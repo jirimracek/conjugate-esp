@@ -10,7 +10,7 @@
     "prepare": "npm run build",
     "test": "tsc && jest -b1 --noStackTrace --verbose",
     "testv": "tsc && jest -b1 --verbose",
-    "cover": "jest --coverage"
+    "cover": "jest --coverage" 
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,7 @@
   "devDependencies": {
     "@types/jest": ">=25.1.4",
     "@types/node": ">=13.9.1",
+    "coveralls": ">=3.0.9",
     "jest": ">=25.1.0",
     "ts-jest": ">=25.2.1",
     "typescript": ">=3.8.3"
