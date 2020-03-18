@@ -1,10 +1,16 @@
 {
-  "name": "@jirimracek/conjugate-esp",
-  "version": "0.1.0",
+  "name": "conjugate-esp",
+  "version": "0.1.1",
   "description": "Spanish verb conjugator",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run build && node dist/index.js",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "test": "tsc && jest -b1 --noStackTrace --verbose",
+    "testv": "tsc && jest -b1 --verbose",
+    "coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -14,7 +20,7 @@
     "spanish",
     "verb",
     "conjugation",
-    "node",
+    "nodejs",
     "JavaScript",
     "TypeScript"
   ],
@@ -23,5 +29,13 @@
   "bugs": {
     "url": "https://github.com/jirimracek/conjugate-esp/issues"
   },
-  "homepage": "https://github.com/jirimracek/conjugate-esp#readme"
+  "homepage": "https://github.com/jirimracek/conjugate-esp#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.0",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
+  }
 }
