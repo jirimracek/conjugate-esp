@@ -13,3 +13,4 @@ Conjugation of regular -ar, -er, -ir verbs in castellano, voseo, formal, canaria
 Includes mechanisms for dealing with defectives and multiple conjugations.
 
 [![Build Status](https://travis-ci.org/jirimracek/conjugate-esp.svg?branch=master)](https://travis-ci.org/jirimracek/conjugate-esp)
+[![Coverage Status](https://coveralls.io/repos/github/jirimracek/conjugate-esp/badge.svg?branch=master)](https://coveralls.io/github/jirimracek/conjugate-esp?branch=master)
