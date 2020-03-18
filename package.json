@@ -10,7 +10,7 @@
     "prepare": "npm run build",
     "test": "tsc && jest -b1 --noStackTrace --verbose",
     "testv": "tsc && jest -b1 --verbose",
-    "coverage": "jest --coverage"
+    "cover": "jest --coverage"
   },
   "repository": {
     "type": "git",
