@@ -11,3 +11,5 @@ TypeScript/JavaScript npm module that **doesn't** use lookup tables to do the wo
 
 Conjugation of regular -ar, -er, -ir verbs in castellano, voseo, formal, canarias regions.
 Includes mechanisms for dealing with defectives and multiple conjugations.
+
+[![Build Status](https://travis-ci.org/jirimracek/conjugate-esp.svg?branch=master)](https://travis-ci.org/jirimracek/conjugate-esp)
