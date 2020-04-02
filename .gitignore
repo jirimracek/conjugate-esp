@@ -1,9 +1,8 @@
 # My ignores
-docs/help.txt
+docs
 *.map
 .vscode
 # All test files
-gold
 
 # Logs
 logs

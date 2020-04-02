@@ -4,37 +4,36 @@
  * Copyright (c) 2020 Automation Controls & Engineering
  * @license * MIT License
 */
-import { RegionType, V2M_PronType, V2M_AttrType, ModelInterface, TableType, FormatType } from './interfaces';
-import * as ar from './ar';
-import * as er from './er';
-import * as ir from './ir';
-import { Model } from './model';
+import { PronominalKeys, Regions, ModelAttributes } from './declarations/types';
+import { BaseModel, Empty } from './basemodel';
+import * as ar from './armodels';
+import * as er from './ermodels';
+import * as ir from './irmodels';
 
-export class Factory {
+type ArKey = keyof typeof ar;
+type ErKey = keyof typeof er;
+type IrKey = keyof typeof ir;
+
+export class ModelFactory {
     constructor() { };
-    public getModel(name: string, alias: string, type: V2M_PronType, region: RegionType, attributes: V2M_AttrType): Model {
-        switch (name) {
-            case 'amar': return new ar.Amar(alias, type, region, attributes);
-            case 'temer': return new er.Temer(alias, type, region, attributes);
-            case 'vivir': return new ir.Vivir(alias, type, region, attributes);
-            default: 
-            console.error(`Model ${name} not implemented`);
-            return new Empty(alias, type, region, attributes);
-        }
-    }
-}
 
-class Empty extends Model implements ModelInterface {
-    public constructor(alias: string, type: V2M_PronType, region: RegionType, attributes: V2M_AttrType) {
-        super(alias, type, region, attributes);
+    public getModel(name: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes): BaseModel {
+        if (ar[name as ArKey]) {
+            return new ar[name as ArKey](type, region, attributes);
+        } else if (er[name as ErKey]) {
+            return new er[name as ErKey](type, region, attributes);
+        } else if (ir[name as IrKey]) {
+            return new ir[name as IrKey](type, region, attributes);
+        }
+        return new Empty(type, region, attributes);
     }
 
-    public getConjugationOf(verb: string, format: FormatType): TableType | string[] {
-        const status = <TableType>{ Status: { Model: ['not implemented']}};
-        if (format === 'text') {
-            return [`${JSON.stringify(status)}`];
-        }
-        return status;
+    /**
+     * Development helper
+     * @param model 
+     */
+    public isImplemented(name: string): boolean {
+        return !!(ar[name as ArKey] || er[name as ErKey] || ir[name as IrKey]);
     }
 }
 
