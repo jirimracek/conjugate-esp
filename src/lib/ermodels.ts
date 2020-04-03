@@ -33,7 +33,6 @@ export class temer extends BaseModel  {
     }
 
     protected setImperativoAfirmativo(): void {
-        super.setImperativoAfirmativo();
         if (this.region === 'castellano') {
             if (this.type === NONPRONOMINAL) {
                 this.table.Imperativo.Afirmativo[1] = this.table.Indicativo.Presente[1].replace(/s$/, '');

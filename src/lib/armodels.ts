@@ -39,7 +39,6 @@ export class amar extends BaseModel {
     }
 
     protected setImperativoAfirmativo(): void {
-        super.setImperativoAfirmativo();
         // Castellano
         // 2nd singular, idx 1:
         //   N: 2nd singular indicativo presente: tú abandonas             => tú abandona   - drop 's'    
@@ -136,7 +135,7 @@ export class actuar extends amar {
     }
 
     protected beforeImperatives(): void {
-        const pattern: RegExp = /(.)u(.*)/;
+        const pattern: RegExp = /(.*)u(.*)/; // (?=.*e)
         const replacement = '$1ú$2';
         if (this.region === 'castellano') {
             this.replaceIndicativoPresente([0, 1, 2, 5], pattern, replacement);

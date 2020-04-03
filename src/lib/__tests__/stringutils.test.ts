@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 // npm t -- --watch
-import { clearAccents, shiftAccentLeft, accentuateNthVowelFromEnd, accentuateWithDiptongRules } from '../utilities/stringutils';
+import { clearAccents, shiftAccentLeft, accentuateNthVowelFromEnd, accentuateWithDiptongRules, esdrujula } from '../utilities/stringutils';
 // silence legit warnings during tests 
 // (they're useful in production, thus the conditions provoking these warnings
 //  should be tested here but we don't want to clutter the terminal during test)
@@ -42,6 +42,8 @@ test ('accentuation', () => {
     expect(accentuateWithDiptongRules('', 3)).toEqual('');
     expect(accentuateWithDiptongRules('áéí', 3)).toEqual('áéí');
     expect(accentuateWithDiptongRules('aéí', 3)).toEqual('aéí');
+
+    expect(esdrujula('usted santigüense')).toEqual('usted santígüense');
 
     
 });

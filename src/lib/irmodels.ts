@@ -34,7 +34,6 @@ export class vivir extends BaseModel  {
     }
 
     protected setImperativoAfirmativo(): void {
-        super.setImperativoAfirmativo();
 
         if (this.region === 'castellano') {
             if (this.type === NONPRONOMINAL) {

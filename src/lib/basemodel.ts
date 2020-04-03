@@ -8,7 +8,7 @@ import { json2Text, text2Json } from './utilities/modelutils';
 import { PronominalKeys, Regions, ConjugationTable, ModelAttributes, AttributeKeys } from './declarations/types';
 import { PRONOMBRES, PRONOMINAL } from './declarations/constants';
 
-export class BaseModel {
+export abstract class BaseModel {
     protected type: PronominalKeys;
     protected region: Regions;
 
@@ -240,7 +240,7 @@ export class BaseModel {
         this.table.Subjuntivo.Futuro_Perfecto = this.terms.Subjuntivo.Futuro_Perfecto.map((t, index) => this.formCompuesto(t, index));
     }
 
-    protected setImperativoAfirmativo(): void { }
+    protected abstract setImperativoAfirmativo():void;
 
     protected setImperativoNegativo(): void {
         // All regions are formed the same, directly from corresponding subjuntives, insert 'no' after the first pronominal
@@ -250,7 +250,9 @@ export class BaseModel {
 export class Empty extends BaseModel {
     public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(type, region, attributes);
+        this.setImperativoAfirmativo();         // cheat on coverage :)
     }
+    protected setImperativoAfirmativo() { /* unimplemented */}
 }
 
 

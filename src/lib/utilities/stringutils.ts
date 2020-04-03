@@ -137,9 +137,9 @@ export function accentuateWithDiptongRules(word: string, nth: number): string {
     }
   }
   // Else accentuate what we're looking at, it's weak but not a part of a diptong
-  // This will only happen if the word is shorter than the index.  Which would be a problem
+  // This may happen if the word is shorter than the index.  Which would be a problem
   // TODO: come back here once we have all verbs tested 
-  console.warn(`stringutils, this shouldn't have happened, expression: ${word}, accentuate: ${index}`);
+  // console.warn(`stringutils, this shouldn't have happened, expression: '${word}', accentuate: ${index}`);
   return accentAtIndex(word, index);
 }
 
