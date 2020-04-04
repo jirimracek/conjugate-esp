@@ -120,6 +120,7 @@ test('ModelFactory', () => {
     const testFactory = new ModelFactory();
     // serenar is not a model, getModel should return Empty
     expect(testFactory.getModel('serenar', 'N', 'castellano', {})).toBeInstanceOf(Empty);
+    expect(testFactory.getModel('invalid', 'N', 'canarias', {})).toBeInstanceOf(Empty);
 
     // legit existing models
     expect(testFactory.getModel('amar', 'P', 'voseo', {})).not.toBeInstanceOf(Empty);
@@ -133,6 +134,7 @@ test('ModelFactory', () => {
     expect(testFactory.isImplemented('amar_')).toBeFalsy();
     expect(testFactory.isImplemented('teemar')).toBeFalsy();
     expect(testFactory.isImplemented('.vivir')).toBeFalsy();
+
 });
 
 test('getVerbList()', () => {
@@ -143,7 +145,6 @@ test('Not implemented', () => {
     // unimplemented model
     expect(conjugator.conjugate('yacer', 'formal', 'text')).toEqual([]);
     expect(conjugator.conjugate('yacer', 'formal', 'json')).toEqual([{}]);
-
 });
 
 test('Optional', () => {
@@ -217,8 +218,8 @@ verbsToTest.forEach(verb => {
 });
 
 
-// Verify json and text results contain same data
-test(`Result text === json`, () => {
+// Verify json and text headers have the same data
+test(`Info text === Info json`, () => {
     verbsToTest.forEach(verb => {
         regionsToTest.forEach(region => {
             const conjugations: string[][] = [];

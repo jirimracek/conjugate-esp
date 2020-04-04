@@ -240,7 +240,7 @@ export abstract class BaseModel {
         this.table.Subjuntivo.Futuro_Perfecto = this.terms.Subjuntivo.Futuro_Perfecto.map((t, index) => this.formCompuesto(t, index));
     }
 
-    protected abstract setImperativoAfirmativo():void;
+    protected abstract setImperativoAfirmativo():void;        // The only one that must be implemented by derived class, they have nothing in common (so far 4/4/20)
 
     protected setImperativoNegativo(): void {
         // All regions are formed the same, directly from corresponding subjuntives, insert 'no' after the first pronominal
@@ -251,8 +251,6 @@ export class Empty extends BaseModel {
     public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(type, region, attributes);
         this.setImperativoAfirmativo();         // cheat on coverage :)
-    }
+     }
     protected setImperativoAfirmativo() { /* unimplemented */}
 }
-
-
