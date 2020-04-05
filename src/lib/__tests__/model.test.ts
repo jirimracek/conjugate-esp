@@ -89,12 +89,14 @@ models.push('actuar', 'adquirir', 'agorar', 'aguar', 'ahincar', 'aislar', 'andar
 models.push('abrir', 'argüir');
 verbs.push(...models);
 // some interesting verbs
-verbs.push('inhestar');           // participio irregular  {"N":{"pensar":{"PR":"estad/iest"}}}
-verbs.push('ventar');             // {"N":[{"pensar":{"A":"D_1","SN":"true"}}
-verbs.push('serenar');             // {"N":["amar",{"amar":{"A":"D_1","SN":"true"}}],"P":"amar"}
-verbs.push('adecuar');             // dual {"N":["amar","actuar"],"P":["amar","actuar"]}
-verbs.push('aclarar');             // aclarar":{"N":["amar",{"amar":{"A":"D_1","SN":"true"}}],"P":"amar"}
-verbs.push('abolir');              // {"N":["vivir",{"vivir":{"canarias":"D_2","castellano":"D_3","formal":"D_2","voseo":"D_4"}}]}
+verbs.push('inhestar');    // participio irregular  {"N":{"pensar":{"PR":"estad/iest"}}}
+verbs.push('ventar');      // {"N":[{"pensar":{"A":"D_1","SN":"true"}}
+verbs.push('serenar');     // {"N":["amar",{"amar":{"A":"D_1","SN":"true"}}],"P":"amar"}
+verbs.push('adecuar');     // dual {"N":["amar","actuar"],"P":["amar","actuar"]}
+verbs.push('aclarar');     // aclarar":{"N":["amar",{"amar":{"A":"D_1","SN":"true"}}],"P":"amar"}
+verbs.push('abolir');      // {"N":["vivir",{"vivir":{"canarias":"D_2","castellano":"D_3","formal":"D_2","voseo":"D_4"}}]}
+verbs.push('puar');        // dual conjugation, monosyllables accentuation rules {"N":["actuar",{"actuar":{"MS":"true"}}]}
+
 
 
 const verbsToTest = shuffle(conjugator.getVerbList().filter(verb => verbs.includes(verb)));
@@ -147,7 +149,7 @@ test('Not implemented', () => {
     expect(conjugator.conjugate('yacer', 'formal', 'json')).toEqual([{}]);
 });
 
-test('Optional', () => {
+test('Optional parameters', () => {
     expect(conjugator.conjugate('amarse')).toEqual([{}]);
     // force bad region
     expect(conjugator.conjugate('temer', 'castillano' as Regions)).toEqual([{}]);

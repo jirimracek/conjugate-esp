@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 import { BaseModel } from './basemodel';
-import { esdrujula, clearAccents } from './utilities/stringutils';
+import { esdrujula, clearAccents, clearLastAccent } from './utilities/stringutils';
 import { PronominalKeys, Regions, ModelAttributes, AttributeKeys } from './declarations/types';
 import { TERM, AR, NONPRONOMINAL } from './declarations/constants';
 
@@ -13,6 +13,7 @@ import { TERM, AR, NONPRONOMINAL } from './declarations/constants';
  * @class base class for all -ar conjugations
  */
 export class amar extends BaseModel {
+    protected monoSyllables = false;
 
     public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(type, region, attributes);
@@ -27,9 +28,11 @@ export class amar extends BaseModel {
         });
         // Make local adjustments
         this.configTerminations();
+
+        this.monoSyllables = attributes['MS' as AttributeKeys] as boolean;
     }
 
-    protected configTerminations():void {
+    protected configTerminations(): void {
         // Adjust voseo, 2nd singular
         if (this.region === 'voseo') {
             this.terms.Indicativo.Presente[1] = 'ás';
@@ -135,19 +138,33 @@ export class actuar extends amar {
     }
 
     protected beforeImperatives(): void {
-        const pattern: RegExp = /(.*)u(.*)/; // (?=.*e)
+        const pattern: RegExp = /(.*)u(.*)/;
         const replacement = '$1ú$2';
         if (this.region === 'castellano') {
             this.replaceIndicativoPresente([0, 1, 2, 5], pattern, replacement);
             this.replaceSubjuntivoPresente([0, 1, 2, 5], pattern, replacement);
-        }
-        if (this.region === 'voseo') {
+            if (this.monoSyllables) {             // strip monosyllable accents where applicable
+                this.table.Indicativo.Presente[4] = clearLastAccent(this.table.Indicativo.Presente[4]);
+                [0, 2].forEach(index => this.table.Indicativo.Preterito_Indefinido[index] = clearLastAccent(this.table.Indicativo.Preterito_Indefinido[index]));
+                this.table.Subjuntivo.Presente[4] = clearLastAccent(this.table.Subjuntivo.Presente[4]);
+            }
+        } else if (this.region === 'voseo') {
             this.replaceIndicativoPresente([0, 2, 4, 5], pattern, replacement);
             this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
-        }
-        if (this.region === 'canarias' || this.region === 'formal') {
+            if (this.monoSyllables) {
+                this.table.Indicativo.Presente[1] = clearLastAccent(this.table.Indicativo.Presente[1]);
+                [0, 2].forEach(index => this.table.Indicativo.Preterito_Indefinido[index] = clearLastAccent(this.table.Indicativo.Preterito_Indefinido[index]));
+            }
+        } else {
+            // shared between canarias and formal
             this.replaceIndicativoPresente([0, 1, 2, 4, 5], pattern, replacement);
             this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
+            if (this.region === 'canarias' && this.monoSyllables) {
+                [0, 2].forEach(index => this.table.Indicativo.Preterito_Indefinido[index] = clearLastAccent(this.table.Indicativo.Preterito_Indefinido[index]));
+            }
+            if (this.region === 'formal' && this.monoSyllables) {
+                [0, 1, 2].forEach(index => this.table.Indicativo.Preterito_Indefinido[index] = clearLastAccent(this.table.Indicativo.Preterito_Indefinido[index]));
+            }
         }
     }
 }
@@ -175,7 +192,7 @@ export class agorar extends amar {
     }
 }
 
-export class aguar extends amar  {
+export class aguar extends amar {
     public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(type, region, attributes);
     }
@@ -188,12 +205,12 @@ export class aguar extends amar  {
     }
 }
 
-export class ahincar extends amar  {
+export class ahincar extends amar {
     public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(type, region, attributes);
     }
 
-    protected beforeImperatives() :void{
+    protected beforeImperatives(): void {
         const pattern: RegExp = /(.)inc(.*)/;
         this.replaceIndicativoPreteritoIndefinito([0], pattern, '$1inqu$2');
         this.replaceSubjuntivoPresente([3], pattern, '$1inqu$2');
@@ -213,12 +230,12 @@ export class ahincar extends amar  {
         }
     }
 }
-export class aislar extends amar  {
+export class aislar extends amar {
     public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(type, region, attributes);
     }
 
-    protected beforeImperatives():void {
+    protected beforeImperatives(): void {
         const pattern: RegExp = /(.)(a|e|h)i(.*)/;
         const replacement: string = '$1$2í$3';
         if (this.region === 'castellano') {
@@ -235,12 +252,12 @@ export class aislar extends amar  {
         }
     }
 }
-export class andar extends amar  {
+export class andar extends amar {
     public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(type, region, attributes);
     }
 
-    protected configTerminations():void {
+    protected configTerminations(): void {
         this.terms.Indicativo.Preterito_Indefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis', 'uvieron'];
         this.terms.Subjuntivo.Preterito_Imperfecto_ra = ['uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais', 'uvieran'];
         this.terms.Subjuntivo.Preterito_Imperfecto_se = ['uviese', 'uvieses', 'uviese', 'uviésemos', 'uvieseis', 'uviesen'];
@@ -249,23 +266,23 @@ export class andar extends amar  {
         super.configTerminations();
     }
 }
-export class cazar extends amar  {
+export class cazar extends amar {
     public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(type, region, attributes);
     }
-    protected beforeImperatives():void {
+    protected beforeImperatives(): void {
         const pattern: RegExp = /(.[aeioulnr])z([eé].*)/;
         const replacement = '$1c$2';
         this.replaceIndicativoPreteritoIndefinito([0], pattern, replacement);
         this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
     }
 }
-export class pensar extends amar  {
+export class pensar extends amar {
     public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(type, region, attributes);
     }
 
-    protected afterImpersonales():void {
+    protected afterImpersonales(): void {
         const PR = this.attributes['PR'] as string;
         if (PR) {
             const [expression, replacement] = PR.split('/');
@@ -275,7 +292,7 @@ export class pensar extends amar  {
 
     }
 
-    protected beforeImperatives():void {
+    protected beforeImperatives(): void {
         const patternI: RegExp = /(.*)e(.*)/;
         const patternS: RegExp = /(.*)e(?=.*e)(.*)/;
         const replacement: string = '$1ie$2';

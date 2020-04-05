@@ -39,13 +39,27 @@ export function shiftAccentLeft(word: string): string {
   return match[1] + AccentedVowels[PlainVowels.indexOf(match[2])] + match[3] + stringEnd;
 }
 
+// clear only the last accent of the expression: él puó -> él puo
+export function clearLastAccent(word: string): string {
+  const wordArray = word.split('');
+  for (let i = wordArray.length - 1; i >= 0; --i) {
+    const index = AccentedVowels.indexOf(wordArray[i]);
+    if (-1 !== index) {
+      wordArray[i] = PlainVowels[index];
+      break;
+    }
+  }
+  return wordArray.join('');
+}
+
+// clear all accents
 export function clearAccents(word: string): string {
   return word.split('').map(letter => {
-    const indexA = AccentedVowels.indexOf(letter);
-    if (-1 === indexA) {
+    const index = AccentedVowels.indexOf(letter);
+    if (-1 === index) {
       return letter;
     }
-    return PlainVowels[indexA];
+    return PlainVowels[index];
   }).join('');
 }
 
