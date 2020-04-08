@@ -36,7 +36,7 @@ const REGIONS = ['castellano', 'voseo', 'canarias', 'formal'] as Regions[];
 export class Conjugator {
     protected templates: DB = definitions;
     private defective: DefectiveData = definitions['defectives'];
-    private factory = new ModelFactory();
+    protected factory = new ModelFactory();
 
     constructor() { }
 

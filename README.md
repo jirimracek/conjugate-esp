@@ -20,12 +20,14 @@ ____
    import { Conjugator } from "<path to install>";
    const cng = new Conjugator();
 ```
+
 ```javascript
  JavaScript
    // You'll need to build the *dist* directory with tsc as it's not pushed to the repository
    const CNG = require("<path to install>/dist");
    const cng = new CNG.Conjugator();
 ```
+
 ```typescript
 Then
    const using_default_parameters = cng.conjugate('hablar');   // region: castellano, output format: json
@@ -34,7 +36,6 @@ Then
    console.log(JSON.stringify(jsonResult, null, 1));
    console.log(textResult);
 ```
- 
 
 ____
 
@@ -62,31 +63,31 @@ ____
 
 ### Regular models
 
-|               | Implemented |   Tested  |
+|               | Implement   |   Test    |
 | ------------- |:-----------:|:---------:|
-| <font color="green">amar</font>         |  &#x2714;   |  &#x2714; |
-| <font color="green">temer         |  &#x2714;   |  &#x2714; |
-| <font color="green">vivir         |  &#x2714;   |  &#x2714; |
+| **amar**      |  &#x2714;   |  &#x2714; |
+| **temer**     |  &#x2714;   |  &#x2714; |
+| **vivir**     |  &#x2714;   |  &#x2714; |
 
 ____
 
-### Proposed irregular models
+### Irregular models
 
 <table>
 <tr><td>
 
-| AR            | Implemented | Tested    |
+| AR            | Implement   | Test      |
 |---------------|:-----------:|:---------:|
-| <font color="green">actuar  </font>      |  &#x2714;   |  &#x2714; |
-| <font color="green">agorar  </font>      |  &#x2714;   |  &#x2714; |
-| <font color="green">aguar   </font>      |  &#x2714;   |  &#x2714; |
-| <font color="green">ahincar </font>      |  &#x2714;   |  &#x2714; |
-| <font color="green">aislar  </font>      |  &#x2714;   |  &#x2714; |
-| <font color="green">andar   </font>      |  &#x2714;   |  &#x2714; |
+| **actuar**    |  &#x2714;   |  &#x2714; |
+| **agorar**    |  &#x2714;   |  &#x2714; |
+| **aguar**     |  &#x2714;   |  &#x2714; |
+| **ahincar**   |  &#x2714;   |  &#x2714; |
+| **aislar**    |  &#x2714;   |  &#x2714; |
+| **andar**     |  &#x2714;   |  &#x2714; |
 | aullar        |  &#x2718;   |  &#x2718; |
 | avergonzar    |  &#x2718;   |  &#x2718; |
 | cabrahigar    |  &#x2718;   |  &#x2718; |
-| <font color="green">cazar  </font>        |  &#x2714;   |  &#x2714; |
+| cazar         |  &#x2714;   |  &#x2714; |
 | colgar        |  &#x2718;   |  &#x2718; |
 | contar        |  &#x2718;   |  &#x2718; |
 | dar           |  &#x2718;   |  &#x2718; |
@@ -100,7 +101,7 @@ ____
 | forzar        |  &#x2718;   |  &#x2718; |
 | jugar         |  &#x2718;   |  &#x2718; |
 | pagar         |  &#x2718;   |  &#x2718; |
-| <font color="green">pensar  </font>       |  &#x2714;   |  &#x2714; |
+| **pensar**    |  &#x2714;   |  &#x2714; |
 | regar         |  &#x2718;   |  &#x2718; |
 | sacar         |  &#x2718;   |  &#x2718; |
 | trocar        |  &#x2718;   |  &#x2718; |
@@ -118,7 +119,7 @@ ____
 
 </td><td>
 
-|ER             | Implemented | Tested    |
+|ER             | Implement   | Test      |
 |---------------|:-----------:|:---------:|
 | caber         |  &#x2718;   |  &#x2718; |
 | caer          |  &#x2718;   |  &#x2718; |
@@ -161,11 +162,11 @@ ____
 
 </td><td>
 
-|IR             | Implemented | Tested    |
+|IR             | Implement   | Test      |
 |-------------- |:-----------:|:---------:|
-| <font color="green">abrir </font>        |  &#x2714;   |  &#x2714; |
-| <font color="green">adquirir  </font>     |  &#x2714;   |  &#x2714; |
-| <font color="green">argüir  </font>       |  &#x2714;   |  &#x2714; |
+| **abrir**     |  &#x2714;   |  &#x2714; |
+| **adquirir**  |  &#x2714;   |  &#x2714; |
+| **argüir**    |  &#x2714;   |  &#x2714; |
 | asir          |  &#x2718;   |  &#x2718; |
 | bendecir      |  &#x2718;   |  &#x2718; |
 | ceñir         |  &#x2718;   |  &#x2718; |
@@ -203,4 +204,3 @@ ____
 | zurcir        |  &#x2718;   |  &#x2718; |
 
 </td></tr> </table>
-
