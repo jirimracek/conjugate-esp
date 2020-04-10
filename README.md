@@ -57,7 +57,7 @@ ____
 
 ## Status
 
-- 4/5/2020, Version 0.2.0 - basic system in place
+- 4/10/2020, Version 0.2.0 - basic system in place
 
 ____
 

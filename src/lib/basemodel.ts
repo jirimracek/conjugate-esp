@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 import { json2Text, text2Json } from './utilities/modelutils';
-import { PronominalKeys, Regions, ConjugationTable, ModelAttributes, AttributeKeys } from './declarations/types';
+import { PronominalKeys, Regions, ConjugationTable, ModelAttributes, AttributeKeys, DefectiveType } from './declarations/types';
 import { PRONOMBRES, PRONOMINAL } from './declarations/constants';
 
 export abstract class BaseModel {
@@ -18,13 +18,19 @@ export abstract class BaseModel {
     protected stem: string = '';
 
     protected attributes: ModelAttributes;
-    private stripDefectiveNoun = false;                // true === don't use nouns with defectives 
+    private stripDefectiveNoun = false;                // true means don't use nouns with defectives 
 
     protected constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         this.type = type;
         this.region = region;
         this.stripDefectiveNoun = attributes['SN' as AttributeKeys] as boolean;
         this.attributes = attributes;
+        // Defective attributes:
+        // {d:imorfo|eimorfo|imper|tercio|terciop|mmorfo|bimorfop|bimorfog|trimorfo|omorfo|omorfos}
+        const defectiveType = attributes['d'] as DefectiveType;
+        if (defectiveType) {
+            this.stripDefectiveNoun = (['imper', 'tercio', 'terciop', ] as DefectiveType[]).includes(defectiveType);
+        }
 
         // initialize result conjugation table
         ['Impersonal', 'Indicativo', 'Subjuntivo', 'Imperativo'].forEach(mode => this.table[mode] = {});

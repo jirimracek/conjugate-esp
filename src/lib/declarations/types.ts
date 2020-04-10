@@ -41,7 +41,10 @@ export type DefectiveKeys = Regions | 'A';
 // PD:RegExp/replacement - Participio Dual            - RegExp is the regular expression that creates the irregular participio form from the regular one
 //                                                                    AND it gets added as a second participio. The first, REGULAR PARTICIPIO gets used for COMPUESTOS
 // PC:RegExp/replacement - Participio Compuesto(irregular)  - same as PD, EXCEPT the second, IRREGULAR PARTICIPIO gets used for COMPUESTOS
-export type AttributeKeys = 'SN' | 'PR' | 'PD' | 'PC';
+export type AttributeKeys = 'SN' | 'PR' | 'PD' | 'PC' | 'd';
+        // {d:imorfo|eimorfo|imper|tercio|terciop|mmorfo|bimorfop|bimorfog|trimorfo|omorfo|omorfos}
+export type DefectiveType = 'imorfo' | 'eimorfo' | 'imper' | 'tercio' | 'terciop' | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'omorfos';
+
 
 // export const g: DB = {
 //     "abocanar": {

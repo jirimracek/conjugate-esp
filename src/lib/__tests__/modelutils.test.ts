@@ -108,12 +108,15 @@ const abandonarseText = ["abandonarse", "abandonándose", "abandonado",
     "yo me hubiere abandonado", "tú te hubieres abandonado", "él se hubiere abandonado", "nosotros nos hubiéremos abandonado", "ustedes se hubieren abandonado", "ellos se hubieren abandonado",
     "-", "tú abandónate", "-", "nosotros abandonémonos", "ustedes abandónense", "-", "-", "tú no te abandones", "-", "nosotros no nos abandonemos", "ustedes no se abandonen", "-"];
 
-test('text2Json()', () => {
-    expect(text2Json(abandonarText)).toEqual(abandonarJson);
-    expect(text2Json(abandonarseText)).toEqual(abandonarseJson);
-});
+describe("Model Utils", () => {
+    test('text2Json()', () => {
+        expect(text2Json(abandonarText)).toEqual(abandonarJson);
+        expect(text2Json(abandonarseText)).toEqual(abandonarseJson);
+    });
 
-test('json2Text()', () => {
-    expect(json2Text(abandonarJson)).toEqual(abandonarText);
-    expect(json2Text(abandonarseJson)).toEqual(abandonarseText);
+    test('json2Text()', () => {
+        expect(json2Text(abandonarJson)).toEqual(abandonarText);
+        expect(json2Text(abandonarseJson)).toEqual(abandonarseText);
+    });
+
 });
