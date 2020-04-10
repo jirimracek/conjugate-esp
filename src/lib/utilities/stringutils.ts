@@ -78,16 +78,15 @@ export function esdrujula(phrase: string): string {
   }
 
   const syllable = list[list.length - 3];     // get 3rd from the end and operate on it
-  let accentuated = syllable.replace(/([aeo])/, (match, p1): string => {
-    return Accented[Plain.indexOf(p1)];
-  });
-  // If strong wasn't found, accentuate the weak, there is only one
-  if (accentuated === syllable) {
-    accentuated = syllable.replace(/([ui])/, (match, p1): string => {
+  if (/[aeo]/.test(syllable)) {               // has a strong vowel? (may not have more than one)
+    list[list.length - 3] = syllable.replace(/([aeo])/, (match, p1): string => {
       return Accented[Plain.indexOf(p1)];
     });
+  } else {                                   // one or more weak ones, accentuate the last one
+    list[list.length - 3] = syllable.replace(/(.*)([ui])/, (match, p1, p2): string => {
+      return `${p1}${Accented[Plain.indexOf(p2)]}`;
+    });
   }
-  list[list.length - 3] = accentuated;
   expressions.push(list.join(''));
   return expressions.join(' ');
 }

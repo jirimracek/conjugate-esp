@@ -148,6 +148,8 @@ describe("String Utils", () => {
         expect(esdrujula('ustedes amaestrense')).toEqual('ustedes amaéstrense');
         expect(esdrujula('ustedes aoptense')).toEqual('ustedes aóptense');
         expect(esdrujula('ustedes apilgüense')).toEqual('ustedes apílgüense');
+        expect(esdrujula('ustedes cuidense')).toEqual('ustedes cuídense');
+        expect(esdrujula('ustedes desalquilense')).toEqual('ustedes desalquílense');
         expect(esdrujula('ustedes desaparroquiense')).toEqual('ustedes desaparróquiense');
         expect(esdrujula('ustedes desempeorense')).toEqual('ustedes desempeórense');
         expect(esdrujula('ustedes deslengüense')).toEqual('ustedes desléngüense');
