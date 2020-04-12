@@ -7,10 +7,11 @@
 import { Conjugator } from '../../index';
 import fs from 'fs';
 import path from 'path';
-import { ResultType, FormatType } from '../conjugator';
+import { ResultType } from '../conjugator';
 import { ModelFactory } from '../factory';
 import { Empty } from '../basemodel';
 import { Regions, VerbModelData, DB } from '../declarations/types'
+import { json2Text } from '../utilities/modelutils';
 
 // Disable thrown messages
 beforeEach(() => {
@@ -56,28 +57,22 @@ describe("Model Test", () => {
         // Corrupted definitions file / missing templates - this should never happen
         let mockjugator = new MockJugator();
         // undefine verb model data in templates
-        expect(mockjugator.conjugate('vivir', 'formal', 'text')).not.toEqual([]);
-        expect(mockjugator.conjugate('vivir', 'formal', 'json')).not.toEqual([{}]);
+        expect(mockjugator.conjugate('vivir', 'formal')).not.toEqual([{}]);
         mockjugator.undefineModelData('vivir');
-        expect(mockjugator.conjugate('vivir', 'formal', 'text')).toEqual([]);
-        expect(mockjugator.conjugate('vivir', 'formal', 'json')).toEqual([{}]);
+        expect(mockjugator.conjugate('vivir', 'formal')).toEqual([{}]);
         mockjugator.restore();
-        expect(mockjugator.conjugate('vivir', 'formal', 'text')).not.toEqual([]);
-        expect(mockjugator.conjugate('vivir', 'formal', 'json')).not.toEqual([{}]);
+        expect(mockjugator.conjugate('vivir', 'formal')).not.toEqual([{}]);
 
         mockjugator.deleteTemplates();
-        expect(mockjugator.conjugate('amar', 'castellano', 'text')).toEqual([]);
-        expect(mockjugator.conjugate('amar', 'castellano', 'json')).toEqual([{}]);
+        expect(mockjugator.conjugate('amar', 'castellano')).toEqual([{}]);
         expect(mockjugator.getVerbList()).toEqual([]);
         mockjugator.restore();
 
-        expect(mockjugator.conjugate('amar', 'castellano', 'text')).not.toEqual([]);
-        expect(mockjugator.conjugate('amar', 'castellano', 'json')).not.toEqual([{}]);
+        expect(mockjugator.conjugate('amar', 'castellano')).not.toEqual([{}]);
         expect(mockjugator.getVerbList()).not.toEqual([]);
         mockjugator.restore();
 
-        expect(mockjugator.conjugate('amar', 'castellano', 'text')).not.toEqual([]);
-        expect(mockjugator.conjugate('amar', 'castellano', 'json')).not.toEqual([{}]);
+        expect(mockjugator.conjugate('amar', 'castellano')).not.toEqual([{}]);
     });
 
 
@@ -92,15 +87,16 @@ describe("Model Test", () => {
     models.push('abrir', 'argüir');
     verbs.push(...models);
     // some interesting verbs
-    verbs.push('inhestar');    // participio irregular  {"N":{"pensar":{"PR":"estad/iest"}}}
-    verbs.push('ventar');      // {"N":[{"pensar":{"A":"D_1","SN":"true"}}
-    verbs.push('serenar');     // {"N":["amar",{"amar":{"A":"D_1","SN":"true"}}],"P":"amar"}
-    verbs.push('adecuar');     // dual {"N":["amar","actuar"],"P":["amar","actuar"]}
-    verbs.push('aclarar');     // aclarar":{"N":["amar",{"amar":{"A":"D_1","SN":"true"}}],"P":"amar"}
-    verbs.push('abolir');      // {"N":["vivir",{"vivir":{"canarias":"D_2","castellano":"D_3","formal":"D_2","voseo":"D_4"}}]}
-    verbs.push('puar');        // dual conjugation, monosyllables accentuation rules {"N":["actuar",{"actuar":{"MS":"true"}}]}
+    verbs.push('abar');        // the only known trimorfo         "abar": { "P": { "amar": { "d": "trimorfo" } } }
+    verbs.push('abolir');      // interesting imorfo              "abolir": { "N": [ "vivir", { "vivir": { "d": "imorfo" } } ] },
+    verbs.push('aclarar');     // dual, defective                 "aclarar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
+    verbs.push('adecuar');     // dual, non defective             "adecuar": { "N": [ "amar", "actuar" ], "P": [ "amar", "actuar" ]
+    verbs.push('antojar');     // defective terciopersonal v2     "antojar": { "P": { "amar": { "d": "terciop" } } },
 
-
+    verbs.push('inhestar');    // participio irregular, replace   "inhestar": { "N": { "pensar": { "PR": "estad/iest" } }
+    verbs.push('puar');        // dual, monosyllables             "puar": { "N": [ "actuar", { "actuar": { "MS": "true" } } ] },
+    verbs.push('serenar');     // triple, defective, both N + P   "serenar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
+    verbs.push('ventar');      // triple, defective               "ventar": { "N": [ { "pensar": { "d": "imper" } }, "amar", "pensar" ] },
 
     const verbsToTest = shuffle(conjugator.getVerbList().filter(verb => verbs.includes(verb)));
 
@@ -114,11 +110,9 @@ describe("Model Test", () => {
     });
 
     test('Bad Input', () => {
-        expect(conjugator.conjugate('amarse', 'castellano', 'json')).toEqual([{}]);
+        expect(conjugator.conjugate('amarse', 'castellano')).toEqual([{}]);
         // force bad region
-        expect(conjugator.conjugate('temer', 'castillano' as Regions, 'json')).toEqual([{}]);
-        // force bad format
-        expect(conjugator.conjugate('vivir', 'voseo', 'jsn' as FormatType)).toEqual([]);
+        expect(conjugator.conjugate('temer', 'castillano' as Regions)).toEqual([{}]);
     });
 
     test('ModelFactory', () => {
@@ -148,8 +142,7 @@ describe("Model Test", () => {
 
     test('Not implemented', () => {
         // unimplemented model
-        expect(conjugator.conjugate('yacer', 'formal', 'text')).toEqual([]);
-        expect(conjugator.conjugate('yacer', 'formal', 'json')).toEqual([{}]);
+        expect(conjugator.conjugate('yacer', 'formal')).toEqual([{}]);
     });
 
     test('Optional parameters', () => {
@@ -167,12 +160,7 @@ describe("Model Test", () => {
             const testFiles = fs.readdirSync(path.join(TEST_DIR, verb), 'utf8');
             test(`${verb}`, () => {
                 regionsToTest.forEach(region => {
-                    const conjugations: string[][] = [];
-                    const conjugated = conjugator.conjugate(verb, region, 'text') as string[];
-
-                    while (conjugated.length > 0) {
-                        conjugations.push(conjugated.splice(0, linesPerConjugation));
-                    }
+                    const conjugations: ResultType[] = conjugator.conjugate(verb, region);
 
                     const regionFiles = testFiles.filter(file => file.endsWith(region));
                     const goldFiles: Map<string, string[]> = new Map();
@@ -187,75 +175,25 @@ describe("Model Test", () => {
                     let cIndexN = 0;
                     conjugations.forEach(conjugation => {
 
-                        const info = conjugation.shift();
+                        const info = conjugation.info;
                         expect(info).not.toBeUndefined();
 
-                        const [model, region, pronominal, defective] = info!.split(',').map(chunk => chunk!.split(':').filter((info, index) => index === 1).join()) as string[];
+                        const [model, region, pronominal, defective] = [info.model, info.region, info.pronominal, info.defective];
                         let fileName = '';
-                        if (pronominal === 'true') {
+                        if (pronominal) {
                             fileName = `${verb}se-${model}-${cIndexP++}-${region}`;
                         } else {
                             fileName = `${verb}-${model}-${cIndexN++}-${region}`;
                         }
+                        const data = json2Text(conjugation.conjugation);
 
-                        // console.log(fileName);
                         const goldData = goldFiles.get(fileName);
                         expect(goldData).not.toBeUndefined();
 
                         goldData!.forEach((line, index) => {
-                            // Leave these here to make debug easier
-                            if (`${index}:${conjugation[index]}` !== `${index}:${line}`) {
-                                const dbgModel = model;
-                                const dbgRegion = region;
-                                const dbgPronominal = pronominal;
-                                const dbgDefective = defective;
-                                const dbgGoldData = goldData;
-                                const dbgInfo = info;
-                                const dbgGold = goldFiles;
-                                const dbgFileName = fileName;
-                                debugger;
-                            }
                             // Received                               Expected   
-                            expect(`${index}:${conjugation[index]}`).toBe(`${index}:${line}`);
+                            expect(`${index}:${data[index]}`).toBe(`${index}:${line}`);
                         });
-                    });
-                });
-            });
-        });
-
-    });
-
-
-    // Verify json and text headers have the same data
-    test(`Info Header Test`, () => {
-        verbsToTest.forEach(verb => {
-            regionsToTest.forEach(region => {
-                const conjugations: string[][] = [];
-                const conjugated = conjugator.conjugate(verb, region, 'text') as string[];
-                const jsonConjugations = conjugator.conjugate(verb, region, 'json') as Array<ResultType>;
-
-                while (conjugated.length > 0) {
-                    conjugations.push(conjugated.splice(0, linesPerConjugation));
-                }
-
-                conjugations.forEach((textArray, index) => {
-                    const jsonConjugation = jsonConjugations[index];
-                    expect(jsonConjugation).not.toBeUndefined();
-
-                    const textShifted = textArray.shift();
-                    expect(textShifted).not.toBeUndefined();
-
-                    const textSplit = textShifted!.split(',');
-                    expect(textSplit).not.toBeUndefined();
-
-                    const info = textSplit.map(data => data.split(':')[1]);
-                    expect(info).not.toBeUndefined();
-
-                    const jInfo = Object.values(jsonConjugation.info);
-                    expect(jInfo).not.toBeUndefined();
-
-                    info!.forEach((info, index) => {
-                        expect(info).toEqual(jInfo[index].toString());
                     });
                 });
             });

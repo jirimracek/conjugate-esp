@@ -12,29 +12,33 @@ Spanish verb conjugator, uses model templates, pattern matching & logic to conju
 
 ____
 
-## Usage, output formats
+## Usage
 
 ```typescript
  TypeScript
    // <path to install>/index.ts exports Conjugator
-   import { Conjugator } from "<path to install>";
+   import { Conjugator } from '<path to install>';
    const cng = new Conjugator();
 ```
 
 ```javascript
  JavaScript
    // You'll need to build the *dist* directory with tsc as it's not pushed to the repository
-   const CNG = require("<path to install>/dist");
+   const CNG = require('<path to install>/dist');
    const cng = new CNG.Conjugator();
 ```
 
-```typescript
-Then
-   const using_default_parameters = cng.conjugate('hablar');   // region: castellano, output format: json
-   const textResult = cng.conjugate('amar', 'voseo', 'text');
-   const jsonResult = cng.conjugate('vivir', 'canarias', 'json');
-   console.log(JSON.stringify(jsonResult, null, 1));
-   console.log(textResult);
+```javascript
+   const amar = cng.conjugate('amar');                // castellano (tú, vosotros), default region
+   console.log(JSON.stringify(amar, null, 1));
+   const temer = cng.conjugate('temer', 'formal');    // formal (usted, ustedes)
+   console.log(JSON.stringify(temer, null, 1));
+   const vivir = cng.conjugate('vivir', 'voseo');     // voseo (vos, ustedes)
+   console.log(JSON.stringify(vivir, null, 1));
+   const comer = cng.conjugate('comer', 'canarias');  // canarias (tú, ustedes)
+   console.log(JSON.stringify(comer, null, 1));
+   const verbs = cng.getVerbList();                   // get list of verbs (string[])
+   console.log(`${verbs.length} known verbs`);
 ```
 
 ____
@@ -57,7 +61,7 @@ ____
 
 ## Status
 
-- 4/10/2020, Version 0.2.0 - basic system in place
+- 4/12/2020, Bump version to 0.3.0, dropped text format from conjugate(), changed db internals to accomodate all defectives
 
 ____
 

@@ -5,12 +5,9 @@
  * @license * MIT License
 */
 
-import { PronominalKeys, Regions, ConjugationTable } from "./types";
+import { ConjugationTable, PronounsTable } from "./types";
 
-export const PRONOMINAL = 'P';
-export const NONPRONOMINAL = 'N';
-
-export const PRONOMBRES: { [key in PronominalKeys]: { [key in Regions]: string[] } } = {
+export const PRONOUNS: Readonly<PronounsTable> = {
     N: {
         castellano: ['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos'],
         voseo: ['yo', 'vos', 'él', 'nosotros', 'ustedes', 'ellos'],
@@ -25,8 +22,8 @@ export const PRONOMBRES: { [key in PronominalKeys]: { [key in Regions]: string[]
     }
 }
 
-export const TERM: Readonly<ConjugationTable> = {
-    Impersonal: {},
+// The composite verb auxiliar haber forms
+export const AUX_HABER: Readonly<ConjugationTable> = {
     Indicativo: {
         Preterito_Perfecto: ['he', 'has', 'ha', 'hemos', 'habéis', 'han'],
         Preterito_Pluscuamperfecto: ['había', 'habías', 'había', 'habíamos', 'habíais', 'habían'],
@@ -39,13 +36,10 @@ export const TERM: Readonly<ConjugationTable> = {
         Preterito_Pluscuamperfecto_ra: ['hubiera', 'hubieras', 'hubiera', 'hubiéramos', 'hubierais', 'hubieran'],
         Preterito_Pluscuamperfecto_se: ['hubiese', 'hubieses', 'hubiese', 'hubiésemos', 'hubieseis', 'hubiesen'],
         Futuro_Perfecto: ['hubiere', 'hubieres', 'hubiere', 'hubiéremos', 'hubiereis', 'hubieren']
-    },
-    Imperativo: {
-        Afirmativo: [],
-        Negativo: []
     }
 }
 
+// The desinences (endings) of conjugated forms
 export const AR: Readonly<ConjugationTable> = {
     Impersonal: {
         Infinitivo: ['ar', 'arse'],
@@ -64,10 +58,8 @@ export const AR: Readonly<ConjugationTable> = {
         Preterito_Imperfecto_ra: ['ara', 'aras', 'ara', 'áramos', 'arais', 'aran'],
         Preterito_Imperfecto_se: ['ase', 'ases', 'ase', 'ásemos', 'aseis', 'asen'],
         Futuro_Imperfecto: ['are', 'ares', 'are', 'áremos', 'areis', 'aren']
-    },
-    Imperativo: {}
+    }
 }
-
 
 export const ER: Readonly<ConjugationTable> = {
     Impersonal: {
@@ -87,10 +79,8 @@ export const ER: Readonly<ConjugationTable> = {
         Preterito_Imperfecto_ra: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
         Preterito_Imperfecto_se: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
         Futuro_Imperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
-    },
-    Imperativo: {}
+    }
 }
-
 
 export const IR: Readonly<ConjugationTable> = {
     Impersonal: {
@@ -110,6 +100,5 @@ export const IR: Readonly<ConjugationTable> = {
         Preterito_Imperfecto_ra: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
         Preterito_Imperfecto_se: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
         Futuro_Imperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
-    },
-    Imperativo: {}
+    }
 }

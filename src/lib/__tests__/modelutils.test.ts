@@ -7,7 +7,6 @@
 
 import { text2Json, json2Text } from '../utilities/modelutils'
 
-// test text2Json and json2Text here as well
 // Conversion test by hand
 const abandonarJson = {
     "Impersonal": { "Infinitivo": ["abandonar"], "Gerundio": ["abandonando"], "Participio": ["abandonado"] },
