@@ -9,7 +9,7 @@ const Unbreakable: readonly string[] = ['bl', 'cl', 'fl', 'gl', 'kl', 'll', 'pl'
 // https://www.diccionariodedudas.com/reglas-de-acentuacion-grafica-en-espanol/
 // https://www.thefreelibrary.com/Word+division+in+spanish.-a06362173
 // The idea:
-// Infinite loop, each run processes one character. Consider current character and one or two following
+// Each loop run processes one character. Consider current character and one or two following
 // Decide whether they need to be broken up or stay together
 // Break up rules: see 'Case:' inline comments
 /**
@@ -17,17 +17,16 @@ const Unbreakable: readonly string[] = ['bl', 'cl', 'fl', 'gl', 'kl', 'll', 'pl'
  * @param phrase 
  */
 export function syllabify(phrase: string): string[] {
-  if (!phrase || phrase === '') {
+  if (!phrase) { 
     return [''];
+  }
+  if (phrase.length < 2) {
+    return [phrase];
   }
 
   let current = 0;
   const result: string[] = [];
-  while (true) {
-    if (phrase.length === (current + 1)) {
-      result.push(phrase[current]);
-      break;
-    }
+  while (phrase.length > (current + 1)) {
     result.push(phrase[current]);
 
     // Case: current is vowel
@@ -56,6 +55,7 @@ export function syllabify(phrase: string): string[] {
     }
     ++current;
   }
+  result.push(phrase[current]);
   return result.join('').split('-');
 }
 
@@ -91,7 +91,10 @@ export function esdrujula(phrase: string): string {
   return expressions.join(' ');
 }
 
-// clear only the last accent of the expression: él puó -> él puo
+/**
+ * clear only the last accent of the expression: él puó -> él puo
+ * @param word 
+ */
 export function clearLastAccent(word: string): string {
   if (!word) return '';
   return word.replace(/(.*)([áéíóú])/, (match, p1, p2): string => {
@@ -99,7 +102,10 @@ export function clearLastAccent(word: string): string {
   });
 }
 
-// clear all accents
+/**
+ * clear all accents
+ * @param word 
+ */
 export function clearAccents(word: string): string {
   if (!word) return '';
   return word.replace(/([áéíóú])/g, (match, p1): string => {

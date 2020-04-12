@@ -24,7 +24,6 @@ export abstract class BaseModel {
     protected constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         this.type = type;
         this.region = region;
-        this.stripDefectiveNoun = attributes['SN' as AttributeKeys] as boolean;
         this.attributes = attributes;
         this.auxHaber = JSON.parse(JSON.stringify(AUX_HABER));
 
