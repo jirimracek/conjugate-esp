@@ -61,7 +61,7 @@ ____
 
 ## Status
 
-- 4/12/2020, Bump version to 0.3.0, dropped text format from conjugate(), changed db internals to accomodate all defectives
+- 4/13/2020, Added nacer
 
 ____
 
@@ -134,7 +134,7 @@ ____
 | leer          |  &#x2718;   |  &#x2718; |
 | mecer         |  &#x2718;   |  &#x2718; |
 | mover         |  &#x2718;   |  &#x2718; |
-| nacer         |  &#x2718;   |  &#x2718; |
+| **nacer**         |  &#x2714;   |  &#x2714; |
 | oler          |  &#x2718;   |  &#x2718; |
 | placer        |  &#x2718;   |  &#x2718; |
 | poder         |  &#x2718;   |  &#x2718; |

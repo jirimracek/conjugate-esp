@@ -27,19 +27,18 @@ export abstract class BaseModel {
         this.attributes = attributes;
         this.auxHaber = JSON.parse(JSON.stringify(AUX_HABER));
 
-        // Defective attributes:
-        // {d:imorfo|eimorfo|imper|tercio|terciop|mmorfo|bimorfop|bimorfog|trimorfo|omorfo|omorfos}
+        // Modify this.pronouns tables as per selected defective attributes
+        // Normally we use the PRONOMBRES table.  A few defective form dictate that the pronouns
+        // are not to be used. imper, tercio and terciop
         const defectiveType = attributes['_d_'] as DefectiveType;
         if (defectiveType) {
-            // Normally we use the PRONOMBRES table unless the defective form dictates that the pronouns
-            // are not to be used. Defectives imper, tercio and terciop
             if (['imper', 'tercio', 'terciop'].includes(defectiveType)) {
                 // Dup the pronouns object so we don't disturb the constant
                 this.pronouns = JSON.parse(JSON.stringify(this.pronouns));
-                // fill pronouns arrays with blanks as they're not used
+                // fill unused pronouns with (exactly) 6 blanks
                 (['N', 'P'] as PronominalKeys[]).forEach(pronominalkey => {
                     (['castellano', 'voseo', 'formal', 'canarias'] as Regions[]).forEach(region => {
-                        this.pronouns[pronominalkey][region] = Array.from('      ');
+                        this.pronouns[pronominalkey][region] = Array.from('      ');   // count them. 6
                     });
                 });
             }
@@ -100,29 +99,83 @@ export abstract class BaseModel {
             ['Preterito_Perfecto', 'Preterito_Pluscuamperfecto_ra', 'Preterito_Pluscuamperfecto_se', 'Futuro_Perfecto'].forEach(mode =>
                 this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
         }
+        this.applyAttributesPre();
 
+    }
+    /**
+     * Some attributes need to be processed before we conjugate, others after, some before and after :(
+     */
+    protected applyAttributesPre(): void {
         // Apply defective rules, if any, to desinences.  Basically we replace the invalid desinence with a '-'
-        // When all is done at then end, all forms that end with an '-' get replaced with '-' 
+        // When constructing a word, if desinence === '-', the whole expression gets '-'
         // {d:imorfo|eimorfo|imper|tercio|terciop|mmorfo|bimorfop|bimorfog|trimorfo|omorfo|omorfos}
+
+        // Ex: imorfo rules - formas cuya desinencia empieza por la vocal 'i'
+        // this means that before we conjugate, we need to identify the defective versions by looking
+        // at the desinence table.  The desinence table gets built by the base class and refined by
+        // derived classes.  So we can't really do this in constructor but it needs to happen before 
+        // the conjugation functions chain gets applied
+        // all singles that don't start with i get replaced with '-'
+        // This really only applies to ir verbs
         const defectiveType = this.attributes['_d_'] as DefectiveType;
-        if (defectiveType && defectiveType === 'imorfo') {
-            // imorfo - formas cuya desinencia empieza por la vocal 'i' 
-            // all singles that don't start with i get replaced with '-'
-            // This really only applies to ir verbs
-            ['Indicativo', 'Subjuntivo'].forEach(mode => {
-                this.desinences[mode]['Presente'] = this.desinences[mode]['Presente'].map(d => /^[ií]/.test(d) ? d : '-');
-            });
-        }
-        // impersonal - infinitivo, gerundio, participio y en las terceras personas del singular 
-        if (defectiveType && defectiveType === 'imper') {
-            ['Indicativo', 'Subjuntivo'].forEach(mode => {
-                Object.keys(this.desinences[mode]).forEach(time => {
-                    [0, 1, 3, 4, 5].forEach(index => this.desinences[mode][time][index] = '-');
-                });
-                Object.keys(this.auxHaber[mode]).forEach(time => {
-                    [0, 1, 3, 4, 5].forEach(index => this.auxHaber[mode][time][index] = '-');
-                });
-            });
+        if (defectiveType) {
+            switch (defectiveType) {
+                case 'imorfo':     // formas cuya desinencia empieza por la vocal -i
+                    ['Indicativo', 'Subjuntivo'].forEach(mode => {
+                        this.desinences[mode]['Presente'] = this.desinences[mode]['Presente'].map(d => /^[ií]/.test(d) ? d : '-');
+                    });
+                    break;
+                // case 'eimorfo':
+                //     break;
+                case 'imper': // infinitivo, gerundio, participio y en las terceras personas del singular
+                    ['Indicativo', 'Subjuntivo'].forEach(mode => {
+                        Object.keys(this.desinences[mode]).forEach(time => {
+                            [0, 1, 3, 4, 5].forEach(index => this.desinences[mode][time][index] = '-');
+                        });
+                        Object.keys(this.auxHaber[mode]).forEach(time => {
+                            [0, 1, 3, 4, 5].forEach(index => this.auxHaber[mode][time][index] = '-');
+                        });
+                    });
+                    break;
+                case 'tercio':
+                    // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos _d_: tercio
+                    // this needs to be done partly pre (here - to separate singles from compuestos) 
+                    //                   and partly post to zap gerundio & participio after we're done
+                    // Verbo empecer
+                    ['Indicativo', 'Subjuntivo'].forEach(mode => {
+                        Object.keys(this.desinences[mode]).forEach(time => {
+                            [0, 1, 3, 4].forEach(index => this.desinences[mode][time][index] = '-');
+                        });
+                        Object.keys(this.auxHaber[mode]).forEach(time => {
+                            [0, 1, 2, 3, 4, 5].forEach(index => this.auxHaber[mode][time][index] = '-');
+                        });
+                    });
+                    break;
+                case 'terciop':
+                    // terciopersonal, v2 - infinitivo, gerundio, participio y en terceras personas
+                    // Verbo: acaecer, acontecer
+                    ['Indicativo', 'Subjuntivo'].forEach(mode => {
+                        Object.keys(this.desinences[mode]).forEach(time => {
+                            [0, 1, 3, 4].forEach(index => this.desinences[mode][time][index] = '-');
+                        });
+                        Object.keys(this.auxHaber[mode]).forEach(time => {
+                            [0, 1, 3, 4].forEach(index => this.auxHaber[mode][time][index] = '-');
+                        });
+                    });
+                    break;
+                // case 'mmorfo':
+                //     break;
+                // case 'bimorfop':
+                //     break;
+                // case 'bimorfog':
+                //     break;
+                // case 'trimorfo':
+                //     break;
+                // case 'omorfo':
+                //     break;
+                // case 'ogmorfo':
+                //     break;
+            }
         }
     }
 
@@ -162,7 +215,7 @@ export abstract class BaseModel {
         this.setImperativoAfirmativo();
         this.setImperativoNegativo();
 
-        this.applyDefectives();
+        this.applyAttributesPost();
 
         return this.table;
     }
@@ -174,33 +227,56 @@ export abstract class BaseModel {
     // imperatives get built from indicative/subjuntive modes
     protected beforeImperatives(): void { }
 
-    private applyDefectives(): void {
-        // {d:imorfo|eimorfo|imper|tercio|terciop|mmorfo|bimorfop|bimorfog|trimorfo|omorfo|omorfos}
+    private applyAttributesPost(): void {
         const defectiveType = this.attributes['_d_'] as DefectiveType;
-        // trimorfo infinitivo y en las segundas personas del imperativo
-        if (defectiveType && defectiveType === 'trimorfo') {
-            this.table.Impersonal.Gerundio = ['-'];
-            this.table.Impersonal.Participio = ['-'];
-            ['Indicativo', 'Subjuntivo' ].forEach(mode => {
-                Object.keys(this.table[mode]).forEach(time => {
-                    [0, 1, 2, 3, 4, 5].forEach(index => this.table[mode][time][index] = '-');
-                });
-            });
-            ['Imperativo'].forEach(mode => {
-                Object.keys(this.table[mode]).forEach(time => {
-                    [2, 3].forEach(index => this.table[mode][time][index] = '-');
-                });
-            });
+        if (defectiveType) {
+            switch (defectiveType) {
+                // case 'imorfo':     // formas cuya desinencia empieza por la vocal -i
+                //     break;
+                // case 'eimorfo':
+                //     break;
+                // case 'imper': // infinitivo, gerundio, participio y en las terceras personas del singular
+                //     break;
+                case 'tercio':
+                    // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos _d_: tercio
+                    // this needs to be done partly pre (above) to separate singles from compuestos
+                    //                   and partly post (here) to zap gerundio & participio after we're done
+                    // Verbo empecer
+                    this.table.Impersonal.Gerundio = ['-'];
+                    this.table.Impersonal.Participio = ['-'];
+                    break;
+                // case 'terciop':
+                //     break;
+                // case 'mmorfo':
+                //     break;
+                // case 'bimorfop':
+                //     break;
+                // case 'bimorfog':
+                //     break;
+                case 'trimorfo':
+                    // trimorfo infinitivo y en las segundas personas del imperativo
+                    // this can not all be done pre because we need to build subjuntives to build imperatives
+                    // so we prune everything after it gets built
+                    // Verbo abar
+                    this.table.Impersonal.Gerundio = ['-'];
+                    this.table.Impersonal.Participio = ['-'];
+                    ['Indicativo', 'Subjuntivo'].forEach(mode => {
+                        Object.keys(this.table[mode]).forEach(time => {
+                            [0, 1, 2, 3, 4, 5].forEach(index => this.table[mode][time][index] = '-');
+                        });
+                    });
+                    ['Imperativo'].forEach(mode => {
+                        Object.keys(this.table[mode]).forEach(time => {
+                            [2, 3].forEach(index => this.table[mode][time][index] = '-');
+                        });
+                    });
+                    break;
+                // case 'omorfo':
+                //     break;
+                // case 'ogmorfo':
+                //     break;
+            }
         }
-        // terciopersonal, v2 - infinitivo, gerundio, participio y en terceras personas
-        if (defectiveType && defectiveType === 'terciop') {
-            ['Indicativo', 'Subjuntivo', 'Imperativo'].forEach(mode => {
-                Object.keys(this.table[mode]).forEach(time => {
-                    [0, 1, 3, 4].forEach(index => this.table[mode][time][index] = '-');
-                });
-            });
-        }
-
     }
 
     protected setInfinitivo(): void {

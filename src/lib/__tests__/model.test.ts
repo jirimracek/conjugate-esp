@@ -90,9 +90,10 @@ describe("Model Test", () => {
     verbs.push('abar');        // the only known trimorfo         "abar": { "P": { "amar": { "d": "trimorfo" } } }
     verbs.push('abolir');      // interesting imorfo              "abolir": { "N": [ "vivir", { "vivir": { "d": "imorfo" } } ] },
     verbs.push('aclarar');     // dual, defective                 "aclarar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
+    verbs.push('acontecer');   // single defective                "acontecer": { "N": { "nacer": { "_d_": "terciop" } } },
     verbs.push('adecuar');     // dual, non defective             "adecuar": { "N": [ "amar", "actuar" ], "P": [ "amar", "actuar" ]
     verbs.push('antojar');     // defective terciopersonal v2     "antojar": { "P": { "amar": { "d": "terciop" } } },
-
+    verbs.push('empecer')      // the only known tercio           "empecer": { "N": { "nacer": { "_d_": "tercio" } } },
     verbs.push('inhestar');    // participio irregular, replace   "inhestar": { "N": { "pensar": { "PR": "estad/iest" } }
     verbs.push('puar');        // dual, monosyllables             "puar": { "N": [ "actuar", { "actuar": { "MS": "true" } } ] },
     verbs.push('serenar');     // triple, defective, both N + P   "serenar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
