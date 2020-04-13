@@ -79,37 +79,6 @@ describe("Model Test", () => {
 
     const conjugator = new Conjugator();
     const TEST_DIR = './testdata';
-    const linesPerConjugation = 124;    // each text conjugation is 124 lines 
-    const models: string[] = ['amar', 'temer', 'vivir'];
-    const verbs: string[] = [];
-    const regionsToTest = shuffle(['castellano', 'voseo', 'formal', 'canarias']) as Regions[];
-    models.push('actuar', 'adquirir', 'agorar', 'aguar', 'ahincar', 'aislar', 'andar', 'cazar', 'pensar');
-    models.push('abrir', 'argüir');
-    verbs.push(...models);
-    // some interesting verbs
-    verbs.push('abar');        // the only known trimorfo         "abar": { "P": { "amar": { "d": "trimorfo" } } }
-    verbs.push('abolir');      // interesting imorfo              "abolir": { "N": [ "vivir", { "vivir": { "d": "imorfo" } } ] },
-    verbs.push('aclarar');     // dual, defective                 "aclarar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
-    verbs.push('acontecer');   // single defective                "acontecer": { "N": { "nacer": { "_d_": "terciop" } } },
-    verbs.push('adecuar');     // dual, non defective             "adecuar": { "N": [ "amar", "actuar" ], "P": [ "amar", "actuar" ]
-    verbs.push('antojar');     // defective terciopersonal v2     "antojar": { "P": { "amar": { "d": "terciop" } } },
-    verbs.push('empecer')      // the only known tercio           "empecer": { "N": { "nacer": { "_d_": "tercio" } } },
-    verbs.push('inhestar');    // participio irregular, replace   "inhestar": { "N": { "pensar": { "PR": "estad/iest" } }
-    verbs.push('puar');        // dual, monosyllables             "puar": { "N": [ "actuar", { "actuar": { "MS": "true" } } ] },
-    verbs.push('serenar');     // triple, defective, both N + P   "serenar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
-    verbs.push('ventar');      // triple, defective               "ventar": { "N": [ { "pensar": { "d": "imper" } }, "amar", "pensar" ] },
-
-    const verbsToTest = shuffle(conjugator.getVerbList().filter(verb => verbs.includes(verb)));
-
-    test('Availability', () => {
-        verbs.forEach(verb => {
-            // this can happen if something goes wrong with the db (partial db during development)
-            if (!verbsToTest.includes(verb)) {
-                fail(`FIXME: '${verb}' not available for testing`);
-            }
-        });
-    });
-
     test('Bad Input', () => {
         expect(conjugator.conjugate('amarse', 'castellano')).toEqual([{}]);
         // force bad region
@@ -155,45 +124,80 @@ describe("Model Test", () => {
         expect(conjugator.conjugate('vivir')).not.toEqual([{}]);
     });
 
+    const verbs: string[] = [];
+    const regionsToTest = shuffle(['castellano', 'voseo', 'formal', 'canarias']) as Regions[];
+    // const models: string[] = ['amar', 'temer', 'vivir'];
+    const models: string[] = ['abrir', 'actuar', 'adquirir', 'agorar', 'aguar', 'ahincar', 'aislar', 'amar', 'andar', 'argüir', 'cazar', 'contar', 'nacer', 'pensar', 'temer', 'vivir'];
+
+
+    verbs.push(...models);
+    // some interesting verbs
+    verbs.push('abar');        // the only known trimorfo         "abar": { "P": { "amar": { "d": "trimorfo" } } }
+    verbs.push('abolir');      // interesting imorfo              "abolir": { "N": [ "vivir", { "vivir": { "d": "imorfo" } } ] },
+    verbs.push('aclarar');     // dual, defective                 "aclarar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
+    verbs.push('acontecer');   // single defective                "acontecer": { "N": { "nacer": { "_d_": "terciop" } } },
+    verbs.push('adecuar');     // dual, non defective             "adecuar": { "N": [ "amar", "actuar" ], "P": [ "amar", "actuar" ]
+    verbs.push('antojar');     // defective terciopersonal v2     "antojar": { "P": { "amar": { "d": "terciop" } } },
+    verbs.push('empecer')      // the only known tercio           "empecer": { "N": { "nacer": { "_d_": "tercio" } } },
+    verbs.push('inhestar');    // participio irregular, replace   "inhestar": { "N": { "pensar": { "PR": "estad/iest" } }
+    verbs.push('puar');        // dual, monosyllables             "puar": { "N": [ "actuar", { "actuar": { "MS": "true" } } ] },
+    verbs.push('serenar');     // triple, defective, both N + P   "serenar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
+    verbs.push('ventar');      // triple, defective               "ventar": { "N": [ { "pensar": { "d": "imper" } }, "amar", "pensar" ] },
+    verbs.push('tronar');      // from contar                     "tronar": { "N": [ { "contar": { "_d_": "imper" } }, "contar" ], "P": "contar" },
+
+    const verbsToTest = shuffle(conjugator.getVerbList().filter(verb => verbs.includes(verb)));
+
+    test('Availability', () => {
+        verbs.forEach(verb => {
+            // this can happen if something goes wrong with the db (partial db during development)
+            if (!verbsToTest.includes(verb)) {
+                fail(`FIXME: '${verb}' not available for testing`);
+            }
+        });
+    });
+
 
     describe("Conjugation Test", () => {
         verbsToTest.forEach(verb => {
             const testFiles = fs.readdirSync(path.join(TEST_DIR, verb), 'utf8');
-            test(`${verb}`, () => {
+            describe(`${verb}`, () => {
                 regionsToTest.forEach(region => {
-                    const conjugations: ResultType[] = conjugator.conjugate(verb, region);
+                    test(`${region}`, () => {
 
-                    const regionFiles = testFiles.filter(file => file.endsWith(region));
-                    const goldFiles: Map<string, string[]> = new Map();
-                    regionFiles.forEach(file => goldFiles.set(file, fs.readFileSync(path.join(TEST_DIR, verb, file), 'utf8').split('\n')));
+                        const conjugations: ResultType[] = conjugator.conjugate(verb, region);
 
-                    if (conjugations.length !== regionFiles.length) {
-                        debugger;
-                    }
-                    expect(conjugations.length).toBe(regionFiles.length);
+                        const regionFiles = testFiles.filter(file => file.endsWith(region));
+                        const goldFiles: Map<string, string[]> = new Map();
+                        regionFiles.forEach(file => goldFiles.set(file, fs.readFileSync(path.join(TEST_DIR, verb, file), 'utf8').split('\n')));
 
-                    let cIndexP = 0;
-                    let cIndexN = 0;
-                    conjugations.forEach(conjugation => {
-
-                        const info = conjugation.info;
-                        expect(info).not.toBeUndefined();
-
-                        const [model, region, pronominal, defective] = [info.model, info.region, info.pronominal, info.defective];
-                        let fileName = '';
-                        if (pronominal) {
-                            fileName = `${verb}se-${model}-${cIndexP++}-${region}`;
-                        } else {
-                            fileName = `${verb}-${model}-${cIndexN++}-${region}`;
+                        if (conjugations.length !== regionFiles.length) {
+                            debugger;
                         }
-                        const data = json2Text(conjugation.conjugation);
+                        expect(conjugations.length).toBe(regionFiles.length);
 
-                        const goldData = goldFiles.get(fileName);
-                        expect(goldData).not.toBeUndefined();
+                        let cIndexP = 0;
+                        let cIndexN = 0;
+                        conjugations.forEach(conjugation => {
 
-                        goldData!.forEach((line, index) => {
-                            // Received                               Expected   
-                            expect(`${index}:${data[index]}`).toBe(`${index}:${line}`);
+                            const info = conjugation.info;
+                            expect(info).not.toBeUndefined();
+
+                            const [model, region, pronominal ] = [info.model, info.region, info.pronominal];
+                            let fileName = '';
+                            if (pronominal) {
+                                fileName = `${verb}se-${model}-${cIndexP++}-${region}`;
+                            } else {
+                                fileName = `${verb}-${model}-${cIndexN++}-${region}`;
+                            }
+                            const data = json2Text(conjugation.conjugation);
+
+                            const goldData = goldFiles.get(fileName);
+                            expect(goldData).not.toBeUndefined();
+
+                            goldData!.forEach((line, index) => {
+                                // Received                               Expected   
+                                expect(`${index}:${data[index]}`).toBe(`${index}:${line}`);
+                            });
                         });
                     });
                 });

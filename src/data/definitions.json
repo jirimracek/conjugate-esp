@@ -1301,7 +1301,7 @@
   "N": "amar"
  },
  "acollar": {
-  "N": "contar"
+  "N": "amar"
  },
  "acollarar": {
   "N": "amar",
@@ -1381,7 +1381,7 @@
   "N": "amar"
  },
  "acontar": {
-  "N": "contar"
+  "N": "amar"
  },
  "acontecer": {
   "N": {
@@ -1478,7 +1478,11 @@
  "acostumbrar": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "omorfo"
+    }
+   }
   ],
   "P": "amar"
  },
@@ -1873,7 +1877,11 @@
  "adonecer": {
   "N": [
    "nacer",
-   "nacer"
+   {
+    "nacer": {
+     "_d_": "terciop"
+    }
+   }
   ]
  },
  "adonizar": {
@@ -2246,8 +2254,8 @@
  },
  "aforar": {
   "N": [
-   "amar",
-   "contar"
+   "contar",
+   "amar"
   ]
  },
  "aforcar": {
@@ -2653,8 +2661,16 @@
   "P": "cazar"
  },
  "aguerrir": {
-  "N": "vivir",
-  "P": "vivir"
+  "N": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  },
+  "P": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  }
  },
  "aguijar": {
   "N": "amar"
@@ -2915,8 +2931,8 @@
   "N": "amar"
  },
  "ajorar": {
-  "N": "contar",
-  "P": "contar"
+  "N": "amar",
+  "P": "amar"
  },
  "ajordar": {
   "N": "amar"
@@ -2984,7 +3000,11 @@
  "alambrar": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "alambrear": {
@@ -3064,12 +3084,20 @@
  "alborear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "alborecer": {
   "N": [
-   "nacer",
+   {
+    "nacer": {
+     "_d_": "imper"
+    }
+   },
    "nacer"
   ]
  },
@@ -3099,7 +3127,7 @@
   "N": "cazar"
  },
  "alcahotar": {
-  "N": "contar"
+  "N": "amar"
  },
  "alcahuetar": {
   "N": "amar"
@@ -3749,7 +3777,11 @@
  },
  "amanecer": {
   "N": [
-   "nacer",
+   {
+    "nacer": {
+     "_d_": "imper"
+    }
+   },
    "nacer"
   ],
   "P": "nacer"
@@ -4441,7 +4473,11 @@
  },
  "anochecer": {
   "N": [
-   "nacer",
+   {
+    "nacer": {
+     "_d_": "imper"
+    }
+   },
    "nacer"
   ],
   "P": "nacer"
@@ -4624,7 +4660,7 @@
   "N": "amar"
  },
  "anzolar": {
-  "N": "contar"
+  "N": "amar"
  },
  "aocar": {
   "N": "sacar"
@@ -4861,7 +4897,11 @@
  "apedrear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "amar"
  },
@@ -5811,8 +5851,16 @@
   "N": "amar"
  },
  "arrecir": {
-  "N": "vivir",
-  "P": "vivir"
+  "N": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  },
+  "P": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  }
  },
  "arrecoger": {
   "N": "coger",
@@ -6612,7 +6660,11 @@
  },
  "atardecer": {
   "N": [
-   "nacer",
+   {
+    "nacer": {
+     "_d_": "imper"
+    }
+   },
    "nacer"
   ]
  },
@@ -6652,7 +6704,11 @@
  "atañer": {
   "N": [
    "tañer",
-   "tañer"
+   {
+    "tañer": {
+     "_d_": "terciop"
+    }
+   }
   ]
  },
  "atear": {
@@ -6727,8 +6783,16 @@
   "P": "amar"
  },
  "aterir": {
-  "N": "vivir",
-  "P": "vivir"
+  "N": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  },
+  "P": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  }
  },
  "aternecer": {
   "N": "nacer"
@@ -8647,7 +8711,11 @@
  "brisar": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "briscar": {
@@ -9907,7 +9975,11 @@
  "cerner": {
   "N": [
    "tender",
-   "tender"
+   {
+    "tender": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "tender"
  },
@@ -10381,7 +10453,11 @@
  "chispear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "amar"
  },
@@ -10721,7 +10797,11 @@
  "clarear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "amar"
  },
@@ -11079,7 +11159,11 @@
   "P": "amar"
  },
  "colorir": {
-  "N": "vivir"
+  "N": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  }
  },
  "colpar": {
   "N": "amar"
@@ -11318,11 +11402,19 @@
  "compungir": {
   "N": [
    "surgir",
-   "surgir"
+   {
+    "surgir": {
+     "_d_": "imorfo"
+    }
+   }
   ],
   "P": [
    "surgir",
-   "surgir"
+   {
+    "surgir": {
+     "_d_": "imorfo"
+    }
+   }
   ]
  },
  "compurgar": {
@@ -11380,7 +11472,11 @@
   "N": "actuar"
  },
  "concernir": {
-  "N": "discernir"
+  "N": {
+   "discernir": {
+    "_d_": "terciop"
+   }
+  }
  },
  "concertar": {
   "N": "pensar",
@@ -11765,14 +11861,14 @@
   "N": "vivir"
  },
  "consograr": {
-  "N": "contar"
+  "N": "amar"
  },
  "consolar": {
   "N": "contar",
   "P": "contar"
  },
  "consoldar": {
-  "N": "contar"
+  "N": "amar"
  },
  "consolidar": {
   "N": "amar",
@@ -13311,7 +13407,7 @@
   "N": "cazar"
  },
  "demonstrar": {
-  "N": "contar"
+  "N": "amar"
  },
  "demorar": {
   "N": "amar",
@@ -13345,7 +13441,7 @@
   "N": "amar"
  },
  "denodar": {
-  "P": "contar"
+  "P": "amar"
  },
  "denominar": {
   "N": "amar",
@@ -13602,11 +13698,19 @@
  },
  "desabrir": {
   "N": [
-   "vivir",
+   {
+    "vivir": {
+     "_d_": "imorfo"
+    }
+   },
    "vivir"
   ],
   "P": [
-   "vivir",
+   {
+    "vivir": {
+     "_d_": "imorfo"
+    }
+   },
    "vivir"
   ]
  },
@@ -13654,7 +13758,7 @@
   "N": "amar"
  },
  "desacollar": {
-  "N": "contar"
+  "N": "amar"
  },
  "desacomodar": {
   "N": "amar",
@@ -14959,8 +15063,16 @@
   "P": "amar"
  },
  "descolorir": {
-  "N": "vivir",
-  "P": "vivir"
+  "N": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  },
+  "P": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  }
  },
  "descombrar": {
   "N": "amar"
@@ -17267,8 +17379,16 @@
   "N": "amar"
  },
  "despavorir": {
-  "N": "vivir",
-  "P": "vivir"
+  "N": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  },
+  "P": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  }
  },
  "despear": {
   "P": "amar"
@@ -18054,11 +18174,19 @@
  "desvaír": {
   "N": [
    "embaír",
-   "embaír"
+   {
+    "embaír": {
+     "_d_": "imorfo"
+    }
+   }
   ],
   "P": [
    "embaír",
-   "embaír"
+   {
+    "embaír": {
+     "_d_": "imorfo"
+    }
+   }
   ]
  },
  "desvedar": {
@@ -19221,8 +19349,16 @@
   "P": "cazar"
  },
  "embaír": {
-  "N": "embaír",
-  "P": "embaír"
+  "N": {
+   "embaír": {
+    "_d_": "imorfo"
+   }
+  },
+  "P": {
+   "embaír": {
+    "_d_": "imorfo"
+   }
+  }
  },
  "embebecer": {
   "N": "nacer",
@@ -19839,11 +19975,19 @@
  "empedernir": {
   "N": [
    "vivir",
-   "vivir"
+   {
+    "vivir": {
+     "_d_": "imorfo"
+    }
+   }
   ],
   "P": [
    "vivir",
-   "vivir"
+   {
+    "vivir": {
+     "_d_": "imorfo"
+    }
+   }
   ]
  },
  "empedrar": {
@@ -24276,7 +24420,11 @@
  "escampar": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "escamujar": {
@@ -24345,7 +24493,11 @@
  "escarchar": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "amar"
  },
@@ -24456,7 +24608,11 @@
  },
  "esclarecer": {
   "N": [
-   "nacer",
+   {
+    "nacer": {
+     "_d_": "imper"
+    }
+   },
    "nacer"
   ]
  },
@@ -25234,7 +25390,11 @@
  "estar": {
   "N": [
    "estar",
-   "estar"
+   {
+    "estar": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "estar"
  },
@@ -26591,10 +26751,10 @@
  },
  "follar": {
   "N": [
-   "amar",
-   "contar"
+   "contar",
+   "amar"
   ],
-  "P": "amar"
+  "P": "contar"
  },
  "fomentar": {
   "N": "amar"
@@ -27102,7 +27262,11 @@
  },
  "garantir": {
   "N": [
-   "vivir",
+   {
+    "vivir": {
+     "_d_": "imorfo"
+    }
+   },
    "vivir"
   ]
  },
@@ -27422,7 +27586,11 @@
  "gotear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "gozar": {
@@ -27770,7 +27938,11 @@
  "haber": {
   "N": [
    "haber",
-   "haber"
+   {
+    "haber": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "haber"
  },
@@ -27796,7 +27968,11 @@
  "hacer": {
   "N": [
    "hacer",
-   "hacer"
+   {
+    "hacer": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "hacer"
  },
@@ -29750,7 +29926,11 @@
  "jarrear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "jarretar": {
@@ -30163,7 +30343,11 @@
  "lanchar": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "lancinar": {
@@ -30639,9 +30823,17 @@
  "llover": {
   "N": [
    "mover",
-   "mover"
+   {
+    "mover": {
+     "_d_": "imper"
+    }
+   }
   ],
-  "P": "mover"
+  "P": {
+   "mover": {
+    "_d_": "imper"
+   }
+  }
  },
  "lloviznar": {
   "N": {
@@ -30666,7 +30858,11 @@
  },
  "lobreguecer": {
   "N": [
-   "nacer",
+   {
+    "nacer": {
+     "_d_": "imper"
+    }
+   },
    "nacer"
   ]
  },
@@ -31227,8 +31423,16 @@
   "N": "amar"
  },
  "manir": {
-  "N": "vivir",
-  "P": "vivir"
+  "N": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  },
+  "P": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  }
  },
  "manjolar": {
   "N": "amar"
@@ -31324,7 +31528,11 @@
  "marcear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "marcenar": {
@@ -31344,7 +31552,11 @@
  "marcir": {
   "N": [
    "zurcir",
-   "zurcir"
+   {
+    "zurcir": {
+     "_d_": "eimorfo"
+    }
+   }
   ]
  },
  "marear": {
@@ -31561,7 +31773,11 @@
  "mayear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "mayorar": {
@@ -32783,7 +32999,11 @@
  "nortear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "amar"
  },
@@ -32818,7 +33038,11 @@
   "N": "amar",
   "P": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "nucir": {
@@ -33230,10 +33454,18 @@
  },
  "oscurecer": {
   "N": [
-   "nacer",
+   {
+    "nacer": {
+     "_d_": "imper"
+    }
+   },
    "nacer"
   ],
-  "P": "nacer"
+  "P": {
+   "nacer": {
+    "_d_": "imper"
+   }
+  }
  },
  "osear": {
   "N": "amar"
@@ -33594,10 +33826,18 @@
  },
  "parecer": {
   "N": [
-   "nacer",
+   {
+    "nacer": {
+     "_d_": "imper"
+    }
+   },
    "nacer"
   ],
-  "P": "nacer"
+  "P": {
+   "nacer": {
+    "_d_": "imper"
+   }
+  }
  },
  "parificar": {
   "N": "sacar"
@@ -33666,7 +33906,11 @@
  "pasar": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "terciop"
+    }
+   }
   ],
   "P": "amar"
  },
@@ -34194,7 +34438,11 @@
  "pesar": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "terciop"
+    }
+   }
   ]
  },
  "pescar": {
@@ -34287,7 +34535,11 @@
  "picar": {
   "N": [
    "sacar",
-   "sacar"
+   {
+    "sacar": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "sacar"
  },
@@ -34645,7 +34897,11 @@
  "poder": {
   "N": [
    "poder",
-   "poder"
+   {
+    "poder": {
+     "_d_": "terciop"
+    }
+   }
   ]
  },
  "podrecer": {
@@ -34743,7 +34999,11 @@
  "poner": {
   "N": [
    "poner",
-   "poner"
+   {
+    "poner": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "poner"
  },
@@ -35161,7 +35421,11 @@
   "N": "amar"
  },
  "preterir": {
-  "N": "servir"
+  "N": {
+   "servir": {
+    "_d_": "imorfo"
+   }
+  }
  },
  "preterizar": {
   "N": "cazar"
@@ -35228,7 +35492,11 @@
  "pringar": {
   "N": [
    "pagar",
-   "pagar"
+   {
+    "pagar": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "pagar"
  },
@@ -35726,7 +35994,11 @@
  "querer": {
   "N": [
    "querer",
-   "querer"
+   {
+    "querer": {
+     "_d_": "terciop"
+    }
+   }
   ]
  },
  "querochar": {
@@ -35833,7 +36105,11 @@
  "rachear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "racimar": {
@@ -37313,7 +37589,11 @@
  "relampaguear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "relampar": {
@@ -37417,7 +37697,11 @@
   "P": "pagar"
  },
  "remanir": {
-  "N": "vivir"
+  "N": {
+   "vivir": {
+    "_d_": "imorfo"
+   }
+  }
  },
  "remansar": {
   "N": "amar",
@@ -38731,7 +39015,11 @@
  "rociar": {
   "N": [
    "vaciar",
-   "vaciar"
+   {
+    "vaciar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "rodajear": {
@@ -38824,17 +39112,21 @@
   "N": "amar"
  },
  "rosar": {
-  "N": {
+  "N": "amar",
+  "P": {
    "amar": {
     "_d_": "imper"
    }
-  },
-  "P": "amar"
+  }
  },
  "roscar": {
   "N": [
    "sacar",
-   "sacar"
+   {
+    "sacar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "rosear": {
@@ -38914,7 +39206,11 @@
  "rugir": {
   "N": [
    "surgir",
-   "surgir"
+   {
+    "surgir": {
+     "_d_": "terciop"
+    }
+   }
   ]
  },
  "ruinar": {
@@ -40151,7 +40447,11 @@
  "sonar": {
   "N": [
    "contar",
-   "contar"
+   {
+    "contar": {
+     "_d_": "terciop"
+    }
+   }
   ],
   "P": "contar"
  },
@@ -41114,7 +41414,11 @@
  "tempestear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "templar": {
@@ -41191,7 +41495,11 @@
   "N": "amar",
   "P": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "terciop"
+    }
+   }
   ]
  },
  "tergiversar": {
@@ -41439,7 +41747,7 @@
   "P": "amar"
  },
  "tonar": {
-  "N": "contar"
+  "N": "amar"
  },
  "tongonear": {
   "N": "amar",
@@ -41786,7 +42094,11 @@
  "trapear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ]
  },
  "trapicar": {
@@ -42292,7 +42604,11 @@
  },
  "tronar": {
   "N": [
-   "contar",
+   {
+    "contar": {
+     "_d_": "imper"
+    }
+   },
    "contar"
   ],
   "P": "contar"
@@ -42817,9 +43133,17 @@
  "ventear": {
   "N": [
    "amar",
-   "amar"
+   {
+    "amar": {
+     "_d_": "imper"
+    }
+   }
   ],
-  "P": "amar"
+  "P": {
+   "amar": {
+    "_d_": "imper"
+   }
+  }
  },
  "ventilar": {
   "N": "amar",

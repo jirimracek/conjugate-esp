@@ -61,13 +61,15 @@ describe("String Utils", () => {
         expect(syllabify('desaparroquiense')).toEqual(['de', 'sa', 'pa', 'rro', 'quien', 'se']);
         expect(syllabify('desempeorense')).toEqual(['de', 'sem', 'pe', 'o', 'ren', 'se']);
         expect(syllabify('deslengüense')).toEqual(['des', 'len', 'güen', 'se']);
-
+        expect(syllabify('tú electrosueldate')).toEqual(['tú', ' e', 'lec', 'tro', 'suel', 'da', 'te']);
         expect(syllabify('igualense')).toEqual(['i', 'gua', 'len', 'se']);
         expect(syllabify('ionicemonos')).toEqual(['io', 'ni', 'ce', 'mo', 'nos']);
         expect(syllabify('ionicense')).toEqual(['io', 'ni', 'cen', 'se']);
         expect(syllabify('ionizate')).toEqual(['io', 'ni', 'za', 'te']);
         expect(syllabify('redondeate')).toEqual(['re', 'don', 'de', 'a', 'te']);
         expect(syllabify('sobreaguense')).toEqual(['so', 'bre', 'a', 'guen', 'se']);
+
+
 
         // Accentuated
         expect(syllabify('aguáitate')).toEqual(['a', 'guái', 'ta', 'te']);
@@ -89,6 +91,7 @@ describe("String Utils", () => {
         expect(syllabify('desaparróquiense')).toEqual(['de', 'sa', 'pa', 'rró', 'quien', 'se']);
         expect(syllabify('desléngüense')).toEqual(['des', 'lén', 'güen', 'se']);
         expect(syllabify('desempeórense')).toEqual(['de', 'sem', 'pe', 'ó', 'ren', 'se']);
+        expect(syllabify('tú electrosuéldate')).toEqual(['tú', ' e', 'lec', 'tro', 'suél', 'da', 'te']);
         expect(syllabify('iguálense')).toEqual(['i', 'guá', 'len', 'se']);
         expect(syllabify('ionicémonos')).toEqual(['io', 'ni', 'cé', 'mo', 'nos']);
         expect(syllabify('ionícense')).toEqual(['io', 'ní', 'cen', 'se']);
@@ -121,6 +124,7 @@ describe("String Utils", () => {
         expect(esdrujula('tú caigate')).toEqual('tú cáigate');
         expect(esdrujula('tú callate')).toEqual('tú cállate');
         expect(esdrujula('tú desaparroquiate')).toEqual('tú desaparróquiate');
+        expect(esdrujula('tú electrosueldate')).toEqual('tú electrosuéldate');
         expect(esdrujula('tú hablame')).toEqual('tú háblame');
         expect(esdrujula('tú ionizate')).toEqual('tú ionízate');
         expect(esdrujula('tú muevete')).toEqual('tú muévete');
@@ -143,6 +147,8 @@ describe("String Utils", () => {
         expect(esdrujula('nosotros antarqueemonos')).toEqual('nosotros antarqueémonos');
         expect(esdrujula('nosotros azoemonos')).toEqual('nosotros azoémonos');
         expect(esdrujula('nosotros ionicemonos')).toEqual('nosotros ionicémonos');
+        expect(esdrujula('nosotros electrosoldamonos')).toEqual('nosotros electrosoldámonos');
+
 
         expect(esdrujula('ustedes aguaitense')).toEqual('ustedes aguáitense');
         expect(esdrujula('ustedes amaestrense')).toEqual('ustedes amaéstrense');
@@ -153,6 +159,7 @@ describe("String Utils", () => {
         expect(esdrujula('ustedes desaparroquiense')).toEqual('ustedes desaparróquiense');
         expect(esdrujula('ustedes desempeorense')).toEqual('ustedes desempeórense');
         expect(esdrujula('ustedes deslengüense')).toEqual('ustedes desléngüense');
+        expect(esdrujula('ustedes electrosueldense')).toEqual('ustedes electrosuéldense');
         expect(esdrujula('ustedes rearmense')).toEqual('ustedes reármense');
         expect(esdrujula('ustedes sobreaguense')).toEqual('ustedes sobreáguense');
     });

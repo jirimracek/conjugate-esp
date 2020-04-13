@@ -191,6 +191,43 @@ export class cazar extends amar {
         this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
     }
 }
+
+export class contar extends amar {
+    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(type, region, attributes);
+    }
+    protected beforeImperatives(): void {
+        // /(.*)o(?=.*o)/
+        //         replace(/(.*)o/, '$1_ue_'));
+        //                     (/(.*)o(?=.*o)/, '$1_ue_')
+        const pattern: RegExp = /(.*)o/;
+        const pattern_1: RegExp = /(.*)o(?=.*o)/;
+        const pattern_2: RegExp = /(.*g)ue/;
+        const replacement = '$1ue';
+        const replacement_2 = '$1üe';
+        this.replaceIndicativoPresente([0], pattern_1, replacement);
+        this.replaceIndicativoPresente([0], pattern_2, replacement_2);
+        if (this.region === 'castellano') {
+            this.replaceIndicativoPresente([1, 2, 5], pattern, replacement);
+            this.replaceIndicativoPresente([1, 2, 5], pattern_2, replacement_2);
+            this.replaceSubjuntivoPresente([0, 1, 2, 5], pattern, replacement);
+            this.replaceSubjuntivoPresente([0, 1, 2, 5], pattern_2, replacement_2);
+        }
+        if (this.region === 'voseo') {
+            this.replaceIndicativoPresente([2, 4, 5], pattern, replacement);
+            this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
+            this.replaceIndicativoPresente([2, 4, 5], pattern_2, replacement_2);
+            this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern_2, replacement_2);
+        }
+        if (this.region === 'canarias' || this.region === 'formal') {
+            this.replaceIndicativoPresente([1, 2, 4, 5], pattern, replacement);
+            this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
+            this.replaceIndicativoPresente([1, 2, 4, 5], pattern_2, replacement_2);
+            this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern_2, replacement_2);
+        }
+    }
+}
+
 export class pensar extends amar {
     public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(type, region, attributes);
