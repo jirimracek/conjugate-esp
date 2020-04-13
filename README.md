@@ -61,7 +61,7 @@ ____
 
 ## Status
 
-- 4/13/2020, Added nacer
+- 4/13/2020, Added nacer, started using multiline definitions.json because the single line version, albeit smaller, is a PITA to diff and merge
 
 ____
 
