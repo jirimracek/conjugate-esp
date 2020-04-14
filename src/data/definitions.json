@@ -4987,7 +4987,7 @@
   "P": "amar"
  },
  "apercebir": {
-  "N": "servir"
+  "N": "vivir"
  },
  "aperchar": {
   "N": "amar",
@@ -5362,7 +5362,7 @@
   "N": "amar"
  },
  "apremir": {
-  "N": "servir"
+  "N": "vivir"
  },
  "aprender": {
   "N": "temer"
@@ -7737,7 +7737,7 @@
   "P": "sacar"
  },
  "añedir": {
-  "N": "servir"
+  "N": "vivir"
  },
  "añejar": {
   "N": "amar",
@@ -13073,7 +13073,7 @@
   "N": "amar"
  },
  "decebir": {
-  "N": "servir"
+  "N": "vivir"
  },
  "decelerar": {
   "N": "amar"
@@ -13255,7 +13255,7 @@
   "N": "amar"
  },
  "degestir": {
-  "N": "servir"
+  "N": "vivir"
  },
  "deglutir": {
   "N": "vivir"
@@ -14135,7 +14135,7 @@
   "P": "pagar"
  },
  "desapercebir": {
-  "N": "servir"
+  "N": "vivir"
  },
  "desapestar": {
   "N": "amar"
@@ -18505,7 +18505,7 @@
   "N": "sentir"
  },
  "digestir": {
-  "N": "servir"
+  "N": "vivir"
  },
  "digitalizar": {
   "N": "cazar"
@@ -26035,7 +26035,7 @@
   "N": "amar"
  },
  "expremir": {
-  "N": "servir"
+  "N": "vivir"
  },
  "expresar": {
   "N": "amar",
@@ -26418,7 +26418,7 @@
   "N": "cazar"
  },
  "fenchir": {
-  "N": "servir"
+  "N": "vivir"
  },
  "fender": {
   "N": "tender"
@@ -28792,7 +28792,7 @@
   "P": "amar"
  },
  "impremir": {
-  "N": "servir"
+  "N": "vivir"
  },
  "imprentar": {
   "N": "amar"
@@ -35301,7 +35301,7 @@
   "N": "amar"
  },
  "premir": {
-  "N": "servir"
+  "N": "vivir"
  },
  "premitir": {
   "N": "vivir"
@@ -39112,12 +39112,12 @@
   "N": "amar"
  },
  "rosar": {
-  "N": "amar",
-  "P": {
+  "N": {
    "amar": {
     "_d_": "imper"
    }
-  }
+  },
+  "P": "amar"
  },
  "roscar": {
   "N": [

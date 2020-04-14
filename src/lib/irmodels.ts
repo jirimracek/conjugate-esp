@@ -101,3 +101,69 @@ export class argüir extends vivir {
         this.replaceSubjuntivoFuturoImperfecto([0, 1, 2, 3, 4, 5], pattern, replacement);
     }
 }
+export class surgir extends vivir {
+    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(type, region, attributes);
+    }
+
+    protected beforeImperatives(): void {
+        const pattern: RegExp = /(.*)g(.*)/;
+        const replacement: string = '$1j$2';
+        if (this.region === 'castellano') {
+            this.replaceIndicativoPresente([0], pattern, replacement);
+            this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
+        }
+        if (this.region === 'voseo') {
+            this.replaceIndicativoPresente([0], pattern, replacement);
+            this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
+        }
+        if (this.region === 'canarias' || this.region === 'formal') {
+            this.replaceIndicativoPresente([0], pattern, replacement);
+            this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
+        }
+    }
+}
+export class servir extends vivir {
+    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(type, region, attributes);
+    }
+
+    protected beforeImperatives(): void {
+        const pattern: RegExp = /(.)qui(.*)/;
+        const replacement: string = '$1quie$2';
+        if (this.region === 'castellano') {
+            // this.replaceIndicativoPresente([0, 1, 2, 5], pattern, replacement);
+            // this.replaceSubjuntivoPresente([0, 1, 2, 5], pattern, replacement);
+        }
+        if (this.region === 'voseo') {
+            // this.replaceIndicativoPresente([0, 2, 4, 5], pattern, replacement);
+            // this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
+        }
+        if (this.region === 'canarias' || this.region === 'formal') {
+            // this.replaceIndicativoPresente([0, 1, 2, 4, 5], pattern, replacement);
+            // this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
+        }
+    }
+}
+export class embaír extends vivir {
+    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(type, region, attributes);
+    }
+
+    protected beforeImperatives(): void {
+        const pattern: RegExp = /(.)qui(.*)/;
+        const replacement: string = '$1quie$2';
+        if (this.region === 'castellano') {
+            // this.replaceIndicativoPresente([0, 1, 2, 5], pattern, replacement);
+            // this.replaceSubjuntivoPresente([0, 1, 2, 5], pattern, replacement);
+        }
+        if (this.region === 'voseo') {
+            // this.replaceIndicativoPresente([0, 2, 4, 5], pattern, replacement);
+            // this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
+        }
+        if (this.region === 'canarias' || this.region === 'formal') {
+            // this.replaceIndicativoPresente([0, 1, 2, 4, 5], pattern, replacement);
+            // this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
+        }
+    }
+}
