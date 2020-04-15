@@ -30858,12 +30858,12 @@
  },
  "lobreguecer": {
   "N": [
+   "nacer",
    {
     "nacer": {
      "_d_": "imper"
     }
-   },
-   "nacer"
+   }
   ]
  },
  "localizar": {
@@ -33454,18 +33454,14 @@
  },
  "oscurecer": {
   "N": [
+   "nacer",
    {
     "nacer": {
      "_d_": "imper"
     }
-   },
-   "nacer"
-  ],
-  "P": {
-   "nacer": {
-    "_d_": "imper"
    }
-  }
+  ],
+  "P": "nacer"
  },
  "osear": {
   "N": "amar"
@@ -33826,18 +33822,14 @@
  },
  "parecer": {
   "N": [
+   "nacer",
    {
     "nacer": {
      "_d_": "imper"
     }
-   },
-   "nacer"
-  ],
-  "P": {
-   "nacer": {
-    "_d_": "imper"
    }
-  }
+  ],
+  "P": "nacer"
  },
  "parificar": {
   "N": "sacar"
@@ -42042,7 +42034,11 @@
  "transparecer": {
   "N": [
    "nacer",
-   "nacer"
+   {
+    "nacer": {
+     "_d_": "imper"
+    }
+   }
   ],
   "P": "nacer"
  },

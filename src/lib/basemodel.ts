@@ -9,6 +9,8 @@ import { PRONOUNS, AUX_HABER } from './declarations/constants';
 import { clearAccents, esdrujula } from './utilities/stringutils';
 
 export abstract class BaseModel {
+    protected verb: string;
+    protected stem: string = '';
     protected type: PronominalKeys;
     protected region: Regions;
     protected pronouns: PronounsTable = PRONOUNS;
@@ -17,11 +19,12 @@ export abstract class BaseModel {
     protected auxHaber: ConjugationTable = {};
     protected table: ConjugationTable = {};
     protected participioCompuesto = '';
-    protected stem: string = '';
 
     protected attributes: ModelAttributes;
 
-    protected constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    protected constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        this.verb = verb;
+        this.stem = verb.replace(/..$/, '');
         this.type = type;
         this.region = region;
         this.attributes = attributes;
@@ -54,7 +57,7 @@ export abstract class BaseModel {
      * Reorder terminations based on the region.  Call in derived class once we have the desinences configured
      * based on verb type.  This is the last step, common to everyone.
      */
-    protected configDesinencesByRegion() {
+    protected setDesinencesByRegion() {
         // Shuffle terminations and auxHaber based on region
         if (this.region === 'voseo') {                      // Voseo, 2nd singular -> accented version, 2nd plural -> ustedes 
             // desinences
@@ -127,7 +130,7 @@ export abstract class BaseModel {
                     this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.map(d => /^[ií]/.test(d) ? d : '-');
                     // this.desinences.Impersonal.Participio = this.desinences.Impersonal.Participio.map(d => /^[ií]/.test(d) ? d : '-');
                     ['Indicativo', 'Subjuntivo'].forEach(mode => {
-                        Object.keys(this.desinences[mode]).forEach (time => {
+                        Object.keys(this.desinences[mode]).forEach(time => {
                             this.desinences[mode][time] = this.desinences[mode][time].map(d => /^[ií]/.test(d) ? d : '-');
                         });
                         // this.desinences[mode]['Presente'] = this.desinences[mode]['Presente'].map(d => /^[ií]/.test(d) ? d : '-');
@@ -187,14 +190,11 @@ export abstract class BaseModel {
         }
     }
 
-    public getConjugationOf(verb: string): ConjugationTable {
-        this.stem = verb.replace(/..$/, '');
+    public getConjugationOf(): ConjugationTable {
 
         this.setInfinitivo();
         this.setGerundio();
         this.setParticipio();
-        this.setParticipioCompuesto();
-        this.afterImpersonales();
 
         this.setIndicativoPresente();
         this.setIndicativoPreteritoImperfecto();
@@ -218,8 +218,6 @@ export abstract class BaseModel {
         this.setSubjuntivoPreteritoPluscuamperfectoSe();
         this.setSubjuntivoFuturoPerfecto();
 
-        this.beforeImperatives();
-
         this.setImperativoAfirmativo();
         this.setImperativoNegativo();
 
@@ -227,13 +225,6 @@ export abstract class BaseModel {
 
         return this.table;
     }
-
-    // Allow participio, gerundio modifications after the base versions are set
-    protected afterImpersonales(): void { }
-
-    // Allow irregular modifications in derived classes before calling imperatives
-    // imperatives get built from indicative/subjuntive modes
-    protected beforeImperatives(): void { }
 
     private applyAttributesPost(): void {
         const defectiveType = this.attributes['_d_'] as DefectiveType;
@@ -290,58 +281,63 @@ export abstract class BaseModel {
     protected setInfinitivo(): void {
         this.table.Impersonal.Infinitivo = [`${this.stem}${(this.type === 'P' ? this.desinences.Impersonal.Infinitivo[1] : this.desinences.Impersonal.Infinitivo[0])}`];
     }
-    protected setGerundio(): void {
+    protected setGerundio(root?: string): void {
         if (this.type === 'N' && this.desinences.Impersonal.Gerundio[0] !== '-') {
-            this.table.Impersonal.Gerundio = [`${this.stem}${this.desinences.Impersonal.Gerundio[0]}`];
+            this.table.Impersonal.Gerundio = [`${root ? root : this.stem}${this.desinences.Impersonal.Gerundio[0]}`];
         } else if (this.type === 'P' && this.desinences.Impersonal.Gerundio[1] !== '-') {
-            this.table.Impersonal.Gerundio = [`${this.stem}${this.desinences.Impersonal.Gerundio[1]}`];
-            // this.table.Impersonal.Gerundio = [`${this.stem}${(this.type === 'P' ? this.desinences.Impersonal.Gerundio[1] : this.desinences.Impersonal.Gerundio[0])}`];
+            this.table.Impersonal.Gerundio = [`${root ? root : this.stem}${this.desinences.Impersonal.Gerundio[1]}`];
         } else {
             this.table.Impersonal.Gerundio = ['-'];
         }
     }
     protected setParticipio(): void {
         this.table.Impersonal.Participio = [`${this.stem}${this.desinences.Impersonal.Participio}`];
-    }
-
-    protected setParticipioCompuesto(): void {
         this.participioCompuesto = this.table.Impersonal.Participio[0];
     }
 
     /////////////////////////////////////////////////////////////////
     // Indicativo simple
-    private formSimple(desinence: string, index: number): string {
+    /**
+     * Compose simple (not compuesto) mode-time-person region conjugated expression, 
+     * join pronoun + verb stem + desinence.  
+     * If desinence is defective ('-'), return a blank ('-')
+     * @param desinence this person's desinence
+     * @param index this person's index in the pronouns table
+     * @param root root of the verb / verb stem.  Optional, if not provided, the verb default is used
+     */
+    private formSimple(desinence: string, index: number, root?: string): string {
         if (desinence !== '-') {
-            return `${this.pronouns[this.type][this.region][index]} ${this.stem}${desinence}`.trim();
+            return `${this.pronouns[this.type][this.region][index]} ${root ? root : this.stem}${desinence}`.trim();
         }
         return '-';
     }
 
-    // Set simple methods
-    protected setIndicativoPresente(): void {
-        this.table.Indicativo.Presente = this.desinences.Indicativo.Presente.map((desinence, index) => this.formSimple(desinence, index));
+    /**
+     * Iterate over desinences table, form a table of conjugations.
+     * Called from the base class if the verb stem doesn't change or
+     * from derived, which may change stems per each person.
+     * 
+     * @param roots optional array of verb stems modified by the derived object, if undefined, formSimple will use this.stem
+     */
+    protected setIndicativoPresente(roots?: string[]): void {
+        this.table.Indicativo.Presente =
+            this.desinences.Indicativo.Presente.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
     }
-
     protected setIndicativoPreteritoImperfecto(): void {
-        this.table.Indicativo.Preterito_Imperfecto = this.desinences.Indicativo.Preterito_Imperfecto.map((desinence, index) => this.formSimple(desinence, index));
+        this.table.Indicativo.Preterito_Imperfecto =
+            this.desinences.Indicativo.Preterito_Imperfecto.map((desinence, index) => this.formSimple(desinence, index));
     }
-    protected setIndicativoPreteritoIndefinido(): void {
-        this.table.Indicativo.Preterito_Indefinido = this.desinences.Indicativo.Preterito_Indefinido.map((desinence, index) => this.formSimple(desinence, index));
+    protected setIndicativoPreteritoIndefinido(roots?: string[]): void {
+        this.table.Indicativo.Preterito_Indefinido =
+            this.desinences.Indicativo.Preterito_Indefinido.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
     }
-
     protected setIndicativoFuturoImperfecto(): void {
-        this.table.Indicativo.Futuro_Imperfecto = this.desinences.Indicativo.Futuro_Imperfecto.map((desinence, index) => this.formSimple(desinence, index));
+        this.table.Indicativo.Futuro_Imperfecto =
+            this.desinences.Indicativo.Futuro_Imperfecto.map((desinence, index) => this.formSimple(desinence, index));
     }
     protected setIndicativoCondicionalSimple(): void {
-        this.table.Indicativo.Condicional_Simple = this.desinences.Indicativo.Condicional_Simple.map((desinence, index) => this.formSimple(desinence, index));
-    }
-
-    // Replace simple methods
-    protected replaceIndicativoPresente(indexes: number[], pattern: RegExp, replacement: string): void {
-        indexes.forEach(index => this.table.Indicativo.Presente[index] = this.table.Indicativo.Presente[index].replace(pattern, replacement));
-    }
-    protected replaceIndicativoPreteritoIndefinito(indexes: number[], pattern: RegExp, replacement: string): void {
-        indexes.forEach(index => this.table.Indicativo.Preterito_Indefinido[index] = this.table.Indicativo.Preterito_Indefinido[index].replace(pattern, replacement));
+        this.table.Indicativo.Condicional_Simple =
+            this.desinences.Indicativo.Condicional_Simple.map((desinence, index) => this.formSimple(desinence, index));
     }
 
     /////////////////////////////////////////////////////////////////
@@ -371,35 +367,22 @@ export abstract class BaseModel {
 
     /////////////////////////////////////////////////////////////////
     // Subjuntivo simple set methods
-    protected setSubjuntivoPresente(): void {
-        this.table.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map((desinence, index) => this.formSimple(desinence, index));
+    protected setSubjuntivoPresente(roots?: string[]): void {
+        this.table.Subjuntivo.Presente =
+            this.desinences.Subjuntivo.Presente.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
     }
-    protected setSubjuntivoPreteritoImperfectoRa(): void {
-        this.table.Subjuntivo.Preterito_Imperfecto_ra = this.desinences.Subjuntivo.Preterito_Imperfecto_ra.map((desinence, index) => this.formSimple(desinence, index));
-    }
-
-    protected setSubjuntivoPreteritoImperfectoSe(): void {
-        this.table.Subjuntivo.Preterito_Imperfecto_se = this.desinences.Subjuntivo.Preterito_Imperfecto_se.map((desinence, index) => this.formSimple(desinence, index));
-    }
-    protected setSubjuntivoFuturoImperfecto(): void {
-        this.table.Subjuntivo.Futuro_Imperfecto = this.desinences.Subjuntivo.Futuro_Imperfecto.map((desinence, index) => this.formSimple(desinence, index));
+    protected setSubjuntivoPreteritoImperfectoRa(roots?: string[]): void {
+        this.table.Subjuntivo.Preterito_Imperfecto_ra =
+            this.desinences.Subjuntivo.Preterito_Imperfecto_ra.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
     }
 
-    // Sub simple replace methods
-    protected replaceSubjuntivoPresente(indexes: number[], pattern: RegExp, replacement: string): void {
-        indexes.forEach(index => this.table.Subjuntivo.Presente[index] = this.table.Subjuntivo.Presente[index].replace(pattern, replacement));
+    protected setSubjuntivoPreteritoImperfectoSe(roots?: string[]): void {
+        this.table.Subjuntivo.Preterito_Imperfecto_se =
+            this.desinences.Subjuntivo.Preterito_Imperfecto_se.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
     }
-
-    protected replaceSubjuntivoPreteritoImperfectoRa(indexes: number[], pattern: RegExp, replacement: string): void {
-        indexes.forEach(index => this.table.Subjuntivo.Preterito_Imperfecto_ra[index] = this.table.Subjuntivo.Preterito_Imperfecto_ra[index].replace(pattern, replacement));
-    }
-
-    protected replaceSubjuntivoPreteritoImperfectoSe(indexes: number[], pattern: RegExp, replacement: string): void {
-        indexes.forEach(index => this.table.Subjuntivo.Preterito_Imperfecto_se[index] = this.table.Subjuntivo.Preterito_Imperfecto_se[index].replace(pattern, replacement));
-    }
-
-    protected replaceSubjuntivoFuturoImperfecto(indexes: number[], pattern: RegExp, replacement: string): void {
-        indexes.forEach(index => this.table.Subjuntivo.Futuro_Imperfecto[index] = this.table.Subjuntivo.Futuro_Imperfecto[index].replace(pattern, replacement));
+    protected setSubjuntivoFuturoImperfecto(roots?: string[]): void {
+        this.table.Subjuntivo.Futuro_Imperfecto =
+            this.desinences.Subjuntivo.Futuro_Imperfecto.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
     }
 
     /////////////////////////////////////////////////////////////////
@@ -514,7 +497,7 @@ export abstract class BaseModel {
 }
 
 export class Empty extends BaseModel {
-    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(type, region, attributes);
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
     }
 }

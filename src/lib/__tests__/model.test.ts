@@ -88,13 +88,13 @@ describe("Model Test", () => {
     test('ModelFactory', () => {
         const testFactory = new ModelFactory();
         // serenar is not a model, getModel should return Empty
-        expect(testFactory.getModel('serenar', 'N', 'castellano', {})).toBeInstanceOf(Empty);
-        expect(testFactory.getModel('invalid', 'N', 'canarias', {})).toBeInstanceOf(Empty);
+        expect(testFactory.getModel('serenar','serenar', 'N', 'castellano', {})).toBeInstanceOf(Empty);
+        expect(testFactory.getModel('amar','invalid', 'N', 'canarias', {})).toBeInstanceOf(Empty);
 
         // legit existing models
-        expect(testFactory.getModel('amar', 'P', 'voseo', {})).not.toBeInstanceOf(Empty);
-        expect(testFactory.getModel('vivir', 'P', 'formal', {})).not.toBeInstanceOf(Empty);
-        expect(testFactory.getModel('temer', 'P', 'castellano', {})).not.toBeInstanceOf(Empty);
+        expect(testFactory.getModel('amar','amar', 'P', 'voseo', {})).not.toBeInstanceOf(Empty);
+        expect(testFactory.getModel('amar','vivir', 'P', 'formal', {})).not.toBeInstanceOf(Empty);
+        expect(testFactory.getModel('amar','temer', 'P', 'castellano', {})).not.toBeInstanceOf(Empty);
 
         expect(testFactory.isImplemented('amar')).toBeTruthy();
         expect(testFactory.isImplemented('temer')).toBeTruthy();
@@ -127,7 +127,7 @@ describe("Model Test", () => {
     const verbs: string[] = [];
     const regionsToTest = shuffle(['castellano', 'voseo', 'formal', 'canarias']) as Regions[];
     const models: string[] = ['abrir', 'actuar', 'adquirir', 'agorar', 'aguar', 'ahincar', 'aislar', 'amar', 'andar', 'argüir',
-        'cazar', 'contar', 'embaír', 'nacer', 'pensar', 'servir', 'surgir', 'temer', 'vivir']
+        'cazar', 'contar', 'embaír', 'nacer', 'pensar', 'servir', 'surgir', 'temer', 'vivir'];
 
     verbs.push(...models);
     // some interesting verbs
@@ -137,13 +137,15 @@ describe("Model Test", () => {
     verbs.push('acontecer');   // single defective                  "acontecer": { "N": { "nacer": { "_d_": "terciop" } } },
     verbs.push('adecuar');     // dual, non defective               "adecuar": { "N": [ "amar", "actuar" ], "P": [ "amar", "actuar" ]
     verbs.push('antojar');     // defective terciopersonal v2       "antojar": { "P": { "amar": { "d": "terciop" } } },
+    verbs.push('degollar');    // contar, o -> üe
+    verbs.push('desvaír');     // dual, ír, defective in both N&P   "desvaír": { "N": [ { "embaír": { "_d_": "imorfo" } }, "embaír" ], "P": [ { "embaír": { "_d_": "imorfo" } }, "embaír" ] },
     verbs.push('empecer')      // the only known tercio             "empecer": { "N": { "nacer": { "_d_": "tercio" } } },
     verbs.push('inhestar');    // participio irregular, replace     "inhestar": { "N": { "pensar": { "PR": "estad/iest" } }
     verbs.push('puar');        // dual, monosyllables               "puar": { "N": [ "actuar", { "actuar": { "MS": "true" } } ] },
     verbs.push('serenar');     // triple, defective in one, N&P     "serenar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
-    verbs.push('ventar');      // triple, defective                 "ventar": { "N": [ { "pensar": { "d": "imper" } }, "amar", "pensar" ] },
     verbs.push('tronar');      // from contar                       "tronar": { "N": [ { "contar": { "_d_": "imper" } }, "contar" ], "P": "contar" },
-    verbs.push('desvaír');     // dual, ír, defective in both N&P   "desvaír": { "N": [ { "embaír": { "_d_": "imorfo" } }, "embaír" ], "P": [ { "embaír": { "_d_": "imorfo" } }, "embaír" ] },
+    verbs.push('ventar');      // triple, defective                 "ventar": { "N": [ { "pensar": { "d": "imper" } }, "amar", "pensar" ] },
+
     const verbsToTest = shuffle(conjugator.getVerbList().filter(verb => verbs.includes(verb)));
 
     test('Availability', () => {

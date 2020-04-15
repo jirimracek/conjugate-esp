@@ -78,16 +78,16 @@ export class Conjugator {
 
             // Construct each model based on its recipe and get the verb conjugated based on given model
             modelTemplates.forEach(template => {
-                const [name, pronominalKey, region, attributes] = template;
-                if (!this.factory.isImplemented(name)) {
-                    throw new Error(`Model ${name} not implemented, can't do ${verb} ${region}`);
+                const [modelName, pronominalKey, region, attributes] = template;
+                if (!this.factory.isImplemented(modelName)) {
+                    throw new Error(`Model ${modelName} not implemented, can't do ${verb} ${region}`);
                 }
 
-                const model = this.factory.getModel(name, pronominalKey, region, attributes);
+                const model = this.factory.getModel(verb, modelName, pronominalKey, region, attributes);
 
                 result.push({
-                    info: { model: name, region: region, pronominal: (pronominalKey === 'P'), defective: !!(attributes['_d_']) },
-                    conjugation: model.getConjugationOf(verb)
+                    info: { model: modelName, region: region, pronominal: (pronominalKey === 'P'), defective: !!(attributes['_d_']) },
+                    conjugation: model.getConjugationOf()
                 });
             });
             return result;

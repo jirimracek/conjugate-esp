@@ -45,7 +45,7 @@ ____
 
 ### Many thanks for never getting tired of my questions
 
-- [Estudio Sampere Salamanca, namely Esther González, Ester García, María Ballesteros](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html "Sampere Salamanca")
+- [Estudio Sampere Salamanca, España, namely Esther González, Ester García, María Ballesteros](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html "Sampere Salamanca")
 
 ____
 
@@ -201,7 +201,7 @@ ____
 
 ____
 
-## The rough stats
+## Rough stats
 
 - Gathered **12819** verbs from various resources, internet lists, books, etc.
 - Of which
@@ -218,6 +218,7 @@ ____
 
 ## Changelog
 
+- 4/16/2020 - major cleanup, changed the construction mechanism. Cleaner structure, simpler code, regexps are much simpler now and easy to read.  Changed internal interfaces, model gets to know its verb at construction time now, whole system is more structurally sound, easier to follow, better use of inheritance / poly, now looks much more like OO than an experimental code.
 - 4/15/2020 - add surgir, servir, embaír. Started changelog
 
 - 4/13/2020 - added nacer, contar, maybe finalized what the definitions file should look like

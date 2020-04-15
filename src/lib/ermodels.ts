@@ -11,18 +11,19 @@ import { ER } from './declarations/constants';
 
 export class temer extends BaseModel {
 
-    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(type, region, attributes);
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
         this.desinences = JSON.parse(JSON.stringify(ER));
+        this.configDesinences();
+        this.setDesinencesByRegion();
+    }
+
+    protected configDesinences(): void {
         // Adjust voseo, 2nd singular
         if (this.region === 'voseo') {
             this.desinences.Indicativo.Presente[1] = 'és';
         }
-        this.localTermConfig();
-        this.configDesinencesByRegion();
     }
-
-    protected localTermConfig(): void { }
 
     protected setImperativoAfirmativo(): void {
         super.setImperativoAfirmativo();
@@ -31,30 +32,21 @@ export class temer extends BaseModel {
             this.table.Imperativo.Afirmativo[4] = clearAccents(this.table.Indicativo.Presente[4].replace(/^(.+?) (.*) (.*)is$/, '$1 $3$2'));   // NOTE: ar == er != ir
         }
     }
-
 }
 
 export class nacer extends temer {
-    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(type, region, attributes);
+    private newStem: string;
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.newStem = this.stem.replace(/s?c$/, 'zc');
     }
 
-    protected beforeImperatives():void {
-        const pattern: RegExp = /(.*)c(.*)/;
-        const replacement: string = '$1zc$2';
-        if (this.region === 'castellano') {
-            this.replaceIndicativoPresente([0], pattern, replacement);
-            this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
-        }
-        if (this.region === 'voseo') {
-            this.replaceIndicativoPresente([0], pattern, replacement);
-            this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
-        }
-        if (this.region === 'canarias' || this.region === 'formal') {
-            this.replaceIndicativoPresente([0], pattern, replacement);
-            this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
-        }
+    protected setIndicativoPresente(): void {
+        super.setIndicativoPresente([this.newStem, this.stem, this.stem, this.stem, this.stem, this.stem]);
+    }
 
+    protected setSubjuntivoPresente(): void {
+        super.setSubjuntivoPresente([this.newStem, this.newStem, this.newStem, this.newStem, this.newStem, this.newStem]);
     }
 }
 

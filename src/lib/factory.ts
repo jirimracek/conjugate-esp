@@ -17,15 +17,15 @@ type IrKey = keyof typeof ir;
 export class ModelFactory {
     constructor() { };
 
-    public getModel(name: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes): BaseModel {
-        if (ar[name as ArKey]) {
-            return new ar[name as ArKey](type, region, attributes);
-        } else if (er[name as ErKey]) {
-            return new er[name as ErKey](type, region, attributes);
-        } else if (ir[name as IrKey]) {
-            return new ir[name as IrKey](type, region, attributes);
+    public getModel(verb: string, modelName: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes): BaseModel {
+        if (ar[modelName as ArKey]) {
+            return new ar[modelName as ArKey](verb, type, region, attributes);
+        } else if (er[modelName as ErKey]) {
+            return new er[modelName as ErKey](verb, type, region, attributes);
+        } else if (ir[modelName as IrKey]) {
+            return new ir[modelName as IrKey](verb, type, region, attributes);
         }
-        return new Empty(type, region, attributes);
+        return new Empty(verb, type, region, attributes);
     }
 
     /**

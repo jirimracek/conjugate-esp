@@ -10,17 +10,18 @@ import { IR } from './declarations/constants';
 
 export class vivir extends BaseModel {
 
-    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(type, region, attributes);
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
         this.desinences = JSON.parse(JSON.stringify(IR));
+        this.configDesinences();
+        this.setDesinencesByRegion();
+    }
+
+    protected configDesinences(): void {
         if (this.region === 'voseo') {
             this.desinences.Indicativo['Presente'][1] = 'ís';
         }
-        this.configDesinences();
-        this.configDesinencesByRegion();
-    }
-
-    protected configDesinences(): void { }
+     }
 
     protected setImperativoAfirmativo(): void {
         super.setImperativoAfirmativo();
@@ -34,141 +35,207 @@ export class vivir extends BaseModel {
 
 
 export class abrir extends vivir {
-    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(type, region, attributes);
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
     }
     protected setParticipio(): void {
         this.table.Impersonal.Participio = [`${this.stem}${this.desinences.Impersonal.Participio}`.replace(/rid/, 'iert')];
+        this.participioCompuesto = this.table.Impersonal.Participio[0];
     }
 }
 
+// Just like pensar
 export class adquirir extends vivir {
-    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(type, region, attributes);
+    private newStem: string;
+
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.newStem = this.stem.replace(/ir/, 'ier');
     }
 
-    protected beforeImperatives(): void {
-        const pattern: RegExp = /(.)qui(.*)/;
-        const replacement: string = '$1quie$2';
-        if (this.region === 'castellano') {
-            this.replaceIndicativoPresente([0, 1, 2, 5], pattern, replacement);
-            this.replaceSubjuntivoPresente([0, 1, 2, 5], pattern, replacement);
+    protected setIndicativoPresente(): void {
+        switch (this.region) {
+            case 'castellano':
+                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.stem, this.newStem]);
+                break;
+            case 'voseo':
+                super.setIndicativoPresente([this.newStem, this.stem, this.newStem, this.stem, this.newStem, this.newStem]);
+                break;
+            case 'canarias':
+            case 'formal':
+                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
+                break;
         }
-        if (this.region === 'voseo') {
-            this.replaceIndicativoPresente([0, 2, 4, 5], pattern, replacement);
-            this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
-        }
-        if (this.region === 'canarias' || this.region === 'formal') {
-            this.replaceIndicativoPresente([0, 1, 2, 4, 5], pattern, replacement);
-            this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
+    }
+    protected setSubjuntivoPresente(): void {
+        switch (this.region) {
+            case 'castellano':
+                super.setSubjuntivoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.stem, this.newStem]);
+                break;
+            case 'voseo':
+            case 'canarias':
+            case 'formal':
+                super.setSubjuntivoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
+                break;
         }
     }
 }
+
 export class argüir extends vivir {
-    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(type, region, attributes);
+    private newStem: string;
+    private roots: string[];
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        //                                \u00fc ===  ü                      
+        this.newStem = this.stem.replace(/\u00fc/, 'u');
+        this.roots = Array(6).fill(0,0).map(() => this.newStem);
+    }
+
+    protected configDesinences() {
+        super.configDesinences();
+        this.desinences.Impersonal.Gerundio = ['yendo', 'yéndose'];
+        [0, 2, 5].forEach(i => this.desinences.Indicativo.Presente[i] = `y${this.desinences.Indicativo.Presente[i]}`);
+        if (this.region !== 'voseo') {
+            this.desinences.Indicativo.Presente[1] = `y${this.desinences.Indicativo.Presente[1]}`;
+        }
+        const pattern = /^i/;
+        const replacement = 'y';
+        [2, 5].forEach(i => this.desinences.Indicativo.Preterito_Indefinido[i] =
+            this.desinences.Indicativo.Preterito_Indefinido[i].replace(pattern, replacement));
+
+        [0, 1, 2, 3, 4, 5].forEach(i => {
+            this.desinences.Subjuntivo.Presente[i] = `y${this.desinences.Subjuntivo.Presente[i]}`;
+            this.desinences.Subjuntivo.Preterito_Imperfecto_ra[i] =
+                this.desinences.Subjuntivo.Preterito_Imperfecto_ra[i].replace(pattern, replacement);
+            this.desinences.Subjuntivo.Preterito_Imperfecto_se[i] =
+                this.desinences.Subjuntivo.Preterito_Imperfecto_se[i].replace(pattern, replacement);
+            this.desinences.Subjuntivo.Futuro_Imperfecto[i] =
+                this.desinences.Subjuntivo.Futuro_Imperfecto[i].replace(pattern, replacement);
+        });
     }
 
     protected setGerundio(): void {
         // change in stem from argü to argu. gerundio would get built as [argü] + 'iendo' 
-        // first change the stem, then termination 
-        //                         \u00fc ===  ü                      
-        const pattern: RegExp = /(.)\u00fc(.*)/;
-        const replacement: string = '$1u$2';
-        this.table.Impersonal.Gerundio = [`${this.stem.replace(pattern, replacement)}${this.desinences.Impersonal.Gerundio[0].replace(/^i/, 'y')}`];
+        super.setGerundio(this.newStem);
     }
-    protected beforeImperatives(): void {
-        const pattern: RegExp = /(.)\u00fci?(.*)/;
-        const replacement: string = '$1uy$2';
-        if (this.region === 'castellano') {
-            this.replaceIndicativoPresente([0, 1, 2, 5], pattern, replacement);
-            this.replaceIndicativoPreteritoIndefinito([2, 5], pattern, replacement);
+
+    protected setIndicativoPresente(): void {
+        switch (this.region) {
+            case 'castellano':
+                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.stem, this.newStem]);
+                break;
+            case 'voseo':
+                super.setIndicativoPresente([this.newStem, this.stem, this.newStem, this.stem, this.newStem, this.newStem]);
+                break;
+            case 'canarias':
+            case 'formal':
+                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
+                break;
         }
-        if (this.region === 'voseo') {
-            this.replaceIndicativoPresente([0, 2, 4, 5], pattern, replacement);
-            this.replaceIndicativoPreteritoIndefinito([2, 4, 5], pattern, replacement);
+    }
+    protected setIndicativoPreteritoIndefinido(): void {
+        switch (this.region) {
+            case 'castellano':
+                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.newStem, this.stem, this.stem, this.newStem]);
+                break;
+            case 'voseo':
+            case 'canarias':
+                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.newStem, this.stem, this.newStem, this.newStem]);
+                break;
+            case 'formal':
+                super.setIndicativoPreteritoIndefinido([this.stem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
+                break;
         }
-        if (this.region === 'canarias') {
-            this.replaceIndicativoPresente([0, 1, 2, 4, 5], pattern, replacement);
-            this.replaceIndicativoPreteritoIndefinito([2, 4, 5], pattern, replacement);
-        }
-        if (this.region === 'formal') {
-            this.replaceIndicativoPresente([0, 1, 2, 4, 5], pattern, replacement);
-            this.replaceIndicativoPreteritoIndefinito([1, 2, 4, 5], pattern, replacement);
-        }
-        this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
-        this.replaceSubjuntivoPreteritoImperfectoRa([0, 1, 2, 3, 4, 5], pattern, replacement);
-        this.replaceSubjuntivoPreteritoImperfectoSe([0, 1, 2, 3, 4, 5], pattern, replacement);
-        this.replaceSubjuntivoFuturoImperfecto([0, 1, 2, 3, 4, 5], pattern, replacement);
+    }
+    protected setSubjuntivoPresente(): void {
+        super.setSubjuntivoPresente(this.roots);
+    }
+    protected setSubjuntivoPreteritoImperfectoRa(): void {
+        super.setSubjuntivoPreteritoImperfectoRa(this.roots);
+    }
+    protected setSubjuntivoPreteritoImperfectoSe(): void {
+        super.setSubjuntivoPreteritoImperfectoSe(this.roots);
+    }
+    protected setSubjuntivoFuturoImperfecto(): void {
+        super.setSubjuntivoFuturoImperfecto(this.roots);
     }
 }
 export class surgir extends vivir {
-    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(type, region, attributes);
+    private newStem: string;
+
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.newStem = this.stem.replace(/g$/, 'j');
     }
 
-    protected beforeImperatives(): void {
-        const pattern: RegExp = /(.*)g(.*)/;
-        const replacement: string = '$1j$2';
-        if (this.region === 'castellano') {
-            this.replaceIndicativoPresente([0], pattern, replacement);
-            this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
-        }
-        if (this.region === 'voseo') {
-            this.replaceIndicativoPresente([0], pattern, replacement);
-            this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
-        }
-        if (this.region === 'canarias' || this.region === 'formal') {
-            this.replaceIndicativoPresente([0], pattern, replacement);
-            this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], pattern, replacement);
-        }
+    protected setIndicativoPresente(): void {
+        super.setIndicativoPresente([this.newStem, this.stem, this.stem, this.stem, this.stem, this.stem]);
+    }
+    protected setSubjuntivoPresente(): void {
+        super.setSubjuntivoPresente(Array(6).fill(0,0).map(() => this.newStem));
     }
 }
+
 export class servir extends vivir {
-    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(type, region, attributes);
+    private newStem: string;
+    private roots: string[];
+
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.newStem = this.stem.replace(/(.*)e/, '$1i');
+        this.roots = Array(6).fill(0,0).map(() => this.newStem);
     }
 
-    protected beforeImperatives(): void {
-        // Basically we need to replace e with i in different places.  In right places
-        const replacement: string = '$1i';
-        const eFollowedByE: RegExp = /(.*)e(?=.*[eé])/;
-        const eFollowedByIe: RegExp = /(.*)e(?=.*i[eé])/;
-        const lastE: RegExp = /(.*)e/;
+    protected setGerundio(): void {
+        // This is the only replacement root form so just set it here for the rest of them
+        super.setGerundio(this.newStem);
+    }
 
-        // Common places (covers complete voseo)
-        this.table.Impersonal.Gerundio = [this.table.Impersonal.Gerundio[0].replace(/(.*)e(?=.*i)/, replacement)];
-
-        this.replaceIndicativoPresente([0], /(.*)e(?=.*o)/, replacement);
-        this.replaceIndicativoPresente([2, 5], eFollowedByE, replacement);
-
-        this.replaceIndicativoPreteritoIndefinito([2], lastE, replacement);
-        this.replaceIndicativoPreteritoIndefinito([5], eFollowedByE, replacement);
-
-        this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], lastE, replacement);
-        this.replaceSubjuntivoPreteritoImperfectoRa([0, 1, 2, 3, 4, 5], eFollowedByIe, replacement);
-        this.replaceSubjuntivoPreteritoImperfectoSe([0, 1, 2, 3, 4, 5], eFollowedByIe, replacement);
-        this.replaceSubjuntivoFuturoImperfecto([0, 1, 2, 3, 4, 5], eFollowedByIe, replacement);
-
-        // Region diffs
-        if (this.region === 'castellano') {
-            this.replaceIndicativoPresente([1], eFollowedByE, replacement);
-        } else {
-            this.replaceIndicativoPresente([4], eFollowedByE, replacement);
-            this.replaceIndicativoPreteritoIndefinito([4], eFollowedByE, replacement);
-            if (this.region === 'canarias') {
-                this.replaceIndicativoPresente([1], eFollowedByE, replacement);
-            }
-            if (this.region === 'formal') {
-                this.replaceIndicativoPresente([1], eFollowedByE, replacement);
-                this.replaceIndicativoPreteritoIndefinito([1], lastE, replacement);
-            }
+    protected setIndicativoPresente(): void {
+        switch (this.region) {
+            case 'castellano':
+                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.stem, this.newStem]);
+                break;
+            case 'voseo':
+                super.setIndicativoPresente([this.newStem, this.stem, this.newStem, this.stem, this.newStem, this.newStem]);
+                break;
+            case 'canarias':
+            case 'formal':
+                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
+                break;
         }
     }
+    protected setIndicativoPreteritoIndefinido(): void {
+        switch (this.region) {
+            case 'castellano':
+                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.newStem, this.stem, this.stem, this.newStem]);
+                break;
+            case 'voseo':
+            case 'canarias':
+                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.newStem, this.stem, this.newStem, this.newStem]);
+                break;
+            case 'formal':
+                super.setIndicativoPreteritoIndefinido([this.stem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
+                break;
+        }
+    }
+    protected setSubjuntivoPresente(): void {
+        super.setSubjuntivoPresente(this.roots);
+    }
+    protected setSubjuntivoPreteritoImperfectoRa(): void {
+        super.setSubjuntivoPreteritoImperfectoRa(this.roots);
+    }
+    protected setSubjuntivoPreteritoImperfectoSe(): void {
+        super.setSubjuntivoPreteritoImperfectoSe(this.roots);
+    }
+    protected setSubjuntivoFuturoImperfecto(): void {
+        super.setSubjuntivoFuturoImperfecto(this.roots);
+    }
 }
+
 export class embaír extends vivir {
-    public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(type, region, attributes);
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
     }
     protected configDesinences() {
         super.configDesinences();
@@ -179,21 +246,35 @@ export class embaír extends vivir {
         this.desinences.Indicativo.Presente[3] = 'ímos';
         this.desinences.Indicativo.Preterito_Indefinido = ['í', 'íste', 'yó', 'ímos', 'ísteis', 'yeron'];
         this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(t => `y${t}`);
-        this.desinences.Subjuntivo.Preterito_Imperfecto_ra =
-            this.desinences.Subjuntivo.Preterito_Imperfecto_ra.map((d, i) => i === 4 ? d.replace(/ie/, 'yé') : d.replace(/i/, 'y'));
-        this.desinences.Subjuntivo.Preterito_Imperfecto_se =
-            this.desinences.Subjuntivo.Preterito_Imperfecto_se.map((d, i) => i === 4 ? d.replace(/ie/, 'yé') : d.replace(/i/, 'y'));
-        this.desinences.Subjuntivo.Futuro_Imperfecto =
-            this.desinences.Subjuntivo.Futuro_Imperfecto.map((d, i) => i === 4 ? d.replace(/ie/, 'yé') : d.replace(/i/, 'y'));
+
+        let pattern = /i/;
+        let replacement = 'y';
+        [0, 1, 2, 3, 5].forEach(i => {
+            this.desinences.Subjuntivo.Preterito_Imperfecto_ra[i] =
+                this.desinences.Subjuntivo.Preterito_Imperfecto_ra[i].replace(pattern, replacement);
+            this.desinences.Subjuntivo.Preterito_Imperfecto_se[i] =
+                this.desinences.Subjuntivo.Preterito_Imperfecto_se[i].replace(pattern, replacement);
+            this.desinences.Subjuntivo.Futuro_Imperfecto[i] =
+                this.desinences.Subjuntivo.Futuro_Imperfecto[i].replace(pattern, replacement);
+        });
+        pattern = /ie/;
+        replacement = 'yé';
+        this.desinences.Subjuntivo.Preterito_Imperfecto_ra[4] =
+            this.desinences.Subjuntivo.Preterito_Imperfecto_ra[4].replace(pattern, replacement);
+        this.desinences.Subjuntivo.Preterito_Imperfecto_se[4] =
+            this.desinences.Subjuntivo.Preterito_Imperfecto_se[4].replace(pattern, replacement);
+        this.desinences.Subjuntivo.Futuro_Imperfecto[4] =
+            this.desinences.Subjuntivo.Futuro_Imperfecto[4].replace(pattern, replacement);
     }
+
     protected setImperativoAfirmativo() {
         super.setImperativoAfirmativo();
         if (this.region === 'castellano') {
             if (this.type === 'N') {
                 this.table.Imperativo.Afirmativo[4] = this.table.Indicativo.Presente[4].replace(/s$/, 'd');
             } else {
-            this.table.Imperativo.Afirmativo[4] =
-                this.table.Indicativo.Presente[4].replace(/^(.+?) (.*) (.*)ís$/, '$1 $3i$2');   // NOTE: ar == er != ir
+                this.table.Imperativo.Afirmativo[4] =
+                    this.table.Indicativo.Presente[4].replace(/^(.+?) (.*) (.*)ís$/, '$1 $3i$2');   // NOTE: ar == er != ir
             }
         }
     }
