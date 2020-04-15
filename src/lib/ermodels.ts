@@ -19,7 +19,7 @@ export class temer extends BaseModel {
             this.desinences.Indicativo.Presente[1] = 'és';
         }
         this.localTermConfig();
-        this.finishTermConfig();
+        this.configDesinencesByRegion();
     }
 
     protected localTermConfig(): void { }

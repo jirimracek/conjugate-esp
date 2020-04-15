@@ -51,10 +51,10 @@ export abstract class BaseModel {
     }
 
     /**
-     * Reorder terminations based on the region.  Call in derived class once we have the terminations configured
-     * based on verb type, defectives, etc.  This is the last step, common to everyone.
+     * Reorder terminations based on the region.  Call in derived class once we have the desinences configured
+     * based on verb type.  This is the last step, common to everyone.
      */
-    protected finishTermConfig() {
+    protected configDesinencesByRegion() {
         // Shuffle terminations and auxHaber based on region
         if (this.region === 'voseo') {                      // Voseo, 2nd singular -> accented version, 2nd plural -> ustedes 
             // desinences
@@ -99,8 +99,10 @@ export abstract class BaseModel {
             ['Preterito_Perfecto', 'Preterito_Pluscuamperfecto_ra', 'Preterito_Pluscuamperfecto_se', 'Futuro_Perfecto'].forEach(mode =>
                 this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
         }
-        this.applyAttributesPre();
 
+        // Once the desinances are configured, setup attributes that need to be setup before conjugation
+        // In particular, the once that affect desinences. Again.
+        this.applyAttributesPre();
     }
     /**
      * Some attributes need to be processed before we conjugate, others after, some before and after :(
@@ -120,9 +122,15 @@ export abstract class BaseModel {
         const defectiveType = this.attributes['_d_'] as DefectiveType;
         if (defectiveType) {
             switch (defectiveType) {
-                case 'imorfo':     // formas cuya desinencia empieza por la vocal -i
+                case 'imorfo':     // formas cuya desinencia empieza por la vocal -i, i.e. ignore the rest
+                    // this.desinences.Impersonal.Infinitivo = this.desinences.Impersonal.Infinitivo.map(d => /^[ií]/.test(d) ? d : '-');
+                    this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.map(d => /^[ií]/.test(d) ? d : '-');
+                    // this.desinences.Impersonal.Participio = this.desinences.Impersonal.Participio.map(d => /^[ií]/.test(d) ? d : '-');
                     ['Indicativo', 'Subjuntivo'].forEach(mode => {
-                        this.desinences[mode]['Presente'] = this.desinences[mode]['Presente'].map(d => /^[ií]/.test(d) ? d : '-');
+                        Object.keys(this.desinences[mode]).forEach (time => {
+                            this.desinences[mode][time] = this.desinences[mode][time].map(d => /^[ií]/.test(d) ? d : '-');
+                        });
+                        // this.desinences[mode]['Presente'] = this.desinences[mode]['Presente'].map(d => /^[ií]/.test(d) ? d : '-');
                     });
                     break;
                 // case 'eimorfo':
@@ -283,11 +291,19 @@ export abstract class BaseModel {
         this.table.Impersonal.Infinitivo = [`${this.stem}${(this.type === 'P' ? this.desinences.Impersonal.Infinitivo[1] : this.desinences.Impersonal.Infinitivo[0])}`];
     }
     protected setGerundio(): void {
-        this.table.Impersonal.Gerundio = [`${this.stem}${(this.type === 'P' ? this.desinences.Impersonal.Gerundio[1] : this.desinences.Impersonal.Gerundio[0])}`];
+        if (this.type === 'N' && this.desinences.Impersonal.Gerundio[0] !== '-') {
+            this.table.Impersonal.Gerundio = [`${this.stem}${this.desinences.Impersonal.Gerundio[0]}`];
+        } else if (this.type === 'P' && this.desinences.Impersonal.Gerundio[1] !== '-') {
+            this.table.Impersonal.Gerundio = [`${this.stem}${this.desinences.Impersonal.Gerundio[1]}`];
+            // this.table.Impersonal.Gerundio = [`${this.stem}${(this.type === 'P' ? this.desinences.Impersonal.Gerundio[1] : this.desinences.Impersonal.Gerundio[0])}`];
+        } else {
+            this.table.Impersonal.Gerundio = ['-'];
+        }
     }
     protected setParticipio(): void {
         this.table.Impersonal.Participio = [`${this.stem}${this.desinences.Impersonal.Participio}`];
     }
+
     protected setParticipioCompuesto(): void {
         this.participioCompuesto = this.table.Impersonal.Participio[0];
     }

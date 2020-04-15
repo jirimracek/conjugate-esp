@@ -31,8 +31,8 @@ export class amar extends BaseModel {
         // Give derived class a chance to modify the terms array one more time if needed
         this.localTermConfig();
 
-        // Finish the term configuration
-        this.finishTermConfig();
+        // Finish desinences configuration
+        this.configDesinencesByRegion();
     }
 
     // Give derived classes chance to modify terms arrays
@@ -197,9 +197,6 @@ export class contar extends amar {
         super(type, region, attributes);
     }
     protected beforeImperatives(): void {
-        // /(.*)o(?=.*o)/
-        //         replace(/(.*)o/, '$1_ue_'));
-        //                     (/(.*)o(?=.*o)/, '$1_ue_')
         const pattern: RegExp = /(.*)o/;
         const pattern_1: RegExp = /(.*)o(?=.*o)/;
         const pattern_2: RegExp = /(.*g)ue/;

@@ -16,17 +16,18 @@ export class vivir extends BaseModel {
         if (this.region === 'voseo') {
             this.desinences.Indicativo['Presente'][1] = 'ís';
         }
-        this.localTermConfig();
-        this.finishTermConfig();
+        this.configDesinences();
+        this.configDesinencesByRegion();
     }
 
-    protected localTermConfig(): void { }
+    protected configDesinences(): void { }
 
     protected setImperativoAfirmativo(): void {
         super.setImperativoAfirmativo();
-        if (this.region === 'castellano' && this.type !== 'N') {
+        if (this.region === 'castellano' && this.type === 'P') {
             // This is the only line that's different between AR ER IR.  So far. 3/18/20
-            this.table.Imperativo.Afirmativo[4] = this.table.Indicativo.Presente[4].replace(/^(.+?) (.*) (.*)i?s$/, '$1 $3$2');   // NOTE: ar == er != ir
+            this.table.Imperativo.Afirmativo[4] =
+                this.table.Indicativo.Presente[4].replace(/^(.+?) (.*) (.*)i?s$/, '$1 $3$2');   // NOTE: ar == er != ir
         }
     }
 }
@@ -129,19 +130,39 @@ export class servir extends vivir {
     }
 
     protected beforeImperatives(): void {
-        const pattern: RegExp = /(.)qui(.*)/;
-        const replacement: string = '$1quie$2';
+        // Basically we need to replace e with i in different places.  In right places
+        const replacement: string = '$1i';
+        const eFollowedByE: RegExp = /(.*)e(?=.*[eé])/;
+        const eFollowedByIe: RegExp = /(.*)e(?=.*i[eé])/;
+        const lastE: RegExp = /(.*)e/;
+
+        // Common places (covers complete voseo)
+        this.table.Impersonal.Gerundio = [this.table.Impersonal.Gerundio[0].replace(/(.*)e(?=.*i)/, replacement)];
+
+        this.replaceIndicativoPresente([0], /(.*)e(?=.*o)/, replacement);
+        this.replaceIndicativoPresente([2, 5], eFollowedByE, replacement);
+
+        this.replaceIndicativoPreteritoIndefinito([2], lastE, replacement);
+        this.replaceIndicativoPreteritoIndefinito([5], eFollowedByE, replacement);
+
+        this.replaceSubjuntivoPresente([0, 1, 2, 3, 4, 5], lastE, replacement);
+        this.replaceSubjuntivoPreteritoImperfectoRa([0, 1, 2, 3, 4, 5], eFollowedByIe, replacement);
+        this.replaceSubjuntivoPreteritoImperfectoSe([0, 1, 2, 3, 4, 5], eFollowedByIe, replacement);
+        this.replaceSubjuntivoFuturoImperfecto([0, 1, 2, 3, 4, 5], eFollowedByIe, replacement);
+
+        // Region diffs
         if (this.region === 'castellano') {
-            // this.replaceIndicativoPresente([0, 1, 2, 5], pattern, replacement);
-            // this.replaceSubjuntivoPresente([0, 1, 2, 5], pattern, replacement);
-        }
-        if (this.region === 'voseo') {
-            // this.replaceIndicativoPresente([0, 2, 4, 5], pattern, replacement);
-            // this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
-        }
-        if (this.region === 'canarias' || this.region === 'formal') {
-            // this.replaceIndicativoPresente([0, 1, 2, 4, 5], pattern, replacement);
-            // this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
+            this.replaceIndicativoPresente([1], eFollowedByE, replacement);
+        } else {
+            this.replaceIndicativoPresente([4], eFollowedByE, replacement);
+            this.replaceIndicativoPreteritoIndefinito([4], eFollowedByE, replacement);
+            if (this.region === 'canarias') {
+                this.replaceIndicativoPresente([1], eFollowedByE, replacement);
+            }
+            if (this.region === 'formal') {
+                this.replaceIndicativoPresente([1], eFollowedByE, replacement);
+                this.replaceIndicativoPreteritoIndefinito([1], lastE, replacement);
+            }
         }
     }
 }
@@ -149,21 +170,31 @@ export class embaír extends vivir {
     public constructor(type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(type, region, attributes);
     }
-
-    protected beforeImperatives(): void {
-        const pattern: RegExp = /(.)qui(.*)/;
-        const replacement: string = '$1quie$2';
+    protected configDesinences() {
+        super.configDesinences();
+        this.desinences.Impersonal.Infinitivo = ['ír', 'írse'];
+        this.desinences.Impersonal.Gerundio = ['yendo', 'yéndose'];
+        this.desinences.Impersonal.Participio = ['ído'];
+        this.desinences.Indicativo.Presente[0] = 'yo';
+        this.desinences.Indicativo.Presente[3] = 'ímos';
+        this.desinences.Indicativo.Preterito_Indefinido = ['í', 'íste', 'yó', 'ímos', 'ísteis', 'yeron'];
+        this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(t => `y${t}`);
+        this.desinences.Subjuntivo.Preterito_Imperfecto_ra =
+            this.desinences.Subjuntivo.Preterito_Imperfecto_ra.map((d, i) => i === 4 ? d.replace(/ie/, 'yé') : d.replace(/i/, 'y'));
+        this.desinences.Subjuntivo.Preterito_Imperfecto_se =
+            this.desinences.Subjuntivo.Preterito_Imperfecto_se.map((d, i) => i === 4 ? d.replace(/ie/, 'yé') : d.replace(/i/, 'y'));
+        this.desinences.Subjuntivo.Futuro_Imperfecto =
+            this.desinences.Subjuntivo.Futuro_Imperfecto.map((d, i) => i === 4 ? d.replace(/ie/, 'yé') : d.replace(/i/, 'y'));
+    }
+    protected setImperativoAfirmativo() {
+        super.setImperativoAfirmativo();
         if (this.region === 'castellano') {
-            // this.replaceIndicativoPresente([0, 1, 2, 5], pattern, replacement);
-            // this.replaceSubjuntivoPresente([0, 1, 2, 5], pattern, replacement);
-        }
-        if (this.region === 'voseo') {
-            // this.replaceIndicativoPresente([0, 2, 4, 5], pattern, replacement);
-            // this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
-        }
-        if (this.region === 'canarias' || this.region === 'formal') {
-            // this.replaceIndicativoPresente([0, 1, 2, 4, 5], pattern, replacement);
-            // this.replaceSubjuntivoPresente([0, 1, 2, 4, 5], pattern, replacement);
+            if (this.type === 'N') {
+                this.table.Imperativo.Afirmativo[4] = this.table.Indicativo.Presente[4].replace(/s$/, 'd');
+            } else {
+            this.table.Imperativo.Afirmativo[4] =
+                this.table.Indicativo.Presente[4].replace(/^(.+?) (.*) (.*)ís$/, '$1 $3i$2');   // NOTE: ar == er != ir
+            }
         }
     }
 }

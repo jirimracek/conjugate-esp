@@ -157,7 +157,7 @@ ____
 | discernir | &#x2718; |
 | distinguir | &#x2718; |
 | dormir | &#x2718; |
-| embaír | &#x2718; |
+| ***embaír*** | &#x2714; |
 | erguir | &#x2718; |
 | escribir | &#x2718; |
 | huir | &#x2718; |
@@ -177,8 +177,8 @@ ____
 | salir | &#x2718; |
 | seguir | &#x2718; |
 | sentir | &#x2718; |
-| servir | &#x2718; |
-| surgir | &#x2718; |
+| ***servir*** | &#x2714; |
+| ***surgir*** | &#x2714; |
 | venir | &#x2718; |
 | zurcir | &#x2718; |
 </td></tr> </table>
@@ -193,10 +193,33 @@ ____
 
 - [Vadémecum del verbo español, Pedro Gomis Blanco, Laura Segura Calvo](https://www.amazon.es/Vad%C3%A9mecum-verbo-espa%C3%B1ol-Pedro-Blanco/dp/8497783875 "Amazon.es")
 
-- [Rodríguez-Rodríguez, G; Carreras-Riudavets, F; Hernández-Figueroa, Z; (2009). Conjugación de verbos en español - Conjugador IP](https://tulengua.es "Conjugador TIP")
+- [Rodríguez-Rodríguez, G; Carreras-Riudavets, F; Hernández-Figueroa, Z; (2009). Conjugación de verbos en español - Conjugador TIP](https://tulengua.es "Conjugador TIP")
 
 - [Diccionario panhispánico de dudas](https://www.casadellibro.com/libro-diccionario-panhispanico-de-dudas-2-ed/9788429406238/1051481 "Casa del libro" )
 
 - ... and many others
 
 ____
+
+## The rough stats
+
+- Gathered **12819** verbs from various resources, internet lists, books, etc.
+- Of which
+  - Probably at least half are unused as per la RAE but it's a fun challenge to try them all
+  - Majority is conjugated per regular models (amar 8600+, temer 140+, vivir 290+)
+  - There are about 130 defectives of 11 categories, some are single model, others are duals
+  - There are about 180 dual verbs conjugated as per 2 models (different models or same model non-defective / defective) and about 6 triples (yacer, roer, ...)
+- Models needed to do all defectives
+  - **actuar aislar amar cazar contar** discernir **embaír** estar haber hacer lucir mover **nacer** pagar **pensar** poder poner predecir querer reponer sacar **servir** **surgir** tañer **temer** tender vaciar **vivir** zurcir
+- Additional models needed to do all multiples
+  - enraizar huir mecer placer podrir predecir pudrir raer reír roer satisfacer yacer
+
+____
+
+## Changelog
+
+- 4/15/2020 - add surgir, servir, embaír. Started changelog
+
+- 4/13/2020 - added nacer, contar, maybe finalized what the definitions file should look like
+
+- ... have basic system in place, tests, coverage, etc.

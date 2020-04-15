@@ -126,25 +126,24 @@ describe("Model Test", () => {
 
     const verbs: string[] = [];
     const regionsToTest = shuffle(['castellano', 'voseo', 'formal', 'canarias']) as Regions[];
-    // const models: string[] = ['amar', 'temer', 'vivir'];
-    const models: string[] = ['abrir', 'actuar', 'adquirir', 'agorar', 'aguar', 'ahincar', 'aislar', 'amar', 'andar', 'argüir', 'cazar', 'contar', 'nacer', 'pensar', 'temer', 'vivir'];
-
+    const models: string[] = ['abrir', 'actuar', 'adquirir', 'agorar', 'aguar', 'ahincar', 'aislar', 'amar', 'andar', 'argüir',
+        'cazar', 'contar', 'embaír', 'nacer', 'pensar', 'servir', 'surgir', 'temer', 'vivir']
 
     verbs.push(...models);
     // some interesting verbs
-    verbs.push('abar');        // the only known trimorfo         "abar": { "P": { "amar": { "d": "trimorfo" } } }
-    verbs.push('abolir');      // interesting imorfo              "abolir": { "N": [ "vivir", { "vivir": { "d": "imorfo" } } ] },
-    verbs.push('aclarar');     // dual, defective                 "aclarar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
-    verbs.push('acontecer');   // single defective                "acontecer": { "N": { "nacer": { "_d_": "terciop" } } },
-    verbs.push('adecuar');     // dual, non defective             "adecuar": { "N": [ "amar", "actuar" ], "P": [ "amar", "actuar" ]
-    verbs.push('antojar');     // defective terciopersonal v2     "antojar": { "P": { "amar": { "d": "terciop" } } },
-    verbs.push('empecer')      // the only known tercio           "empecer": { "N": { "nacer": { "_d_": "tercio" } } },
-    verbs.push('inhestar');    // participio irregular, replace   "inhestar": { "N": { "pensar": { "PR": "estad/iest" } }
-    verbs.push('puar');        // dual, monosyllables             "puar": { "N": [ "actuar", { "actuar": { "MS": "true" } } ] },
-    verbs.push('serenar');     // triple, defective, both N + P   "serenar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
-    verbs.push('ventar');      // triple, defective               "ventar": { "N": [ { "pensar": { "d": "imper" } }, "amar", "pensar" ] },
-    verbs.push('tronar');      // from contar                     "tronar": { "N": [ { "contar": { "_d_": "imper" } }, "contar" ], "P": "contar" },
-
+    verbs.push('abar');        // the only known trimorfo           "abar": { "P": { "amar": { "d": "trimorfo" } } }
+    verbs.push('abolir');      // interesting imorfo                "abolir": { "N": [ "vivir", { "vivir": { "d": "imorfo" } } ] },
+    verbs.push('aclarar');     // dual, defective                   "aclarar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
+    verbs.push('acontecer');   // single defective                  "acontecer": { "N": { "nacer": { "_d_": "terciop" } } },
+    verbs.push('adecuar');     // dual, non defective               "adecuar": { "N": [ "amar", "actuar" ], "P": [ "amar", "actuar" ]
+    verbs.push('antojar');     // defective terciopersonal v2       "antojar": { "P": { "amar": { "d": "terciop" } } },
+    verbs.push('empecer')      // the only known tercio             "empecer": { "N": { "nacer": { "_d_": "tercio" } } },
+    verbs.push('inhestar');    // participio irregular, replace     "inhestar": { "N": { "pensar": { "PR": "estad/iest" } }
+    verbs.push('puar');        // dual, monosyllables               "puar": { "N": [ "actuar", { "actuar": { "MS": "true" } } ] },
+    verbs.push('serenar');     // triple, defective in one, N&P     "serenar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
+    verbs.push('ventar');      // triple, defective                 "ventar": { "N": [ { "pensar": { "d": "imper" } }, "amar", "pensar" ] },
+    verbs.push('tronar');      // from contar                       "tronar": { "N": [ { "contar": { "_d_": "imper" } }, "contar" ], "P": "contar" },
+    verbs.push('desvaír');     // dual, ír, defective in both N&P   "desvaír": { "N": [ { "embaír": { "_d_": "imorfo" } }, "embaír" ], "P": [ { "embaír": { "_d_": "imorfo" } }, "embaír" ] },
     const verbsToTest = shuffle(conjugator.getVerbList().filter(verb => verbs.includes(verb)));
 
     test('Availability', () => {
@@ -182,7 +181,7 @@ describe("Model Test", () => {
                             const info = conjugation.info;
                             expect(info).not.toBeUndefined();
 
-                            const [model, region, pronominal ] = [info.model, info.region, info.pronominal];
+                            const [model, region, pronominal] = [info.model, info.region, info.pronominal];
                             let fileName = '';
                             if (pronominal) {
                                 fileName = `${verb}se-${model}-${cIndexP++}-${region}`;
