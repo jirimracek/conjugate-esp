@@ -22,15 +22,6 @@ export class vivir extends BaseModel {
             this.desinences.Indicativo['Presente'][1] = 'ís';
         }
      }
-
-    protected setImperativoAfirmativo(): void {
-        super.setImperativoAfirmativo();
-        if (this.region === 'castellano' && this.type === 'P') {
-            // This is the only line that's different between AR ER IR.  So far. 3/18/20
-            this.table.Imperativo.Afirmativo[4] =
-                this.table.Indicativo.Presente[4].replace(/^(.+?) (.*) (.*)i?s$/, '$1 $3$2');   // NOTE: ar == er != ir
-        }
-    }
 }
 
 
@@ -265,17 +256,5 @@ export class embaír extends vivir {
             this.desinences.Subjuntivo.Preterito_Imperfecto_se[4].replace(pattern, replacement);
         this.desinences.Subjuntivo.Futuro_Imperfecto[4] =
             this.desinences.Subjuntivo.Futuro_Imperfecto[4].replace(pattern, replacement);
-    }
-
-    protected setImperativoAfirmativo() {
-        super.setImperativoAfirmativo();
-        if (this.region === 'castellano') {
-            if (this.type === 'N') {
-                this.table.Imperativo.Afirmativo[4] = this.table.Indicativo.Presente[4].replace(/s$/, 'd');
-            } else {
-                this.table.Imperativo.Afirmativo[4] =
-                    this.table.Indicativo.Presente[4].replace(/^(.+?) (.*) (.*)ís$/, '$1 $3i$2');   // NOTE: ar == er != ir
-            }
-        }
     }
 }

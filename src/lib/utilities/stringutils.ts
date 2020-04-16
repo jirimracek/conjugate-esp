@@ -92,6 +92,29 @@ export function esdrujula(phrase: string): string {
 }
 
 /**
+ * Make the nth syllable from the end strong if it already isn't. Accentuate weak
+ * @param phrase to strong-ify
+ * @param nth nth syllable from the end (1 == last syllable, 2 == next to last ...)
+ */
+export function strongify(phrase: string, nth: number): string {
+  if (nth < 1 || undefined === phrase || '' === phrase) {
+    return phrase;
+  }
+  const syllables = syllabify(phrase);
+  const index = syllables.length - nth;
+  if (index < 0) {
+    return phrase;
+  }
+  if (/[aeoáéíóú]/.test(syllables[index])) {
+    return phrase;           // already strong
+  }
+  syllables[index] = syllables[index].replace(/(.*)([ui])(.*)/, (match, p1, p2, p3): string => {
+    return `${p1}${Accented[Plain.indexOf(p2)]}${p3}`;
+  });
+  return syllables.join('');
+}
+
+/**
  * clear only the last accent of the expression: él puó -> él puo
  * @param word 
  */

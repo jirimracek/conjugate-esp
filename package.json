@@ -10,6 +10,7 @@
     "prepare": "npm run build",
     "test": "tsc && jest -b1 --noStackTrace ",
     "verbose": "tsc && jest -b1 --verbose",
+    "strings": "tsc && jest -b1 --noStackTrace --testPathPattern=stringutils",
     "cover": "jest --coverage"
   },
   "repository": {

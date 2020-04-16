@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 // npm t -- --watch
-import { clearAccents, esdrujula, clearLastAccent, syllabify } from '../utilities/stringutils';
+import { clearAccents, esdrujula, clearLastAccent, syllabify, strongify } from '../utilities/stringutils';
 // silence legit warnings during tests 
 // (they're useful in production, thus the conditions provoking these warnings
 //  should be tested here but we don't want to clutter the terminal during test)
@@ -162,5 +162,37 @@ describe("String Utils", () => {
         expect(esdrujula('ustedes electrosueldense')).toEqual('ustedes electrosuéldense');
         expect(esdrujula('ustedes rearmense')).toEqual('ustedes reármense');
         expect(esdrujula('ustedes sobreaguense')).toEqual('ustedes sobreáguense');
+    });
+    test('strongify', () => {
+        expect(strongify('aba', 1)).toEqual('aba');
+        expect(strongify('aba', 2)).toEqual('aba');
+        expect(strongify('aba', -1)).toEqual('aba');
+        expect(strongify('', 2)).toEqual('');
+        expect(strongify('', 1)).toEqual('');
+        expect(strongify('', 0)).toEqual('');
+        expect(strongify('', -1)).toEqual('');
+        expect(strongify('c', 2)).toEqual('c');
+        expect(strongify('c', 1)).toEqual('c');
+        expect(strongify('c', 0)).toEqual('c');
+        expect(strongify('c', -1)).toEqual('c');
+        expect(strongify(undefined as unknown as string, 2)).toEqual(undefined);
+        expect(strongify(undefined as unknown as string, 1)).toEqual(undefined);
+        expect(strongify(undefined as unknown as string, 0)).toEqual(undefined);
+        expect(strongify(undefined as unknown as string, -1)).toEqual(undefined);
+        // Real world (almost)
+        expect(strongify('abri', 1)).toEqual('abrí');
+        expect(strongify('actua', 1)).toEqual('actua');
+        expect(strongify('embaí', 1)).toEqual('embaí');
+        expect(strongify('embai', 1)).toEqual('embai');
+        expect(strongify('desvai', 1)).toEqual('desvai');
+        expect(strongify('desvi', 1)).toEqual('desví');
+        expect(strongify('desvu', 1)).toEqual('desvú');
+        expect(strongify('desviu', 1)).toEqual('desviú');
+        expect(strongify('servi', 1)).toEqual('serví');
+        expect(strongify('serena', 2)).toEqual('serena');
+        expect(strongify('serena', 3)).toEqual('serena');
+        expect(strongify('seirena', 3)).toEqual('seirena');
+        expect(strongify('sieirena', 3)).toEqual('sieirena');
+        expect(strongify('sirena', 3)).toEqual('sírena');
     });
 });
