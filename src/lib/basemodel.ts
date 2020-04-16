@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 import { PronominalKeys, Regions, ConjugationTable, ModelAttributes, DefectiveType, PronounsTable } from './declarations/types';
-import { PRONOUNS, AUX_HABER } from './declarations/constants';
+import { PRONOUNS, AUX_HABER, NO_IMPERATIVO_AFIRMATIVO, NO_IMPERATIVO_NEGATIVO } from './declarations/constants';
 import { clearAccents, esdrujula, strongify } from './utilities/stringutils';
 
 export abstract class BaseModel {
@@ -171,14 +171,25 @@ export abstract class BaseModel {
                 break;
             // case 'mmorfo':
             //     break;
-            // case 'bimorfop':
-            //     break;
+            case 'bimorfop':        //  bimorfo(p) - sólo en infinitivo y en participio - zap everything else indiscriminantly
+                this.desinences.Impersonal.Gerundio = ['-', '-'];
+                ['Indicativo', 'Subjuntivo'].forEach(mode => {
+                    Object.keys(this.desinences[mode]).forEach(time => {
+                        [0, 1, 2, 3, 4, 5].forEach(index => this.desinences[mode][time][index] = '-');
+                    });
+                    Object.keys(this.auxHaber[mode]).forEach(time => {
+                        [0, 1, 2, 3, 4, 5].forEach(index => this.auxHaber[mode][time][index] = '-');
+                    });
+                });
+                break;
             // case 'bimorfog':
             //     break;
             // case 'trimorfo':
             //     break;
-            // case 'omorfo':
-            //     break;
+            // oligomorfo - infinitivo, participio, gerundio, en los presentes y los pretéritos imperfectos de indicativo y subjuntivo, y 
+            //              en algunos tiempos compuestos.  Kill future, condicional, imperativos, 
+            // case 'omorfo':   do it in post
+                // break;
             // case 'ogmorfo':
             //     break;
         }
@@ -345,7 +356,7 @@ export abstract class BaseModel {
 
     // Imperatives
     protected setImperativoAfirmativo(): void {
-        if (['imper', 'tercio', 'terciop'].includes(this.defectiveAttributes)) {
+        if (NO_IMPERATIVO_AFIRMATIVO.includes(this.defectiveAttributes)) {
             return;
         }
         // Castellano
@@ -428,7 +439,7 @@ export abstract class BaseModel {
     }
 
     protected setImperativoNegativo(): void {
-        if (['imper', 'tercio', 'terciop'].includes(this.defectiveAttributes)) {
+        if (NO_IMPERATIVO_NEGATIVO.includes(this.defectiveAttributes)) {
             return;
         }
         // All regions are formed the same, directly from corresponding subjuntives, insert 'no' after the first pronominal
@@ -455,8 +466,14 @@ export abstract class BaseModel {
             //     break;
             // case 'mmorfo':
             //     break;
-            // case 'bimorfop':
-            //     break;
+            // case 'bimorfop':   //  bimorfo(p) - sólo en infinitivo y en participio - zap everything else indiscriminantly
+            // this.table.Impersonal.Gerundio = ['-'];
+            // ['Indicativo', 'Subjuntivo'].forEach(mode => {
+            //     Object.keys(this.table[mode]).forEach(time => {
+            //         [0, 1, 2, 3, 4, 5].forEach(index => this.table[mode][time][index] = '-');
+            //     });
+            // });
+            // break;
             // case 'bimorfog':
             //     break;
             case 'trimorfo':
@@ -477,8 +494,18 @@ export abstract class BaseModel {
                     });
                 });
                 break;
-            // case 'omorfo':
-            //     break;
+            case 'omorfo':
+                this.table.Indicativo.Preterito_Indefinido = Array.from('------');
+                this.table.Indicativo.Futuro_Imperfecto = Array.from('------');
+                this.table.Indicativo.Condicional_Simple = Array.from('------');
+                this.table.Subjuntivo.Futuro_Imperfecto = Array.from('------');
+
+                this.table.Indicativo.Preterito_Anterior = Array.from('------');
+                this.table.Indicativo.Futuro_Perfecto = Array.from('------');
+                this.table.Indicativo.Condicional_Compuesto = Array.from('------');
+                this.table.Subjuntivo.Futuro_Perfecto = Array.from('------');
+                this.table.Imperativo.Negativo[3] = '-';
+                break;
             // case 'ogmorfo':
             //     break;
         }

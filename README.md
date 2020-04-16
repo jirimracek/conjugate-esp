@@ -74,17 +74,17 @@ ____
 | desosar | &#x2718; |
 | empezar | &#x2718; |
 | enraizar | &#x2718; |
-| enviar | &#x2718; |
-| errar | &#x2718; |
+| ***errar*** | &#x2714; |
 | estar | &#x2718; |
 | forzar | &#x2718; |
 | jugar | &#x2718; |
-| pagar | &#x2718; |
+| ***pagar*** | &#x2714; |
 | ***pensar*** | &#x2714; |
 | regar | &#x2718; |
-| sacar | &#x2718; |
-| trocar | &#x2718; |
-| vaciar | &#x2718; |
+| ***sacar*** | &#x2714; |
+| ***vaciar*** | &#x2714; |
+| ***volcar*** | &#x2714; |
+|&#x2796;||
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
@@ -107,7 +107,6 @@ ____
 | hacer | &#x2718; |
 | joguer | &#x2718; |
 | leer | &#x2718; |
-| mecer | &#x2718; |
 | mover | &#x2718; |
 | ***nacer*** | &#x2714; |
 | oler | &#x2718; |
@@ -119,22 +118,23 @@ ____
 | raer | &#x2718; |
 | rehacer | &#x2718; |
 | reponer | &#x2718; |
-| responder | &#x2718; |
+| ***responder*** | &#x2714; |
 | roer | &#x2718; |
 | romper | &#x2718; |
 | saber | &#x2718; |
 | satisfacer | &#x2718; |
 | ser | &#x2718; |
+| soler | &#x2718; |
 | tañer | &#x2718; |
 | tender | &#x2718; |
 | tener | &#x2718; |
 | torcer | &#x2718; |
 | traer | &#x2718; |
 | valer | &#x2718; |
+| ***vencer*** | &#x2714; |
 | ver | &#x2718; |
 | volver | &#x2718; |
 | yacer | &#x2718; |
-|&#x2796;||
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
@@ -209,18 +209,27 @@ ____
   - Majority is conjugated per regular models (amar 8600+, temer 140+, vivir 290+)
   - There are about 130 defectives of 11 categories, some are single model, others are duals
   - There are about 180 dual verbs conjugated as per 2 models (different models or same model non-defective / defective) and about 6 triples (yacer, roer, ...)
-- Models needed to do all defectives
-  - **actuar aislar amar cazar contar** discernir **embaír** estar haber hacer lucir mover **nacer** pagar **pensar** poder poner predecir querer reponer sacar **servir** **surgir** tañer **temer** tender vaciar **vivir** zurcir
+- Models needed to do all defectives (todo / **done**)
+  - **actuar aislar amar cazar contar** discernir **embaír** estar haber hacer lucir mover **nacer** **pagar** **pensar** poder poner predecir querer reponer **responder** **sacar** **servir** **surgir** tañer **temer** tender **vaciar** **vivir** zurcir
 - Additional models needed to do all multiples
-  - enraizar huir mecer placer podrir predecir pudrir raer reír roer satisfacer yacer
+  - enraizar **errar** huir **vencer** placer podrir predecir pudrir raer reír **responder** roer satisfacer **volcar** yacer
 
 ____
 
 ## Changelog
 
-- 4/16/2020 - major cleanup, changed the construction mechanism. Cleaner structure, simpler code, regexps are much simpler now and easy to read.  Changed internal interfaces, model gets to know its verb at construction time now, whole system is more structurally sound, easier to follow, better use of inheritance / poly, now looks much more like OO than an experimental code.
+- 4/17/2020
+  - added pagar, sacar, vaciar, volcar, vencer, responder, errar
+  - consolidated imperativo afirmativo, all is now handled in the base class, **mental note** - probably can make a lot of things private now.  Or later. Maybe.  
+  - implemented bimorfop - infinitivo & participio (empedernir)
+  - implemented omorfo - acostumbrar & soler defectivos
+  - string helper strongify - make an nth syllable strong unless it already is
+  - tested
+- 4/16/2020
+  - major cleanup, changed the construction mechanism
+  - cleaner structure, simpler code, regexps are much simpler now and easy to read  
+  - changed internal interfaces, model gets to know its verb at construction time now, system is much easier to follow
+  - better use of inheritance & poly, looks more production than experimental code
 - 4/15/2020 - add surgir, servir, embaír. Started changelog
-
 - 4/13/2020 - added nacer, contar, maybe finalized what the definitions file should look like
-
 - ... have basic system in place, tests, coverage, etc.
