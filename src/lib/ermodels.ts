@@ -25,26 +25,26 @@ export class temer extends BaseModel {
     }
 }
 export class nacer extends temer {
-    private newStem: string;
+    private replacement: string;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.newStem = this.stem.replace(/s?c$/, 'zc');
+        this.replacement = this.stem.replace(/s?c$/, 'zc');
     }
 
     protected setIndicativoPresente(): void {
-        super.setIndicativoPresente([this.newStem, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPresente([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
     }
 
     protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente([this.newStem, this.newStem, this.newStem, this.newStem, this.newStem, this.newStem]);
+        super.setSubjuntivoPresente([this.replacement, this.replacement, this.replacement, this.replacement, this.replacement, this.replacement]);
     }
 }
 
 export class responder extends temer {
-    private newStem: string;
+    private replacement: string;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.newStem = this.stem.replace(/sp.*/, 'p');
+        this.replacement = this.stem.replace(/sp.*/, 'p');
     }
 
     protected configDesinences(): void {
@@ -53,24 +53,24 @@ export class responder extends temer {
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
-        super.setIndicativoPreteritoIndefinido([this.newStem, this.newStem, this.newStem, this.newStem, this.newStem, this.newStem]);
+        super.setIndicativoPreteritoIndefinido([this.replacement, this.replacement, this.replacement, this.replacement, this.replacement, this.replacement]);
     }
 }
 
 export class vencer extends temer {
-    private newStem: string;
+    private replacement: string;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.newStem = this.stem.replace(/c$/, 'z');
-        // this.newStem = this.stem;
+        this.replacement = this.stem.replace(/c$/, 'z');
+        // this.replacement = this.stem;
     }
 
     protected setIndicativoPresente(): void {
-        super.setIndicativoPresente([this.newStem, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPresente([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
     }
 
     protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente([this.newStem, this.newStem, this.newStem, this.newStem, this.newStem, this.newStem]);
+        super.setSubjuntivoPresente([this.replacement, this.replacement, this.replacement, this.replacement, this.replacement, this.replacement]);
     }
 }
 

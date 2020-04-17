@@ -5184,7 +5184,7 @@
   "P": "amar"
  },
  "aplegar": {
-  "N": "regar"
+  "N": "pagar"
  },
  "aplicar": {
   "N": "sacar",
@@ -5968,7 +5968,7 @@
   "N": "amar"
  },
  "arreplegar": {
-  "N": "regar"
+  "N": "pagar"
  },
  "arrequesonar": {
   "P": "amar"
@@ -7861,11 +7861,7 @@
   "N": "amar"
  },
  "balbucir": {
-  "N": {
-   "lucir": {
-    "_d_": "eimorfo"
-   }
-  }
+  "N": "balbucir"
  },
  "balcanizar": {
   "N": "cazar",
@@ -14912,7 +14908,7 @@
   "N": "tender"
  },
  "descendir": {
-  "N": "discernir"
+  "N": "vivir"
  },
  "descentralizar": {
   "N": "cazar"
@@ -24264,7 +24260,7 @@
   "P": "cazar"
  },
  "ermar": {
-  "N": "errar"
+  "N": "amar"
  },
  "erogar": {
   "N": "pagar"
@@ -33132,7 +33128,7 @@
   "P": "sacar"
  },
  "obcegar": {
-  "N": "regar"
+  "N": "pagar"
  },
  "obedecer": {
   "N": "nacer"

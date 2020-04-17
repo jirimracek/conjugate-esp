@@ -7,9 +7,11 @@
 import definitions from '../data/definitions.json';
 import { ModelFactory } from './factory';
 import { ConjugationTable, DB, Regions, PronominalKeys, VerbModelData, ModelAttributes } from './declarations/types';
+import { ERROR_MSG } from './declarations/constants';
 
 export type InfoType = { model: string, region: string, pronominal: boolean, defective: boolean };
-export type ResultType = { info: InfoType, conjugation: ConjugationTable };
+export type ErrorType = { message: string };
+export type ResultType = { info: InfoType | ErrorType, conjugation: ConjugationTable };
 
 /**
  * Create instance of Conjugator, 2 public methods: conjugate() and getVerbList()
@@ -48,18 +50,18 @@ export class Conjugator {
         const result: ResultType[] = [];
         try {
             if (!this.templates) {
-                throw new Error('Undefined templates - check definitions.json file');
+                throw new Error(ERROR_MSG.UndefinedTemplates);
             }
             if (!this.getVerbList().includes(verb)) {
-                throw new Error(`Unknown verb ${verb}`);
+                throw new Error(ERROR_MSG.UnknownVerb.replace('VERB', verb));
             }
             if (!['castellano', 'voseo', 'canarias', 'formal'].includes(region)) {
-                throw new Error(`Unknown region ${region}`);
+                throw new Error(ERROR_MSG.UnknownRegion.replace('REGION', region));
             }
 
             const verbModelData = this.templates[verb] as VerbModelData;
             if (!verbModelData) {
-                throw new Error(`Missing model data for verb ${verb} - check definitions.json file`);
+                throw new Error(ERROR_MSG.MissingModelData.replace('VERB', verb));
             }
 
             // Things we need to know to construct the model 
@@ -80,7 +82,7 @@ export class Conjugator {
             modelTemplates.forEach(template => {
                 const [modelName, pronominalKey, region, attributes] = template;
                 if (!this.factory.isImplemented(modelName)) {
-                    throw new Error(`Model ${modelName} not implemented, can't do ${verb} ${region}`);
+                    throw new Error(ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/, `${modelName}$1${verb}$2${region}`));
                 }
 
                 const model = this.factory.getModel(verb, modelName, pronominalKey, region, attributes);
@@ -93,8 +95,8 @@ export class Conjugator {
             return result;
 
         } catch (error) {
-            console.error(error);
-            return [{} as ResultType];
+            // console.error(error);
+            return [{ info: error.message, conjugation: {} }];
         }
     }
 }

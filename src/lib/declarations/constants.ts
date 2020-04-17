@@ -104,3 +104,10 @@ export const IR: Readonly<ConjugationTable> = {
 }
 export const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'omorfo'];
 export const NO_IMPERATIVO_NEGATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop'];
+export const ERROR_MSG = {
+    UndefinedTemplates: 'Undefined templates - check definitions.json file',
+    UnknownVerb: 'Unknown verb VERB',
+    UnknownRegion: 'Unknown region REGION',
+    MissingModelData: 'Missing verb VERB model data - check definitions.json file',
+    UnknownModel: 'Model MODEL not implemented, can not conjugate verb VERB, region REGION'
+}

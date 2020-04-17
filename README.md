@@ -75,15 +75,16 @@ ____
 | empezar | &#x2718; |
 | enraizar | &#x2718; |
 | ***errar*** | &#x2714; |
-| estar | &#x2718; |
+| ***estar*** | &#x2714; |
 | forzar | &#x2718; |
 | jugar | &#x2718; |
 | ***pagar*** | &#x2714; |
 | ***pensar*** | &#x2714; |
-| regar | &#x2718; |
+| ***regar*** | &#x2714; |
 | ***sacar*** | &#x2714; |
 | ***vaciar*** | &#x2714; |
 | ***volcar*** | &#x2714; |
+|&#x2796;||
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
@@ -138,6 +139,7 @@ ____
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
+|&#x2796;||
 </td><td>
 
 | IR            | |
@@ -147,6 +149,7 @@ ____
 | ***adquirir*** | &#x2714; |
 | ***argüir*** | &#x2714; |
 | asir | &#x2718; |
+| ***balbucir*** | &#x2714; |
 | bendecir | &#x2718; |
 | ceñir | &#x2718; |
 | colegir | &#x2718; |
@@ -154,7 +157,7 @@ ____
 | contraír | &#x2718; |
 | decir | &#x2718; |
 | delinquir | &#x2718; |
-| discernir | &#x2718; |
+| ***discernir*** | &#x2714; |
 | distinguir | &#x2718; |
 | dormir | &#x2718; |
 | ***embaír*** | &#x2714; |
@@ -163,7 +166,7 @@ ____
 | huir | &#x2718; |
 | imprimir | &#x2718; |
 | ir | &#x2718; |
-| lucir | &#x2718; |
+| ***lucir*** | &#x2714; |
 | oír | &#x2718; |
 | plañir | &#x2718; |
 | podrir | &#x2718; |
@@ -210,13 +213,17 @@ ____
   - There are about 130 defectives of 11 categories, some are single model, others are duals
   - There are about 180 dual verbs conjugated as per 2 models (different models or same model non-defective / defective) and about 6 triples (yacer, roer, ...)
 - Models needed to do all defectives (todo / **done**)
-  - **actuar aislar amar cazar contar** discernir **embaír** estar haber hacer lucir mover **nacer** **pagar** **pensar** poder poner predecir querer reponer **responder** **sacar** **servir** **surgir** tañer **temer** tender **vaciar** **vivir** zurcir
+  - **actuar aislar amar cazar contar** **discernir** **embaír** **estar** haber hacer **lucir** mover **nacer** **pagar** **pensar** poder poner predecir querer reponer **responder** **sacar** **servir** **surgir** tañer **temer** tender **vaciar** **vivir** zurcir
 - Additional models needed to do all multiples
-  - enraizar **errar** huir **vencer** placer podrir predecir pudrir raer reír **responder** roer satisfacer **volcar** yacer
+  - enraizar **errar** huir **vencer** placer podrir predecir pudrir raer **regar** reír **responder** roer satisfacer **volcar** yacer
 
 ____
 
 ## Changelog
+
+- 4/17/2020
+  - started noticing some common regularities in irregular conjugations. Code shrinking is in order
+  - models discernir, lucir, balbucir, regar, estar
 
 - 4/17/2020
   - added pagar, sacar, vaciar, volcar, vencer, responder, errar

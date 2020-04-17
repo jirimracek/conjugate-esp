@@ -6,7 +6,7 @@
 */
 import { BaseModel } from './basemodel';
 import { PronominalKeys, Regions, ModelAttributes } from './declarations/types';
-import { IR } from './declarations/constants';
+import { IR, AR } from './declarations/constants';
 
 export class vivir extends BaseModel {
 
@@ -22,6 +22,43 @@ export class vivir extends BaseModel {
             this.desinences.Indicativo['Presente'][1] = 'ís';
         }
      }
+
+    // Repeated pattern of indicativo presente stem modifications
+    // The matrix looks like this
+    //     person: 0 1 2 3 4 5     
+    // castellano: . . .     .
+    //      voseo: .   .   . .
+    //  can & for: . . .   . . 
+    protected setIndicativoPresentePattern_0125(replacement: string): void {
+        switch (this.region) {
+            case 'castellano':
+                super.setIndicativoPresente([replacement, replacement, replacement, this.stem, this.stem, replacement]);
+                break;
+            case 'voseo':
+                super.setIndicativoPresente([replacement, this.stem, replacement, this.stem, replacement, replacement]);
+                break;
+            case 'canarias':
+            case 'formal':
+                super.setIndicativoPresente([replacement, replacement, replacement, this.stem, replacement, replacement]);
+                break;
+        }
+    }
+    // Corresponding subj. presente patterns
+    //            person: 0 1 2 3 4 5     
+    //        castellano: . . .     .
+    // voseo & can & for: . . .   . . 
+    protected setSubjuntivoPresentePattern_0125(replacement: string): void {
+        switch (this.region) {
+            case 'castellano':
+                super.setSubjuntivoPresente([replacement, replacement, replacement, this.stem, this.stem, replacement]);
+                break;
+            case 'voseo':
+            case 'canarias':
+            case 'formal':
+                super.setSubjuntivoPresente([replacement, replacement, replacement, this.stem, replacement, replacement]);
+                break;
+        }
+    }
 }
 
 
@@ -37,49 +74,29 @@ export class abrir extends vivir {
 
 // Just like pensar
 export class adquirir extends vivir {
-    private newStem: string;
+    private replacement: string;
 
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.newStem = this.stem.replace(/ir/, 'ier');
+        this.replacement = this.stem.replace(/ir/, 'ier');
     }
 
     protected setIndicativoPresente(): void {
-        switch (this.region) {
-            case 'castellano':
-                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.stem, this.newStem]);
-                break;
-            case 'voseo':
-                super.setIndicativoPresente([this.newStem, this.stem, this.newStem, this.stem, this.newStem, this.newStem]);
-                break;
-            case 'canarias':
-            case 'formal':
-                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
-                break;
-        }
+        this.setIndicativoPresentePattern_0125(this.replacement);
     }
     protected setSubjuntivoPresente(): void {
-        switch (this.region) {
-            case 'castellano':
-                super.setSubjuntivoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.stem, this.newStem]);
-                break;
-            case 'voseo':
-            case 'canarias':
-            case 'formal':
-                super.setSubjuntivoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
-                break;
-        }
+        this.setSubjuntivoPresentePattern_0125(this.replacement);
     }
 }
 
 export class argüir extends vivir {
-    private newStem: string;
-    private roots: string[];
+    private replacement: string;
+    private replacements: string[];
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         //                                \u00fc ===  ü                      
-        this.newStem = this.stem.replace(/\u00fc/, 'u');
-        this.roots = Array(6).fill(0,0).map(() => this.newStem);
+        this.replacement = this.stem.replace(/\u00fc/, 'u');
+        this.replacements = Array(6).fill(0,0).map(() => this.replacement);
     }
 
     protected configDesinences() {
@@ -107,120 +124,96 @@ export class argüir extends vivir {
 
     protected setGerundio(): void {
         // change in stem from argü to argu. gerundio would get built as [argü] + 'iendo' 
-        super.setGerundio(this.newStem);
+        super.setGerundio(this.replacement);
     }
 
     protected setIndicativoPresente(): void {
-        switch (this.region) {
-            case 'castellano':
-                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.stem, this.newStem]);
-                break;
-            case 'voseo':
-                super.setIndicativoPresente([this.newStem, this.stem, this.newStem, this.stem, this.newStem, this.newStem]);
-                break;
-            case 'canarias':
-            case 'formal':
-                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
-                break;
-        }
+        this.setIndicativoPresentePattern_0125(this.replacement);
     }
+
     protected setIndicativoPreteritoIndefinido(): void {
         switch (this.region) {
             case 'castellano':
-                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.newStem, this.stem, this.stem, this.newStem]);
+                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.replacement, this.stem, this.stem, this.replacement]);
                 break;
             case 'voseo':
             case 'canarias':
-                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.newStem, this.stem, this.newStem, this.newStem]);
+                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.replacement, this.stem, this.replacement, this.replacement]);
                 break;
             case 'formal':
-                super.setIndicativoPreteritoIndefinido([this.stem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
+                super.setIndicativoPreteritoIndefinido([this.stem, this.replacement, this.replacement, this.stem, this.replacement, this.replacement]);
                 break;
         }
     }
     protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente(this.roots);
+        super.setSubjuntivoPresente(this.replacements);
     }
     protected setSubjuntivoPreteritoImperfectoRa(): void {
-        super.setSubjuntivoPreteritoImperfectoRa(this.roots);
+        super.setSubjuntivoPreteritoImperfectoRa(this.replacements);
     }
     protected setSubjuntivoPreteritoImperfectoSe(): void {
-        super.setSubjuntivoPreteritoImperfectoSe(this.roots);
+        super.setSubjuntivoPreteritoImperfectoSe(this.replacements);
     }
     protected setSubjuntivoFuturoImperfecto(): void {
-        super.setSubjuntivoFuturoImperfecto(this.roots);
-    }
-}
-export class surgir extends vivir {
-    private newStem: string;
-
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-        this.newStem = this.stem.replace(/g$/, 'j');
-    }
-
-    protected setIndicativoPresente(): void {
-        super.setIndicativoPresente([this.newStem, this.stem, this.stem, this.stem, this.stem, this.stem]);
-    }
-    protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente(Array(6).fill(0,0).map(() => this.newStem));
+        super.setSubjuntivoFuturoImperfecto(this.replacements);
     }
 }
 
-export class servir extends vivir {
-    private newStem: string;
-    private roots: string[];
+// Really special - combination of vivir & amar
+export class balbucir extends vivir {
+        private replacement: string;
 
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.newStem = this.stem.replace(/(.*)e/, '$1i');
-        this.roots = Array(6).fill(0,0).map(() => this.newStem);
+        this.replacement = this.stem.replace(/c$/, 'ce');
     }
+    protected configDesinences() {
+        super.configDesinences();
 
-    protected setGerundio(): void {
-        // This is the only replacement root form so just set it here for the rest of them
-        super.setGerundio(this.newStem);
+        // Adopt desinences from AR
+        this.desinences.Subjuntivo.Presente = JSON.parse(JSON.stringify(AR.Subjuntivo.Presente));
+    }
+    protected setIndicativoPresente(): void {
+        super.setIndicativoPresente([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem ]);
+    }
+    protected setSubjuntivoPresente(): void {
+        super.setSubjuntivoPresente(Array(6).fill(0,0).map(() => this.replacement));
+    }
+}
+
+export class discernir extends vivir {
+    private replacement: string;
+
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.replacement = this.stem.replace(/(.*)e/, '$1ie');
+        // this.replacement = this.stem;
     }
 
     protected setIndicativoPresente(): void {
-        switch (this.region) {
-            case 'castellano':
-                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.stem, this.newStem]);
-                break;
-            case 'voseo':
-                super.setIndicativoPresente([this.newStem, this.stem, this.newStem, this.stem, this.newStem, this.newStem]);
-                break;
-            case 'canarias':
-            case 'formal':
-                super.setIndicativoPresente([this.newStem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
-                break;
-        }
+        this.setIndicativoPresentePattern_0125(this.replacement);
     }
-    protected setIndicativoPreteritoIndefinido(): void {
-        switch (this.region) {
-            case 'castellano':
-                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.newStem, this.stem, this.stem, this.newStem]);
-                break;
-            case 'voseo':
-            case 'canarias':
-                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.newStem, this.stem, this.newStem, this.newStem]);
-                break;
-            case 'formal':
-                super.setIndicativoPreteritoIndefinido([this.stem, this.newStem, this.newStem, this.stem, this.newStem, this.newStem]);
-                break;
-        }
-    }
+
     protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente(this.roots);
+        this.setSubjuntivoPresentePattern_0125(this.replacement);
     }
-    protected setSubjuntivoPreteritoImperfectoRa(): void {
-        super.setSubjuntivoPreteritoImperfectoRa(this.roots);
+}
+
+export class lucir extends vivir {
+    private replacement: string;
+
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.replacement = this.stem.replace(/(.*)c/, '$1zc');
+        // this.replacement = this.stem;
     }
-    protected setSubjuntivoPreteritoImperfectoSe(): void {
-        super.setSubjuntivoPreteritoImperfectoSe(this.roots);
+
+    protected setIndicativoPresente(): void {
+        super.setIndicativoPresente([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
     }
-    protected setSubjuntivoFuturoImperfecto(): void {
-        super.setSubjuntivoFuturoImperfecto(this.roots);
+
+    protected setSubjuntivoPresente(): void {
+        super.setSubjuntivoPresente(Array(6).fill(0,0).map(() => this.replacement));
     }
 }
 
@@ -258,3 +251,67 @@ export class embaír extends vivir {
             this.desinences.Subjuntivo.Futuro_Imperfecto[4].replace(pattern, replacement);
     }
 }
+
+export class surgir extends vivir {
+    private replacement: string;
+
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.replacement = this.stem.replace(/g$/, 'j');
+    }
+
+    protected setIndicativoPresente(): void {
+        super.setIndicativoPresente([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
+    }
+    protected setSubjuntivoPresente(): void {
+        super.setSubjuntivoPresente(Array(6).fill(0,0).map(() => this.replacement));
+    }
+}
+
+export class servir extends vivir {
+    private replacement: string;
+    private replacements: string[];
+
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.replacement = this.stem.replace(/(.*)e/, '$1i');
+        this.replacements = Array(6).fill(0,0).map(() => this.replacement);
+    }
+
+    protected setGerundio(): void {
+        // This is the only replacement root form so just set it here for the rest of them
+        super.setGerundio(this.replacement);
+    }
+
+    protected setIndicativoPresente(): void {
+        this.setIndicativoPresentePattern_0125(this.replacement);
+    }
+
+    protected setIndicativoPreteritoIndefinido(): void {
+        switch (this.region) {
+            case 'castellano':
+                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.replacement, this.stem, this.stem, this.replacement]);
+                break;
+            case 'voseo':
+            case 'canarias':
+                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, this.replacement, this.stem, this.replacement, this.replacement]);
+                break;
+            case 'formal':
+                super.setIndicativoPreteritoIndefinido([this.stem, this.replacement, this.replacement, this.stem, this.replacement, this.replacement]);
+                break;
+        }
+    }
+    protected setSubjuntivoPresente(): void {
+        super.setSubjuntivoPresente(this.replacements);
+    }
+    protected setSubjuntivoPreteritoImperfectoRa(): void {
+        super.setSubjuntivoPreteritoImperfectoRa(this.replacements);
+    }
+    protected setSubjuntivoPreteritoImperfectoSe(): void {
+        super.setSubjuntivoPreteritoImperfectoSe(this.replacements);
+    }
+    protected setSubjuntivoFuturoImperfecto(): void {
+        super.setSubjuntivoFuturoImperfecto(this.replacements);
+    }
+}
+
