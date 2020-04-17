@@ -126,7 +126,7 @@ export class aguar extends amar {
     }
 
     protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente([this.replacement, this.replacement, this.replacement, this.replacement, this.replacement, this.replacement]);
+        super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
     }
 }
 
@@ -187,7 +187,7 @@ export class cazar extends amar {
         super.setIndicativoPreteritoIndefinido([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
     }
     protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente([this.replacement, this.replacement, this.replacement, this.replacement, this.replacement, this.replacement]);
+        super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
     }
 }
 
@@ -232,23 +232,23 @@ export class estar extends amar {
     }
     protected configDesinences(): void {
         super.configDesinences();
-        this.desinences.Indicativo.Presente = ['oy', 'ás', 'á', 'amos', 'áis', 'án'];
-        this.desinences.Indicativo.Preterito_Indefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis', 'uvieron'];
+        this.desinences.Indicativo.Presente = ['oy', 'ás', 'á', 'amos', 'áis','án'];
+        this.desinences.Indicativo.Preterito_Indefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis','uvieron'];
         this.desinences.Subjuntivo.Presente = ['é', 'és', 'é', 'emos', 'éis', 'én'];
-        this.desinences.Subjuntivo.Preterito_Imperfecto_ra = ['uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais', 'uvieran'];
-        this.desinences.Subjuntivo.Preterito_Imperfecto_se = ['uviese', 'uvieses', 'uviese', 'uviésemos', 'uvieseis', 'uviesen'];
-        this.desinences.Subjuntivo.Futuro_Imperfecto = ['uviere', 'uvieres', 'uviere', 'uviéremos', 'uviereis', 'uvieren'];
+        this.desinences.Subjuntivo.Preterito_Imperfecto_ra = ['uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais','uvieran'];
+        this.desinences.Subjuntivo.Preterito_Imperfecto_se = ['uviese', 'uvieses', 'uviese', 'uviésemos', 'uvieseis','uviesen'];
+        this.desinences.Subjuntivo.Futuro_Imperfecto = ['uviere', 'uvieres', 'uviere', 'uviéremos', 'uviereis','uvieren'];
     }
 
     protected setImperativoAfirmativo(): void {
         super.setImperativoAfirmativo();
         if (this.type === 'P') {
-            switch (this.region) {
-                default:
-                    this.table.Imperativo.Afirmativo[4] = clearLastAccent(this.table.Imperativo.Afirmativo[4]);
-                case 'castellano':
-                    this.table.Imperativo.Afirmativo[1] = clearLastAccent(this.table.Imperativo.Afirmativo[1]);
-            }
+        switch(this.region) {
+            default:
+                this.table.Imperativo.Afirmativo[4] = clearLastAccent(this.table.Imperativo.Afirmativo[4]);
+            case 'castellano': 
+                this.table.Imperativo.Afirmativo[1] = clearLastAccent(this.table.Imperativo.Afirmativo[1]);
+        }
         }
     }
 }
@@ -372,7 +372,7 @@ export class sacar extends amar {
         super.setIndicativoPreteritoIndefinido([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
     }
     protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente([this.replacement, this.replacement, this.replacement, this.replacement, this.replacement, this.replacement]);
+        super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
     }
 }
 

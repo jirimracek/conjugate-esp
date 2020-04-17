@@ -104,16 +104,16 @@ ____
 | caber | &#x2718; |
 | caer | &#x2718; |
 | coger | &#x2718; |
-| haber | &#x2718; |
-| hacer | &#x2718; |
+| ***haber*** | &#x2714; |
+| ***hacer*** | &#x2714; |
 | joguer | &#x2718; |
 | leer | &#x2718; |
-| mover | &#x2718; |
+| ***mover*** | &#x2714; |
 | ***nacer*** | &#x2714; |
 | oler | &#x2718; |
 | placer | &#x2718; |
-| poder | &#x2718; |
-| poner | &#x2718; |
+| ***poder*** | &#x2714; |
+| ***poner*** | &#x2714; |
 | prever | &#x2718; |
 | querer | &#x2718; |
 | raer | &#x2718; |
@@ -125,7 +125,6 @@ ____
 | saber | &#x2718; |
 | satisfacer | &#x2718; |
 | ser | &#x2718; |
-| soler | &#x2718; |
 | tañer | &#x2718; |
 | tender | &#x2718; |
 | tener | &#x2718; |
@@ -155,7 +154,7 @@ ____
 | colegir | &#x2718; |
 | conducir | &#x2718; |
 | contraír | &#x2718; |
-| decir | &#x2718; |
+| ***decir*** | &#x2714; |
 | delinquir | &#x2718; |
 | ***discernir*** | &#x2714; |
 | distinguir | &#x2718; |
@@ -212,18 +211,18 @@ ____
   - Majority is conjugated per regular models (amar 8600+, temer 140+, vivir 290+)
   - There are about 130 defectives of 11 categories, some are single model, others are duals
   - There are about 180 dual verbs conjugated as per 2 models (different models or same model non-defective / defective) and about 6 triples (yacer, roer, ...)
-- Models needed to do all defectives (todo / **done**)
-  - **actuar aislar amar cazar contar** **discernir** **embaír** **estar** haber hacer **lucir** mover **nacer** **pagar** **pensar** poder poner predecir querer reponer **responder** **sacar** **servir** **surgir** tañer **temer** tender **vaciar** **vivir** zurcir
-- Additional models needed to do all multiples
-  - enraizar **errar** huir **vencer** placer podrir predecir pudrir raer **regar** reír **responder** roer satisfacer **volcar** yacer
+- Models involved in defectives (todo / **done**)
+  - **actuar aislar amar cazar contar discernir embaír estar haber hacer lucir mover nacer pagar pensar poder poner** predecir querer reponer **responder sacar servir surgir** tañer **temer** tender **vaciar vivir** zurcir
+- Additional models involved in multiples
+  - enraizar **errar** huir **vencer** placer podrir pudrir raer **regar** reír **responder** roer satisfacer **volcar** yacer
 
 ____
 
 ## Changelog
 
 - 4/17/2020
-  - started noticing some common regularities in irregular conjugations. Code shrinking is in order
-  - models discernir, lucir, balbucir, regar, estar
+  - noticing some common regularities in irregular conjugations. Code shrinking is in order
+  - models discernir, lucir, balbucir, regar, estar, haber, hacer, mover, poder, poner, decir
 
 - 4/17/2020
   - added pagar, sacar, vaciar, volcar, vencer, responder, errar

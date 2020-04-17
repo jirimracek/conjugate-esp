@@ -192,6 +192,8 @@ export abstract class BaseModel {
                 // break;
             // case 'ogmorfo':
             //     break;
+            // case 'osmorfo':
+            //     break;
         }
     }
 
@@ -285,13 +287,13 @@ export abstract class BaseModel {
         this.table.Indicativo.Preterito_Indefinido =
             this.desinences.Indicativo.Preterito_Indefinido.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
     }
-    protected setIndicativoFuturoImperfecto(): void {
+    protected setIndicativoFuturoImperfecto(roots?: string[]): void {
         this.table.Indicativo.Futuro_Imperfecto =
-            this.desinences.Indicativo.Futuro_Imperfecto.map((desinence, index) => this.formSimple(desinence, index));
+            this.desinences.Indicativo.Futuro_Imperfecto.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
     }
-    protected setIndicativoCondicionalSimple(): void {
+    protected setIndicativoCondicionalSimple(roots?: string[]): void {
         this.table.Indicativo.Condicional_Simple =
-            this.desinences.Indicativo.Condicional_Simple.map((desinence, index) => this.formSimple(desinence, index));
+            this.desinences.Indicativo.Condicional_Simple.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
     }
 
     /////////////////////////////////////////////////////////////////
@@ -508,6 +510,25 @@ export abstract class BaseModel {
                 break;
             // case 'ogmorfo':
             //     break;
+            case 'osmorfo':
+                this.table.Impersonal.Participio = ['-'];
+                this.table.Indicativo.Preterito_Indefinido = Array.from('------');
+                this.table.Indicativo.Futuro_Imperfecto = Array.from('------');
+                this.table.Indicativo.Condicional_Simple = Array.from('------');
+                this.table.Indicativo.Preterito_Perfecto = Array.from('------');
+                this.table.Indicativo.Preterito_Pluscuamperfecto = Array.from('------');
+                this.table.Indicativo.Preterito_Anterior = Array.from('------');
+                this.table.Indicativo.Futuro_Perfecto = Array.from('------');
+                this.table.Indicativo.Condicional_Compuesto = Array.from('------');
+
+                this.table.Subjuntivo.Futuro_Imperfecto = Array.from('------');
+                this.table.Subjuntivo.Preterito_Perfecto = Array.from('------');
+                this.table.Subjuntivo.Preterito_Pluscuamperfecto_ra = Array.from('------');
+                this.table.Subjuntivo.Preterito_Pluscuamperfecto_se = Array.from('------');
+                this.table.Subjuntivo.Futuro_Perfecto = Array.from('------');
+
+                this.table.Imperativo.Negativo[3] = '-';
+                break;
         }
     }
 }

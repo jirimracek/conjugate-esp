@@ -30874,18 +30874,14 @@
  },
  "llover": {
   "N": [
-   "mover",
    {
     "mover": {
      "_d_": "imper"
     }
-   }
+   },
+   "mover"
   ],
-  "P": {
-   "mover": {
-    "_d_": "imper"
-   }
-  }
+  "P": "mover"
  },
  "lloviznar": {
   "N": {
@@ -40384,7 +40380,11 @@
  },
  "soler": {
   "N": [
-   "soler",
+   {
+    "mover": {
+     "_d_": "osmorfo"
+    }
+   },
    {
     "mover": {
      "_d_": "omorfo"

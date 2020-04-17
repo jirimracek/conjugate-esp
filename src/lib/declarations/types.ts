@@ -20,7 +20,7 @@ export type ConjugationTable = { [modekey: string]: { [timekey: string]: string[
 //                                                                       AND it gets added as a second participio. The first, REGULAR PARTICIPIO gets used for COMPUESTOS
 //    _pc_:RegExp/replacement - _participio c_ompuesto (irregular)  - same as PD, EXCEPT the second, IRREGULAR PARTICIPIO gets used for COMPUESTOS
 
-export type DefectiveType = 'imorfo' | 'eimorfo' | 'imper' | 'tercio' | 'terciop' | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'ogmorfo';
+export type DefectiveType = 'imorfo' | 'eimorfo' | 'imper' | 'tercio' | 'terciop' | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'ogmorfo' | 'osmorfo';
 export type AttributeValues = DefectiveType | boolean | string;
 export type AttributeKeys = '_pr_' | '_pd_' | '_pc_' | '_d_' | '_ms_';
 // Types used to represent data in the verb definitions json file

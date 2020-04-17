@@ -132,8 +132,10 @@ describe("Model Test", () => {
 
     const regionsToTest = shuffle(['castellano', 'voseo', 'formal', 'canarias']) as Regions[];
     const verbSet: Set<string> = new Set();
-    const models: string[] = ['abrir', 'actuar', 'adquirir', 'agorar', 'aguar', 'ahincar', 'aislar', 'amar', 'andar', 'argüir', 'balbucir', 'cazar', 'contar', 'discernir',
-        'embaír', 'errar', 'estar', 'lucir', 'nacer', 'pagar', 'pensar', 'regar', 'responder', 'sacar', 'servir', 'surgir', 'temer', 'vaciar', 'vencer', 'vivir', 'volcar'];
+    const models: string[] = ['abrir', 'actuar', 'adquirir', 'agorar', 'aguar', 'ahincar', 'aislar', 'amar', 'andar', 'argüir', 'balbucir', 'cazar', 'contar', 'decir', 'discernir',
+        'embaír', 'errar', 'estar', 'haber', 'hacer', 'lucir', 'mover', 'nacer', 'pagar', 'pensar', 'poder', 'poner', 'regar', 'responder', 'sacar',
+        'servir', 'surgir', 'temer', 'vaciar', 'vencer', 'vivir', 'volcar'];
+
 
     models.forEach(m => verbSet.add(m));
     // some interesting verbs
@@ -158,6 +160,7 @@ describe("Model Test", () => {
     verbSet.add('puar');        // dual, monosyllables                  "puar": { "N": [ "actuar", { "actuar": { "MS": "true" } } ] },
     verbSet.add('responder');   // in the list already, quite unique, repuse version         "responder": { "N": [ "temer", "responder" ] },
     verbSet.add('serenar');     // triple, defective in one, N&P        "serenar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
+    verbSet.add('soler');       // the name said it all                 "soler": { "N": [ { "mover": { "_d_": "osmorfo" } }, { "mover": { "_d_": "omorfo" } } ] },
     verbSet.add('tronar');      // from contar                          "tronar": { "N": [ { "contar": { "_d_": "imper" } }, "contar" ], "P": "contar" },
     verbSet.add('ventar');      // triple, defective                    "ventar": { "N": [ { "pensar": { "d": "imper" } }, "amar", "pensar" ] },
 
