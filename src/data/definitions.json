@@ -4539,7 +4539,7 @@
   "N": "amar"
  },
  "antedecir": {
-  "N": "predecir"
+  "N": "decir"
  },
  "anteferir": {
   "N": "sentir"
@@ -11552,9 +11552,21 @@
  },
  "condecir": {
   "N": [
-   "predecir",
-   "predecir",
-   "predecir"
+   {
+    "decir": {
+     "_v_": "1"
+    }
+   },
+   {
+    "decir": {
+     "_d_": "terciop"
+    }
+   },
+   {
+    "decir": {
+     "_v_": "2"
+    }
+   }
   ]
  },
  "condecorar": {
@@ -12041,12 +12053,28 @@
  },
  "contradecir": {
   "N": [
-   "predecir",
-   "predecir"
+   {
+    "decir": {
+     "_v_": "1"
+    }
+   },
+   {
+    "decir": {
+     "_v_": "2"
+    }
+   }
   ],
   "P": [
-   "predecir",
-   "predecir"
+   {
+    "decir": {
+     "_v_": "1"
+    }
+   },
+   {
+    "decir": {
+     "_v_": "2"
+    }
+   }
   ]
  },
  "contraendosar": {
@@ -15390,12 +15418,28 @@
  },
  "desdecir": {
   "N": [
-   "predecir",
-   "predecir"
+   {
+    "decir": {
+     "_v_": "1"
+    }
+   },
+   {
+    "decir": {
+     "_v_": "2"
+    }
+   }
   ],
   "P": [
-   "predecir",
-   "predecir"
+   {
+    "decir": {
+     "_v_": "1"
+    }
+   },
+   {
+    "decir": {
+     "_v_": "2"
+    }
+   }
   ]
  },
  "desdentar": {
@@ -23706,8 +23750,12 @@
  },
  "entredecir": {
   "N": [
-   "predecir",
-   "predecir"
+   "decir",
+   {
+    "decir": {
+     "_v_": "1"
+    }
+   }
   ]
  },
  "entrederramar": {
@@ -25143,7 +25191,11 @@
   "N": "vivir"
  },
  "esperdecir": {
-  "N": "predecir"
+  "N": {
+   "decir": {
+    "_v_": "1"
+   }
+  }
  },
  "esperecer": {
   "N": "nacer"
@@ -29513,7 +29565,11 @@
   "P": "amar"
  },
  "interdecir": {
-  "N": "predecir"
+  "N": {
+   "decir": {
+    "_v_": "1"
+   }
+  }
  },
  "interesar": {
   "N": "amar",
@@ -35259,8 +35315,16 @@
  },
  "predecir": {
   "N": [
-   "predecir",
-   "predecir"
+   {
+    "decir": {
+     "_v_": "1"
+    }
+   },
+   {
+    "decir": {
+     "_v_": "2"
+    }
+   }
   ]
  },
  "predefinir": {
@@ -37049,8 +37113,12 @@
  },
  "redecir": {
   "N": [
-   "predecir",
-   "predecir"
+   {
+    "decir": {
+     "_v_": "1"
+    }
+   },
+   "decir"
   ]
  },
  "redefinir": {

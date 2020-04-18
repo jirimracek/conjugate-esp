@@ -179,10 +179,12 @@ export class balbucir extends vivir {
     }
 }
 
+// Write according to docs/decir.ods, 3 versions
 export class decir extends vivir {
-
+    private version: number;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
+        this.version = (attributes._v_ ? attributes._v_ : 0) as number;
     }
     protected configDesinences() {
         super.configDesinences();
@@ -192,7 +194,7 @@ export class decir extends vivir {
         this.desinences.Subjuntivo.Futuro_Imperfecto = ['ijere', 'ijeres', 'ijere', 'ijéremos', 'ijereis', 'ijeren',];
     }
     protected setGerundio(): void {
-        super.setGerundio(this.stem.replace(/de/, 'di'));
+        super.setGerundio(this.stem.replace(/dec/, 'dic'));
     }
     protected setParticipio(): void {
         this.table.Impersonal.Participio = [`${this.stem}${this.desinences.Impersonal.Participio}`.replace(/ecid/, 'ich')];
@@ -200,7 +202,7 @@ export class decir extends vivir {
     }
     protected setIndicativoPresente(): void {
         const p1 = this.stem.replace(/ec/, 'ig');
-        const p2 = this.stem.replace(/e/, 'i');
+        const p2 = this.stem.replace(/(.*)e/, '$1i');
         switch (this.region) {
             case 'castellano':
                 super.setIndicativoPresente([p1, p2, p2, this.stem, this.stem, p2]);
@@ -218,14 +220,6 @@ export class decir extends vivir {
         const p = this.stem.replace(/ec/, 'ij');
         super.setIndicativoPreteritoIndefinido(Array.from('012345').map(() => p));
     }
-    protected setIndicativoFuturoImperfecto(): void {
-        const p = this.stem.replace(/ec/, '');
-        super.setIndicativoFuturoImperfecto(Array.from('012345').map(() => p));
-    }
-    protected setIndicativoCondicionalSimple(): void {
-        const p = this.stem.replace(/ec/, '');
-        super.setIndicativoCondicionalSimple(Array.from('012345').map(() => p));
-    }
     protected setSubjuntivoPresente(): void {
         const p = this.stem.replace(/ec/, 'ig');
         super.setSubjuntivoPresente(Array.from('012345').map(() => p));
@@ -242,22 +236,47 @@ export class decir extends vivir {
         const p = this.stem.replace(/ec/, '');
         super.setSubjuntivoFuturoImperfecto(Array.from('012345').map(() => p));
     }
+
+    // where the ugly starts
+    // Only for version 2
+    protected setIndicativoFuturoImperfecto(): void {
+        if (this.attributes._v_ === '2') {
+            super.setIndicativoFuturoImperfecto();                   //  predeciré, antedeciré
+        } else {
+            const p = this.stem.replace(/ec/, '');                   //  diré, prediré
+            super.setIndicativoFuturoImperfecto(Array.from('012345').map(() => p));
+        }
+    }
+    // Only for version 2
+    protected setIndicativoCondicionalSimple(): void {
+        if (this.attributes._v_ === '2') {
+            super.setIndicativoCondicionalSimple();                   //  predeciría, antedeciría
+        } else {
+            const p = this.stem.replace(/ec/, '');                    // diría, prediría
+            super.setIndicativoCondicionalSimple(Array.from('012345').map(() => p));
+        }
+    }
+    // Only for version 0  (decir, redecir, entredecir: di, redí, entredí) see decir.ods document in env
+    // decir imperative has no accent, all others do
     protected setImperativoAfirmativo(): void {
         super.setImperativoAfirmativo();
-        switch (this.region) {
-            case 'castellano':
-            case 'canarias':
-                this.table.Imperativo.Afirmativo[1] = this.table.Imperativo.Afirmativo[1].replace(/[ií]ce/, 'i');
+        if (this.version === 0 && (this.region === 'castellano' || this.region === 'canarias')) {
+            this.table.Imperativo.Afirmativo[1] = this.table.Imperativo.Afirmativo[1].
+                replace(/(.*)d[ií]ce/, (match: string, p1: string): string => {
+                    // if p1 ends with a space (tú dice: p1 ===  'tú ') 
+                    if (/\s+$/.test(p1)) return `${p1}di`;
+                    return `${p1}dí`;   //  else p1 didn't end with a space (tú redice: p1 === 'tú re')
+                });
         }
     }
 }
+
 export class discernir extends vivir {
     private replacement: string;
 
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.replacement = this.stem.replace(/(.*)e/, '$1ie');
-        // this.replacement = this.stem;
     }
 
     protected setIndicativoPresente(): void {
@@ -317,12 +336,6 @@ export class lucir extends vivir {
     }
     protected setSubjuntivoPresente(): void {
         super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
-    }
-}
-
-export class predecir extends vivir {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
     }
 }
 
