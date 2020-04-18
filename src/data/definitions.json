@@ -1697,7 +1697,7 @@
   "N": "sacar"
  },
  "adaponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "adaptar": {
   "N": "amar",
@@ -4569,8 +4569,8 @@
   "N": "amar"
  },
  "anteponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "anteposar": {
   "N": "amar"
@@ -5247,8 +5247,8 @@
   "N": "cazar"
  },
  "aponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "apontocar": {
   "N": "sacar"
@@ -6703,12 +6703,12 @@
  },
  "atañer": {
   "N": [
-   "tañer",
    {
     "tañer": {
      "D": "terciop"
     }
-   }
+   },
+   "tañer"
   ]
  },
  "atear": {
@@ -11371,8 +11371,8 @@
   "P": "amar"
  },
  "componer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "comportar": {
   "N": "amar",
@@ -12153,8 +12153,8 @@
   "N": "amar"
  },
  "contraponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "contrapugnar": {
   "N": "amar"
@@ -13557,7 +13557,7 @@
   "N": "amar"
  },
  "deponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "deportar": {
   "N": "amar",
@@ -15148,8 +15148,8 @@
   "N": "amar"
  },
  "descomponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "descomprimir": {
   "N": "imprimir"
@@ -16695,7 +16695,7 @@
   "P": "amar"
  },
  "desimponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "desimpresionar": {
   "N": "amar",
@@ -17698,7 +17698,7 @@
   "N": "cazar"
  },
  "desponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "desporrondingar": {
   "P": "pagar"
@@ -18827,8 +18827,8 @@
   "N": "placer"
  },
  "disponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "disputar": {
   "N": "amar",
@@ -23836,7 +23836,7 @@
   "N": "pensar"
  },
  "entreponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "entrepunzar": {
   "N": "cazar"
@@ -25201,7 +25201,7 @@
   "N": "nacer"
  },
  "esperecir": {
-  "N": "zurcir"
+  "N": "lucir"
  },
  "esperezar": {
   "P": "cazar"
@@ -26104,8 +26104,8 @@
   "N": "amar"
  },
  "exponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "exportar": {
   "N": "amar"
@@ -26463,7 +26463,7 @@
   "N": "pagar"
  },
  "feder": {
-  "N": "tender"
+  "N": "temer"
  },
  "federalizar": {
   "N": "cazar",
@@ -26959,7 +26959,7 @@
   "P": "cazar"
  },
  "fotocomponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "fotocopiar": {
   "N": "amar"
@@ -28299,7 +28299,7 @@
   "N": "pensar"
  },
  "herver": {
-  "N": "tender"
+  "N": "temer"
  },
  "hervir": {
   "N": "sentir"
@@ -28864,8 +28864,8 @@
   "N": "amar"
  },
  "imponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "importar": {
   "N": "amar"
@@ -29108,8 +29108,8 @@
   "P": "amar"
  },
  "indisponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "individualizar": {
   "N": "cazar"
@@ -29177,7 +29177,11 @@
   "N": "amar"
  },
  "infecir": {
-  "N": "zurcir"
+  "N": {
+   "lucir": {
+    "PR": "ido/to"
+   }
+  }
  },
  "infectar": {
   "N": "amar",
@@ -29618,8 +29622,8 @@
   "N": "amar"
  },
  "interponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "interprender": {
   "N": "temer"
@@ -33432,8 +33436,8 @@
   "N": "amar"
  },
  "oponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "opositar": {
   "N": "amar"
@@ -35195,8 +35199,8 @@
   "N": "amar"
  },
  "posponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "postar": {
   "N": "amar"
@@ -35340,8 +35344,8 @@
   "N": "sacar"
  },
  "predisponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "predominar": {
   "N": "amar"
@@ -35463,7 +35467,7 @@
   "N": "amar"
  },
  "preponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "preposterar": {
   "N": "amar"
@@ -35518,7 +35522,7 @@
   "P": "vivir"
  },
  "presuponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "presupuestar": {
   "N": "amar"
@@ -35796,8 +35800,8 @@
   "N": "amar"
  },
  "proponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "proporcionar": {
   "N": "amar",
@@ -35848,7 +35852,7 @@
   "P": "amar"
  },
  "prosuponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "protagonizar": {
   "N": "cazar"
@@ -36946,7 +36950,7 @@
   "N": "amar"
  },
  "recomponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "recomprar": {
   "N": "amar"
@@ -38229,14 +38233,14 @@
  },
  "reponer": {
   "N": [
-   "reponer",
+   "poner",
    {
-    "reponer": {
+    "poner": {
      "D": "ogmorfo"
     }
    }
   ],
-  "P": "reponer"
+  "P": "poner"
  },
  "reportar": {
   "N": "amar",
@@ -40232,7 +40236,7 @@
   "N": "amar"
  },
  "sobreexponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "sobreganar": {
   "N": "amar"
@@ -40272,8 +40276,8 @@
   "P": "amar"
  },
  "sobreponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "sobrepujar": {
   "N": "amar"
@@ -40336,7 +40340,7 @@
   "P": "amar"
  },
  "sobrexponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "socaliñar": {
   "N": "amar"
@@ -41046,8 +41050,8 @@
   "P": "contar"
  },
  "superponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "supervalorar": {
   "N": "amar",
@@ -41077,7 +41081,7 @@
   "P": "vivir"
  },
  "suponer": {
-  "N": "reponer"
+  "N": "poner"
  },
  "suportar": {
   "N": "amar"
@@ -42190,8 +42194,8 @@
   "N": "amar"
  },
  "transponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "transportar": {
   "N": "amar",
@@ -42449,8 +42453,8 @@
   "P": "amar"
  },
  "trasponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "trasportar": {
   "N": "amar",
@@ -43683,8 +43687,8 @@
   "N": "amar"
  },
  "yuxtaponer": {
-  "N": "reponer",
-  "P": "reponer"
+  "N": "poner",
+  "P": "poner"
  },
  "zabordar": {
   "N": "amar"

@@ -131,8 +131,16 @@ export abstract class BaseModel {
                     });
                 });
                 break;
-            // case 'eimorfo':
-            //     break;
+            case 'eimorfo':     // desinencia empieza por la vocal -e o por la -i, zap everything else
+                ['Indicativo', 'Subjuntivo'].forEach(mode => {
+                    Object.keys(this.desinences[mode]).forEach(time => {
+                        this.desinences[mode][time] = this.desinences[mode][time].map(d => /^[iíeé]/.test(d) ? d : '-');
+                    });
+                });
+                // for some reason beyond my understanding, the following are also excluded ????
+                this.auxHaber.Indicativo.Preterito_Perfecto[0] = '-';
+                this.auxHaber.Subjuntivo.Preterito_Perfecto = Array.from('------');
+                break;
             case 'imper': // infinitivo, gerundio, participio y en las terceras personas del singular
                 ['Indicativo', 'Subjuntivo'].forEach(mode => {
                     Object.keys(this.desinences[mode]).forEach(time => {
@@ -190,8 +198,8 @@ export abstract class BaseModel {
             //              en algunos tiempos compuestos.  Kill future, condicional, imperativos, 
             // case 'omorfo':   do it in post
                 // break;
-            // case 'ogmorfo':
-            //     break;
+            // case 'ogmorfo': // oligomorfo, v2 -  pretérito perfecto simple de indicativo y en el pretérito imperfecto de subjuntivo: nuke everything else: reponer:D=ogmorfo
+            //     break;      do it in post
             // case 'osmorfo':
             //     break;
         }
@@ -508,8 +516,29 @@ export abstract class BaseModel {
                 this.table.Subjuntivo.Futuro_Perfecto = Array.from('------');
                 this.table.Imperativo.Negativo[3] = '-';
                 break;
-            // case 'ogmorfo':
-            //     break;
+            case 'ogmorfo':
+                this.table.Impersonal.Infinitivo = ['-'];
+                this.table.Impersonal.Gerundio = ['-'];
+                this.table.Impersonal.Participio = ['-'];
+
+                this.table.Indicativo.Presente = Array.from('------');
+                // this.table.Indicativo.Preterito_Indefinido = Array.from('------');
+                this.table.Indicativo.Preterito_Imperfecto = Array.from('------');
+                this.table.Indicativo.Futuro_Imperfecto = Array.from('------');
+                this.table.Indicativo.Condicional_Simple = Array.from('------');
+                this.table.Indicativo.Preterito_Perfecto = Array.from('------');
+                this.table.Indicativo.Preterito_Pluscuamperfecto = Array.from('------');
+                this.table.Indicativo.Preterito_Anterior = Array.from('------');
+                this.table.Indicativo.Futuro_Perfecto = Array.from('------');
+                this.table.Indicativo.Condicional_Compuesto = Array.from('------');
+
+                this.table.Subjuntivo.Presente = Array.from('------');
+                this.table.Subjuntivo.Futuro_Imperfecto = Array.from('------');
+                this.table.Subjuntivo.Preterito_Pluscuamperfecto_ra = Array.from('------');
+                this.table.Subjuntivo.Preterito_Pluscuamperfecto_se = Array.from('------');
+                this.table.Subjuntivo.Futuro_Perfecto = Array.from('------');
+                this.table.Subjuntivo.Preterito_Perfecto = Array.from('------');
+                break;
             case 'osmorfo':
                 this.table.Impersonal.Participio = ['-'];
                 this.table.Indicativo.Preterito_Indefinido = Array.from('------');

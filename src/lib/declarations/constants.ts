@@ -102,8 +102,8 @@ export const IR: Readonly<ConjugationTable> = {
         Futuro_Imperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
     }
 }
-export const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'omorfo', 'osmorfo'];
-export const NO_IMPERATIVO_NEGATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop'];
+export const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'omorfo', 'osmorfo', 'ogmorfo'];
+export const NO_IMPERATIVO_NEGATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'ogmorfo'];
 export const ERROR_MSG = {
     UndefinedTemplates: 'Undefined templates - check definitions.json file',
     UnknownVerb: 'Unknown verb VERB',

@@ -6,7 +6,7 @@
 */
 import definitions from '../data/definitions.json';
 import { ModelFactory } from './factory';
-import { ConjugationTable, DB, Regions, PronominalKeys, VerbModelData, ModelAttributes } from './declarations/types';
+import { ConjugationTable, DB, Regions, PronominalKeys, VerbModelData, ModelAttributes, Model } from './declarations/types';
 import { ERROR_MSG } from './declarations/constants';
 
 export type InfoType = { verb: string, model: string, region: string, pronominal: boolean, defective: boolean };
@@ -98,5 +98,36 @@ export class Conjugator {
             // console.error(error);
             return [{ info: error.message, conjugation: {} }];
         }
+    }
+
+    /**
+     * Get complete list of all known models
+     */
+    public getModels(): string[] {
+        const result: Set<string> = new Set();
+        const list = Object.values(this.templates);   // can't tell the type yet
+
+        function traverse(value?: Model | Model[]) {
+            if (typeof value === 'string') {
+                result.add(value);
+            } else if (Array.isArray(value)) {
+                value.forEach(data => {
+                    if (typeof data === 'string') {
+                        result.add(data);
+                    } else {
+                        result.add(Object.keys(data)[0]);
+                    }
+                });
+            }
+        }
+        (list as VerbModelData[]).forEach(value => {   // now we know the type
+            traverse(value.N);
+            traverse(value.P);
+        });
+        return Array.from(result);
+    }
+
+    public getImplementedModels(): string [] {
+        return this.getModels().filter(m => this.factory.isImplemented(m));
     }
 }

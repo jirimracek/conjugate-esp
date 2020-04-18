@@ -172,7 +172,7 @@ export class balbucir extends vivir {
         this.desinences.Subjuntivo.Presente = JSON.parse(JSON.stringify(AR.Subjuntivo.Presente));
     }
     protected setIndicativoPresente(): void {
-        super.setIndicativoPresente([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPresente([this.replacement, ... Array.from('12345').map(() => this.stem)]);
     }
     protected setSubjuntivoPresente(): void {
         super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
@@ -326,13 +326,23 @@ export class embaír extends vivir {
 export class lucir extends vivir {
     private replacement: string;
 
+    protected setParticipio() {
+        super.setParticipio();
+        const PR = this.attributes['PR'] as string;
+        if (PR) {
+            const [expression, replacement] = PR.split('/');
+            this.table.Impersonal.Participio[0] = this.table.Impersonal.Participio[0].replace(expression, replacement);
+            this.participioCompuesto = this.table.Impersonal.Participio[0];
+        }
+    }
+
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.replacement = this.stem.replace(/(.*)c/, '$1zc');
     }
 
     protected setIndicativoPresente(): void {
-        super.setIndicativoPresente([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPresente([this.replacement, ...Array.from('12345').map(() => this.stem)]);
     }
     protected setSubjuntivoPresente(): void {
         super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
@@ -349,7 +359,7 @@ export class surgir extends vivir {
     }
 
     protected setIndicativoPresente(): void {
-        super.setIndicativoPresente([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPresente([this.replacement, ...Array.from('12345').map(() => this.stem)]);
     }
     protected setSubjuntivoPresente(): void {
         super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
@@ -401,4 +411,19 @@ export class servir extends vivir {
         super.setSubjuntivoFuturoImperfecto(this.replacements);
     }
 }
+export class zurcir extends vivir {
+    private replacement: string;
+    private replacements: string[];
 
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.replacement = this.stem.replace(/c$/, 'z');
+        this.replacements = Array.from('012345').map(() => this.replacement);
+    }
+    protected setIndicativoPresente(): void {
+        super.setIndicativoPresente([this.replacement, ...Array.from('12345').map(() => this.stem)]);
+    }
+    protected setSubjuntivoPresente(): void {
+        super.setSubjuntivoPresente(this.replacements);
+    }
+}

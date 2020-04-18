@@ -78,7 +78,7 @@ export class hacer extends temer {
     }
 
     protected setIndicativoPresente(): void {
-        super.setIndicativoPresente([this.stem.replace(/c/, 'g'), this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPresente([this.stem.replace(/c/, 'g'), ...Array.from('12345').map(() => this.stem)]); 
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
@@ -141,7 +141,7 @@ export class haber extends temer {
         const replacement = this.stem.replace(/ab/, '');
         switch (this.region) {
             case 'castellano':
-                super.setIndicativoPresente([replacement, replacement, replacement, replacement, this.stem, replacement]);
+                super.setIndicativoPresente([...Array.from('1234').map(() => replacement), this.stem, replacement]);
                 break;
             case 'voseo':
             case 'canarias':
@@ -204,7 +204,7 @@ export class nacer extends temer {
     }
 
     protected setIndicativoPresente(): void {
-        super.setIndicativoPresente([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPresente([this.replacement, ...Array.from('12345').map(() => this.stem)]); 
     }
 
     protected setSubjuntivoPresente(): void {
@@ -218,7 +218,7 @@ export class poder extends temer {
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.replacement = this.stem.replace(/o/, 'u');
-        this.replacements = Array.from('012345').map(() => this.replacement);    
+        this.replacements = Array.from('012345').map(() => this.replacement);
     }
 
     protected configDesinences(): void {
@@ -255,8 +255,8 @@ export class poner extends temer {
     private replacements: string[];
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.replacement = this.stem.replace(/on/, 'us');
-        this.replacements = Array.from('012345').map(() => this.replacement);    
+        this.replacement = this.stem.replace(/on$/, 'us');
+        this.replacements = Array.from('012345').map(() => this.replacement);
     }
 
     protected configDesinences(): void {
@@ -275,7 +275,7 @@ export class poner extends temer {
         super.setIndicativoPreteritoIndefinido(Array.from('012345').map(() => this.replacement));
     }
     protected setSubjuntivoPresente(): void {
-        const replace = this.stem.replace(/on/, 'ong');
+        const replace = this.stem.replace(/on$/, 'ong');
         super.setSubjuntivoPresente(Array.from('012345').map(() => replace));
     }
     protected setSubjuntivoPreteritoImperfectoRa(): void {
@@ -287,13 +287,56 @@ export class poner extends temer {
     protected setSubjuntivoFuturoImperfecto(): void {
         super.setSubjuntivoFuturoImperfecto(this.replacements);
     }
+
+    // Similar to the case of decir.Imp.Aff, the monos (there is just one, pon) and P, all drop their accents
     protected setImperativoAfirmativo(): void {
         super.setImperativoAfirmativo();
-        switch (this.region) {
-            case 'castellano':
-            case 'canarias':
-                this.table.Imperativo.Afirmativo[1] = this.table.Imperativo.Afirmativo[1].replace(/[oó]ne/, 'on');
+        if (this.region === 'castellano' || this.region === 'canarias') {
+            this.table.Imperativo.Afirmativo[1] = this.table.Imperativo.Afirmativo[1].replace(/(.*)p[oó]ne/, (match: string, p1: string): string => {
+                // if p1 ends with a space (tú pon: p1 ===  'tú ') - this is the mono we're looking for
+                if (/\s+$/.test(p1) || this.type === 'P') return `${p1}pon`;
+                return `${p1}pón`;   //  else p1 didn't end with a space (tú repon: p1 === 'tú re')
+            });
         }
+    }
+}
+
+export class querer extends temer {
+    private replacement: string;
+    private repl: string[];
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.replacement = this.stem.replace(/ue/, 'uie');
+        const r2 = this.stem.replace(/er$/, 'is');
+        this.repl = Array.from('012345').map(() => r2);
+    }
+
+    protected configDesinences(): void {
+        super.configDesinences();
+        this.desinences.Indicativo.Preterito_Indefinido = ['ise', 'isiste', 'iso', 'isimos', 'isisteis', 'isieron'];
+        this.desinences.Indicativo.Futuro_Imperfecto = ['ré', 'rás', 'rá', 'remos', 'réis', 'rán'];
+        this.desinences.Indicativo.Condicional_Simple = ['ría', 'rías', 'ría', 'ríamos', 'ríais', 'rían'];
+
+    }
+
+    protected setIndicativoPresente(): void {
+        this.setIndicativoPresentePattern_0125(this.replacement);
+    }
+    protected setIndicativoPreteritoIndefinido(): void {
+        const p = this.stem.replace(/uer/, 'u');
+        super.setIndicativoPreteritoIndefinido(Array.from('012345').map(() => p));
+    }
+    protected setSubjuntivoPresente(): void {
+        this.setSubjuntivoPresentePattern_0125(this.replacement);
+    }
+    protected setSubjuntivoPreteritoImperfectoRa(): void {
+        super.setSubjuntivoPreteritoImperfectoRa(this.repl);
+    }
+    protected setSubjuntivoPreteritoImperfectoSe(): void {
+        super.setSubjuntivoPreteritoImperfectoSe(this.repl);
+    }
+    protected setSubjuntivoFuturoImperfecto(): void {
+        super.setSubjuntivoFuturoImperfecto(this.repl);
     }
 }
 
@@ -310,7 +353,36 @@ export class responder extends temer {
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
-        super.setIndicativoPreteritoIndefinido(Array.from('012345').map(() => this.replacement)); 
+        super.setIndicativoPreteritoIndefinido(Array.from('012345').map(() => this.replacement));
+    }
+}
+
+export class tañer extends temer {
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+    }
+    protected configDesinences(): void {
+        super.configDesinences();
+        this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.map(d => d.replace(/^i/, '')); 
+        this.desinences.Indicativo.Preterito_Indefinido[2] = 'ó';
+        this.desinences.Indicativo.Preterito_Indefinido[5] = 'eron';
+
+        this.desinences.Subjuntivo.Preterito_Imperfecto_ra = this.desinences.Subjuntivo.Preterito_Imperfecto_ra.map(d => d.replace(/^i/, ''));
+        this.desinences.Subjuntivo.Preterito_Imperfecto_se = this.desinences.Subjuntivo.Preterito_Imperfecto_se.map(d => d.replace(/^i/, ''));
+        this.desinences.Subjuntivo.Futuro_Imperfecto = this.desinences.Subjuntivo.Futuro_Imperfecto.map(d => d.replace(/^i/, ''));
+    }
+}
+export class tender extends temer {
+    private replacement: string;
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.replacement = this.stem.replace(/(.*)e/, '$1ie');
+    }
+    protected setIndicativoPresente (): void {
+        this.setIndicativoPresentePattern_0125(this.replacement);
+    }
+    protected setSubjuntivoPresente(): void {
+        this.setSubjuntivoPresentePattern_0125(this.replacement);
     }
 }
 
@@ -322,7 +394,7 @@ export class vencer extends temer {
     }
 
     protected setIndicativoPresente(): void {
-        super.setIndicativoPresente([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPresente([this.replacement, ...Array.from('12345').map(() => this.stem)]);
     }
 
     protected setSubjuntivoPresente(): void {

@@ -122,7 +122,7 @@ export class aguar extends amar {
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
-        super.setIndicativoPreteritoIndefinido([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPreteritoIndefinido([this.replacement, ...Array.from('12345').map(() => this.stem)]);  
     }
 
     protected setSubjuntivoPresente(): void {
@@ -145,7 +145,7 @@ export class ahincar extends amar {
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
-        super.setIndicativoPreteritoIndefinido([this.cToQ, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPreteritoIndefinido([this.cToQ, ...Array.from('12345').map(() => this.stem)]);  
     }
 }
 
@@ -184,7 +184,7 @@ export class cazar extends amar {
         this.replacement = this.stem.replace(/z$/, 'c');
     }
     protected setIndicativoPreteritoIndefinido(): void {
-        super.setIndicativoPreteritoIndefinido([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPreteritoIndefinido([this.replacement, ...Array.from('12345').map(() => this.stem)]);  
     }
     protected setSubjuntivoPresente(): void {
         super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
@@ -369,7 +369,7 @@ export class sacar extends amar {
         this.replacement = this.stem.replace(/(.*)c/, '$1qu');
     }
     protected setIndicativoPreteritoIndefinido(): void {
-        super.setIndicativoPreteritoIndefinido([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPreteritoIndefinido([this.replacement, ...Array.from('12345').map(() => this.stem)]); 
     }
     protected setSubjuntivoPresente(): void {
         super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
@@ -400,7 +400,7 @@ export class volcar extends amar {
         }
     }
     protected setIndicativoPreteritoIndefinido(): void {
-        super.setIndicativoPreteritoIndefinido([this.simple, this.stem, this.stem, this.stem, this.stem, this.stem]);
+        super.setIndicativoPreteritoIndefinido([this.simple, ...Array.from('12345').map(() => this.stem)]); 
     }
 
     protected setSubjuntivoPresente(): void {

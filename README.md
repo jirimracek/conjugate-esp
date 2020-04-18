@@ -95,7 +95,6 @@ ____
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
-|&#x2796;||
 </td><td>
 
 | ER            | |
@@ -115,18 +114,17 @@ ____
 | ***poder*** | &#x2714; |
 | ***poner*** | &#x2714; |
 | prever | &#x2718; |
-| querer | &#x2718; |
+| ***querer*** | &#x2714; |
 | raer | &#x2718; |
 | rehacer | &#x2718; |
-| reponer | &#x2718; |
 | ***responder*** | &#x2714; |
 | roer | &#x2718; |
 | romper | &#x2718; |
 | saber | &#x2718; |
 | satisfacer | &#x2718; |
 | ser | &#x2718; |
-| tañer | &#x2718; |
-| tender | &#x2718; |
+| ***tañer*** | &#x2714; |
+| ***tender*** | &#x2714; |
 | tener | &#x2718; |
 | torcer | &#x2718; |
 | traer | &#x2718; |
@@ -135,6 +133,7 @@ ____
 | ver | &#x2718; |
 | volver | &#x2718; |
 | yacer | &#x2718; |
+|&#x2796;||
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
@@ -169,7 +168,6 @@ ____
 | oír | &#x2718; |
 | plañir | &#x2718; |
 | podrir | &#x2718; |
-| predecir | &#x2718; |
 | prohibir | &#x2718; |
 | pudrir | &#x2718; |
 | rehenchir | &#x2718; |
@@ -182,7 +180,7 @@ ____
 | ***servir*** | &#x2714; |
 | ***surgir*** | &#x2714; |
 | venir | &#x2718; |
-| zurcir | &#x2718; |
+| ***zurcir*** | &#x2714; |
 </td></tr> </table>
 
 ____
@@ -211,14 +209,21 @@ ____
   - Majority is conjugated per regular models (amar 8600+, temer 140+, vivir 290+)
   - There are about 130 defectives of 11 categories, some are single model, others are duals
   - There are about 180 dual verbs conjugated as per 2 models (different models or same model non-defective / defective) and about 6 triples (yacer, roer, ...)
-- Models involved in defectives (todo / **done**)
-  - **actuar aislar amar cazar contar discernir embaír estar haber hacer lucir mover nacer pagar pensar poder poner** predecir querer reponer **responder sacar servir surgir** tañer **temer** tender **vaciar vivir** zurcir
+- Models involved in defectives (**done**)
+  - **actuar aislar amar cazar contar discernir embaír estar haber hacer lucir mover nacer pagar pensar poder poner querer responder sacar servir surgir tañer temer tender vaciar vivir zurcir**
 - Additional models involved in multiples
   - enraizar **errar** huir **vencer** placer podrir pudrir raer **regar** reír **responder** roer satisfacer **volcar** yacer
 
 ____
 
 ## Changelog
+
+- 4/18/2020
+  - condecir, contradecir, desdecir, predecir, entredecir, redecir, antedecir, decir, esperdecir, interdecir - difficult variety
+  - got rid of predecir model - handled by decir
+  - got rid reponer model - handled by poner
+  - zurcir, querer, tañer, tender - **done with defectives**
+  - changed the database attributes configuration one more time, hopefully for the last time to verb:attrname=attrvalue:attrname=value ...
 
 - 4/17/2020
   - noticing some common regularities in irregular conjugations. Code shrinking is in order
