@@ -251,7 +251,6 @@ export class decir extends vivir {
         }
     }
 }
-
 export class discernir extends vivir {
     private replacement: string;
 
@@ -320,6 +319,13 @@ export class lucir extends vivir {
         super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
     }
 }
+
+export class predecir extends vivir {
+    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+    }
+}
+
 
 export class surgir extends vivir {
     private replacement: string;

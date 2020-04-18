@@ -9,7 +9,7 @@ import { ModelFactory } from './factory';
 import { ConjugationTable, DB, Regions, PronominalKeys, VerbModelData, ModelAttributes } from './declarations/types';
 import { ERROR_MSG } from './declarations/constants';
 
-export type InfoType = { model: string, region: string, pronominal: boolean, defective: boolean };
+export type InfoType = { verb: string, model: string, region: string, pronominal: boolean, defective: boolean };
 export type ErrorType = { message: string };
 export type ResultType = { info: InfoType | ErrorType, conjugation: ConjugationTable };
 
@@ -88,7 +88,7 @@ export class Conjugator {
                 const model = this.factory.getModel(verb, modelName, pronominalKey, region, attributes);
 
                 result.push({
-                    info: { model: modelName, region: region, pronominal: (pronominalKey === 'P'), defective: !!(attributes['_d_']) },
+                    info: { verb: pronominalKey === 'P' ? `${verb}se` : verb, model: modelName, region: region, pronominal: (pronominalKey === 'P'), defective: !!(attributes['_d_']) },
                     conjugation: model.getConjugationOf()
                 });
             });
