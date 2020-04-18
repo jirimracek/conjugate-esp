@@ -48,6 +48,7 @@ verbSet.add('acontecer');   // single defective                     "acontecer":
 verbSet.add('adecuar');     // dual, non defective                  "adecuar": { "N": [ "amar", "actuar" ], "P": [ "amar", "actuar" ]
 verbSet.add('antojar');     // defective terciopersonal v2          "antojar": { "P": { "amar": { "d": "terciop" } } },
 verbSet.add('balbucir');    // combo of ir & ar verb, very unique, in the model list
+verbSet.add('condecir');    // the decir family of differences
 verbSet.add('degollar');    // contar, o -> üe
 verbSet.add('derrocar');    // dual volcar, sacar                   "derrocar": { "N": [ "volcar", "sacar" ], "P": "volcar" },
 verbSet.add('desvaír');     // dual, ír, defective in both N&P      "desvaír": { "N": [ { "embaír": { "_d_": "imorfo" } }, "embaír" ], "P": [ { "embaír": { "_d_": "imorfo" } }, "embaír" ] },
@@ -57,8 +58,10 @@ verbSet.add('errar');       // err -> yerr                          "errar": { "
 verbSet.add('guiar');       // dual vaciar with monosyll            "guiar": { "N": [ "vaciar", { "vaciar": { "_ms_": "true" } } ], "P": [ "vaciar", { "vaciar": { "_ms_": "true" } } ] },
 verbSet.add('hidropicar');  // sacar, dual, defective               "hidropicar": { "N": [ "sacar", { "sacar": { "_d_": "imper" } } ], "P": "sacar" },
 verbSet.add('inhestar');    // participio irregular, replace        "inhestar": { "N": { "pensar": { "PR": "estad/iest" } }
+verbSet.add('predecir');    // the decir family of differences
 verbSet.add('pringar');     // dual pagar                           "pringar": { "N": [ "pagar", { "pagar": { "_d_": "imper" } } ], "P": "pagar" },
 verbSet.add('puar');        // dual, monosyllables                  "puar": { "N": [ "actuar", { "actuar": { "MS": "true" } } ] },
+verbSet.add('redecir');     // the decir family of differences
 verbSet.add('responder');   // in the list already, quite unique, repuse version         "responder": { "N": [ "temer", "responder" ] },
 verbSet.add('serenar');     // triple, defective in one, N&P        "serenar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
 verbSet.add('soler');       // the name said it all                 "soler": { "N": [ { "mover": { "_d_": "osmorfo" } }, { "mover": { "_d_": "omorfo" } } ] },

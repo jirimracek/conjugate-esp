@@ -82,7 +82,7 @@
  "abar": {
   "P": {
    "amar": {
-    "_d_": "trimorfo"
+    "D": "trimorfo"
    }
   }
  },
@@ -284,7 +284,7 @@
  "abocanar": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -326,7 +326,7 @@
    "vivir",
    {
     "vivir": {
-     "_d_": "imorfo"
+     "D": "imorfo"
     }
    }
   ]
@@ -652,7 +652,7 @@
  "acaecer": {
   "N": {
    "nacer": {
-    "_d_": "terciop"
+    "D": "terciop"
    }
   }
  },
@@ -738,7 +738,7 @@
  "acantalear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -1190,7 +1190,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -1386,7 +1386,7 @@
  "acontecer": {
   "N": {
    "nacer": {
-    "_d_": "terciop"
+    "D": "terciop"
    }
   }
  },
@@ -1480,7 +1480,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "omorfo"
+     "D": "omorfo"
     }
    }
   ],
@@ -1879,7 +1879,7 @@
    "nacer",
    {
     "nacer": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ]
@@ -2663,12 +2663,12 @@
  "aguerrir": {
   "N": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   },
   "P": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   }
  },
@@ -3001,7 +3001,7 @@
   "N": [
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "amar"
@@ -3085,7 +3085,7 @@
   "N": [
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "amar"
@@ -3095,7 +3095,7 @@
   "N": [
    {
     "nacer": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "nacer"
@@ -3319,7 +3319,7 @@
  "algaracear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -3779,7 +3779,7 @@
   "N": [
    {
     "nacer": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "nacer"
@@ -4475,7 +4475,7 @@
   "N": [
    {
     "nacer": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "nacer"
@@ -4606,7 +4606,7 @@
  "antojar": {
   "P": {
    "amar": {
-    "_d_": "terciop"
+    "D": "terciop"
    }
   }
  },
@@ -4899,7 +4899,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -5853,12 +5853,12 @@
  "arrecir": {
   "N": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   },
   "P": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   }
  },
@@ -6662,7 +6662,7 @@
   "N": [
    {
     "nacer": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "nacer"
@@ -6706,7 +6706,7 @@
    "tañer",
    {
     "tañer": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ]
@@ -6785,12 +6785,12 @@
  "aterir": {
   "N": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   },
   "P": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   }
  },
@@ -8708,7 +8708,7 @@
   "N": [
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "amar"
@@ -9680,7 +9680,7 @@
  "cascarrinar": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -9878,7 +9878,7 @@
  "cellisquear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -9945,7 +9945,7 @@
  "cercear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -9973,7 +9973,7 @@
    "tender",
    {
     "tender": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -10151,7 +10151,7 @@
  "chaparrear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -10287,7 +10287,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -10455,7 +10455,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -10559,7 +10559,7 @@
  "chubasquear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -10650,7 +10650,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -10803,7 +10803,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -10812,7 +10812,7 @@
  "clarecer": {
   "N": {
    "nacer": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -11165,7 +11165,7 @@
  "colorir": {
   "N": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   }
  },
@@ -11325,7 +11325,7 @@
    "temer",
    {
     "temer": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ]
@@ -11408,7 +11408,7 @@
    "surgir",
    {
     "surgir": {
-     "_d_": "imorfo"
+     "D": "imorfo"
     }
    }
   ],
@@ -11416,7 +11416,7 @@
    "surgir",
    {
     "surgir": {
-     "_d_": "imorfo"
+     "D": "imorfo"
     }
    }
   ]
@@ -11478,7 +11478,7 @@
  "concernir": {
   "N": {
    "discernir": {
-    "_d_": "terciop"
+    "D": "terciop"
    }
   }
  },
@@ -11554,17 +11554,17 @@
   "N": [
    {
     "decir": {
-     "_v_": "1"
+     "V": "1"
     }
    },
    {
     "decir": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    },
    {
     "decir": {
-     "_v_": "2"
+     "V": "2"
     }
    }
   ]
@@ -12055,24 +12055,24 @@
   "N": [
    {
     "decir": {
-     "_v_": "1"
+     "V": "1"
     }
    },
    {
     "decir": {
-     "_v_": "2"
+     "V": "2"
     }
    }
   ],
   "P": [
    {
     "decir": {
-     "_v_": "1"
+     "V": "1"
     }
    },
    {
     "decir": {
-     "_v_": "2"
+     "V": "2"
     }
    }
   ]
@@ -12662,7 +12662,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ],
@@ -12670,7 +12670,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -13533,7 +13533,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ],
@@ -13744,7 +13744,7 @@
   "N": [
    {
     "vivir": {
-     "_d_": "imorfo"
+     "D": "imorfo"
     }
    },
    "vivir"
@@ -13752,7 +13752,7 @@
   "P": [
    {
     "vivir": {
-     "_d_": "imorfo"
+     "D": "imorfo"
     }
    },
    "vivir"
@@ -15109,12 +15109,12 @@
  "descolorir": {
   "N": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   },
   "P": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   }
  },
@@ -15420,24 +15420,24 @@
   "N": [
    {
     "decir": {
-     "_v_": "1"
+     "V": "1"
     }
    },
    {
     "decir": {
-     "_v_": "2"
+     "V": "2"
     }
    }
   ],
   "P": [
    {
     "decir": {
-     "_v_": "1"
+     "V": "1"
     }
    },
    {
     "decir": {
-     "_v_": "2"
+     "V": "2"
     }
    }
   ]
@@ -17441,12 +17441,12 @@
  "despavorir": {
   "N": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   },
   "P": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   }
  },
@@ -18235,7 +18235,7 @@
   "N": [
    {
     "embaír": {
-     "_d_": "imorfo"
+     "D": "imorfo"
     }
    },
    "embaír"
@@ -18243,7 +18243,7 @@
   "P": [
    {
     "embaír": {
-     "_d_": "imorfo"
+     "D": "imorfo"
     }
    },
    "embaír"
@@ -18607,7 +18607,7 @@
  "diluviar": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -19411,12 +19411,12 @@
  "embaír": {
   "N": {
    "embaír": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   },
   "P": {
    "embaír": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   }
  },
@@ -20010,7 +20010,7 @@
  "empecer": {
   "N": {
    "nacer": {
-    "_d_": "tercio"
+    "D": "tercio"
    }
   }
  },
@@ -20036,24 +20036,24 @@
   "N": [
    {
     "vivir": {
-     "_d_": "bimorfop"
+     "D": "bimorfop"
     }
    },
    {
     "vivir": {
-     "_d_": "imorfo"
+     "D": "imorfo"
     }
    }
   ],
   "P": [
    {
     "vivir": {
-     "_d_": "bimorfop"
+     "D": "bimorfop"
     }
    },
    {
     "vivir": {
-     "_d_": "imorfo"
+     "D": "imorfo"
     }
    }
   ]
@@ -21039,7 +21039,7 @@
  "encelajar": {
   "P": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -23753,7 +23753,7 @@
    "decir",
    {
     "decir": {
-     "_v_": "1"
+     "V": "1"
     }
    }
   ]
@@ -24494,7 +24494,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ]
@@ -24567,7 +24567,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -24682,7 +24682,7 @@
   "N": [
    {
     "nacer": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "nacer"
@@ -25193,7 +25193,7 @@
  "esperdecir": {
   "N": {
    "decir": {
-    "_v_": "1"
+    "V": "1"
    }
   }
  },
@@ -25468,7 +25468,7 @@
    "estar",
    {
     "estar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -26567,7 +26567,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ],
@@ -26575,7 +26575,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -27348,7 +27348,7 @@
   "N": [
    {
     "vivir": {
-     "_d_": "imorfo"
+     "D": "imorfo"
     }
    },
    "vivir"
@@ -27445,7 +27445,7 @@
  "garuar": {
   "N": {
    "actuar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -27672,7 +27672,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ]
@@ -27739,7 +27739,7 @@
    "cazar",
    {
     "cazar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ]
@@ -27957,7 +27957,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ],
@@ -27965,7 +27965,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -28032,7 +28032,7 @@
    "haber",
    {
     "haber": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -28062,7 +28062,7 @@
    "hacer",
    {
     "hacer": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -28127,7 +28127,7 @@
  "harinear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -28183,7 +28183,7 @@
    "pensar",
    {
     "pensar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -28342,7 +28342,7 @@
    "sacar",
    {
     "sacar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -29049,7 +29049,7 @@
    "vivir",
    {
     "vivir": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ]
@@ -29296,7 +29296,7 @@
  "inhestar": {
   "N": {
    "pensar": {
-    "_pr_": "estad/iest"
+    "PR": "estad/iest"
    }
   }
  },
@@ -29567,7 +29567,7 @@
  "interdecir": {
   "N": {
    "decir": {
-    "_v_": "1"
+    "V": "1"
    }
   }
  },
@@ -30028,7 +30028,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ]
@@ -30445,7 +30445,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ]
@@ -30686,7 +30686,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ],
@@ -30694,7 +30694,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -30932,7 +30932,7 @@
   "N": [
    {
     "mover": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "mover"
@@ -30942,7 +30942,7 @@
  "lloviznar": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   },
   "P": "amar"
@@ -30950,7 +30950,7 @@
  "lloviznear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -30965,7 +30965,7 @@
    "nacer",
    {
     "nacer": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ]
@@ -31529,12 +31529,12 @@
  "manir": {
   "N": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   },
   "P": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   }
  },
@@ -31634,7 +31634,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ]
@@ -31658,7 +31658,7 @@
    "zurcir",
    {
     "zurcir": {
-     "_d_": "eimorfo"
+     "D": "eimorfo"
     }
    }
   ]
@@ -31878,7 +31878,7 @@
   "N": [
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "amar"
@@ -32229,7 +32229,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -32514,7 +32514,7 @@
  "mollinear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -32524,14 +32524,14 @@
  "molliznar": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
  "molliznear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -32957,7 +32957,7 @@
  "neblinear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -33022,7 +33022,7 @@
   "N": [
    {
     "pensar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "pensar"
@@ -33031,7 +33031,7 @@
  "neviscar": {
   "N": {
    "sacar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -33109,7 +33109,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -33148,7 +33148,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ]
@@ -33242,7 +33242,7 @@
  "obstar": {
   "N": {
    "amar": {
-    "_d_": "terciop"
+    "D": "terciop"
    }
   }
  },
@@ -33309,7 +33309,7 @@
    "vivir",
    {
     "vivir": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ],
@@ -33547,7 +33547,7 @@
  "orvallar": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -33565,7 +33565,7 @@
    "nacer",
    {
     "nacer": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -33872,14 +33872,14 @@
  "paramar": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
  "paramear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -33933,7 +33933,7 @@
    "nacer",
    {
     "nacer": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -34008,7 +34008,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ],
@@ -34540,7 +34540,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ]
@@ -34628,7 +34628,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -34641,7 +34641,7 @@
    "sacar",
    {
     "sacar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -34753,7 +34753,7 @@
  "pintear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -35003,7 +35003,7 @@
    "poder",
    {
     "poder": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ]
@@ -35105,7 +35105,7 @@
    "poner",
    {
     "poner": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -35317,12 +35317,12 @@
   "N": [
    {
     "decir": {
-     "_v_": "1"
+     "V": "1"
     }
    },
    {
     "decir": {
-     "_v_": "2"
+     "V": "2"
     }
    }
   ]
@@ -35535,7 +35535,7 @@
  "preterir": {
   "N": {
    "servir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   }
  },
@@ -35580,7 +35580,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ],
@@ -35588,7 +35588,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -35614,7 +35614,7 @@
    "pagar",
    {
     "pagar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -35910,7 +35910,7 @@
    "actuar",
    {
     "actuar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -36116,7 +36116,7 @@
    "querer",
    {
     "querer": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ]
@@ -36226,7 +36226,7 @@
   "N": [
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "amar"
@@ -37115,7 +37115,7 @@
   "N": [
    {
     "decir": {
-     "_v_": "1"
+     "V": "1"
     }
    },
    "decir"
@@ -37714,7 +37714,7 @@
   "N": [
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "amar"
@@ -37823,7 +37823,7 @@
  "remanir": {
   "N": {
    "vivir": {
-    "_d_": "imorfo"
+    "D": "imorfo"
    }
   }
  },
@@ -38232,7 +38232,7 @@
    "reponer",
    {
     "reponer": {
-     "_d_": "ogmorfo"
+     "D": "ogmorfo"
     }
    }
   ],
@@ -39126,7 +39126,7 @@
  "rocear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -39141,7 +39141,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ]
@@ -39238,7 +39238,7 @@
  "rosar": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   },
   "P": "amar"
@@ -39248,7 +39248,7 @@
    "sacar",
    {
     "sacar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ]
@@ -39290,7 +39290,7 @@
    "actuar",
    {
     "actuar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -39332,7 +39332,7 @@
    "surgir",
    {
     "surgir": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ]
@@ -39667,7 +39667,7 @@
  "sarracear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -39867,7 +39867,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -40450,12 +40450,12 @@
   "N": [
    {
     "mover": {
-     "_d_": "osmorfo"
+     "D": "osmorfo"
     }
    },
    {
     "mover": {
-     "_d_": "omorfo"
+     "D": "omorfo"
     }
    }
   ]
@@ -40577,7 +40577,7 @@
    "contar",
    {
     "contar": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ],
@@ -40956,7 +40956,7 @@
    "temer",
    {
     "temer": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ]
@@ -41363,7 +41363,7 @@
  "tardecer": {
   "N": {
    "nacer": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -41535,7 +41535,7 @@
  "tempestar": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -41543,7 +41543,7 @@
   "N": [
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "amar"
@@ -41625,7 +41625,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "terciop"
+     "D": "terciop"
     }
    }
   ]
@@ -42172,7 +42172,7 @@
    "nacer",
    {
     "nacer": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ],
@@ -42228,7 +42228,7 @@
    "amar",
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    }
   ]
@@ -42623,7 +42623,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ],
@@ -42631,7 +42631,7 @@
    "vaciar",
    {
     "vaciar": {
-     "_ms_": "true"
+     "M": "true"
     }
    }
   ]
@@ -42746,7 +42746,7 @@
   "N": [
    {
     "contar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "contar"
@@ -43263,7 +43263,7 @@
   "N": [
    {
     "pensar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "amar",
@@ -43274,7 +43274,7 @@
   "N": [
    {
     "amar": {
-     "_d_": "imper"
+     "D": "imper"
     }
    },
    "amar"
@@ -43288,14 +43288,14 @@
  "ventiscar": {
   "N": {
    "sacar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
  "ventisquear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },
@@ -43820,7 +43820,7 @@
  "zaracear": {
   "N": {
    "amar": {
-    "_d_": "imper"
+    "D": "imper"
    }
   }
  },

@@ -17,7 +17,7 @@ export class amar extends BaseModel {
 
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.monoSyllables = attributes['_ms_'] as boolean;
+        this.monoSyllables = attributes['M'] as boolean;
 
         // Initialize termination table, map ar terminations to the base
         // Clone so we don't overwrite the template
@@ -275,7 +275,7 @@ export class pensar extends amar {
 
     protected setParticipio(): void {
         super.setParticipio();
-        const PR = this.attributes['_pr_'] as string;
+        const PR = this.attributes['PR'] as string;
         if (PR) {
             const [expression, replacement] = PR.split('/');
             this.table.Impersonal.Participio[0] = this.table.Impersonal.Participio[0].replace(new RegExp(expression), replacement);

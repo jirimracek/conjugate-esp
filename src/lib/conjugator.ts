@@ -88,7 +88,7 @@ export class Conjugator {
                 const model = this.factory.getModel(verb, modelName, pronominalKey, region, attributes);
 
                 result.push({
-                    info: { verb: pronominalKey === 'P' ? `${verb}se` : verb, model: modelName, region: region, pronominal: (pronominalKey === 'P'), defective: !!(attributes['_d_']) },
+                    info: { verb: pronominalKey === 'P' ? `${verb}se` : verb, model: modelName, region: region, pronominal: (pronominalKey === 'P'), defective: !!(attributes['D']) },
                     conjugation: model.getConjugationOf()
                 });
             });

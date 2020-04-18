@@ -29,7 +29,7 @@ export abstract class BaseModel {
         this.type = type;
         this.region = region;
         this.attributes = attributes;                                     //  exists but empty if there aren't any
-        this.defectiveAttributes = attributes['_d_'] as DefectiveType;    //  undefined if there aren't any 
+        this.defectiveAttributes = attributes['D'] as DefectiveType;    //  undefined if there aren't any 
         this.auxHaber = JSON.parse(JSON.stringify(AUX_HABER));
 
         // Modify this.pronouns tables as per selected defective attributes
@@ -144,7 +144,7 @@ export abstract class BaseModel {
                 });
                 break;
             case 'tercio':
-                // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos _d_: tercio
+                // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos D = tercio
                 // this needs to be done partly pre (here - to separate singles from compuestos) 
                 //                   and partly post to zap gerundio & participio after we're done
                 // Verbo empecer
@@ -457,7 +457,7 @@ export abstract class BaseModel {
             // case 'imper': // infinitivo, gerundio, participio y en las terceras personas del singular
             //     break;
             case 'tercio':
-                // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos _d_: tercio
+                // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos D= tercio
                 // this needs to be done partly pre (above) to separate singles from compuestos
                 //                   and partly post (here) to zap gerundio & participio after we're done
                 // Verbo empecer

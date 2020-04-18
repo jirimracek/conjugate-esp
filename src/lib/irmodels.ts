@@ -181,10 +181,10 @@ export class balbucir extends vivir {
 
 // Write according to docs/decir.ods, 3 versions
 export class decir extends vivir {
-    private version: number;
+    private version: string;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.version = (attributes._v_ ? attributes._v_ : 0) as number;
+        this.version = (attributes.V ? attributes.V : '0') as string;
     }
     protected configDesinences() {
         super.configDesinences();
@@ -240,7 +240,7 @@ export class decir extends vivir {
     // where the ugly starts
     // Only for version 2
     protected setIndicativoFuturoImperfecto(): void {
-        if (this.attributes._v_ === '2') {
+        if (this.version === '2') {
             super.setIndicativoFuturoImperfecto();                   //  predeciré, antedeciré
         } else {
             const p = this.stem.replace(/ec/, '');                   //  diré, prediré
@@ -249,7 +249,7 @@ export class decir extends vivir {
     }
     // Only for version 2
     protected setIndicativoCondicionalSimple(): void {
-        if (this.attributes._v_ === '2') {
+        if (this.version === '2') {
             super.setIndicativoCondicionalSimple();                   //  predeciría, antedeciría
         } else {
             const p = this.stem.replace(/ec/, '');                    // diría, prediría
@@ -260,7 +260,7 @@ export class decir extends vivir {
     // decir imperative has no accent, all others do
     protected setImperativoAfirmativo(): void {
         super.setImperativoAfirmativo();
-        if (this.version === 0 && (this.region === 'castellano' || this.region === 'canarias')) {
+        if (this.version === '0' && (this.region === 'castellano' || this.region === 'canarias')) {
             this.table.Imperativo.Afirmativo[1] = this.table.Imperativo.Afirmativo[1].
                 replace(/(.*)d[ií]ce/, (match: string, p1: string): string => {
                     // if p1 ends with a space (tú dice: p1 ===  'tú ') 
