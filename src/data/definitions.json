@@ -2031,8 +2031,8 @@
   "N": "amar"
  },
  "afacer": {
-  "N": "satisfacer",
-  "P": "satisfacer"
+  "N": "hacer",
+  "P": "hacer"
  },
  "afalagar": {
   "N": "pagar"
@@ -3293,7 +3293,7 @@
   "N": "cazar"
  },
  "alfeizar": {
-  "N": "enraizar"
+  "N": "cazar"
  },
  "alfeñar": {
   "N": "amar"
@@ -7381,12 +7381,20 @@
  },
  "autosatisfacer": {
   "N": [
-   "satisfacer",
-   "satisfacer"
+   "hacer",
+   {
+    "hacer": {
+     "V": "1"
+    }
+   }
   ],
   "P": [
-   "satisfacer",
-   "satisfacer"
+   "hacer",
+   {
+    "hacer": {
+     "V": "1"
+    }
+   }
   ]
  },
  "autosostener": {
@@ -12085,7 +12093,7 @@
   "P": "traer"
  },
  "contrafacer": {
-  "N": "satisfacer"
+  "N": "hacer"
  },
  "contrafallar": {
   "N": "amar"
@@ -12409,11 +12417,11 @@
  "corporeizar": {
   "N": [
    "enraizar",
-   "enraizar"
+   "cazar"
   ],
   "P": [
    "enraizar",
-   "enraizar"
+   "cazar"
   ]
  },
  "corporificar": {
@@ -12464,13 +12472,29 @@
  "corroer": {
   "N": [
    "roer",
-   "roer",
-   "roer"
+   {
+    "roer": {
+     "V": "1"
+    }
+   },
+   {
+    "roer": {
+     "V": "2"
+    }
+   }
   ],
   "P": [
    "roer",
-   "roer",
-   "roer"
+   {
+    "roer": {
+     "V": "1"
+    }
+   },
+   {
+    "roer": {
+     "V": "2"
+    }
+   }
   ]
  },
  "corromper": {
@@ -16285,8 +16309,8 @@
   "N": "amar"
  },
  "desfacer": {
-  "N": "satisfacer",
-  "P": "satisfacer"
+  "N": "hacer",
+  "P": "hacer"
  },
  "desfajar": {
   "N": "amar",
@@ -23902,8 +23926,16 @@
  "entreyacer": {
   "N": [
    "yacer",
-   "yacer",
-   "yacer"
+   {
+    "yacer": {
+     "V": "1"
+    }
+   },
+   {
+    "yacer": {
+     "V": "2"
+    }
+   }
   ]
  },
  "entricar": {
@@ -26267,8 +26299,8 @@
   "N": "amar"
  },
  "facer": {
-  "N": "satisfacer",
-  "P": "satisfacer"
+  "N": "hacer",
+  "P": "hacer"
  },
  "facerir": {
   "N": "sentir"
@@ -26803,7 +26835,11 @@
  "fluir": {
   "N": [
    "huir",
-   "huir"
+   {
+    "huir": {
+     "M": "true"
+    }
+   }
   ]
  },
  "fluorar": {
@@ -27079,11 +27115,19 @@
  "freír": {
   "N": [
    "reír",
-   "reír"
+   {
+    "reír": {
+     "M": "true"
+    }
+   }
   ],
   "P": [
    "reír",
-   "reír"
+   {
+    "reír": {
+     "M": "true"
+    }
+   }
   ]
  },
  "fricar": {
@@ -27114,7 +27158,11 @@
  "fruir": {
   "N": [
    "huir",
-   "huir"
+   {
+    "huir": {
+     "M": "true"
+    }
+   }
   ]
  },
  "fruncir": {
@@ -27726,7 +27774,7 @@
   "N": "temer"
  },
  "grandifacer": {
-  "N": "satisfacer"
+  "N": "hacer"
  },
  "grandisonar": {
   "N": "contar"
@@ -27829,7 +27877,11 @@
  "gruir": {
   "N": [
    "huir",
-   "huir"
+   {
+    "huir": {
+     "M": "true"
+    }
+   }
   ]
  },
  "grujir": {
@@ -28494,11 +28546,11 @@
  },
  "homogeneizar": {
   "N": [
-   "enraizar",
+   "cazar",
    "enraizar"
   ],
   "P": [
-   "enraizar",
+   "cazar",
    "enraizar"
   ]
  },
@@ -28637,11 +28689,19 @@
  "huir": {
   "N": [
    "huir",
-   "huir"
+   {
+    "huir": {
+     "M": "true"
+    }
+   }
   ],
   "P": [
    "huir",
-   "huir"
+   {
+    "huir": {
+     "M": "true"
+    }
+   }
   ]
  },
  "huisachear": {
@@ -29735,9 +29795,6 @@
  "invectivar": {
   "N": "amar"
  },
- "invehír": {
-  "N": "reír"
- },
  "invenir": {
   "N": "venir"
  },
@@ -30757,8 +30814,8 @@
   "P": "nacer"
  },
  "licuefacer": {
-  "N": "satisfacer",
-  "P": "satisfacer"
+  "N": "hacer",
+  "P": "hacer"
  },
  "liderar": {
   "N": "amar"
@@ -31065,11 +31122,19 @@
  "luir": {
   "N": [
    "huir",
-   "huir"
+   {
+    "huir": {
+     "M": "true"
+    }
+   }
   ],
   "P": [
    "huir",
-   "huir"
+   {
+    "huir": {
+     "M": "true"
+    }
+   }
   ]
  },
  "lujar": {
@@ -31285,7 +31350,7 @@
   "N": "tender"
  },
  "malfacer": {
-  "N": "satisfacer"
+  "N": "hacer"
  },
  "malgastar": {
   "N": "amar"
@@ -32766,7 +32831,11 @@
  "muir": {
   "N": [
    "huir",
-   "huir"
+   {
+    "huir": {
+     "M": "true"
+    }
+   }
   ]
  },
  "mujerear": {
@@ -34885,7 +34954,11 @@
  "placer": {
   "N": [
    "placer",
-   "placer"
+   {
+    "placer": {
+     "V": "1"
+    }
+   }
   ]
  },
  "plagar": {
@@ -35019,11 +35092,19 @@
  "podrir": {
   "N": [
    "podrir",
-   "podrir"
+   {
+    "podrir": {
+     "V": "1"
+    }
+   }
   ],
   "P": [
    "podrir",
-   "podrir"
+   {
+    "podrir": {
+     "V": "1"
+    }
+   }
   ]
  },
  "poetar": {
@@ -35947,11 +36028,19 @@
  "pudrir": {
   "N": [
    "pudrir",
-   "pudrir"
+   {
+    "pudrir": {
+     "V": "1"
+    }
+   }
   ],
   "P": [
    "pudrir",
-   "pudrir"
+   {
+    "pudrir": {
+     "V": "1"
+    }
+   }
   ]
  },
  "puentear": {
@@ -36280,7 +36369,11 @@
  "raer": {
   "N": [
    "raer",
-   "raer"
+   {
+    "raer": {
+     "V": "1"
+    }
+   }
   ]
  },
  "rafear": {
@@ -36385,8 +36478,8 @@
   "N": "amar"
  },
  "rarefacer": {
-  "N": "satisfacer",
-  "P": "satisfacer"
+  "N": "hacer",
+  "P": "hacer"
  },
  "rarificar": {
   "N": "sacar",
@@ -37288,7 +37381,7 @@
   "N": "amar"
  },
  "refacer": {
-  "N": "satisfacer"
+  "N": "hacer"
  },
  "refalar": {
   "N": "amar",
@@ -38220,11 +38313,19 @@
  "repodrir": {
   "N": [
    "podrir",
-   "podrir"
+   {
+    "podrir": {
+     "V": "1"
+    }
+   }
   ],
   "P": [
    "podrir",
-   "podrir"
+   {
+    "podrir": {
+     "V": "1"
+    }
+   }
   ]
  },
  "repollar": {
@@ -38314,11 +38415,19 @@
  "repudrir": {
   "N": [
    "pudrir",
-   "pudrir"
+   {
+    "pudrir": {
+     "V": "1"
+    }
+   }
   ],
   "P": [
    "pudrir",
-   "pudrir"
+   {
+    "pudrir": {
+     "V": "1"
+    }
+   }
   ]
  },
  "repugnar": {
@@ -39035,11 +39144,19 @@
  "reír": {
   "N": [
    "reír",
-   "reír"
+   {
+    "reír": {
+     "M": "true"
+    }
+   }
   ],
   "P": [
    "reír",
-   "reír"
+   {
+    "reír": {
+     "M": "true"
+    }
+   }
   ]
  },
  "reñir": {
@@ -39166,8 +39283,16 @@
  "roer": {
   "N": [
    "roer",
-   "roer",
-   "roer"
+   {
+    "roer": {
+     "V": "1"
+    }
+   },
+   {
+    "roer": {
+     "V": "2"
+    }
+   }
   ]
  },
  "rogar": {
@@ -39689,12 +39814,20 @@
  },
  "satisfacer": {
   "N": [
-   "satisfacer",
-   "satisfacer"
+   "hacer",
+   {
+    "hacer": {
+     "V": "1"
+    }
+   }
   ],
   "P": [
-   "satisfacer",
-   "satisfacer"
+   "hacer",
+   {
+    "hacer": {
+     "V": "1"
+    }
+   }
   ]
  },
  "saturar": {
@@ -40944,8 +41077,16 @@
  "subyacer": {
   "N": [
    "yacer",
-   "yacer",
-   "yacer"
+   {
+    "yacer": {
+     "V": "1"
+    }
+   },
+   {
+    "yacer": {
+     "V": "2"
+    }
+   }
   ]
  },
  "subyugar": {
@@ -43649,8 +43790,16 @@
  "yacer": {
   "N": [
    "yacer",
-   "yacer",
-   "yacer"
+   {
+    "yacer": {
+     "V": "1"
+    }
+   },
+   {
+    "yacer": {
+     "V": "2"
+    }
+   }
   ]
  },
  "yantar": {

@@ -73,7 +73,7 @@ ____
 | desdar | &#x2718; |
 | desosar | &#x2718; |
 | empezar | &#x2718; |
-| enraizar | &#x2718; |
+| ***enraizar*** | &#x2714; |
 | ***errar*** | &#x2714; |
 | ***estar*** | &#x2714; |
 | forzar | &#x2718; |
@@ -110,18 +110,17 @@ ____
 | ***mover*** | &#x2714; |
 | ***nacer*** | &#x2714; |
 | oler | &#x2718; |
-| placer | &#x2718; |
+| ***placer*** | &#x2714; |
 | ***poder*** | &#x2714; |
 | ***poner*** | &#x2714; |
 | prever | &#x2718; |
 | ***querer*** | &#x2714; |
-| raer | &#x2718; |
+| ***raer*** | &#x2714; |
 | rehacer | &#x2718; |
 | ***responder*** | &#x2714; |
-| roer | &#x2718; |
+| ***roer*** | &#x2714; |
 | romper | &#x2718; |
 | saber | &#x2718; |
-| satisfacer | &#x2718; |
 | ser | &#x2718; |
 | ***tañer*** | &#x2714; |
 | ***tender*** | &#x2714; |
@@ -132,7 +131,8 @@ ____
 | ***vencer*** | &#x2714; |
 | ver | &#x2718; |
 | volver | &#x2718; |
-| yacer | &#x2718; |
+| ***yacer*** | &#x2714; |
+|&#x2796;||
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
@@ -161,19 +161,19 @@ ____
 | ***embaír*** | &#x2714; |
 | erguir | &#x2718; |
 | escribir | &#x2718; |
-| huir | &#x2718; |
+| ***huir*** | &#x2714; |
 | imprimir | &#x2718; |
 | ir | &#x2718; |
 | ***lucir*** | &#x2714; |
 | oír | &#x2718; |
 | plañir | &#x2718; |
-| podrir | &#x2718; |
+| ***podrir*** | &#x2714; |
 | prohibir | &#x2718; |
-| pudrir | &#x2718; |
+| ***pudrir*** | &#x2714; |
 | rehenchir | &#x2718; |
 | rehuir | &#x2718; |
 | reunir | &#x2718; |
-| reír | &#x2718; |
+| ***reír*** | &#x2714; |
 | salir | &#x2718; |
 | seguir | &#x2718; |
 | sentir | &#x2718; |
@@ -209,19 +209,25 @@ ____
   - Majority is conjugated per regular models (amar 8600+, temer 140+, vivir 290+)
   - There are about 130 defectives of 11 categories, some are single model, others are duals
   - There are about 180 dual verbs conjugated as per 2 models (different models or same model non-defective / defective) and about 6 triples (yacer, roer, ...)
-- Models involved in defectives (**done**)
-  - **actuar aislar amar cazar contar discernir embaír estar haber hacer lucir mover nacer pagar pensar poder poner querer responder sacar servir surgir tañer temer tender vaciar vivir zurcir**
+- Models involved in defectives
+  - actuar aislar amar cazar contar discernir embaír estar haber hacer lucir mover nacer pagar pensar poder poner querer responder sacar servir surgir tañer temer tender vaciar vivir zurcir
 - Additional models involved in multiples
-  - enraizar **errar** huir **vencer** placer podrir pudrir raer **regar** reír **responder** roer satisfacer **volcar** yacer
+  - enraizar errar huir vencer placer podrir pudrir raer regar reír responder roer volcar yacer
 
 ____
 
 ## Changelog
 
+- 4/19/2020
+  - enraizar, yacer, huir, placer, podrir, pudrir, raer, reír, roer
+  - offloaded model satisfacer, handled by hacer
+  - defectives: **done**
+  - dual, triple conjugations: **done**
+
 - 4/18/2020
   - condecir, contradecir, desdecir, predecir, entredecir, redecir, antedecir, decir, esperdecir, interdecir - difficult variety
   - got rid of predecir model - handled by decir
-  - got rid reponer model - handled by poner
+  - got rid of reponer model - handled by poner
   - zurcir, querer, tañer, tender - **done with defectives**
   - changed the database attributes configuration one more time, hopefully for the last time to verb:attrname=attrvalue:attrname=value ...
 

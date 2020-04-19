@@ -38,15 +38,16 @@ const models: string[] = temp.getImplementedModels();
 
 models.forEach(m => verbSet.add(m));
 // some interesting verbs
-verbSet.add('abar');        // the only known trimorfo              "abar": { "P": { "amar": { "D": "trimorfo" } } }
+verbSet.add('abar');        // the only known trimorfo              "abar": { "P": { "amar": { "D": "trimorfo" } } },
 verbSet.add('abolir');      // interesting imorfo                   "abolir": { "N": [ "vivir", { "vivir": { "D": "imorfo" } } ] },
 verbSet.add('acostumbrar')  // omorfo                               "acostumbrar": { "N": [ "amar", { "amar": { "D": "omorfo" } } ], "P": "amar" },
 verbSet.add('aclarar');     // dual, defective                      "aclarar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
 verbSet.add('acontecer');   // single defective                     "acontecer": { "N": { "nacer": { "D": "terciop" } } },
 verbSet.add('adecuar');     // dual, non defective                  "adecuar": { "N": [ "amar", "actuar" ], "P": [ "amar", "actuar" ]
 verbSet.add('antojar');     // defective terciopersonal v2          "antojar": { "P": { "amar": { "D": "terciop" } } },
+verbSet.add('autosatisfacer');     // odd version of hacer          "autosatisfacer": { "N": [ "hacer", { "hacer": { "V": "1" } } ],
 verbSet.add('balbucir');    // combo of ir & ar verb, very unique, in the model list
-verbSet.add('condecir');    // the decir family of differences
+verbSet.add('condecir');    // the decir family of differences      "condecir": { "N": [ { "decir": { "V": "1" } }, { "decir": { "D": "terciop" } }, { "decir": { "V": "2" } } ] },
 verbSet.add('degollar');    // contar, o -> üe
 verbSet.add('derrocar');    // dual volcar, sacar                   "derrocar": { "N": [ "volcar", "sacar" ], "P": "volcar" },
 verbSet.add('desvaír');     // dual, ír, defective in both N&P      "desvaír": { "N": [ { "embaír": { "D": "imorfo" } }, "embaír" ], "P": [ { "embaír": { "D": "imorfo" } }, "embaír" ] },
@@ -91,6 +92,9 @@ describe("Model Test", () => {
             public restore() {
                 this.templates = JSON.parse(JSON.stringify(this.savedTemplates));
             }
+            public fakeUnimplemented(verb: string, model: string): void {
+                this.templates[verb] = { 'N': model } as VerbModelData;
+            }
         }
         // Corrupted definitions file / missing templates - this should never happen
         let mockjugator = new MockJugator();
@@ -110,6 +114,12 @@ describe("Model Test", () => {
 
         expect((mockjugator.conjugate('amar')[0].info as InfoType)['region']).toEqual('castellano');
         expect(mockjugator.getVerbList()).not.toEqual([]);
+        mockjugator.restore();
+
+        mockjugator.fakeUnimplemented('foobar', 'bar');
+        expect(mockjugator.conjugate('foobar')).toEqual([{ info: ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/, 'bar$1foobar$2castellano'), conjugation: {} }]);
+        mockjugator.fakeUnimplemented('totally', 'bad');
+        expect(mockjugator.conjugate('totally', 'canarias')).toEqual([{ info: ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/, 'bad$1totally$2canarias'), conjugation: {} }]);
         mockjugator.restore();
 
         expect((mockjugator.conjugate('vivir')[0].info as InfoType)['defective']).toEqual(false);
@@ -149,12 +159,7 @@ describe("Model Test", () => {
     });
 
     test('getVerbList()', () => {
-        expect(conjugator.getVerbList().length).toBe(12819);       // number of verbs in the db
-    });
-
-    test('Not implemented', () => {
-        // unimplemented model
-        expect(conjugator.conjugate('yacer', 'formal')).toEqual([{ info: ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/, `yacer$1yacer$2formal`), conjugation: {} }]);
+        expect(conjugator.getVerbList().length).toBe(12818);       // number of verbs in the db
     });
 
     test('Optional parameters', () => {

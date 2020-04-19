@@ -20,6 +20,7 @@ export abstract class BaseModel {
     protected table: ConjugationTable = {};
     protected participioCompuesto = '';
 
+    protected version: string;
     protected attributes: ModelAttributes;
     private defectiveAttributes: DefectiveType;
 
@@ -31,6 +32,7 @@ export abstract class BaseModel {
         this.attributes = attributes;                                     //  exists but empty if there aren't any
         this.defectiveAttributes = attributes['D'] as DefectiveType;    //  undefined if there aren't any 
         this.auxHaber = JSON.parse(JSON.stringify(AUX_HABER));
+        this.version = (attributes.V ? attributes.V : '0') as string;
 
         // Modify this.pronouns tables as per selected defective attributes
         // Normally we use the PRONOMBRES table.  A few defective form dictate that the pronouns
@@ -103,7 +105,7 @@ export abstract class BaseModel {
         }
 
         // Once the desinances are configured, setup attributes that need to be setup before conjugation
-        // In particular, the once that affect desinences. Again.
+        // In particular, the ones that affect desinences. Again.
         this.applyAttributesPre();
     }
     /**
@@ -287,9 +289,9 @@ export abstract class BaseModel {
         this.table.Indicativo.Presente =
             this.desinences.Indicativo.Presente.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
     }
-    protected setIndicativoPreteritoImperfecto(): void {
+    protected setIndicativoPreteritoImperfecto(roots?: string[]): void {
         this.table.Indicativo.Preterito_Imperfecto =
-            this.desinences.Indicativo.Preterito_Imperfecto.map((desinence, index) => this.formSimple(desinence, index));
+            this.desinences.Indicativo.Preterito_Imperfecto.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
     }
     protected setIndicativoPreteritoIndefinido(roots?: string[]): void {
         this.table.Indicativo.Preterito_Indefinido =
