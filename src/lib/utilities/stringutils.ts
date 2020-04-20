@@ -135,3 +135,39 @@ export function clearAccents(word: string): string {
     return Plain[Accented.indexOf(p1)];
   });
 }
+
+/**
+ * apply monosyllable accent rules to the last word of the phrase. If the word 
+ * has an accent on a strong vowel, remove it, otherwise leave it alone
+ * 
+ * @param phrase 
+ */
+export function applyMonoRules(phrase: string): string {
+  if (undefined === phrase || '' === phrase.trim()) {
+    return phrase;
+  }
+  const words = phrase.split(' ');
+  const last = words.pop() as string;
+  // Would it be a monosyllable if it didn't have any accent?
+  if (syllabify(clearAccents(last)).length !== 1) {
+    return phrase;
+  }
+
+  // If a strong one has an accent, remove it
+  if (/[áéó]/.test(last)) {
+    words.push(clearAccents(last))
+    return words.join(' ');
+  }
+  // If there is a strong and it is not accented, return, accent belongs to the weak
+  if (/[aeo]/.test(last)) {
+    return phrase;
+  }
+
+  // No strongs, remove accent
+  // in theory we allow for an accent on the first one but we don't seem to have that case
+  if (/[iu][íú][iu]*/.test(last)) {
+    words.push(clearAccents(last))
+    return words.join(' ');
+  }
+  return phrase;
+}

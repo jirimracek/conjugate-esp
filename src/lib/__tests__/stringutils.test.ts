@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 // npm t -- --watch
-import { clearAccents, esdrujula, clearLastAccent, syllabify, strongify } from '../utilities/stringutils';
+import { clearAccents, esdrujula, clearLastAccent, syllabify, strongify, applyMonoRules } from '../utilities/stringutils';
 // silence legit warnings during tests 
 // (they're useful in production, thus the conditions provoking these warnings
 //  should be tested here but we don't want to clutter the terminal during test)
@@ -194,5 +194,17 @@ describe("String Utils", () => {
         expect(strongify('seirena', 3)).toEqual('seirena');
         expect(strongify('sieirena', 3)).toEqual('sieirena');
         expect(strongify('sirena', 3)).toEqual('sírena');
+    });
+    test('mono', () => {
+        expect(applyMonoRules(undefined as unknown as string)).toEqual(undefined);
+        expect(applyMonoRules('')).toEqual('');
+        expect(applyMonoRules('last is not a mono tvrz')).toEqual('last is not a mono tvrz');
+        expect(applyMonoRules('tú te ríes')).toEqual('tú te ríes');
+        expect(applyMonoRules('vosotros fluís')).toEqual('vosotros fluis');
+        expect(applyMonoRules('vosotros flúis')).toEqual('vosotros flúis');
+        expect(applyMonoRules('ustedes guíen')).toEqual('ustedes guíen');
+        expect(applyMonoRules('ustedes guién')).toEqual('ustedes guien');    
+        expect(applyMonoRules('ustedes gúien')).toEqual('ustedes gúien');    
+        
     });
 });

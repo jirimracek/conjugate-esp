@@ -9,24 +9,19 @@ import { PronominalKeys, Regions, ModelAttributes } from './declarations/types';
 import { IR, AR } from './declarations/constants';
 
 export class vivir extends BaseModel {
-    protected monoSyllables: boolean;
 
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.desinences = JSON.parse(JSON.stringify(IR));
 
-        this.monoSyllables = attributes['M'] as boolean;
         this.configDesinences();
         this.setDesinencesByRegion();
+
     }
 
     protected configDesinences(): void {
         if (this.region === 'voseo') {
-            // if (this.monoSyllables) {
-            //     this.desinences.Indicativo['Presente'][1] = 'is';
-            // } else {
-                this.desinences.Indicativo['Presente'][1] = 'ís';
-            // }
+            this.desinences.Indicativo['Presente'][1] = 'ís';
         }
     }
 
@@ -37,35 +32,35 @@ export class vivir extends BaseModel {
     //      voseo: .   .   . .
     //  can & for: . . .   . . 
     protected setIndicativoPresentePattern_0125(replacement: string): void {
-        switch (this.region) {
+    switch(this.region) {
             case 'castellano':
-                super.setIndicativoPresente([replacement, replacement, replacement, this.stem, this.stem, replacement]);
-                break;
+    super.setIndicativoPresente([replacement, replacement, replacement, this.stem, this.stem, replacement]);
+    break;
             case 'voseo':
-                super.setIndicativoPresente([replacement, this.stem, replacement, this.stem, replacement, replacement]);
-                break;
+    super.setIndicativoPresente([replacement, this.stem, replacement, this.stem, replacement, replacement]);
+    break;
             case 'canarias':
             // intentional fall through
             case 'formal':
-                super.setIndicativoPresente([replacement, replacement, replacement, this.stem, replacement, replacement]);
-        }
+    super.setIndicativoPresente([replacement, replacement, replacement, this.stem, replacement, replacement]);
+}
     }
     // Corresponding subj. presente patterns
     //            person: 0 1 2 3 4 5     
     //        castellano: . . .     .
     // voseo & can & for: . . .   . . 
     protected setSubjuntivoPresentePattern_0125(replacement: string): void {
-        switch (this.region) {
+    switch(this.region) {
             case 'castellano':
-                super.setSubjuntivoPresente([replacement, replacement, replacement, this.stem, this.stem, replacement]);
-                break;
+    super.setSubjuntivoPresente([replacement, replacement, replacement, this.stem, this.stem, replacement]);
+    break;
             case 'voseo':
             // intentional fall through
             case 'canarias':
             // intentional fall through
             case 'formal':
-                super.setSubjuntivoPresente([replacement, replacement, replacement, this.stem, replacement, replacement]);
-        }
+    super.setSubjuntivoPresente([replacement, replacement, replacement, this.stem, replacement, replacement]);
+}
     }
 }
 
@@ -335,16 +330,10 @@ export class huir extends vivir {
         this.desinences.Subjuntivo.Preterito_Imperfecto_ra = this.desinences.Subjuntivo.Preterito_Imperfecto_ra.map(d => d.replace(/^i/, 'y'));
         this.desinences.Subjuntivo.Preterito_Imperfecto_se = this.desinences.Subjuntivo.Preterito_Imperfecto_se.map(d => d.replace(/^i/, 'y'));
         this.desinences.Subjuntivo.Futuro_Imperfecto = this.desinences.Subjuntivo.Futuro_Imperfecto.map(d => d.replace(/^i/, 'y'));
-        if (this.monoSyllables) {             // strip monosyllable accents where applicable
-            this.desinences.Indicativo.Preterito_Indefinido[0] = this.desinences.Indicativo.Preterito_Indefinido[0].replace(/í/, 'i');
-        }
 
         switch (this.region) {
             case 'castellano':
                 this.desinences.Indicativo.Presente[1] = this.desinences.Indicativo.Presente[1].replace(/^/, 'y');
-                if (this.monoSyllables) {             //  one more here
-                    this.desinences.Indicativo.Presente[4] = this.desinences.Indicativo.Presente[4].replace(/í/, 'i');
-                }
                 break;
             case 'formal':
                 this.desinences.Indicativo.Preterito_Indefinido[1] = this.desinences.Indicativo.Preterito_Indefinido[1].replace(/i/, 'y');
@@ -549,14 +538,10 @@ export class reír extends vivir {
 
     protected configDesinences(): void {
         super.configDesinences();
-        this.desinences.Impersonal.Infinitivo = ['ír','írse'];
+        this.desinences.Impersonal.Infinitivo = ['ír', 'írse'];
         this.desinences.Impersonal.Participio = ['ído'];
         this.desinences.Indicativo.Presente[3] = 'ímos';
         this.desinences.Indicativo.Preterito_Indefinido = ['í', 'íste', 'ió', 'ímos', 'ísteis', 'ieron'];
-        if (this.monoSyllables) {
-            this.desinences.Indicativo.Preterito_Indefinido[2] = 'io';
-            this.desinences.Subjuntivo.Presente[4] = 'ais';
-        }
     }
 
     protected setGerundio(): void {

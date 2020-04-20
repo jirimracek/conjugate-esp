@@ -13,11 +13,9 @@ import { AR } from './declarations/constants';
  * @class base class for all -ar conjugations
  */
 export class amar extends BaseModel {
-    protected monoSyllables = false;
 
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.monoSyllables = attributes['M'] as boolean;
 
         // Initialize termination table, map ar terminations to the base
         // Clone so we don't overwrite the template
@@ -33,7 +31,7 @@ export class amar extends BaseModel {
     // Give derived classes chance to modify terms arrays
     protected configDesinences(): void {
         // Adjust voseo, 2nd singular
-        if (this.region === 'voseo' && !this.monoSyllables) {
+        if (this.region === 'voseo') {   
             this.desinences.Indicativo.Presente[1] = 'ás';
         }
     }
@@ -85,16 +83,6 @@ export class actuar extends amar {
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.replacement = this.stem.replace(/(.*)u/, '$1ú');
-    }
-
-    protected configDesinences(): void {
-        super.configDesinences();
-        if (this.monoSyllables) {             // strip monosyllable accents where applicable
-            this.desinences.Indicativo.Presente[4] = 'ais';
-            this.desinences.Indicativo.Preterito_Indefinido[0] = 'e';
-            this.desinences.Indicativo.Preterito_Indefinido[2] = 'o';
-            this.desinences.Subjuntivo.Presente[4] = 'eis';
-        }
     }
 
     protected setIndicativoPresente(): void {
@@ -341,16 +329,6 @@ export class vaciar extends amar {
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.replacement = this.stem.replace(/(.*)i/, '$1í');
-    }
-
-    protected configDesinences(): void {
-        super.configDesinences();
-        if (this.monoSyllables) {             // strip monosyllable accents where applicable
-            this.desinences.Indicativo.Presente[4] = 'ais';
-            this.desinences.Indicativo.Preterito_Indefinido[0] = 'e';
-            this.desinences.Indicativo.Preterito_Indefinido[2] = 'o';
-            this.desinences.Subjuntivo.Presente[4] = 'eis';
-        }
     }
 
     protected setIndicativoPresente(): void {

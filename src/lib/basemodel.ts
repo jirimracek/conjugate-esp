@@ -6,7 +6,7 @@
 */
 import { PronominalKeys, Regions, ConjugationTable, ModelAttributes, DefectiveType, PronounsTable } from './declarations/types';
 import { PRONOUNS, AUX_HABER, NO_IMPERATIVO_AFIRMATIVO, NO_IMPERATIVO_NEGATIVO } from './declarations/constants';
-import { clearAccents, esdrujula, strongify } from './utilities/stringutils';
+import { clearAccents, esdrujula, strongify, applyMonoRules } from './utilities/stringutils';
 
 export abstract class BaseModel {
     protected verb: string;
@@ -23,6 +23,7 @@ export abstract class BaseModel {
     protected version: string;
     protected attributes: ModelAttributes;
     private defectiveAttributes: DefectiveType;
+    private monoSyllables: boolean;
 
     protected constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         this.verb = verb;
@@ -33,6 +34,7 @@ export abstract class BaseModel {
         this.defectiveAttributes = attributes['D'] as DefectiveType;    //  undefined if there aren't any 
         this.auxHaber = JSON.parse(JSON.stringify(AUX_HABER));
         this.version = (attributes.V ? attributes.V : '0') as string;
+        this.monoSyllables = attributes['M'] as boolean;
 
         // Modify this.pronouns tables as per selected defective attributes
         // Normally we use the PRONOMBRES table.  A few defective form dictate that the pronouns
@@ -199,7 +201,7 @@ export abstract class BaseModel {
             // oligomorfo - infinitivo, participio, gerundio, en los presentes y los pretéritos imperfectos de indicativo y subjuntivo, y 
             //              en algunos tiempos compuestos.  Kill future, condicional, imperativos, 
             // case 'omorfo':   do it in post
-                // break;
+            // break;
             // case 'ogmorfo': // oligomorfo, v2 -  pretérito perfecto simple de indicativo y en el pretérito imperfecto de subjuntivo: nuke everything else: reponer:D=ogmorfo
             //     break;      do it in post
             // case 'osmorfo':
@@ -234,6 +236,8 @@ export abstract class BaseModel {
         this.setSubjuntivoPreteritoPluscuamperfectoRa();
         this.setSubjuntivoPreteritoPluscuamperfectoSe();
         this.setSubjuntivoFuturoPerfecto();
+
+        this.applyMono();
 
         this.setImperativoAfirmativo();
         this.setImperativoNegativo();
@@ -560,6 +564,17 @@ export abstract class BaseModel {
 
                 this.table.Imperativo.Negativo[3] = '-';
                 break;
+        }
+    }
+        
+    private applyMono(): void {
+        if (this.monoSyllables) {             // strip monosyllable accents where applicable
+            this.table.Indicativo.Presente[1] = applyMonoRules(this.table.Indicativo.Presente[1]);
+            this.table.Indicativo.Presente[4] = applyMonoRules(this.table.Indicativo.Presente[4]);
+            this.table.Indicativo.Preterito_Indefinido[0] = applyMonoRules(this.table.Indicativo.Preterito_Indefinido[0]);
+            this.table.Indicativo.Preterito_Indefinido[1] = applyMonoRules(this.table.Indicativo.Preterito_Indefinido[1]);
+            this.table.Indicativo.Preterito_Indefinido[2] = applyMonoRules(this.table.Indicativo.Preterito_Indefinido[2]);
+            this.table.Subjuntivo.Presente[4] = applyMonoRules(this.table.Subjuntivo.Presente[4]);
         }
     }
 }
