@@ -32,7 +32,7 @@ export function text2Json(table: string[]): ConjugationTable {
 
     ['Infinitivo', 'Gerundio', 'Participio'].forEach(type => retVal.Impersonal[type] = [temp.shift() as string]);
 
-    ['Presente', 'Preterito_Imperfecto', 'Preterito_Indefinido', 'Futuro_Imperfecto', 'Condicional_Simple',
+    ['Presente', 'Preterito_Imperfecto', 'PreteritoIndefinido', 'Futuro_Imperfecto', 'Condicional_Simple',
         'Preterito_Perfecto', 'Preterito_Pluscuamperfecto', 'Preterito_Anterior',
         'Futuro_Perfecto', 'Condicional_Compuesto'].forEach(time => retVal['Indicativo'][time] = temp.splice(0, 6));
 

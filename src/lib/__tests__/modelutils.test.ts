@@ -13,7 +13,7 @@ const abandonarJson = {
     "Indicativo": {
         "Presente": ["yo abandono", "tú abandonas", "él abandona", "nosotros abandonamos", "ustedes abandonan", "ellos abandonan"],
         "Preterito_Imperfecto": ["yo abandonaba", "tú abandonabas", "él abandonaba", "nosotros abandonábamos", "ustedes abandonaban", "ellos abandonaban"],
-        "Preterito_Indefinido": ["yo abandoné", "tú abandonaste", "él abandonó", "nosotros abandonamos", "ustedes abandonaron", "ellos abandonaron"],
+        "PreteritoIndefinido": ["yo abandoné", "tú abandonaste", "él abandonó", "nosotros abandonamos", "ustedes abandonaron", "ellos abandonaron"],
         "Futuro_Imperfecto": ["yo abandonaré", "tú abandonarás", "él abandonará", "nosotros abandonaremos", "ustedes abandonarán", "ellos abandonarán"],
         "Condicional_Simple": ["yo abandonaría", "tú abandonarías", "él abandonaría", "nosotros abandonaríamos", "ustedes abandonarían", "ellos abandonarían"],
         "Preterito_Perfecto": ["yo he abandonado", "tú has abandonado", "él ha abandonado", "nosotros hemos abandonado", "ustedes han abandonado", "ellos han abandonado"],
@@ -62,7 +62,7 @@ const abandonarseJson = {
     "Indicativo": {
         "Presente": ["yo me abandono", "tú te abandonas", "él se abandona", "nosotros nos abandonamos", "ustedes se abandonan", "ellos se abandonan"],
         "Preterito_Imperfecto": ["yo me abandonaba", "tú te abandonabas", "él se abandonaba", "nosotros nos abandonábamos", "ustedes se abandonaban", "ellos se abandonaban"],
-        "Preterito_Indefinido": ["yo me abandoné", "tú te abandonaste", "él se abandonó", "nosotros nos abandonamos", "ustedes se abandonaron", "ellos se abandonaron"],
+        "PreteritoIndefinido": ["yo me abandoné", "tú te abandonaste", "él se abandonó", "nosotros nos abandonamos", "ustedes se abandonaron", "ellos se abandonaron"],
         "Futuro_Imperfecto": ["yo me abandonaré", "tú te abandonarás", "él se abandonará", "nosotros nos abandonaremos", "ustedes se abandonarán", "ellos se abandonarán"],
         "Condicional_Simple": ["yo me abandonaría", "tú te abandonarías", "él se abandonaría", "nosotros nos abandonaríamos", "ustedes se abandonarían", "ellos se abandonarían"],
         "Preterito_Perfecto": ["yo me he abandonado", "tú te has abandonado", "él se ha abandonado", "nosotros nos hemos abandonado", "ustedes se han abandonado", "ellos se han abandonado"],

@@ -23,19 +23,19 @@ export const PRONOUNS: Readonly<PronounsTable> = {
 }
 
 // The composite verb auxiliar haber forms
-export const AUX_HABER: Readonly<ConjugationTable> = {
+export const AUX: Readonly<ConjugationTable> = {
     Indicativo: {
         Preterito_Perfecto: ['he', 'has', 'ha', 'hemos', 'habéis', 'han'],
-        Preterito_Pluscuamperfecto: ['había', 'habías', 'había', 'habíamos', 'habíais', 'habían'],
-        Preterito_Anterior: ['hube', 'hubiste', 'hubo', 'hubimos', 'hubisteis', 'hubieron'],
-        Futuro_Perfecto: ['habré', 'habrás', 'habrá', 'habremos', 'habréis', 'habrán'],
-        Condicional_Compuesto: ['habría', 'habrías', 'habría', 'habríamos', 'habríais', 'habrían']
+        PreteritoPluscuamperfecto: ['había', 'habías', 'había', 'habíamos', 'habíais', 'habían'],
+        PreteritoAnterior: ['hube', 'hubiste', 'hubo', 'hubimos', 'hubisteis', 'hubieron'],
+        FuturoPerfecto: ['habré', 'habrás', 'habrá', 'habremos', 'habréis', 'habrán'],
+        CondicionalCompuesto: ['habría', 'habrías', 'habría', 'habríamos', 'habríais', 'habrían']
     },
     Subjuntivo: {
         Preterito_Perfecto: ['haya', 'hayas', 'haya', 'hayamos', 'hayáis', 'hayan'],
-        Preterito_Pluscuamperfecto_ra: ['hubiera', 'hubieras', 'hubiera', 'hubiéramos', 'hubierais', 'hubieran'],
-        Preterito_Pluscuamperfecto_se: ['hubiese', 'hubieses', 'hubiese', 'hubiésemos', 'hubieseis', 'hubiesen'],
-        Futuro_Perfecto: ['hubiere', 'hubieres', 'hubiere', 'hubiéremos', 'hubiereis', 'hubieren']
+        PreteritoPluscuamperfectoRa: ['hubiera', 'hubieras', 'hubiera', 'hubiéramos', 'hubierais', 'hubieran'],
+        PreteritoPluscuamperfectoSe: ['hubiese', 'hubieses', 'hubiese', 'hubiésemos', 'hubieseis', 'hubiesen'],
+        FuturoPerfecto: ['hubiere', 'hubieres', 'hubiere', 'hubiéremos', 'hubiereis', 'hubieren']
     }
 }
 
@@ -48,16 +48,16 @@ export const AR: Readonly<ConjugationTable> = {
     },
     Indicativo: {
         Presente: ['o', 'as', 'a', 'amos', 'áis', 'an'],
-        Preterito_Imperfecto: ['aba', 'abas', 'aba', 'ábamos', 'abais', 'aban'],
-        Preterito_Indefinido: ['é', 'aste', 'ó', 'amos', 'asteis', 'aron'],
-        Futuro_Imperfecto: ['aré', 'arás', 'ará', 'aremos', 'aréis', 'arán'],
-        Condicional_Simple: ['aría', 'arías', 'aría', 'aríamos', 'aríais', 'arían']
+        PreteritoImperfecto: ['aba', 'abas', 'aba', 'ábamos', 'abais', 'aban'],
+        PreteritoIndefinido: ['é', 'aste', 'ó', 'amos', 'asteis', 'aron'],
+        FuturoImperfecto: ['aré', 'arás', 'ará', 'aremos', 'aréis', 'arán'],
+        CondicionalSimple: ['aría', 'arías', 'aría', 'aríamos', 'aríais', 'arían']
     },
     Subjuntivo: {
         Presente: ['e', 'es', 'e', 'emos', 'éis', 'en'],
-        Preterito_Imperfecto_ra: ['ara', 'aras', 'ara', 'áramos', 'arais', 'aran'],
-        Preterito_Imperfecto_se: ['ase', 'ases', 'ase', 'ásemos', 'aseis', 'asen'],
-        Futuro_Imperfecto: ['are', 'ares', 'are', 'áremos', 'areis', 'aren']
+        PreteritoImperfectoRa: ['ara', 'aras', 'ara', 'áramos', 'arais', 'aran'],
+        PreteritoImperfectoSe: ['ase', 'ases', 'ase', 'ásemos', 'aseis', 'asen'],
+        FuturoImperfecto: ['are', 'ares', 'are', 'áremos', 'areis', 'aren']
     }
 }
 
@@ -69,16 +69,16 @@ export const ER: Readonly<ConjugationTable> = {
     },
     Indicativo: {
         Presente: ['o', 'es', 'e', 'emos', 'éis', 'en'],
-        Preterito_Imperfecto: ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'],
-        Preterito_Indefinido: ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'],
-        Futuro_Imperfecto: ['eré', 'erás', 'erá', 'eremos', 'eréis', 'erán'],
-        Condicional_Simple: ['ería', 'erías', 'ería', 'eríamos', 'eríais', 'erían']
+        PreteritoImperfecto: ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'],
+        PreteritoIndefinido: ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'],
+        FuturoImperfecto: ['eré', 'erás', 'erá', 'eremos', 'eréis', 'erán'],
+        CondicionalSimple: ['ería', 'erías', 'ería', 'eríamos', 'eríais', 'erían']
     },
     Subjuntivo: {
         Presente: ['a', 'as', 'a', 'amos', 'áis', 'an'],
-        Preterito_Imperfecto_ra: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
-        Preterito_Imperfecto_se: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
-        Futuro_Imperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
+        PreteritoImperfectoRa: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
+        PreteritoImperfectoSe: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
+        FuturoImperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
     }
 }
 
@@ -90,16 +90,16 @@ export const IR: Readonly<ConjugationTable> = {
     },
     Indicativo: {
         Presente: ['o', 'es', 'e', 'imos', 'ís', 'en'],
-        Preterito_Imperfecto: ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'],
-        Preterito_Indefinido: ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'],
-        Futuro_Imperfecto: ['iré', 'irás', 'irá', 'iremos', 'iréis', 'irán'],
-        Condicional_Simple: ['iría', 'irías', 'iría', 'iríamos', 'iríais', 'irían']
+        PreteritoImperfecto: ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'],
+        PreteritoIndefinido: ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'],
+        FuturoImperfecto: ['iré', 'irás', 'irá', 'iremos', 'iréis', 'irán'],
+        CondicionalSimple: ['iría', 'irías', 'iría', 'iríamos', 'iríais', 'irían']
     },
     Subjuntivo: {
         Presente: ['a', 'as', 'a', 'amos', 'áis', 'an'],
-        Preterito_Imperfecto_ra: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
-        Preterito_Imperfecto_se: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
-        Futuro_Imperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
+        PreteritoImperfectoRa: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
+        PreteritoImperfectoSe: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
+        FuturoImperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
     }
 }
 export const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'omorfo', 'osmorfo', 'ogmorfo'];
@@ -111,3 +111,4 @@ export const ERROR_MSG = {
     MissingModelData: 'Missing verb VERB model data - check definitions.json file',
     UnknownModel: 'Model MODEL not implemented, can not conjugate verb VERB, region REGION'
 }
+export const DASH6 = '------';

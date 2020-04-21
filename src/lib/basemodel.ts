@@ -5,23 +5,25 @@
  * @license * MIT License
 */
 import { PronominalKeys, Regions, ConjugationTable, ModelAttributes, DefectiveType, PronounsTable } from './declarations/types';
-import { PRONOUNS, AUX_HABER, NO_IMPERATIVO_AFIRMATIVO, NO_IMPERATIVO_NEGATIVO } from './declarations/constants';
+import { PRONOUNS, AUX, NO_IMPERATIVO_AFIRMATIVO, NO_IMPERATIVO_NEGATIVO } from './declarations/constants';
 import { clearAccents, esdrujula, strongify, applyMonoRules } from './utilities/stringutils';
+import { DASH6 } from './declarations/constants';
 
 export abstract class BaseModel {
     protected verb: string;
     protected stem: string = '';
     protected type: PronominalKeys;
     protected region: Regions;
-    protected pronouns: PronounsTable = PRONOUNS;
 
     protected desinences: ConjugationTable = {};
-    protected auxHaber: ConjugationTable = {};
     protected table: ConjugationTable = {};
-    protected participioCompuesto = '';
+    protected participioCompuesto: string = '';
 
     protected version: string;
     protected attributes: ModelAttributes;
+
+    private pronouns: PronounsTable = PRONOUNS;
+    private auxHaber: ConjugationTable = {};
     private defectiveAttributes: DefectiveType;
     private monoSyllables: boolean;
 
@@ -31,181 +33,76 @@ export abstract class BaseModel {
         this.type = type;
         this.region = region;
         this.attributes = attributes;                                     //  exists but empty if there aren't any
-        this.defectiveAttributes = attributes['D'] as DefectiveType;    //  undefined if there aren't any 
-        this.auxHaber = JSON.parse(JSON.stringify(AUX_HABER));
+        this.defectiveAttributes = attributes['D'] as DefectiveType;      //  undefined if there aren't any 
+        this.auxHaber = JSON.parse(JSON.stringify(AUX));
         this.version = (attributes.V ? attributes.V : '0') as string;
         this.monoSyllables = attributes['M'] as boolean;
 
         // Modify this.pronouns tables as per selected defective attributes
-        // Normally we use the PRONOMBRES table.  A few defective form dictate that the pronouns
+        // Normally we use the PRONOMBRES table.  A few defective forms dictate that the pronouns
         // are not to be used. imper, tercio and terciop
         if (['imper', 'tercio', 'terciop'].includes(this.defectiveAttributes)) {
             // Dup the pronouns object so we don't disturb the constant
             this.pronouns = JSON.parse(JSON.stringify(this.pronouns));
-            // fill unused pronouns with (exactly) 6 blanks
-            (['N', 'P'] as PronominalKeys[]).forEach(pronominalkey => {
-                (['castellano', 'voseo', 'formal', 'canarias'] as Regions[]).forEach(region => {
-                    this.pronouns[pronominalkey][region] = Array.from('      ');   // count them. 6
-                });
-            });
+            // fill to-be-unused pronouns with (exactly) 6 blanks
+            this.pronouns.N[this.region] = Array.from('      ');   // count them. 6
+            this.pronouns.P[this.region] = Array.from('      ');   // count them. 6
         }
 
         // initialize result conjugation table
         ['Impersonal', 'Indicativo', 'Subjuntivo', 'Imperativo'].forEach(mode => this.table[mode] = {});
-        this.table.Imperativo.Afirmativo = Array.from('------');
-        this.table.Imperativo.Negativo = Array.from('------');
+        this.table.Imperativo.Afirmativo = Array.from(DASH6);
+        this.table.Imperativo.Negativo = Array.from(DASH6);
     }
 
     /**
      * Reorder terminations based on the region.  Call in derived class once we have the desinences configured
      * based on verb type.  This is the last step, common to everyone.
      */
-    protected setDesinencesByRegion() {
+    protected remapDesinencesByRegion() {
         // Shuffle terminations and auxHaber based on region
         if (this.region === 'voseo') {                      // Voseo, 2nd singular -> accented version, 2nd plural -> ustedes 
             // desinences
-            ['Presente', 'Preterito_Imperfecto', 'Preterito_Indefinido', 'Futuro_Imperfecto', 'Condicional_Simple'].forEach(mode =>
+            ['Presente', 'PreteritoImperfecto', 'PreteritoIndefinido', 'FuturoImperfecto', 'CondicionalSimple'].forEach(mode =>
                 this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]);
-            ['Presente', 'Preterito_Imperfecto_ra', 'Preterito_Imperfecto_se', 'Futuro_Imperfecto'].forEach(mode =>
+            ['Presente', 'PreteritoImperfectoRa', 'PreteritoImperfectoSe', 'FuturoImperfecto'].forEach(mode =>
                 this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
 
             // auxHaber
-            ['Preterito_Perfecto', 'Preterito_Pluscuamperfecto', 'Preterito_Anterior', 'Futuro_Perfecto', 'Condicional_Compuesto'].forEach(mode =>
+            ['Preterito_Perfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode =>
                 this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
-            ['Preterito_Perfecto', 'Preterito_Pluscuamperfecto_ra', 'Preterito_Pluscuamperfecto_se', 'Futuro_Perfecto'].forEach(mode =>
+            ['Preterito_Perfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(mode =>
                 this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
 
         } else if (this.region === 'formal') {               // Castellano formal, 2nd singular -> usted, 2nd plural -> ustedes
-            ['Presente', 'Preterito_Imperfecto', 'Preterito_Indefinido', 'Futuro_Imperfecto', 'Condicional_Simple'].forEach(mode => {
+            ['Presente', 'PreteritoImperfecto', 'PreteritoIndefinido', 'FuturoImperfecto', 'CondicionalSimple'].forEach(mode => {
                 this.desinences.Indicativo[mode][1] = this.desinences.Indicativo[mode][2];
                 this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]
             });
-            ['Presente', 'Preterito_Imperfecto_ra', 'Preterito_Imperfecto_se', 'Futuro_Imperfecto'].forEach(mode => {
+            ['Presente', 'PreteritoImperfectoRa', 'PreteritoImperfectoSe', 'FuturoImperfecto'].forEach(mode => {
                 this.desinences.Subjuntivo[mode][1] = this.desinences.Subjuntivo[mode][2];
                 this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]
             });
 
-            ['Preterito_Perfecto', 'Preterito_Pluscuamperfecto', 'Preterito_Anterior', 'Futuro_Perfecto', 'Condicional_Compuesto'].forEach(mode => {
+            ['Preterito_Perfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode => {
                 this.auxHaber.Indicativo[mode][1] = this.auxHaber.Indicativo[mode][2];
                 this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]
             });
-            ['Preterito_Perfecto', 'Preterito_Pluscuamperfecto_ra', 'Preterito_Pluscuamperfecto_se', 'Futuro_Perfecto'].forEach(mode => {
+            ['Preterito_Perfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(mode => {
                 this.auxHaber.Subjuntivo[mode][1] = this.auxHaber.Subjuntivo[mode][2];
                 this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]
             });
 
         } else if (this.region === 'canarias') {             // Canarias, 2nd singular remains the same, 2nd plural -> ustedes
-            ['Presente', 'Preterito_Imperfecto', 'Preterito_Indefinido', 'Futuro_Imperfecto', 'Condicional_Simple'].forEach(mode =>
+            ['Presente', 'PreteritoImperfecto', 'PreteritoIndefinido', 'FuturoImperfecto', 'CondicionalSimple'].forEach(mode =>
                 this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]);
-            ['Presente', 'Preterito_Imperfecto_ra', 'Preterito_Imperfecto_se', 'Futuro_Imperfecto'].forEach(mode =>
+            ['Presente', 'PreteritoImperfectoRa', 'PreteritoImperfectoSe', 'FuturoImperfecto'].forEach(mode =>
                 this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
 
-            ['Preterito_Perfecto', 'Preterito_Pluscuamperfecto', 'Preterito_Anterior', 'Futuro_Perfecto', 'Condicional_Compuesto'].forEach(mode =>
+            ['Preterito_Perfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode =>
                 this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
-            ['Preterito_Perfecto', 'Preterito_Pluscuamperfecto_ra', 'Preterito_Pluscuamperfecto_se', 'Futuro_Perfecto'].forEach(mode =>
+            ['Preterito_Perfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(mode =>
                 this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
-        }
-
-        // Once the desinances are configured, setup attributes that need to be setup before conjugation
-        // In particular, the ones that affect desinences. Again.
-        this.applyAttributesPre();
-    }
-    /**
-     * Some attributes need to be processed before we conjugate, others after, some before and after :(
-     */
-    protected applyAttributesPre(): void {
-        // Apply defective rules, if any, to desinences.  Basically we replace the invalid desinence with a '-'
-        // When constructing a word, if desinence === '-', the whole expression gets '-'
-        // {d:imorfo|eimorfo|imper|tercio|terciop|mmorfo|bimorfop|bimorfog|trimorfo|omorfo|omorfos}
-
-        // Ex: imorfo rules - formas cuya desinencia empieza por la vocal 'i'
-        // this means that ***before we conjugate, we need to identify the defective versions*** by looking
-        // at the desinence table.  The desinence table gets built by the base class and refined by
-        // derived classes.  So we can't really do this in constructor but it needs to happen before 
-        // the conjugation functions chain gets applied
-        // all singles that don't start with i get replaced with '-'
-        switch (this.defectiveAttributes) {
-            case 'imorfo':     // formas cuya desinencia empieza por la vocal -i, i.e. ignore the rest
-                // this.desinences.Impersonal.Infinitivo = this.desinences.Impersonal.Infinitivo.map(d => /^[ií]/.test(d) ? d : '-');
-                this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.map(d => /^[ií]/.test(d) ? d : '-');
-                // this.desinences.Impersonal.Participio = this.desinences.Impersonal.Participio.map(d => /^[ií]/.test(d) ? d : '-');
-                ['Indicativo', 'Subjuntivo'].forEach(mode => {
-                    Object.keys(this.desinences[mode]).forEach(time => {
-                        this.desinences[mode][time] = this.desinences[mode][time].map(d => /^[ií]/.test(d) ? d : '-');
-                    });
-                });
-                break;
-            case 'eimorfo':     // desinencia empieza por la vocal -e o por la -i, zap everything else
-                ['Indicativo', 'Subjuntivo'].forEach(mode => {
-                    Object.keys(this.desinences[mode]).forEach(time => {
-                        this.desinences[mode][time] = this.desinences[mode][time].map(d => /^[iíeé]/.test(d) ? d : '-');
-                    });
-                });
-                // for some reason beyond my understanding, the following are also excluded ????
-                this.auxHaber.Indicativo.Preterito_Perfecto[0] = '-';
-                this.auxHaber.Subjuntivo.Preterito_Perfecto = Array.from('------');
-                break;
-            case 'imper': // infinitivo, gerundio, participio y en las terceras personas del singular
-                ['Indicativo', 'Subjuntivo'].forEach(mode => {
-                    Object.keys(this.desinences[mode]).forEach(time => {
-                        [0, 1, 3, 4, 5].forEach(index => this.desinences[mode][time][index] = '-');
-                    });
-                    Object.keys(this.auxHaber[mode]).forEach(time => {
-                        [0, 1, 3, 4, 5].forEach(index => this.auxHaber[mode][time][index] = '-');
-                    });
-                });
-                break;
-            case 'tercio':
-                // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos D = tercio
-                // this needs to be done partly pre (here - to separate singles from compuestos) 
-                //                   and partly post to zap gerundio & participio after we're done
-                // Verbo empecer
-                ['Indicativo', 'Subjuntivo'].forEach(mode => {
-                    Object.keys(this.desinences[mode]).forEach(time => {
-                        [0, 1, 3, 4].forEach(index => this.desinences[mode][time][index] = '-');
-                    });
-                    Object.keys(this.auxHaber[mode]).forEach(time => {
-                        [0, 1, 2, 3, 4, 5].forEach(index => this.auxHaber[mode][time][index] = '-');
-                    });
-                });
-                break;
-            case 'terciop':
-                // terciopersonal, v2 - infinitivo, gerundio, participio y en terceras personas
-                // Verbo: acaecer, acontecer
-                ['Indicativo', 'Subjuntivo'].forEach(mode => {
-                    Object.keys(this.desinences[mode]).forEach(time => {
-                        [0, 1, 3, 4].forEach(index => this.desinences[mode][time][index] = '-');
-                    });
-                    Object.keys(this.auxHaber[mode]).forEach(time => {
-                        [0, 1, 3, 4].forEach(index => this.auxHaber[mode][time][index] = '-');
-                    });
-                });
-                break;
-            // case 'mmorfo':
-            //     break;
-            case 'bimorfop':        //  bimorfo(p) - sólo en infinitivo y en participio - zap everything else indiscriminantly
-                this.desinences.Impersonal.Gerundio = ['-', '-'];
-                ['Indicativo', 'Subjuntivo'].forEach(mode => {
-                    Object.keys(this.desinences[mode]).forEach(time => {
-                        [0, 1, 2, 3, 4, 5].forEach(index => this.desinences[mode][time][index] = '-');
-                    });
-                    Object.keys(this.auxHaber[mode]).forEach(time => {
-                        [0, 1, 2, 3, 4, 5].forEach(index => this.auxHaber[mode][time][index] = '-');
-                    });
-                });
-                break;
-            // case 'bimorfog':
-            //     break;
-            // case 'trimorfo':
-            //     break;
-            // oligomorfo - infinitivo, participio, gerundio, en los presentes y los pretéritos imperfectos de indicativo y subjuntivo, y 
-            //              en algunos tiempos compuestos.  Kill future, condicional, imperativos, 
-            // case 'omorfo':   do it in post
-            // break;
-            // case 'ogmorfo': // oligomorfo, v2 -  pretérito perfecto simple de indicativo y en el pretérito imperfecto de subjuntivo: nuke everything else: reponer:D=ogmorfo
-            //     break;      do it in post
-            // case 'osmorfo':
-            //     break;
         }
     }
 
@@ -221,153 +118,118 @@ export abstract class BaseModel {
         this.setIndicativoFuturoImperfecto();
         this.setIndicativoCondicionalSimple();
 
-        this.setIndicativoPreteritoPerfecto();
-        this.setIndicativoPreteritoPluscuamperfecto();
-        this.setIndicativoPreteritoAnterior();
-        this.setIndicativoFuturoPerfecto();
-        this.setIndicativoCondicionalCompuesto();
+        // Compuestos never get overriden in derived classes
+        this.setIndicativoCompuestos();
 
         this.setSubjuntivoPresente();
         this.setSubjuntivoPreteritoImperfectoRa();
         this.setSubjuntivoPreteritoImperfectoSe();
         this.setSubjuntivoFuturoImperfecto();
 
-        this.setSubjuntivoPreteritoPerfecto();
-        this.setSubjuntivoPreteritoPluscuamperfectoRa();
-        this.setSubjuntivoPreteritoPluscuamperfectoSe();
-        this.setSubjuntivoFuturoPerfecto();
+        // Compuestos never get overriden in derived classes
+        this.setSubjuntivoCompuestos();
 
         this.applyMono();
 
         this.setImperativoAfirmativo();
         this.setImperativoNegativo();
 
-        this.applyAttributesPost();
+        this.applyDefectiveAttributes();
 
         return this.table;
     }
 
+    private setInfinitivo(): void {
+        this.table.Impersonal.Infinitivo = [`${this.stem}${(this.type === 'N' ? this.desinences.Impersonal.Infinitivo[0] : this.desinences.Impersonal.Infinitivo[1])}`];
+    }
 
-    protected setInfinitivo(): void {
-        this.table.Impersonal.Infinitivo = [`${this.stem}${(this.type === 'P' ? this.desinences.Impersonal.Infinitivo[1] : this.desinences.Impersonal.Infinitivo[0])}`];
-    }
     protected setGerundio(root?: string): void {
-        if (this.type === 'N' && this.desinences.Impersonal.Gerundio[0] !== '-') {
-            this.table.Impersonal.Gerundio = [`${root ? root : this.stem}${this.desinences.Impersonal.Gerundio[0]}`];
-        } else if (this.type === 'P' && this.desinences.Impersonal.Gerundio[1] !== '-') {
-            this.table.Impersonal.Gerundio = [`${root ? root : this.stem}${this.desinences.Impersonal.Gerundio[1]}`];
-        } else {
-            this.table.Impersonal.Gerundio = ['-'];
-        }
+        this.table.Impersonal.Gerundio = [`${root ? root : this.stem}${this.type == 'N' ? this.desinences.Impersonal.Gerundio[0] : this.desinences.Impersonal.Gerundio[1]}`];
     }
+
     protected setParticipio(): void {
         this.table.Impersonal.Participio = [`${this.stem}${this.desinences.Impersonal.Participio}`];
         this.participioCompuesto = this.table.Impersonal.Participio[0];
     }
 
     /////////////////////////////////////////////////////////////////
-    // Indicativo simple
-    /**
-     * Compose simple (not compuesto) mode-time-person region conjugated expression, 
-     * join pronoun + verb stem + desinence.  
-     * If desinence is defective ('-'), return a blank ('-')
-     * @param desinence this person's desinence
-     * @param index this person's index in the pronouns table
-     * @param root root of the verb / verb stem.  Optional, if not provided, the verb default is used
-     */
-    private formSimple(desinence: string, index: number, root?: string): string {
-        if (desinence !== '-') {
-            return `${this.pronouns[this.type][this.region][index]} ${root ? root : this.stem}${desinence}`.trim();
-        }
-        return '-';
-    }
-
+    // // Indicativo simple
     /**
      * Iterate over desinences table, form a table of conjugations.
      * Called from the base class if the verb stem doesn't change or
-     * from derived, which may change stems per each person.
+     * from derived, which may change stems per each person.  The .trim() is needed for case of missing pronouns (some defectives)
      * 
-     * @param roots optional array of verb stems modified by the derived object, if undefined, formSimple will use this.stem
+     * @param roots optional array of verb stems modified by the derived object, if undefined use this.stem
      */
     protected setIndicativoPresente(roots?: string[]): void {
-        this.table.Indicativo.Presente =
-            this.desinences.Indicativo.Presente.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
+        this.table.Indicativo.Presente = this.desinences.Indicativo.Presente.map((desinence, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${roots ? roots[index] : this.stem}${desinence}`.trim());
     }
     protected setIndicativoPreteritoImperfecto(roots?: string[]): void {
-        this.table.Indicativo.Preterito_Imperfecto =
-            this.desinences.Indicativo.Preterito_Imperfecto.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
+        this.table.Indicativo.PreteritoImperfecto = this.desinences.Indicativo.PreteritoImperfecto.map((desinence, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${roots ? roots[index] : this.stem}${desinence}`.trim());
     }
     protected setIndicativoPreteritoIndefinido(roots?: string[]): void {
-        this.table.Indicativo.Preterito_Indefinido =
-            this.desinences.Indicativo.Preterito_Indefinido.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
+        this.table.Indicativo.PreteritoIndefinido = this.desinences.Indicativo.PreteritoIndefinido.map((desinence, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${roots ? roots[index] : this.stem}${desinence}`.trim());
     }
     protected setIndicativoFuturoImperfecto(roots?: string[]): void {
-        this.table.Indicativo.Futuro_Imperfecto =
-            this.desinences.Indicativo.Futuro_Imperfecto.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
+        this.table.Indicativo.FuturoImperfecto = this.desinences.Indicativo.FuturoImperfecto.map((desinence, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${roots ? roots[index] : this.stem}${desinence}`.trim());
     }
     protected setIndicativoCondicionalSimple(roots?: string[]): void {
-        this.table.Indicativo.Condicional_Simple =
-            this.desinences.Indicativo.Condicional_Simple.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
+        this.table.Indicativo.CondicionalSimple = this.desinences.Indicativo.CondicionalSimple.map((desinence, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${roots ? roots[index] : this.stem}${desinence}`.trim());
     }
 
     /////////////////////////////////////////////////////////////////
     // Compuesto
-    private formCompuesto(aux: string, index: number): string {
-        if (aux !== '-') {
-            return `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim();
-        }
-        return '-';
-    }
-
-    protected setIndicativoPreteritoPerfecto(): void {
-        this.table.Indicativo.Preterito_Perfecto = this.auxHaber.Indicativo.Preterito_Perfecto.map((aux, index) => this.formCompuesto(aux, index));
-    }
-    protected setIndicativoPreteritoPluscuamperfecto(): void {
-        this.table.Indicativo.Preterito_Pluscuamperfecto = this.auxHaber.Indicativo.Preterito_Pluscuamperfecto.map((t, index) => this.formCompuesto(t, index));
-    }
-    protected setIndicativoPreteritoAnterior(): void {
-        this.table.Indicativo.Preterito_Anterior = this.auxHaber.Indicativo.Preterito_Anterior.map((t, index) => this.formCompuesto(t, index));
-    }
-    protected setIndicativoFuturoPerfecto(): void {
-        this.table.Indicativo.Futuro_Perfecto = this.auxHaber.Indicativo.Futuro_Perfecto.map((t, index) => this.formCompuesto(t, index));
-    }
-    protected setIndicativoCondicionalCompuesto(): void {
-        this.table.Indicativo.Condicional_Compuesto = this.auxHaber.Indicativo.Condicional_Compuesto.map((t, index) => this.formCompuesto(t, index));
+    private setIndicativoCompuestos(): void {
+        this.table.Indicativo.Preterito_Perfecto = this.auxHaber.Indicativo.Preterito_Perfecto.map((aux, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
+        this.table.Indicativo.PreteritoPluscuamperfecto = this.auxHaber.Indicativo.PreteritoPluscuamperfecto.map((aux, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
+        this.table.Indicativo.PreteritoAnterior = this.auxHaber.Indicativo.PreteritoAnterior.map((aux, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
+        this.table.Indicativo.FuturoPerfecto = this.auxHaber.Indicativo.FuturoPerfecto.map((aux, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
+        this.table.Indicativo.CondicionalCompuesto = this.auxHaber.Indicativo.CondicionalCompuesto.map((aux, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
     }
 
     /////////////////////////////////////////////////////////////////
     // Subjuntivo simple set methods
     protected setSubjuntivoPresente(roots?: string[]): void {
-        this.table.Subjuntivo.Presente =
-            this.desinences.Subjuntivo.Presente.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
+        this.table.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map((desinence, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${roots ? roots[index] : this.stem}${desinence}`.trim());
     }
+
     protected setSubjuntivoPreteritoImperfectoRa(roots?: string[]): void {
-        this.table.Subjuntivo.Preterito_Imperfecto_ra =
-            this.desinences.Subjuntivo.Preterito_Imperfecto_ra.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
+        this.table.Subjuntivo.PreteritoImperfectoRa = this.desinences.Subjuntivo.PreteritoImperfectoRa.map((desinence, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${roots ? roots[index] : this.stem}${desinence}`.trim());
     }
 
     protected setSubjuntivoPreteritoImperfectoSe(roots?: string[]): void {
-        this.table.Subjuntivo.Preterito_Imperfecto_se =
-            this.desinences.Subjuntivo.Preterito_Imperfecto_se.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
+        this.table.Subjuntivo.PreteritoImperfectoSe = this.desinences.Subjuntivo.PreteritoImperfectoSe.map((desinence, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${roots ? roots[index] : this.stem}${desinence}`.trim());
     }
+
     protected setSubjuntivoFuturoImperfecto(roots?: string[]): void {
-        this.table.Subjuntivo.Futuro_Imperfecto =
-            this.desinences.Subjuntivo.Futuro_Imperfecto.map((desinence, index) => this.formSimple(desinence, index, roots ? roots[index] : roots));
+        this.table.Subjuntivo.FuturoImperfecto = this.desinences.Subjuntivo.FuturoImperfecto.map((desinence, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${roots ? roots[index] : this.stem}${desinence}`.trim());
     }
 
     /////////////////////////////////////////////////////////////////
-    // Subjuntivo compuesto
-    protected setSubjuntivoPreteritoPerfecto(): void {
-        this.table.Subjuntivo.Preterito_Perfecto = this.auxHaber.Subjuntivo.Preterito_Perfecto.map((aux, index) => this.formCompuesto(aux, index));
-    }
-    protected setSubjuntivoPreteritoPluscuamperfectoRa(): void {
-        this.table.Subjuntivo.Preterito_Pluscuamperfecto_ra = this.auxHaber.Subjuntivo.Preterito_Pluscuamperfecto_ra.map((aux, index) => this.formCompuesto(aux, index));
-    }
-    protected setSubjuntivoPreteritoPluscuamperfectoSe(): void {
-        this.table.Subjuntivo.Preterito_Pluscuamperfecto_se = this.auxHaber.Subjuntivo.Preterito_Pluscuamperfecto_se.map((aux, index) => this.formCompuesto(aux, index));
-    }
-    protected setSubjuntivoFuturoPerfecto(): void {
-        this.table.Subjuntivo.Futuro_Perfecto = this.auxHaber.Subjuntivo.Futuro_Perfecto.map((aux, index) => this.formCompuesto(aux, index));
+    // Subjuntivo compuestos
+    private setSubjuntivoCompuestos(): void {
+        this.table.Subjuntivo.Preterito_Perfecto = this.auxHaber.Subjuntivo.Preterito_Perfecto.map((aux, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
+        this.table.Subjuntivo.PreteritoPluscuamperfectoRa = this.auxHaber.Subjuntivo.PreteritoPluscuamperfectoRa.map((aux, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
+        this.table.Subjuntivo.PreteritoPluscuamperfectoSe = this.auxHaber.Subjuntivo.PreteritoPluscuamperfectoSe.map((aux, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
+        this.table.Subjuntivo.FuturoPerfecto = this.auxHaber.Subjuntivo.FuturoPerfecto.map((aux, index) =>
+            `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
     }
 
     // Imperatives
@@ -391,7 +253,7 @@ export abstract class BaseModel {
 
                 // Tricky. Sounds simple, take infinitive, replace the 'r' with 'os'.  Accents matter
                 // Last syllable before 'os' needs to be strong.  Clear accents before strong-ifying 
-                // Do use pronouns.N (vosotros)
+                // Do use pronouns.N (vosotros), it's not an error
                 this.table.Imperativo.Afirmativo[4] = `${this.pronouns.N.castellano[4]} ${strongify(clearAccents(this.verb.replace(/r$/, '')), 1)}os`;
             }
         }
@@ -462,46 +324,127 @@ export abstract class BaseModel {
         [1, 3, 4].forEach(index => this.table.Imperativo.Negativo[index] = this.table.Subjuntivo.Presente[index].replace(/^(.+?) (.*)$/, '$1 no $2'));
     }
 
-    private applyAttributesPost(): void {
+    /**
+     * When all is done, wead out the defectives.  Not pretty but works
+     */
+    private applyDefectiveAttributes(): void {
         switch (this.defectiveAttributes) {
-            // case 'imorfo':     // formas cuya desinencia empieza por la vocal -i
-            //     break;
-            // case 'eimorfo':
-            //     break;
-            // case 'imper': // infinitivo, gerundio, participio y en las terceras personas del singular
-            //     break;
-            case 'tercio':
-                // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos D= tercio
-                // this needs to be done partly pre (above) to separate singles from compuestos
-                //                   and partly post (here) to zap gerundio & participio after we're done
-                // Verbo empecer
-                this.table.Impersonal.Gerundio = ['-'];
-                this.table.Impersonal.Participio = ['-'];
+            case 'imorfo':
+                // use only forms whose desinence starts with i or í, zap the rest
+                // Tricky, need to look at the original desinence this was built with
+                // Nonpronominal and the desinence doesn't start with ií, nuke
+                if (this.type === 'N' && /^[^ií]/.test(this.desinences.Impersonal.Gerundio[0])) {
+                    this.table.Impersonal.Gerundio = ['-'];
+                } else if (this.type === 'P' && /^[^ií]/.test(this.desinences.Impersonal.Gerundio[1])) {
+                    this.table.Impersonal.Gerundio = ['-'];
+                }
+
+                ['Indicativo', 'Subjuntivo'].forEach(mode => {
+                    Object.keys(this.desinences[mode]).forEach(time => {
+                        this.desinences[mode][time].forEach((d, i) => {
+                            if (/^[^ií]/.test(d)) {
+                                this.table[mode][time][i] = '-';
+                            }
+                        });
+                    });
+                });
+                // Imperativos zapping time: look at the last word, the next character just past the stem.length.  
+                // If it's [ií], let it through, zap otherwise
+                [1, 3, 4].forEach(index => {
+                    let last = this.table.Imperativo.Afirmativo[index].split(' ').pop();
+                    if (last && /^[^ií]/.test(last[this.stem.length])) {
+                        this.table.Imperativo.Afirmativo[index] = '-';
+                    }
+                    last = this.table.Imperativo.Negativo[index].split(' ').pop();
+                    if (last && /^[^ií]/.test(last[this.stem.length])) {
+                        this.table.Imperativo.Negativo[index] = '-';
+                    }
+                });
                 break;
-            // case 'terciop':
-            //     break;
-            // case 'mmorfo':
-            //     break;
-            // case 'bimorfop':   //  bimorfo(p) - sólo en infinitivo y en participio - zap everything else indiscriminantly
-            // this.table.Impersonal.Gerundio = ['-'];
-            // ['Indicativo', 'Subjuntivo'].forEach(mode => {
-            //     Object.keys(this.table[mode]).forEach(time => {
-            //         [0, 1, 2, 3, 4, 5].forEach(index => this.table[mode][time][index] = '-');
-            //     });
-            // });
-            // break;
-            // case 'bimorfog':
-            //     break;
-            case 'trimorfo':
-                // trimorfo infinitivo y en las segundas personas del imperativo
-                // this can not all be done pre because we need to build subjuntives to build imperatives
-                // so we prune everything after it gets built
-                // Verbo abar
-                this.table.Impersonal.Gerundio = ['-'];
-                this.table.Impersonal.Participio = ['-'];
+            case 'eimorfo':     // only ones whose desinence starts with  e or i, zap everything else
+                ['Indicativo', 'Subjuntivo'].forEach(mode => {
+                    Object.keys(this.desinences[mode]).forEach(time => {
+                        this.desinences[mode][time].forEach((d, i) => {
+                            if (/^[^iíeé]/.test(d)) {
+                                this.table[mode][time][i] = '-';
+                            }
+                        });
+                    });
+                });
+                [1, 3, 4].forEach(index => {
+                    let last = this.table.Imperativo.Afirmativo[index].split(' ').pop();
+                    if (last && /^[^iíeé]/.test(last[this.stem.length])) {
+                        this.table.Imperativo.Afirmativo[index] = '-';
+                    }
+                    last = this.table.Imperativo.Negativo[index].split(' ').pop();
+                    if (last && /^[^iíeé]/.test(last[this.stem.length])) {
+                        this.table.Imperativo.Negativo[index] = '-';
+                    }
+                });
+                // for some reason beyond my understanding, the following are also excluded ????
+                this.table.Indicativo.Preterito_Perfecto[0] = '-';
+                this.table.Subjuntivo.Preterito_Perfecto = Array.from(DASH6);
+                break;
+            case 'imper': // infinitivo, gerundio, participio y en las terceras personas del singular
                 ['Indicativo', 'Subjuntivo'].forEach(mode => {
                     Object.keys(this.table[mode]).forEach(time => {
-                        [0, 1, 2, 3, 4, 5].forEach(index => this.table[mode][time][index] = '-');
+                        [0, 1, 3, 4, 5].forEach(index => this.table[mode][time][index] = '-');
+                    });
+                });
+                break;
+            case 'tercio':
+                // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos D= tercio
+                // Verbo empecer
+                ['Gerundio', 'Participio'].forEach(v => this.table.Impersonal[v] = ['-']);
+                // Simple indicative
+                ['Presente', 'PreteritoImperfecto', 'PreteritoIndefinido', 'FuturoImperfecto', 'CondicionalSimple'].forEach(time =>
+                    [0, 1, 3, 4].forEach(i => this.table.Indicativo[time][i] = '-'));
+
+                // Simple subjuntive
+                ['Presente', 'PreteritoImperfectoRa', 'PreteritoImperfectoSe', 'FuturoImperfecto'].forEach(time =>
+                    [0, 1, 3, 4].forEach(i => this.table.Subjuntivo[time][i] = '-'));
+
+                // Indicative compuesto
+                ['Preterito_Perfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(time =>
+                    this.table.Indicativo[time] = Array.from(DASH6));    // all 6x
+                ['Preterito_Perfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(time =>
+                    this.table.Subjuntivo[time] = Array.from(DASH6));
+
+                break;
+
+            case 'terciop':
+                // terciopersonal, v2 - infinitivo, gerundio, participio y en terceras personas
+                // Verbo: acaecer, acontecer
+                ['Indicativo', 'Subjuntivo'].forEach(mode => {
+                    Object.keys(this.table[mode]).forEach(time => {
+                        [0, 1, 3, 4].forEach(index => this.table[mode][time][index] = '-');
+                    });
+                });
+                break;
+
+            // case 'mmorfo':
+            //     break;
+
+            case 'bimorfop':        //  bimorfo(p) - sólo en infinitivo y en participio - zap everything else indiscriminantly
+                this.table.Impersonal.Gerundio = ['-'];
+                ['Indicativo', 'Subjuntivo', 'Imperativo'].forEach(mode => {
+                    Object.keys(this.table[mode]).forEach(time => {
+                        this.table[mode][time] = Array.from(DASH6);
+                    });
+                });
+                break;
+
+            // case 'bimorfog':
+            //     break;
+
+            case 'trimorfo':
+                // trimorfo infinitivo y en las segundas personas del imperativo
+                // Verbo abar
+                ['Gerundio', 'Participio'].forEach(v => this.table.Impersonal[v] = ['-']);
+
+                ['Indicativo', 'Subjuntivo'].forEach(mode => {
+                    Object.keys(this.table[mode]).forEach(time => {
+                        this.table[mode][time] = Array.from(DASH6);
                     });
                 });
                 ['Imperativo'].forEach(mode => {
@@ -510,70 +453,45 @@ export abstract class BaseModel {
                     });
                 });
                 break;
-            case 'omorfo':
-                this.table.Indicativo.Preterito_Indefinido = Array.from('------');
-                this.table.Indicativo.Futuro_Imperfecto = Array.from('------');
-                this.table.Indicativo.Condicional_Simple = Array.from('------');
-                this.table.Subjuntivo.Futuro_Imperfecto = Array.from('------');
 
-                this.table.Indicativo.Preterito_Anterior = Array.from('------');
-                this.table.Indicativo.Futuro_Perfecto = Array.from('------');
-                this.table.Indicativo.Condicional_Compuesto = Array.from('------');
-                this.table.Subjuntivo.Futuro_Perfecto = Array.from('------');
+            case 'omorfo':
+                ['PreteritoIndefinido', 'FuturoImperfecto', 'CondicionalSimple', 'PreteritoAnterior',
+                    'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode =>
+                        this.table.Indicativo[mode] = Array.from(DASH6));
+                ['FuturoImperfecto', 'FuturoPerfecto'].forEach(time => this.table.Subjuntivo[time] = Array.from(DASH6));
                 this.table.Imperativo.Negativo[3] = '-';
                 break;
             case 'ogmorfo':
-                this.table.Impersonal.Infinitivo = ['-'];
-                this.table.Impersonal.Gerundio = ['-'];
-                this.table.Impersonal.Participio = ['-'];
+                ['Infinitivo', 'Gerundio', 'Participio'].forEach(v => this.table.Impersonal[v] = ['-']);
 
-                this.table.Indicativo.Presente = Array.from('------');
-                // this.table.Indicativo.Preterito_Indefinido = Array.from('------');
-                this.table.Indicativo.Preterito_Imperfecto = Array.from('------');
-                this.table.Indicativo.Futuro_Imperfecto = Array.from('------');
-                this.table.Indicativo.Condicional_Simple = Array.from('------');
-                this.table.Indicativo.Preterito_Perfecto = Array.from('------');
-                this.table.Indicativo.Preterito_Pluscuamperfecto = Array.from('------');
-                this.table.Indicativo.Preterito_Anterior = Array.from('------');
-                this.table.Indicativo.Futuro_Perfecto = Array.from('------');
-                this.table.Indicativo.Condicional_Compuesto = Array.from('------');
+                ['Presente', 'PreteritoImperfecto', 'FuturoImperfecto', 'CondicionalSimple',
+                    'Preterito_Perfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior',
+                    'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode =>
+                        this.table.Indicativo[mode] = Array.from(DASH6));
 
-                this.table.Subjuntivo.Presente = Array.from('------');
-                this.table.Subjuntivo.Futuro_Imperfecto = Array.from('------');
-                this.table.Subjuntivo.Preterito_Pluscuamperfecto_ra = Array.from('------');
-                this.table.Subjuntivo.Preterito_Pluscuamperfecto_se = Array.from('------');
-                this.table.Subjuntivo.Futuro_Perfecto = Array.from('------');
-                this.table.Subjuntivo.Preterito_Perfecto = Array.from('------');
+                ['Presente', 'FuturoImperfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe',
+                    'FuturoPerfecto', 'Preterito_Perfecto'].forEach(mode => this.table.Subjuntivo[mode] = Array.from(DASH6));
+
                 break;
             case 'osmorfo':
                 this.table.Impersonal.Participio = ['-'];
-                this.table.Indicativo.Preterito_Indefinido = Array.from('------');
-                this.table.Indicativo.Futuro_Imperfecto = Array.from('------');
-                this.table.Indicativo.Condicional_Simple = Array.from('------');
-                this.table.Indicativo.Preterito_Perfecto = Array.from('------');
-                this.table.Indicativo.Preterito_Pluscuamperfecto = Array.from('------');
-                this.table.Indicativo.Preterito_Anterior = Array.from('------');
-                this.table.Indicativo.Futuro_Perfecto = Array.from('------');
-                this.table.Indicativo.Condicional_Compuesto = Array.from('------');
 
-                this.table.Subjuntivo.Futuro_Imperfecto = Array.from('------');
-                this.table.Subjuntivo.Preterito_Perfecto = Array.from('------');
-                this.table.Subjuntivo.Preterito_Pluscuamperfecto_ra = Array.from('------');
-                this.table.Subjuntivo.Preterito_Pluscuamperfecto_se = Array.from('------');
-                this.table.Subjuntivo.Futuro_Perfecto = Array.from('------');
+                ['PreteritoIndefinido', 'FuturoImperfecto', 'CondicionalSimple', 'Preterito_Perfecto',
+                    'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode =>
+                        this.table.Indicativo[mode] = Array.from(DASH6));
+
+                ['FuturoImperfecto', 'Preterito_Perfecto', 'PreteritoPluscuamperfectoRa',
+                    'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(mode =>
+                        this.table.Subjuntivo[mode] = Array.from(DASH6));
 
                 this.table.Imperativo.Negativo[3] = '-';
-                break;
         }
     }
-        
+
     private applyMono(): void {
         if (this.monoSyllables) {             // strip monosyllable accents where applicable
-            this.table.Indicativo.Presente[1] = applyMonoRules(this.table.Indicativo.Presente[1]);
-            this.table.Indicativo.Presente[4] = applyMonoRules(this.table.Indicativo.Presente[4]);
-            this.table.Indicativo.Preterito_Indefinido[0] = applyMonoRules(this.table.Indicativo.Preterito_Indefinido[0]);
-            this.table.Indicativo.Preterito_Indefinido[1] = applyMonoRules(this.table.Indicativo.Preterito_Indefinido[1]);
-            this.table.Indicativo.Preterito_Indefinido[2] = applyMonoRules(this.table.Indicativo.Preterito_Indefinido[2]);
+            [1, 4].forEach(i => this.table.Indicativo.Presente[i] = applyMonoRules(this.table.Indicativo.Presente[i]));
+            [0, 1, 2].forEach(i => this.table.Indicativo.PreteritoIndefinido[i] = applyMonoRules(this.table.Indicativo.PreteritoIndefinido[i]));
             this.table.Subjuntivo.Presente[4] = applyMonoRules(this.table.Subjuntivo.Presente[4]);
         }
     }

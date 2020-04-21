@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 import { BaseModel } from './basemodel';
-import { clearAccents, clearLastAccent } from './utilities/stringutils';
+import { clearLastAccent } from './utilities/stringutils';
 import { PronominalKeys, Regions, ModelAttributes } from './declarations/types';
 import { AR } from './declarations/constants';
 
@@ -25,7 +25,7 @@ export class amar extends BaseModel {
         this.configDesinences();
 
         // Finish desinences configuration in base class
-        this.setDesinencesByRegion();
+        this.remapDesinencesByRegion();
     }
 
     // Give derived classes chance to modify terms arrays
@@ -73,8 +73,8 @@ export class amar extends BaseModel {
     }
 
     // Preterito Indefinido repeating pattern
-    protected setIndicativoPreteritoIndefinidoPattern_0 (replacement: string): void {
-        super.setIndicativoPreteritoIndefinido([replacement, ...Array.from('12345').map(() => this.stem)]);
+    protected setIndicativoPreteritoIndefinidoPattern_0 (RR: string): void {
+        super.setIndicativoPreteritoIndefinido([RR, ...Array.from('12345').map(() => this.stem)]);
     }
 }
 
@@ -162,10 +162,10 @@ export class andar extends amar {
 
     protected configDesinences(): void {
         super.configDesinences();
-        this.desinences.Indicativo.Preterito_Indefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis', 'uvieron'];
-        this.desinences.Subjuntivo.Preterito_Imperfecto_ra = ['uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais', 'uvieran'];
-        this.desinences.Subjuntivo.Preterito_Imperfecto_se = ['uviese', 'uvieses', 'uviese', 'uviésemos', 'uvieseis', 'uviesen'];
-        this.desinences.Subjuntivo.Futuro_Imperfecto = ['uviere', 'uvieres', 'uviere', 'uviéremos', 'uviereis', 'uvieren'];
+        this.desinences.Indicativo.PreteritoIndefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis', 'uvieron'];
+        this.desinences.Subjuntivo.PreteritoImperfectoRa = ['uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais', 'uvieran'];
+        this.desinences.Subjuntivo.PreteritoImperfectoSe = ['uviese', 'uvieses', 'uviese', 'uviésemos', 'uvieseis', 'uviesen'];
+        this.desinences.Subjuntivo.FuturoImperfecto = ['uviere', 'uvieres', 'uviere', 'uviéremos', 'uviereis', 'uvieren'];
     }
 }
 export class cazar extends amar {
@@ -242,11 +242,11 @@ export class estar extends amar {
     protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Indicativo.Presente = ['oy', 'ás', 'á', 'amos', 'áis', 'án'];
-        this.desinences.Indicativo.Preterito_Indefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis', 'uvieron'];
+        this.desinences.Indicativo.PreteritoIndefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis', 'uvieron'];
         this.desinences.Subjuntivo.Presente = ['é', 'és', 'é', 'emos', 'éis', 'én'];
-        this.desinences.Subjuntivo.Preterito_Imperfecto_ra = ['uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais', 'uvieran'];
-        this.desinences.Subjuntivo.Preterito_Imperfecto_se = ['uviese', 'uvieses', 'uviese', 'uviésemos', 'uvieseis', 'uviesen'];
-        this.desinences.Subjuntivo.Futuro_Imperfecto = ['uviere', 'uvieres', 'uviere', 'uviéremos', 'uviereis', 'uvieren'];
+        this.desinences.Subjuntivo.PreteritoImperfectoRa = ['uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais', 'uvieran'];
+        this.desinences.Subjuntivo.PreteritoImperfectoSe = ['uviese', 'uvieses', 'uviese', 'uviésemos', 'uvieseis', 'uviesen'];
+        this.desinences.Subjuntivo.FuturoImperfecto = ['uviere', 'uvieres', 'uviere', 'uviéremos', 'uviereis', 'uvieren'];
     }
 
     protected setImperativoAfirmativo(): void {
@@ -269,7 +269,7 @@ export class pagar extends amar {
     }
     protected configDesinences(): void {
         super.configDesinences();
-        this.desinences.Indicativo.Preterito_Indefinido[0] = 'ué';
+        this.desinences.Indicativo.PreteritoIndefinido[0] = 'ué';
         this.desinences.Subjuntivo.Presente = ['ue', 'ues', 'ue', 'uemos', 'uéis', 'uen'];
     }
 }
@@ -310,7 +310,7 @@ export class regar extends amar {
 
     protected configDesinences(): void {
         super.configDesinences();
-        this.desinences.Indicativo.Preterito_Indefinido[0] = 'ué';
+        this.desinences.Indicativo.PreteritoIndefinido[0] = 'ué';
         this.desinences.Subjuntivo.Presente = ['ue', 'ues', 'ue', 'uemos', 'uéis', 'uen'];
     }
 

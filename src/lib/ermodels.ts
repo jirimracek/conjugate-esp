@@ -14,7 +14,7 @@ export class temer extends BaseModel {
         super(verb, type, region, attributes);
         this.desinences = JSON.parse(JSON.stringify(ER));
         this.configDesinences();
-        this.setDesinencesByRegion();
+        this.remapDesinencesByRegion();
     }
 
     protected configDesinences(): void {
@@ -73,9 +73,9 @@ export class hacer extends temer {
     }
     protected configDesinences(): void {
         super.configDesinences();
-        this.desinences.Indicativo.Preterito_Indefinido = ['e', 'iste', 'o', 'imos', 'isteis', 'ieron'];
-        this.desinences.Indicativo.Futuro_Imperfecto = ['ré', 'rás', 'rá', 'remos', 'réis', 'rán'];
-        this.desinences.Indicativo.Condicional_Simple = ['ría', 'rías', 'ría', 'ríamos', 'ríais', 'rían']
+        this.desinences.Indicativo.PreteritoIndefinido = ['e', 'iste', 'o', 'imos', 'isteis', 'ieron'];
+        this.desinences.Indicativo.FuturoImperfecto = ['ré', 'rás', 'rá', 'remos', 'réis', 'rán'];
+        this.desinences.Indicativo.CondicionalSimple = ['ría', 'rías', 'ría', 'ríamos', 'ríais', 'rían']
     }
 
     protected setIndicativoPresente(): void {
@@ -136,15 +136,15 @@ export class haber extends temer {
     protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Indicativo.Presente = ['e', 'as', 'a', 'emos', 'éis', 'an'];
-        this.desinences.Indicativo.Preterito_Indefinido = ['e', 'iste', 'o', 'imos', 'isteis', 'ieron'];
-        this.desinences.Indicativo.Futuro_Imperfecto = ['ré', 'rás', 'rá', 'remos', 'réis', 'rán'];
-        this.desinences.Indicativo.Condicional_Simple = ['ría', 'rías', 'ría', 'ríamos', 'ríais', 'rían']
+        this.desinences.Indicativo.PreteritoIndefinido = ['e', 'iste', 'o', 'imos', 'isteis', 'ieron'];
+        this.desinences.Indicativo.FuturoImperfecto = ['ré', 'rás', 'rá', 'remos', 'réis', 'rán'];
+        this.desinences.Indicativo.CondicionalSimple = ['ría', 'rías', 'ría', 'ríamos', 'ríais', 'rían']
     }
     protected setIndicativoPresente(): void {
         const replacement = this.stem.replace(/ab/, '');
         switch (this.region) {
             case 'castellano':
-                super.setIndicativoPresente([...Array.from('1234').map(() => replacement), this.stem, replacement]);
+                super.setIndicativoPresente([replacement, replacement, replacement, replacement, this.stem, replacement]);
                 break;
             case 'voseo':
             case 'canarias':
@@ -207,7 +207,7 @@ export class nacer extends temer {
     }
 
     protected setIndicativoPresente(): void {
-        super.setIndicativoPresente([this.replacement, ...Array.from('12345').map(() => this.stem)]);
+        super.setIndicativoPresente([this.replacement, this.stem, this.stem, this.stem, this.stem, this.stem]);
     }
 
     protected setSubjuntivoPresente(): void {
@@ -226,7 +226,7 @@ export class placer extends temer {
     protected configDesinences(): void {
         super.configDesinences();
         if (this.version === '1') {
-            this.desinences.Indicativo.Preterito_Indefinido[2] = this.desinences.Indicativo.Preterito_Indefinido[2].replace(/ió/, 'o');
+            this.desinences.Indicativo.PreteritoIndefinido[2] = this.desinences.Indicativo.PreteritoIndefinido[2].replace(/ió/, 'o');
         }
     }
 
@@ -238,10 +238,11 @@ export class placer extends temer {
         if (this.version === '0') {
             super.setIndicativoPreteritoIndefinido();
         } else {
+            const local = this.stem.replace(/ac/, 'ug');
             if (this.region === 'formal') {
-                super.setIndicativoPreteritoIndefinido([this.stem, ...Array.from('12').map(() => this.stem.replace(/ac/, 'ug')), ...Array.from('345').map(() => this.stem)]);
+                super.setIndicativoPreteritoIndefinido([this.stem, local, local, this.stem, this.stem, this.stem]);
             } else {
-                super.setIndicativoPreteritoIndefinido([...Array.from('01').map(() => this.stem), this.stem.replace(/ac/, 'ug'), ...Array.from('345').map(() => this.stem)]);
+                super.setIndicativoPreteritoIndefinido([this.stem, this.stem, local, this.stem, this.stem, this.stem]);
             }
         }
     }
@@ -250,10 +251,11 @@ export class placer extends temer {
         if (this.version === '0') {
             super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
         } else {
+            const local = this.stem.replace(/ac/, 'eg');
             if (this.region === 'formal') {
-                super.setSubjuntivoPresente([this.replacement, ...Array.from('12').map(() => this.stem.replace(/ac/, 'eg')), ...Array.from('345').map(() => this.replacement)]);
+                super.setSubjuntivoPresente([this.replacement, local, local, this.replacement, this.replacement, this.replacement]);
             } else {
-                super.setSubjuntivoPresente([...Array.from('01').map(() => this.replacement), this.stem.replace(/ac/, 'eg'), ...Array.from('345').map(() => this.replacement)]);
+                super.setSubjuntivoPresente([this.replacement, this.replacement, local, this.replacement, this.replacement, this.replacement]);
             }
         }
     }
@@ -261,10 +263,11 @@ export class placer extends temer {
         if (this.version === '0') {
             super.setSubjuntivoPreteritoImperfectoRa();
         } else {
+            const local = this.stem.replace(/ac/, 'ugu');
             if (this.region === 'formal') {
-                super.setSubjuntivoPreteritoImperfectoRa([this.stem, ...Array.from('12').map(() => this.stem.replace(/ac/, 'ugu')), ...Array.from('345').map(() => this.stem)]);
+                super.setSubjuntivoPreteritoImperfectoRa([this.stem, local, local , this.stem, this.stem, this.stem]);
             } else {
-                super.setSubjuntivoPreteritoImperfectoRa([...Array.from('01').map(() => this.stem), this.stem.replace(/ac/, 'ugu'), ...Array.from('345').map(() => this.stem)]);
+                super.setSubjuntivoPreteritoImperfectoRa([this.stem, this.stem, local, this.stem, this.stem, this.stem]);
             }
         }
     }
@@ -305,9 +308,9 @@ export class poder extends temer {
 
     protected configDesinences(): void {
         super.configDesinences();
-        this.desinences.Indicativo.Preterito_Indefinido = ['e', 'iste', 'o', 'imos', 'isteis', 'ieron'];
-        this.desinences.Indicativo.Futuro_Imperfecto = ['ré', 'rás', 'rá', 'remos', 'réis', 'rán'];
-        this.desinences.Indicativo.Condicional_Simple = ['ría', 'rías', 'ría', 'ríamos', 'ríais', 'rían'];
+        this.desinences.Indicativo.PreteritoIndefinido = ['e', 'iste', 'o', 'imos', 'isteis', 'ieron'];
+        this.desinences.Indicativo.FuturoImperfecto = ['ré', 'rás', 'rá', 'remos', 'réis', 'rán'];
+        this.desinences.Indicativo.CondicionalSimple = ['ría', 'rías', 'ría', 'ríamos', 'ríais', 'rían'];
     }
 
     protected setGerundio(): void {
@@ -344,9 +347,9 @@ export class poner extends temer {
     protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Indicativo.Presente[0] = 'go';
-        this.desinences.Indicativo.Preterito_Indefinido = ['e', 'iste', 'o', 'imos', 'isteis', 'ieron'];
-        this.desinences.Indicativo.Futuro_Imperfecto = ['dré', 'drás', 'drá', 'dremos', 'dréis', 'drán'];
-        this.desinences.Indicativo.Condicional_Simple = ['dría', 'drías', 'dría', 'dríamos', 'dríais', 'drían'];
+        this.desinences.Indicativo.PreteritoIndefinido = ['e', 'iste', 'o', 'imos', 'isteis', 'ieron'];
+        this.desinences.Indicativo.FuturoImperfecto = ['dré', 'drás', 'drá', 'dremos', 'dréis', 'drán'];
+        this.desinences.Indicativo.CondicionalSimple = ['dría', 'drías', 'dría', 'dríamos', 'dríais', 'drían'];
     }
 
     protected setParticipio(): void {
@@ -395,9 +398,9 @@ export class querer extends temer {
 
     protected configDesinences(): void {
         super.configDesinences();
-        this.desinences.Indicativo.Preterito_Indefinido = ['ise', 'isiste', 'iso', 'isimos', 'isisteis', 'isieron'];
-        this.desinences.Indicativo.Futuro_Imperfecto = ['ré', 'rás', 'rá', 'remos', 'réis', 'rán'];
-        this.desinences.Indicativo.Condicional_Simple = ['ría', 'rías', 'ría', 'ríamos', 'ríais', 'rían'];
+        this.desinences.Indicativo.PreteritoIndefinido = ['ise', 'isiste', 'iso', 'isimos', 'isisteis', 'isieron'];
+        this.desinences.Indicativo.FuturoImperfecto = ['ré', 'rás', 'rá', 'remos', 'réis', 'rán'];
+        this.desinences.Indicativo.CondicionalSimple = ['ría', 'rías', 'ría', 'ríamos', 'ríais', 'rían'];
 
     }
 
@@ -427,7 +430,7 @@ export class raer extends temer {
         super(verb, type, region, attributes);
     }
 
-    protected configDesinences():void {
+    protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.map(g => g.replace(/i/, 'y'));
         this.desinences.Impersonal.Participio = this.desinences.Impersonal.Participio.map(g => g.replace(/i/, 'í'));
@@ -438,10 +441,10 @@ export class raer extends temer {
             this.desinences.Indicativo.Presente[0] = this.desinences.Indicativo.Presente[0].replace(/^/, 'y');
             this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(d => d.replace(/^/, 'y'));
         }
-        this.desinences.Indicativo.Preterito_Indefinido =  ['í', 'íste', 'yó', 'ímos', 'ísteis', 'yeron'];
-        this.desinences.Subjuntivo.Preterito_Imperfecto_ra = ['yera', 'yeras', 'yera', 'yéramos', 'yerais', 'yeran'],
-        this.desinences.Subjuntivo.Preterito_Imperfecto_se = ['yese', 'yeses', 'yese', 'yésemos', 'yeseis', 'yesen'],
-        this.desinences.Subjuntivo.Futuro_Imperfecto = ['yere', 'yeres', 'yere', 'yéremos', 'yereis', 'yeren']
+        this.desinences.Indicativo.PreteritoIndefinido = ['í', 'íste', 'yó', 'ímos', 'ísteis', 'yeron'];
+        this.desinences.Subjuntivo.PreteritoImperfectoRa = ['yera', 'yeras', 'yera', 'yéramos', 'yerais', 'yeran'],
+            this.desinences.Subjuntivo.PreteritoImperfectoSe = ['yese', 'yeses', 'yese', 'yésemos', 'yeseis', 'yesen'],
+            this.desinences.Subjuntivo.FuturoImperfecto = ['yere', 'yeres', 'yere', 'yéremos', 'yereis', 'yeren']
     }
 }
 
@@ -454,7 +457,7 @@ export class responder extends temer {
 
     protected configDesinences(): void {
         super.configDesinences();
-        this.desinences.Indicativo.Preterito_Indefinido = ['use', 'usiste', 'uso', 'usimos', 'usisteis', 'usieron'];
+        this.desinences.Indicativo.PreteritoIndefinido = ['use', 'usiste', 'uso', 'usimos', 'usisteis', 'usieron'];
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
@@ -465,7 +468,7 @@ export class roer extends temer {
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
-    protected configDesinences():void {
+    protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.map(g => g.replace(/i/, 'y'));
         this.desinences.Impersonal.Participio = this.desinences.Impersonal.Participio.map(g => g.replace(/i/, 'í'));
@@ -476,10 +479,10 @@ export class roer extends temer {
             this.desinences.Indicativo.Presente[0] = this.desinences.Indicativo.Presente[0].replace(/^/, 'y');
             this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(d => d.replace(/^/, 'y'));
         }
-        this.desinences.Indicativo.Preterito_Indefinido =  ['í', 'íste', 'yó', 'ímos', 'ísteis', 'yeron'];
-        this.desinences.Subjuntivo.Preterito_Imperfecto_ra = ['yera', 'yeras', 'yera', 'yéramos', 'yerais', 'yeran'],
-        this.desinences.Subjuntivo.Preterito_Imperfecto_se = ['yese', 'yeses', 'yese', 'yésemos', 'yeseis', 'yesen'],
-        this.desinences.Subjuntivo.Futuro_Imperfecto = ['yere', 'yeres', 'yere', 'yéremos', 'yereis', 'yeren']
+        this.desinences.Indicativo.PreteritoIndefinido = ['í', 'íste', 'yó', 'ímos', 'ísteis', 'yeron'];
+        this.desinences.Subjuntivo.PreteritoImperfectoRa = ['yera', 'yeras', 'yera', 'yéramos', 'yerais', 'yeran'],
+            this.desinences.Subjuntivo.PreteritoImperfectoSe = ['yese', 'yeses', 'yese', 'yésemos', 'yeseis', 'yesen'],
+            this.desinences.Subjuntivo.FuturoImperfecto = ['yere', 'yeres', 'yere', 'yéremos', 'yereis', 'yeren']
     }
 }
 
@@ -490,12 +493,12 @@ export class tañer extends temer {
     protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.map(d => d.replace(/^i/, ''));
-        this.desinences.Indicativo.Preterito_Indefinido[2] = 'ó';
-        this.desinences.Indicativo.Preterito_Indefinido[5] = 'eron';
+        this.desinences.Indicativo.PreteritoIndefinido[2] = 'ó';
+        this.desinences.Indicativo.PreteritoIndefinido[5] = 'eron';
 
-        this.desinences.Subjuntivo.Preterito_Imperfecto_ra = this.desinences.Subjuntivo.Preterito_Imperfecto_ra.map(d => d.replace(/^i/, ''));
-        this.desinences.Subjuntivo.Preterito_Imperfecto_se = this.desinences.Subjuntivo.Preterito_Imperfecto_se.map(d => d.replace(/^i/, ''));
-        this.desinences.Subjuntivo.Futuro_Imperfecto = this.desinences.Subjuntivo.Futuro_Imperfecto.map(d => d.replace(/^i/, ''));
+        this.desinences.Subjuntivo.PreteritoImperfectoRa = this.desinences.Subjuntivo.PreteritoImperfectoRa.map(d => d.replace(/^i/, ''));
+        this.desinences.Subjuntivo.PreteritoImperfectoSe = this.desinences.Subjuntivo.PreteritoImperfectoSe.map(d => d.replace(/^i/, ''));
+        this.desinences.Subjuntivo.FuturoImperfecto = this.desinences.Subjuntivo.FuturoImperfecto.map(d => d.replace(/^i/, ''));
     }
 }
 export class tender extends temer {
