@@ -13,11 +13,11 @@ import { ERROR_MSG } from '../declarations/constants';
 
 // Disable thrown messages
 beforeEach(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => { });
+    jest.spyOn(console, 'error').mockImplementation(() => { /* empty */ });
 });
 
 // shuffle lists so we don't test in the same order every time
-function shuffle(array: string[]) {
+function shuffle(array: string[]): string[] {
     let count = array.length, temp, index;
     while (count) {
         // Pick remaining 
@@ -38,41 +38,43 @@ const models: string[] = temp.getImplementedModels();
 
 models.forEach(m => verbSet.add(m));
 // some interesting verbs
-verbSet.add('abar');        // the only known trimorfo              "abar": { "P": { "amar": { "D": "trimorfo" } } },
-verbSet.add('abolir');      // interesting imorfo                   "abolir": { "N": [ "vivir", { "vivir": { "D": "imorfo" } } ] },
-verbSet.add('acostumbrar')  // omorfo                               "acostumbrar": { "N": [ "amar", { "amar": { "D": "omorfo" } } ], "P": "amar" },
-verbSet.add('aclarar');     // dual, defective                      "aclarar": { "N": [ "amar", { "amar": { "d": "imper" } } ], "P": "amar" },
-verbSet.add('acontecer');   // single defective                     "acontecer": { "N": { "nacer": { "D": "terciop" } } },
-verbSet.add('adecuar');     // dual, non defective                  "adecuar": { "N": [ "amar", "actuar" ], "P": [ "amar", "actuar" ]
-verbSet.add('antojar');     // defective terciopersonal v2          "antojar": { "P": { "amar": { "D": "terciop" } } },
-verbSet.add('autosatisfacer');     // odd version of hacer          "autosatisfacer": { "N": [ "hacer", { "hacer": { "V": "1" } } ],
+verbSet.add('abar');        // the only known trimorfo              'abar': { 'P': { 'amar': { 'D': 'trimorfo' } } },
+verbSet.add('abolir');      // interesting imorfo                   'abolir': { 'N': [ 'vivir', { 'vivir': { 'D': 'imorfo' } } ] },
+verbSet.add('acostumbrar')  // omorfo                               'acostumbrar': { 'N': [ 'amar', { 'amar': { 'D': 'omorfo' } } ], 'P': 'amar' },
+verbSet.add('aclarar');     // dual, defective                      'aclarar': { 'N': [ 'amar', { 'amar': { 'd': 'imper' } } ], 'P': 'amar' },
+verbSet.add('acontecer');   // single defective                     'acontecer': { 'N': { 'nacer': { 'D': 'terciop' } } },
+verbSet.add('adecuar');     // dual, non defective                  'adecuar': { 'N': [ 'amar', 'actuar' ], 'P': [ 'amar', 'actuar' ]
+verbSet.add('antojar');     // defective terciopersonal v2          'antojar': { 'P': { 'amar': { 'D': 'terciop' } } },
+verbSet.add('autosatisfacer');     // odd version of hacer          'autosatisfacer': { 'N': [ 'hacer', { 'hacer': { 'V': '1' } } ],
 verbSet.add('balbucir');    // combo of ir & ar verb, very unique, in the model list
-verbSet.add('condecir');    // the decir family of differences      "condecir": { "N": [ { "decir": { "V": "1" } }, { "decir": { "D": "terciop" } }, { "decir": { "V": "2" } } ] },
+verbSet.add('colorir');     // imorfo                               'colorir': { 'N': { 'vivir': { 'D': 'imorfo' } } },
+verbSet.add('condecir');    // the decir family of differences      'condecir': { 'N': [ { 'decir': { 'V': '1' } }, { 'decir': { 'D': 'terciop' } }, { 'decir': { 'V': '2' } } ] },
 verbSet.add('degollar');    // contar, o -> üe
-verbSet.add('derrocar');    // dual volcar, sacar                   "derrocar": { "N": [ "volcar", "sacar" ], "P": "volcar" },
-verbSet.add('desvaír');     // dual, ír, defective in both N&P      "desvaír": { "N": [ { "embaír": { "D": "imorfo" } }, "embaír" ], "P": [ { "embaír": { "D": "imorfo" } }, "embaír" ] },
-verbSet.add('empecer')      // the only known tercio                "empecer": { "N": { "nacer": { "D": "tercio" } } },
-verbSet.add('empedernir');  // the only bimorfop, dual defective    "empedernir": { "N": [ { "vivir": { "D": "bimorfop" } }, { "vivir": { "D": "imorfo" } } ], "P": [ { "vivir": { "D": "bimorfop" } }, { "vivir": { "D": "imorfo" } } ] },
-verbSet.add('errar');       // err -> yerr                          "errar": { "N": [ "errar", "amar" ], "P": [ "errar", "amar" ] },
-verbSet.add('guiar');       // dual vaciar with monosyll            "guiar": { "N": [ "vaciar", { "vaciar": { "M": "true" } } ], "P": [ "vaciar", { "vaciar": { "M": "true" } } ] },
-verbSet.add('hidropicar');  // sacar, dual, defective               "hidropicar": { "N": [ "sacar", { "sacar": { "D": "imper" } } ], "P": "sacar" },
-verbSet.add('infecir');     //                                      "infecir": { "N": { "lucir": { "PR": "ido/to" } } },
-verbSet.add('inhestar');    // participio irregular, replace        "inhestar": { "N": { "pensar": { "PR": "estad/iest" } }
-verbSet.add('marcir');      // eimorfo                              "marcir": { "N": [ "zurcir", { "zurcir": { "D": "eimorfo" } } ] },
+verbSet.add('derrocar');    // dual volcar, sacar                   'derrocar': { 'N': [ 'volcar', 'sacar' ], 'P': 'volcar' },
+verbSet.add('desvaír');     // dual, ír, defective in both N&P      'desvaír': { 'N': [ { 'embaír': { 'D': 'imorfo' } }, 'embaír' ], 'P': [ { 'embaír': { 'D': 'imorfo' } }, 'embaír' ] },
+verbSet.add('embaír');
+verbSet.add('empecer')      // the only known tercio                'empecer': { 'N': { 'nacer': { 'D': 'tercio' } } },
+verbSet.add('empedernir');  // the only bimorfop, dual defective    'empedernir': { 'N': [ { 'vivir': { 'D': 'bimorfop' } }, { 'vivir': { 'D': 'imorfo' } } ], 'P': [ { 'vivir': { 'D': 'bimorfop' } }, { 'vivir': { 'D': 'imorfo' } } ] },
+verbSet.add('errar');       // err -> yerr                          'errar': { 'N': [ 'errar', 'amar' ], 'P': [ 'errar', 'amar' ] },
+verbSet.add('guiar');       // dual vaciar with monosyll            'guiar': { 'N': [ 'vaciar', { 'vaciar': { 'M': 'true' } } ], 'P': [ 'vaciar', { 'vaciar': { 'M': 'true' } } ] },
+verbSet.add('hidropicar');  // sacar, dual, defective               'hidropicar': { 'N': [ 'sacar', { 'sacar': { 'D': 'imper' } } ], 'P': 'sacar' },
+verbSet.add('infecir');     //                                      'infecir': { 'N': { 'lucir': { 'PR': 'ido/to' } } },
+verbSet.add('inhestar');    // participio irregular, replace        'inhestar': { 'N': { 'pensar': { 'PR': 'estad/iest' } }
+verbSet.add('marcir');      // eimorfo                              'marcir': { 'N': [ 'zurcir', { 'zurcir': { 'D': 'eimorfo' } } ] },
 verbSet.add('predecir');    // the decir family of differences
-verbSet.add('pringar');     // dual pagar                           "pringar": { "N": [ "pagar", { "pagar": { "D": "imper" } } ], "P": "pagar" },
-verbSet.add('puar');        // dual, monosyllables                  "puar": { "N": [ "actuar", { "actuar": { "MS": "true" } } ] },
+verbSet.add('pringar');     // dual pagar                           'pringar': { 'N': [ 'pagar', { 'pagar': { 'D': 'imper' } } ], 'P': 'pagar' },
+verbSet.add('puar');        // dual, monosyllables                  'puar': { 'N': [ 'actuar', { 'actuar': { 'MS': 'true' } } ] },
 verbSet.add('redecir');     // the decir family of differences
-verbSet.add('reponer');     // ogmorfo                              "reponer": { "N": [ "poner", { "poner": { "D": "ogmorfo" } } ], "P": "poner" },
-verbSet.add('responder');   // in the list already, quite unique, repuse version         "responder": { "N": [ "temer", "responder" ] },
-verbSet.add('serenar');     // triple, defective in one, N&P        "serenar": { "N": [ "amar", { "amar": { "D": "imper" } } ], "P": "amar" },
-verbSet.add('soler');       // the name said it all                 "soler": { "N": [ { "mover": { "D": "osmorfo" } }, { "mover": { "D": "omorfo" } } ] },
-verbSet.add('tronar');      // from contar                          "tronar": { "N": [ { "contar": { "D": "imper" } }, "contar" ], "P": "contar" },
-verbSet.add('ventar');      // triple, defective                    "ventar": { "N": [ { "pensar": { "D": "imper" } }, "amar", "pensar" ] },
+verbSet.add('reponer');     // ogmorfo                              'reponer': { 'N': [ 'poner', { 'poner': { 'D': 'ogmorfo' } } ], 'P': 'poner' },
+verbSet.add('responder');   // in the list already, quite unique, repuse version         'responder': { 'N': [ 'temer', 'responder' ] },
+verbSet.add('serenar');     // triple, defective in one, N&P        'serenar': { 'N': [ 'amar', { 'amar': { 'D': 'imper' } } ], 'P': 'amar' },
+verbSet.add('soler');       // the name said it all                 'soler': { 'N': [ { 'mover': { 'D': 'osmorfo' } }, { 'mover': { 'D': 'omorfo' } } ] },
+verbSet.add('tronar');      // from contar                          'tronar': { 'N': [ { 'contar': { 'D': 'imper' } }, 'contar' ], 'P': 'contar' },
+verbSet.add('ventar');      // triple, defective                    'ventar': { 'N': [ { 'pensar': { 'D': 'imper' } }, 'amar', 'pensar' ] },
 
 const verbs: string[] = Array.from(verbSet);
 
-describe("Model Test", () => {
+describe('Model Test', () => {
     test('Internals', () => {
         // Derive to get access to templates
         class MockJugator extends Conjugator {
@@ -83,13 +85,13 @@ describe("Model Test", () => {
                 this.templates = JSON.parse(JSON.stringify(this.templates));
                 this.savedTemplates = JSON.parse(JSON.stringify(this.templates));
             }
-            public deleteTemplates() {
+            public deleteTemplates(): void {
                 delete this.templates;
             }
-            public undefineModelData(verb: string) {
+            public undefineModelData(verb: string): void {
                 this.templates[verb] = undefined as unknown as VerbModelData;
             }
-            public restore() {
+            public restore(): void {
                 this.templates = JSON.parse(JSON.stringify(this.savedTemplates));
             }
             public fakeUnimplemented(verb: string, model: string): void {
@@ -97,7 +99,7 @@ describe("Model Test", () => {
             }
         }
         // Corrupted definitions file / missing templates - this should never happen
-        let mockjugator = new MockJugator();
+        const mockjugator = new MockJugator();
         expect((mockjugator.conjugate('vivir', 'formal')[0].info as InfoType)['model']).toEqual('vivir');
 
         // undefine verb model data in templates
@@ -183,7 +185,7 @@ describe("Model Test", () => {
     });
 });
 
-describe("Conjugation Test", () => {
+describe('Conjugation Test', () => {
     const conjugator = new Conjugator();
     verbsToTest = shuffle(conjugator.getVerbList().filter(verb => verbs.includes(verb)));
     verbsToTest.forEach(verb => {

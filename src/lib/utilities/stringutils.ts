@@ -17,7 +17,7 @@ const Unbreakable: readonly string[] = ['bl', 'cl', 'fl', 'gl', 'kl', 'll', 'pl'
  * @param phrase 
  */
 export function syllabify(phrase: string): string[] {
-  if (!phrase) { 
+  if (!phrase) {
     return [''];
   }
   if (phrase.length < 2) {

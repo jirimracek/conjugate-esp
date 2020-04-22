@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 
-import { ConjugationTable } from "../declarations/types";
+import { ConjugationTable } from '../declarations/types';
 
 /**
  * 
@@ -25,20 +25,20 @@ export function json2Text(table: ConjugationTable): string[] {
  * @returns json formated
  */
 export function text2Json(table: string[]): ConjugationTable {
-    const retVal: ConjugationTable = <ConjugationTable>{};
+    const retVal: ConjugationTable = {} as ConjugationTable;
     const temp = table.map(m => m);   // Make a copy so it doesn't get overwritten
 
     ['Impersonal', 'Indicativo', 'Subjuntivo', 'Imperativo'].forEach(mode => retVal[mode] = {});
 
     ['Infinitivo', 'Gerundio', 'Participio'].forEach(type => retVal.Impersonal[type] = [temp.shift() as string]);
 
-    ['Presente', 'Preterito_Imperfecto', 'PreteritoIndefinido', 'Futuro_Imperfecto', 'Condicional_Simple',
-        'Preterito_Perfecto', 'Preterito_Pluscuamperfecto', 'Preterito_Anterior',
-        'Futuro_Perfecto', 'Condicional_Compuesto'].forEach(time => retVal['Indicativo'][time] = temp.splice(0, 6));
+    ['Presente', 'PreteritoImperfecto', 'PreteritoIndefinido', 'FuturoImperfecto', 'CondicionalSimple',
+        'PreteritoPerfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior',
+        'FuturoPerfecto', 'CondicionalCompuesto'].forEach(time => retVal['Indicativo'][time] = temp.splice(0, 6));
 
-    ['Presente', 'Preterito_Imperfecto_ra', 'Preterito_Imperfecto_se', 'Futuro_Imperfecto',
-        'Preterito_Perfecto', 'Preterito_Pluscuamperfecto_ra', 'Preterito_Pluscuamperfecto_se',
-        'Futuro_Perfecto'].forEach(time => retVal['Subjuntivo'][time] = temp.splice(0, 6));
+    ['Presente', 'PreteritoImperfectoRa', 'PreteritoImperfectoSe', 'FuturoImperfecto',
+        'PreteritoPerfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe',
+        'FuturoPerfecto'].forEach(time => retVal['Subjuntivo'][time] = temp.splice(0, 6));
 
     ['Afirmativo', 'Negativo'].forEach(imperativo => retVal['Imperativo'][imperativo] = temp.splice(0, 6));
 

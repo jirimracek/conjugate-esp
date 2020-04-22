@@ -11,13 +11,13 @@ import { DASH6 } from './declarations/constants';
 
 export abstract class BaseModel {
     protected verb: string;
-    protected stem: string = '';
+    protected stem = '';
     protected type: PronominalKeys;
     protected region: Regions;
 
     protected desinences: ConjugationTable = {};
     protected table: ConjugationTable = {};
-    protected participioCompuesto: string = '';
+    protected participioCompuesto = '';
 
     protected version: string;
     protected attributes: ModelAttributes;
@@ -59,7 +59,7 @@ export abstract class BaseModel {
      * Reorder terminations based on the region.  Call in derived class once we have the desinences configured
      * based on verb type.  This is the last step, common to everyone.
      */
-    protected remapDesinencesByRegion() {
+    protected remapDesinencesByRegion(): void {
         // Shuffle terminations and auxHaber based on region
         if (this.region === 'voseo') {                      // Voseo, 2nd singular -> accented version, 2nd plural -> ustedes 
             // desinences
@@ -69,9 +69,9 @@ export abstract class BaseModel {
                 this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
 
             // auxHaber
-            ['Preterito_Perfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode =>
+            ['PreteritoPerfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode =>
                 this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
-            ['Preterito_Perfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(mode =>
+            ['PreteritoPerfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(mode =>
                 this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
 
         } else if (this.region === 'formal') {               // Castellano formal, 2nd singular -> usted, 2nd plural -> ustedes
@@ -84,11 +84,11 @@ export abstract class BaseModel {
                 this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]
             });
 
-            ['Preterito_Perfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode => {
+            ['PreteritoPerfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode => {
                 this.auxHaber.Indicativo[mode][1] = this.auxHaber.Indicativo[mode][2];
                 this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]
             });
-            ['Preterito_Perfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(mode => {
+            ['PreteritoPerfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(mode => {
                 this.auxHaber.Subjuntivo[mode][1] = this.auxHaber.Subjuntivo[mode][2];
                 this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]
             });
@@ -99,9 +99,9 @@ export abstract class BaseModel {
             ['Presente', 'PreteritoImperfectoRa', 'PreteritoImperfectoSe', 'FuturoImperfecto'].forEach(mode =>
                 this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
 
-            ['Preterito_Perfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode =>
+            ['PreteritoPerfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode =>
                 this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
-            ['Preterito_Perfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(mode =>
+            ['PreteritoPerfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(mode =>
                 this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
         }
     }
@@ -185,7 +185,7 @@ export abstract class BaseModel {
     /////////////////////////////////////////////////////////////////
     // Compuesto
     private setIndicativoCompuestos(): void {
-        this.table.Indicativo.Preterito_Perfecto = this.auxHaber.Indicativo.Preterito_Perfecto.map((aux, index) =>
+        this.table.Indicativo.PreteritoPerfecto = this.auxHaber.Indicativo.PreteritoPerfecto.map((aux, index) =>
             `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
         this.table.Indicativo.PreteritoPluscuamperfecto = this.auxHaber.Indicativo.PreteritoPluscuamperfecto.map((aux, index) =>
             `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
@@ -222,7 +222,7 @@ export abstract class BaseModel {
     /////////////////////////////////////////////////////////////////
     // Subjuntivo compuestos
     private setSubjuntivoCompuestos(): void {
-        this.table.Subjuntivo.Preterito_Perfecto = this.auxHaber.Subjuntivo.Preterito_Perfecto.map((aux, index) =>
+        this.table.Subjuntivo.PreteritoPerfecto = this.auxHaber.Subjuntivo.PreteritoPerfecto.map((aux, index) =>
             `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
         this.table.Subjuntivo.PreteritoPluscuamperfectoRa = this.auxHaber.Subjuntivo.PreteritoPluscuamperfectoRa.map((aux, index) =>
             `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
@@ -382,8 +382,8 @@ export abstract class BaseModel {
                     }
                 });
                 // for some reason beyond my understanding, the following are also excluded ????
-                this.table.Indicativo.Preterito_Perfecto[0] = '-';
-                this.table.Subjuntivo.Preterito_Perfecto = Array.from(DASH6);
+                this.table.Indicativo.PreteritoPerfecto[0] = '-';
+                this.table.Subjuntivo.PreteritoPerfecto = Array.from(DASH6);
                 break;
             case 'imper': // infinitivo, gerundio, participio y en las terceras personas del singular
                 ['Indicativo', 'Subjuntivo'].forEach(mode => {
@@ -405,9 +405,9 @@ export abstract class BaseModel {
                     [0, 1, 3, 4].forEach(i => this.table.Subjuntivo[time][i] = '-'));
 
                 // Indicative compuesto
-                ['Preterito_Perfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(time =>
+                ['PreteritoPerfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(time =>
                     this.table.Indicativo[time] = Array.from(DASH6));    // all 6x
-                ['Preterito_Perfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(time =>
+                ['PreteritoPerfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(time =>
                     this.table.Subjuntivo[time] = Array.from(DASH6));
 
                 break;
@@ -423,7 +423,7 @@ export abstract class BaseModel {
                 break;
 
             // case 'mmorfo':
-            //     break;
+            // break;
 
             case 'bimorfop':        //  bimorfo(p) - sólo en infinitivo y en participio - zap everything else indiscriminantly
                 this.table.Impersonal.Gerundio = ['-'];
@@ -465,22 +465,22 @@ export abstract class BaseModel {
                 ['Infinitivo', 'Gerundio', 'Participio'].forEach(v => this.table.Impersonal[v] = ['-']);
 
                 ['Presente', 'PreteritoImperfecto', 'FuturoImperfecto', 'CondicionalSimple',
-                    'Preterito_Perfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior',
+                    'PreteritoPerfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior',
                     'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode =>
                         this.table.Indicativo[mode] = Array.from(DASH6));
 
                 ['Presente', 'FuturoImperfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe',
-                    'FuturoPerfecto', 'Preterito_Perfecto'].forEach(mode => this.table.Subjuntivo[mode] = Array.from(DASH6));
+                    'FuturoPerfecto', 'PreteritoPerfecto'].forEach(mode => this.table.Subjuntivo[mode] = Array.from(DASH6));
 
                 break;
             case 'osmorfo':
                 this.table.Impersonal.Participio = ['-'];
 
-                ['PreteritoIndefinido', 'FuturoImperfecto', 'CondicionalSimple', 'Preterito_Perfecto',
+                ['PreteritoIndefinido', 'FuturoImperfecto', 'CondicionalSimple', 'PreteritoPerfecto',
                     'PreteritoPluscuamperfecto', 'PreteritoAnterior', 'FuturoPerfecto', 'CondicionalCompuesto'].forEach(mode =>
                         this.table.Indicativo[mode] = Array.from(DASH6));
 
-                ['FuturoImperfecto', 'Preterito_Perfecto', 'PreteritoPluscuamperfectoRa',
+                ['FuturoImperfecto', 'PreteritoPerfecto', 'PreteritoPluscuamperfectoRa',
                     'PreteritoPluscuamperfectoSe', 'FuturoPerfecto'].forEach(mode =>
                         this.table.Subjuntivo[mode] = Array.from(DASH6));
 

@@ -27,7 +27,9 @@ export class Conjugator {
     protected templates: DB = definitions;
     protected factory = new ModelFactory();
 
-    constructor() { }
+    constructor() {
+        // empty
+    }
 
     /**
      * get sorted list of known verbs
@@ -36,7 +38,7 @@ export class Conjugator {
         try {
             return Object.keys(this.templates).sort(function (a, b) { return a.localeCompare(b); });
         } catch (error) {
-            console.error(`No verbs - check definitions.json file`);
+            console.error('No verbs - check definitions.json file');
             return [];
         }
     }
@@ -107,7 +109,7 @@ export class Conjugator {
         const result: Set<string> = new Set();
         const list = Object.values(this.templates);   // can't tell the type yet
 
-        function traverse(value?: Model | Model[]) {
+        function traverse(value?: Model | Model[]): void {
             if (typeof value === 'string') {
                 result.add(value);
             } else if (Array.isArray(value)) {
@@ -127,7 +129,7 @@ export class Conjugator {
         return Array.from(result);
     }
 
-    public getImplementedModels(): string [] {
+    public getImplementedModels(): string[] {
         return this.getModels().filter(m => this.factory.isImplemented(m));
     }
 }

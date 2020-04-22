@@ -15,7 +15,9 @@ type ErKey = keyof typeof er;
 type IrKey = keyof typeof ir;
 
 export class ModelFactory {
-    constructor() { };
+    constructor() {
+        // empty
+    }
 
     public getModel(verb: string, modelName: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes): BaseModel {
         if (ar[modelName as ArKey]) {

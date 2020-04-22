@@ -10,10 +10,10 @@ import { clearAccents, esdrujula, clearLastAccent, syllabify, strongify, applyMo
 // (they're useful in production, thus the conditions provoking these warnings
 //  should be tested here but we don't want to clutter the terminal during test)
 beforeEach(() => {
-    jest.spyOn(console, 'warn').mockImplementation(() => { });
+    jest.spyOn(console, 'warn').mockImplementation(() => { /* empty */ });
 });
 
-describe("String Utils", () => {
+describe('String Utils', () => {
 
     test('clearAccents', () => {
 

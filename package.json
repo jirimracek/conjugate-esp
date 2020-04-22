@@ -11,7 +11,9 @@
     "test": "tsc && jest -b1 --noStackTrace ",
     "verbose": "tsc && jest -b1 --verbose",
     "strings": "tsc && jest -b1 --noStackTrace --testPathPattern=stringutils",
-    "cover": "jest --coverage"
+    "cover": "jest --coverage",
+    "lint": "eslint --ext=ts src"
+
   },
   "repository": {
     "type": "git",
@@ -35,7 +37,11 @@
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.0",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
     "coveralls": "^3.0.11",
+    "eslint": "^6.8.0",
+    "eslint-config-typescript": "^3.0.0",
     "jest": "^25.3.0",
     "ts-jest": "^25.4.0",
     "typescript": ">=3.8.3"

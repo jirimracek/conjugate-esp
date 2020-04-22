@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/class-name-casing */
 /**
  * @copyright 
  * Copyright (c) 2020 Jiri Mracek jiri@automationce.com 
@@ -29,6 +30,7 @@ export class vivir extends BaseModel {
     // castellano: . . .     .
     //      voseo: .   .   . .
     //  can & for: . . .   . . 
+    // eslint-disable-next-line @typescript-eslint/camelcase
     protected setIndicativoPresentePattern_0125(replacement: string): void {
         switch (this.region) {
             case 'castellano':
@@ -68,6 +70,7 @@ export class vivir extends BaseModel {
     //            person: 0 1 2 3 4 5     
     //        castellano: . . .     .
     // voseo & can & for: . . .   . . 
+    // eslint-disable-next-line @typescript-eslint/camelcase
     protected setSubjuntivoPresentePattern_0125(replacement: string): void {
         switch (this.region) {
             case 'castellano':
@@ -135,7 +138,7 @@ export class argüir extends vivir {
         this.replacements = Array.from('012345').map(() => this.replacement);
     }
 
-    protected configDesinences() {
+    protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Impersonal.Gerundio = ['yendo', 'yéndose'];
         [0, 2, 5].forEach(i => this.desinences.Indicativo.Presente[i] =
@@ -231,16 +234,17 @@ export class balbucir extends vivir {
         super(verb, type, region, attributes);
         this.replacement = this.stem.replace(/c$/, 'ce');
     }
-    protected configDesinences() {
+    protected configDesinences(): void {
         super.configDesinences();
 
         // Adopt desinences from AR
-        this.desinences.Subjuntivo.Presente = 
-        JSON.parse(JSON.stringify(AR.Subjuntivo.Presente));
+        this.desinences.Subjuntivo.Presente =
+            JSON.parse(JSON.stringify(AR.Subjuntivo.Presente));
     }
     protected setIndicativoPresente(): void {
-        super.setIndicativoPresente([this.replacement,
-        ...Array.from('12345').map(() => this.stem)]);
+        super.setIndicativoPresente([
+            this.replacement,
+            ...Array.from('12345').map(() => this.stem)]);
     }
     protected setSubjuntivoPresente(): void {
         super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
@@ -252,7 +256,7 @@ export class decir extends vivir {
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
-    protected configDesinences() {
+    protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Indicativo.PreteritoIndefinido = [
             'e',
@@ -412,14 +416,14 @@ export class embaír extends vivir {
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
-    protected configDesinences() {
+    protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Impersonal.Infinitivo = [
-            'ír', 
+            'ír',
             'írse'
         ];
         this.desinences.Impersonal.Gerundio = [
-            'yendo', 
+            'yendo',
             'yéndose'
         ];
         this.desinences.Impersonal.Participio = [
@@ -464,7 +468,7 @@ export class huir extends vivir {
         super(verb, type, region, attributes);
     }
 
-    protected configDesinences() {
+    protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Impersonal.Gerundio =
             this.desinences.Impersonal.Gerundio.map(g => g.replace(/^i/, 'y'));
@@ -512,7 +516,7 @@ export class lucir extends vivir {
         this.replacement = this.stem.replace(/(.*)c/, '$1zc');
     }
 
-    protected setParticipio() {
+    protected setParticipio(): void {
         super.setParticipio();
         const PR = this.attributes['PR'] as string;
         if (PR) {
@@ -821,15 +825,15 @@ export class reír extends vivir {
     }
     protected setSubjuntivoPresente(): void {
         const local = this.stem.replace(/e$/, 'í');
-        const local_v2 = this.stem.replace(/e$/, 'i');
+        const localV2 = this.stem.replace(/e$/, 'i');
         switch (this.region) {
             case 'castellano':
                 super.setSubjuntivoPresente([
                     local,
                     local,
                     local,
-                    local_v2,
-                    local_v2,
+                    localV2,
+                    localV2,
                     local
                 ]);
                 break;
@@ -838,7 +842,7 @@ export class reír extends vivir {
                     local,
                     local,
                     local,
-                    local_v2,
+                    localV2,
                     local,
                     local
                 ]);
@@ -849,7 +853,7 @@ export class reír extends vivir {
                     local,
                     local,
                     local,
-                    local_v2,
+                    localV2,
                     local,
                     local
                 ]);

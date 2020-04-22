@@ -4,8 +4,7 @@
  * Copyright (c) 2020 Automation Controls & Engineering
  * @license * MIT License
 */
-
-import { ConjugationTable, PronounsTable, DefectiveType } from "./types";
+import { ConjugationTable, PronounsTable, DefectiveType } from './types';
 
 export const PRONOUNS: Readonly<PronounsTable> = {
     N: {
@@ -25,14 +24,14 @@ export const PRONOUNS: Readonly<PronounsTable> = {
 // The composite verb auxiliar haber forms
 export const AUX: Readonly<ConjugationTable> = {
     Indicativo: {
-        Preterito_Perfecto: ['he', 'has', 'ha', 'hemos', 'habéis', 'han'],
+        PreteritoPerfecto: ['he', 'has', 'ha', 'hemos', 'habéis', 'han'],
         PreteritoPluscuamperfecto: ['había', 'habías', 'había', 'habíamos', 'habíais', 'habían'],
         PreteritoAnterior: ['hube', 'hubiste', 'hubo', 'hubimos', 'hubisteis', 'hubieron'],
         FuturoPerfecto: ['habré', 'habrás', 'habrá', 'habremos', 'habréis', 'habrán'],
         CondicionalCompuesto: ['habría', 'habrías', 'habría', 'habríamos', 'habríais', 'habrían']
     },
     Subjuntivo: {
-        Preterito_Perfecto: ['haya', 'hayas', 'haya', 'hayamos', 'hayáis', 'hayan'],
+        PreteritoPerfecto: ['haya', 'hayas', 'haya', 'hayamos', 'hayáis', 'hayan'],
         PreteritoPluscuamperfectoRa: ['hubiera', 'hubieras', 'hubiera', 'hubiéramos', 'hubierais', 'hubieran'],
         PreteritoPluscuamperfectoSe: ['hubiese', 'hubieses', 'hubiese', 'hubiésemos', 'hubieseis', 'hubiesen'],
         FuturoPerfecto: ['hubiere', 'hubieres', 'hubiere', 'hubiéremos', 'hubiereis', 'hubieren']

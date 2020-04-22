@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/class-name-casing */
 /**
  * @copyright 
  * Copyright (c) 2020 Jiri Mracek jiri@automationce.com 
@@ -41,6 +42,7 @@ export class amar extends BaseModel {
     // castellano: . . .     .
     //      voseo: .   .   . .
     //  can & for: . . .   . . 
+    // eslint-disable-next-line @typescript-eslint/camelcase
     protected setIndicativoPresentePattern_0125(replacement: string): void {
         switch (this.region) {
             case 'castellano':
@@ -59,6 +61,7 @@ export class amar extends BaseModel {
     //            person: 0 1 2 3 4 5     
     //        castellano: . . .     .
     // voseo & can & for: . . .   . . 
+    // eslint-disable-next-line @typescript-eslint/camelcase
     protected setSubjuntivoPresentePattern_0125(replacement: string, otherStem = this.stem): void {
         switch (this.region) {
             case 'castellano':
@@ -73,6 +76,7 @@ export class amar extends BaseModel {
     }
 
     // Preterito Indefinido repeating pattern
+    // eslint-disable-next-line @typescript-eslint/camelcase
     protected setIndicativoPreteritoIndefinidoPattern_0 (RR: string): void {
         super.setIndicativoPreteritoIndefinido([RR, ...Array.from('12345').map(() => this.stem)]);
     }
@@ -255,6 +259,7 @@ export class estar extends amar {
             switch (this.region) {
                 default:
                     this.table.Imperativo.Afirmativo[4] = clearLastAccent(this.table.Imperativo.Afirmativo[4]);
+                    // falls through
                 case 'castellano':
                     this.table.Imperativo.Afirmativo[1] = clearLastAccent(this.table.Imperativo.Afirmativo[1]);
             }

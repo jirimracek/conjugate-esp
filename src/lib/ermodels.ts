@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/class-name-casing */
 /**
  * @copyright 
  * Copyright (c) 2020 Jiri Mracek jiri@automationce.com 
@@ -29,6 +30,7 @@ export class temer extends BaseModel {
     // castellano: . . .     .
     //      voseo: .   .   . .
     //  can & for: . . .   . . 
+    // eslint-disable-next-line @typescript-eslint/camelcase
     protected setIndicativoPresentePattern_0125(replacement: string): void {
         switch (this.region) {
             case 'castellano':
@@ -47,6 +49,7 @@ export class temer extends BaseModel {
     //            person: 0 1 2 3 4 5     
     //        castellano: . . .     .
     // voseo & can & for: . . .   . . 
+    // eslint-disable-next-line @typescript-eslint/camelcase
     protected setSubjuntivoPresentePattern_0125(replacement: string): void {
         switch (this.region) {
             case 'castellano':
@@ -84,13 +87,13 @@ export class hacer extends temer {
 
     protected setIndicativoPreteritoIndefinido(): void {
         const replacement = this.stem.replace(/(.*)a/, '$1i');
-        const replacement_ac = this.stem.replace(/ac$/, 'iz');
+        const replacementAcIz = this.stem.replace(/ac$/, 'iz');
         switch (this.region) {
             default:
-                super.setIndicativoPreteritoIndefinido([replacement, replacement, replacement_ac, replacement, replacement, replacement]);
+                super.setIndicativoPreteritoIndefinido([replacement, replacement, replacementAcIz, replacement, replacement, replacement]);
                 break;
             case 'formal':
-                super.setIndicativoPreteritoIndefinido([replacement, replacement_ac, replacement_ac, replacement, replacement, replacement]);
+                super.setIndicativoPreteritoIndefinido([replacement, replacementAcIz, replacementAcIz, replacement, replacement, replacement]);
         }
     }
     protected setIndicativoFuturoImperfecto(): void {
