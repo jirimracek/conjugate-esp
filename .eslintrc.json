@@ -9,6 +9,7 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended"
+        // "plugin:prettier/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -24,16 +25,20 @@
     },
     "plugins": [
         "@typescript-eslint"
+        // "prettier"
     ],
     "rules": {
-        "indent": [
-            "error",
-            4,
-            {
-                "SwitchCase": 1,
-                "ignoreComments": true
-            }
+        // "prettier/prettier": 2,
+        "array-element-newline": [
+            "warn",
+            "consistent"
+            // {"multiline": true, "minItems": 3}
         ],
+        // "array-bracket-newline": [
+        //     "warn",
+        //     "consistent"
+        // {"multiline": true, "minItems": 3}
+        // ],
         "linebreak-style": [
             "error",
             "unix"
@@ -46,6 +51,38 @@
             "off",
             "never"
         ],
+        "max-len": [
+            "warn",
+            {
+                "code": 120,
+                "ignorePattern": "^\\s*(public|protected|private|import|export).*",
+                "ignoreComments": true
+            }
+        ],
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+                // "ignoreComments": true
+            }
+        ],
+        // "implicit-arrow-linebreak": [
+        //     "error",
+        //     "beside"
+        // ],
+        // "newline-per-chained-call": "warn",
+        // "object-curly-newline": [
+        //     "warn",
+        //     {
+        //         "consistent": true
+        //     }
+        // ],
+        // "arrow-body-style": [
+        // "error",
+        // "never"
+        // ],
+        "no-extra-semi": "warn",
         "@typescript-eslint/member-delimiter-style": [
             "warn",
             {

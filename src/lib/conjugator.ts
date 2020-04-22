@@ -6,7 +6,8 @@
 */
 import definitions from '../data/definitions.json';
 import { ModelFactory } from './factory';
-import { ConjugationTable, DB, Regions, PronominalKeys, VerbModelData, ModelAttributes, Model } from './declarations/types';
+import { ConjugationTable, DB, Regions, PronominalKeys, 
+    VerbModelData, ModelAttributes, Model } from './declarations/types';
 import { ERROR_MSG } from './declarations/constants';
 
 export type InfoType = { verb: string, model: string, region: string, pronominal: boolean, defective: boolean };
@@ -69,7 +70,8 @@ export class Conjugator {
             // Things we need to know to construct the model 
             const modelTemplates: [string, PronominalKeys, Regions, ModelAttributes][] = [];
             (Object.keys(verbModelData) as PronominalKeys[]).forEach(pronominalKey => {
-                const models = [verbModelData[pronominalKey]].flat();          // string | [string | ModelWithAttrs] | ModelWithAttrs
+                // string | [string | ModelWithAttrs] | ModelWithAttrs
+                const models = [verbModelData[pronominalKey]].flat();          
                 models.forEach(model => {
                     if (typeof model === 'string') {
                         modelTemplates.push([model, pronominalKey, region, {}]);
@@ -84,13 +86,20 @@ export class Conjugator {
             modelTemplates.forEach(template => {
                 const [modelName, pronominalKey, region, attributes] = template;
                 if (!this.factory.isImplemented(modelName)) {
-                    throw new Error(ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/, `${modelName}$1${verb}$2${region}`));
+                    throw new Error(
+                        ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/, 
+                            `${modelName}$1${verb}$2${region}`));
                 }
 
                 const model = this.factory.getModel(verb, modelName, pronominalKey, region, attributes);
 
                 result.push({
-                    info: { verb: pronominalKey === 'P' ? `${verb}se` : verb, model: modelName, region: region, pronominal: (pronominalKey === 'P'), defective: !!(attributes['D']) },
+                    info: { 
+                        verb: pronominalKey === 'P' ?  `${verb}se` : verb, 
+                        model: modelName, 
+                        region: region, 
+                        pronominal: (pronominalKey === 'P'), 
+                        defective: !!(attributes['D']) },
                     conjugation: model.getConjugationOf()
                 });
             });

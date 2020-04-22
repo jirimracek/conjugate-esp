@@ -103,7 +103,8 @@ describe('String Utils', () => {
     test('esdrujula', () => {
 
         // Long expression (as long as an expression can be split in at least 3 syllables, it get accentuated)
-        expect(esdrujula('one two three four short words, and a fifth expresion')).toEqual('one two three four short words, and a fifth éxpresion');
+        expect(esdrujula('one two three four short words, and a fifth expresion')).
+            toEqual('one two three four short words, and a fifth éxpresion');
 
         // Bad cases
         // Already accented, no change
@@ -114,7 +115,8 @@ describe('String Utils', () => {
         expect(esdrujula('a')).toEqual('a');
         expect(esdrujula('é')).toEqual('é');
         expect(esdrujula('aeiou')).toEqual('aeiou');
-        expect(esdrujula('one two three four short words, and a fifth xpresion')).toEqual('one two three four short words, and a fifth xpresion');
+        expect(esdrujula('one two three four short words, and a fifth xpresion')).
+            toEqual('one two three four short words, and a fifth xpresion');
 
         expect(esdrujula(undefined as unknown as string)).toEqual(undefined);
 

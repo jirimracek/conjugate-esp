@@ -15,7 +15,8 @@ import { ConjugationTable } from '../declarations/types';
 export function json2Text(table: ConjugationTable): string[] {
     const retVal: string[] = [];
     retVal.push(...Object.values(table).map(mode =>
-        Object.values(mode).map(time => time)).flat(2));
+        Object.values(mode).map(time =>
+            time)).flat(2));
     return retVal;
 }
 
@@ -26,21 +27,55 @@ export function json2Text(table: ConjugationTable): string[] {
  */
 export function text2Json(table: string[]): ConjugationTable {
     const retVal: ConjugationTable = {} as ConjugationTable;
-    const temp = table.map(m => m);   // Make a copy so it doesn't get overwritten
+    const temp = table.map(m =>
+        m);   // Make a copy so it doesn't get overwritten
 
-    ['Impersonal', 'Indicativo', 'Subjuntivo', 'Imperativo'].forEach(mode => retVal[mode] = {});
+    [
+        'Impersonal',
+        'Indicativo',
+        'Subjuntivo',
+        'Imperativo'
+    ].forEach(mode =>
+        retVal[mode] = {});
 
-    ['Infinitivo', 'Gerundio', 'Participio'].forEach(type => retVal.Impersonal[type] = [temp.shift() as string]);
+    [
+        'Infinitivo',
+        'Gerundio',
+        'Participio'
+    ].forEach(type =>
+        retVal.Impersonal[type] = [temp.shift() as string]);
 
-    ['Presente', 'PreteritoImperfecto', 'PreteritoIndefinido', 'FuturoImperfecto', 'CondicionalSimple',
-        'PreteritoPerfecto', 'PreteritoPluscuamperfecto', 'PreteritoAnterior',
-        'FuturoPerfecto', 'CondicionalCompuesto'].forEach(time => retVal['Indicativo'][time] = temp.splice(0, 6));
+    [
+        'Presente',
+        'PreteritoImperfecto',
+        'PreteritoIndefinido',
+        'FuturoImperfecto',
+        'CondicionalSimple',
+        'PreteritoPerfecto',
+        'PreteritoPluscuamperfecto',
+        'PreteritoAnterior',
+        'FuturoPerfecto',
+        'CondicionalCompuesto'
+    ].forEach(time =>
+        retVal['Indicativo'][time] = temp.splice(0, 6));
 
-    ['Presente', 'PreteritoImperfectoRa', 'PreteritoImperfectoSe', 'FuturoImperfecto',
-        'PreteritoPerfecto', 'PreteritoPluscuamperfectoRa', 'PreteritoPluscuamperfectoSe',
-        'FuturoPerfecto'].forEach(time => retVal['Subjuntivo'][time] = temp.splice(0, 6));
+    [
+        'Presente',
+        'PreteritoImperfectoRa',
+        'PreteritoImperfectoSe',
+        'FuturoImperfecto',
+        'PreteritoPerfecto',
+        'PreteritoPluscuamperfectoRa',
+        'PreteritoPluscuamperfectoSe',
+        'FuturoPerfecto'
+    ].forEach(time =>
+        retVal['Subjuntivo'][time] = temp.splice(0, 6));
 
-    ['Afirmativo', 'Negativo'].forEach(imperativo => retVal['Imperativo'][imperativo] = temp.splice(0, 6));
+    [
+        'Afirmativo',
+        'Negativo'
+    ].forEach(mode =>
+        retVal['Imperativo'][mode] = temp.splice(0, 6));
 
     return retVal;
 }

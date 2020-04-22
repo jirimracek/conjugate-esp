@@ -10,6 +10,8 @@ Spanish verb conjugator, uses model templates, pattern matching & logic to conju
 
 - Goals: correct, fast, small footprint
 
+- Version 0.3.1, updated on Wed 22 Apr 2020 10:51:38 PM CEST
+
 ____
 
 ## Usage

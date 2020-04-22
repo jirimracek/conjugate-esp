@@ -42,18 +42,38 @@ export class amar extends BaseModel {
     // castellano: . . .     .
     //      voseo: .   .   . .
     //  can & for: . . .   . . 
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    protected setIndicativoPresentePattern_0125(replacement: string): void {
+    protected setIndicativoPresentePattern0125(alteredStem: string): void {
         switch (this.region) {
             case 'castellano':
-                super.setIndicativoPresente([replacement, replacement, replacement, this.stem, this.stem, replacement]);
+                super.setIndicativoPresente([
+                    alteredStem, 
+                    alteredStem,
+                    alteredStem,
+                    this.stem,
+                    this.stem,
+                    alteredStem
+                ]);
                 break;
             case 'voseo':
-                super.setIndicativoPresente([replacement, this.stem, replacement, this.stem, replacement, replacement]);
+                super.setIndicativoPresente([
+                    alteredStem,
+                    this.stem,
+                    alteredStem,
+                    this.stem,
+                    alteredStem,
+                    alteredStem
+                ]);
                 break;
             case 'canarias':
             case 'formal':
-                super.setIndicativoPresente([replacement, replacement, replacement, this.stem, replacement, replacement]);
+                super.setIndicativoPresente([
+                    alteredStem,
+                    alteredStem,
+                    alteredStem,
+                    this.stem,
+                    alteredStem,
+                    alteredStem
+                ]);
                 break;
         }
     }
@@ -61,69 +81,83 @@ export class amar extends BaseModel {
     //            person: 0 1 2 3 4 5     
     //        castellano: . . .     .
     // voseo & can & for: . . .   . . 
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    protected setSubjuntivoPresentePattern_0125(replacement: string, otherStem = this.stem): void {
+    protected setSubjuntivoPresentePattern0125(alteredStem: string, secondAltered = this.stem): void {
         switch (this.region) {
             case 'castellano':
-                super.setSubjuntivoPresente([replacement, replacement, replacement, otherStem, otherStem, replacement]);
+                super.setSubjuntivoPresente([
+                    alteredStem,
+                    alteredStem,
+                    alteredStem,
+                    secondAltered,
+                    secondAltered,
+                    alteredStem
+                ]);
                 break;
             case 'voseo':
             case 'canarias':
             case 'formal':
-                super.setSubjuntivoPresente([replacement, replacement, replacement, otherStem, replacement, replacement]);
+                super.setSubjuntivoPresente([
+                    alteredStem,
+                    alteredStem,
+                    alteredStem,
+                    secondAltered,
+                    alteredStem,
+                    alteredStem
+                ]);
                 break;
         }
     }
 
     // Preterito Indefinido repeating pattern
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    protected setIndicativoPreteritoIndefinidoPattern_0 (RR: string): void {
-        super.setIndicativoPreteritoIndefinido([RR, ...Array.from('12345').map(() => this.stem)]);
+    protected setIndicativoPreteritoIndefinidoPattern0 (alteredStem: string): void {
+        super.setIndicativoPreteritoIndefinido([alteredStem, ...Array.from('12345').map(() => 
+            this.stem)]);
     }
 }
 
 export class actuar extends amar {
-    private replacement: string;
+    private alteredStem: string;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.replacement = this.stem.replace(/(.*)u/, '$1ú');
+        this.alteredStem = this.stem.replace(/(.*)u/, '$1ú');
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern_0125(this.replacement);
+        this.setIndicativoPresentePattern0125(this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern_0125(this.replacement);
+        this.setSubjuntivoPresentePattern0125(this.alteredStem);
     }
 }
 
 export class agorar extends amar {
-    private replacement: string;
+    private alteredStem: string;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.replacement = this.stem.replace(/or$/, 'üer');
+        this.alteredStem = this.stem.replace(/or$/, 'üer');
     }
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern_0125(this.replacement);
+        this.setIndicativoPresentePattern0125(this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern_0125(this.replacement);
+        this.setSubjuntivoPresentePattern0125(this.alteredStem);
     }
 }
 
 export class aguar extends amar {
-    private replacement: string;
+    private alteredStem: string;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.replacement = this.stem.replace(/u$/, 'ü');
+        this.alteredStem = this.stem.replace(/u$/, 'ü');
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
-        this.setIndicativoPreteritoIndefinidoPattern_0(this.replacement);
+        this.setIndicativoPreteritoIndefinidoPattern0(this.alteredStem);
     }
 
     protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
+        super.setSubjuntivoPresente(Array.from('012345').map(() => 
+            this.alteredStem));
     }
 }
 
@@ -133,29 +167,29 @@ export class ahincar extends amar {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern_0125(this.stem.replace(/i/, 'í'));
+        this.setIndicativoPresentePattern0125(this.stem.replace(/i/, 'í'));
     }
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern_0125(this.stem.replace(/inc/, 'ínqu'), this.stem.replace(/c/, 'qu'));
+        this.setSubjuntivoPresentePattern0125(this.stem.replace(/inc/, 'ínqu'), this.stem.replace(/c/, 'qu'));
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
-        this.setIndicativoPreteritoIndefinidoPattern_0(this.stem.replace(/c/, 'qu'));
+        this.setIndicativoPreteritoIndefinidoPattern0(this.stem.replace(/c/, 'qu'));
     }
 }
 
 export class aislar extends amar {
-    private replacement: string;
+    private alteredStem: string;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.replacement = this.stem.replace(/i/, 'í');
+        this.alteredStem = this.stem.replace(/i/, 'í');
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern_0125(this.replacement);
+        this.setIndicativoPresentePattern0125(this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern_0125(this.replacement);
+        this.setSubjuntivoPresentePattern0125(this.alteredStem);
     }
 }
 
@@ -166,34 +200,63 @@ export class andar extends amar {
 
     protected configDesinences(): void {
         super.configDesinences();
-        this.desinences.Indicativo.PreteritoIndefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis', 'uvieron'];
-        this.desinences.Subjuntivo.PreteritoImperfectoRa = ['uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais', 'uvieran'];
-        this.desinences.Subjuntivo.PreteritoImperfectoSe = ['uviese', 'uvieses', 'uviese', 'uviésemos', 'uvieseis', 'uviesen'];
-        this.desinences.Subjuntivo.FuturoImperfecto = ['uviere', 'uvieres', 'uviere', 'uviéremos', 'uviereis', 'uvieren'];
+        this.desinences.Indicativo.PreteritoIndefinido = [
+            'uve', 
+            'uviste',
+            'uvo',
+            'uvimos',
+            'uvisteis',
+            'uvieron'
+        ];
+        this.desinences.Subjuntivo.PreteritoImperfectoRa = [
+            'uviera', 
+            'uvieras',
+            'uviera',
+            'uviéramos',
+            'uvierais',
+            'uvieran'
+        ];
+        this.desinences.Subjuntivo.PreteritoImperfectoSe = [
+            'uviese', 
+            'uvieses',
+            'uviese',
+            'uviésemos',
+            'uvieseis',
+            'uviesen'
+        ];
+        this.desinences.Subjuntivo.FuturoImperfecto = [
+            'uviere', 
+            'uvieres',
+            'uviere',
+            'uviéremos',
+            'uviereis',
+            'uvieren'
+        ];
     }
 }
 export class cazar extends amar {
-    private replacement: string;
+    private alteredStem: string;
     
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.replacement = this.stem.replace(/z$/, 'c');
+        this.alteredStem = this.stem.replace(/z$/, 'c');
     }
     
     protected setIndicativoPreteritoIndefinido(): void {
-        this.setIndicativoPreteritoIndefinidoPattern_0(this.replacement);
+        this.setIndicativoPreteritoIndefinidoPattern0(this.alteredStem);
     }
 
     protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente(Array.from('012345').map(() => this.replacement));
+        super.setSubjuntivoPresente(Array.from('012345').map(() => 
+            this.alteredStem));
     }
 }
 
 export class contar extends amar {
-    private replacement: string;
+    private alteredStem: string;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.replacement = this.stem.replace(/(.*)o/, (match: string, p1: string): string => {
+        this.alteredStem = this.stem.replace(/(.*)o/, (match: string, p1: string): string => {
             if (p1.endsWith('g')) {
                 return `${p1}üe`;
             }
@@ -202,10 +265,10 @@ export class contar extends amar {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern_0125(this.replacement);
+        this.setIndicativoPresentePattern0125(this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern_0125(this.replacement);
+        this.setSubjuntivoPresentePattern0125(this.alteredStem);
     }
 }
 export class enraizar extends amar {
@@ -213,29 +276,29 @@ export class enraizar extends amar {
         super(verb, type, region, attributes);
     }
     protected setIndicativoPresente(): void {
-        const replacement = this.stem.replace(/(.*)i/, '$1í');
-        this.setIndicativoPresentePattern_0125(replacement);
+        const alteredStem = this.stem.replace(/(.*)i/, '$1í');
+        this.setIndicativoPresentePattern0125(alteredStem);
     }
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern_0125(this.stem.replace(/iz$/, 'íc'), this.stem.replace(/iz$/, 'ic'));
+        this.setSubjuntivoPresentePattern0125(this.stem.replace(/iz$/, 'íc'), this.stem.replace(/iz$/, 'ic'));
     }
     protected setIndicativoPreteritoIndefinido(): void {
-        this.setIndicativoPreteritoIndefinidoPattern_0(this.stem.replace(/z$/, 'c'));
+        this.setIndicativoPreteritoIndefinidoPattern0(this.stem.replace(/z$/, 'c'));
     }
 }
 
 export class errar extends amar {
-    private replacement: string;
+    private alteredStem: string;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.replacement = this.stem.replace(/^/, 'y');
+        this.alteredStem = this.stem.replace(/^/, 'y');
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern_0125(this.replacement);
+        this.setIndicativoPresentePattern0125(this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern_0125(this.replacement);
+        this.setSubjuntivoPresentePattern0125(this.alteredStem);
     }
 }
 
@@ -245,12 +308,47 @@ export class estar extends amar {
     }
     protected configDesinences(): void {
         super.configDesinences();
-        this.desinences.Indicativo.Presente = ['oy', 'ás', 'á', 'amos', 'áis', 'án'];
-        this.desinences.Indicativo.PreteritoIndefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis', 'uvieron'];
-        this.desinences.Subjuntivo.Presente = ['é', 'és', 'é', 'emos', 'éis', 'én'];
-        this.desinences.Subjuntivo.PreteritoImperfectoRa = ['uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais', 'uvieran'];
-        this.desinences.Subjuntivo.PreteritoImperfectoSe = ['uviese', 'uvieses', 'uviese', 'uviésemos', 'uvieseis', 'uviesen'];
-        this.desinences.Subjuntivo.FuturoImperfecto = ['uviere', 'uvieres', 'uviere', 'uviéremos', 'uviereis', 'uvieren'];
+        this.desinences.Indicativo.Presente = [
+            'oy',
+            'ás',
+            'á',
+            'amos',
+            'áis',
+            'án'
+        ];
+        this.desinences.Indicativo.PreteritoIndefinido = [
+            'uve',
+            'uviste',
+            'uvo',
+            'uvimos',
+            'uvisteis', 
+            'uvieron'
+        ];
+        this.desinences.Subjuntivo.Presente = ['é',
+            'és',
+            'é',
+            'emos',
+            'éis',
+            'én'];
+        this.desinences.Subjuntivo.PreteritoImperfectoRa = [
+            'uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais', 'uvieran'
+        ];
+        this.desinences.Subjuntivo.PreteritoImperfectoSe = [
+            'uviese',
+            'uvieses',
+            'uviese',
+            'uviésemos',
+            'uvieseis',
+            'uviesen'
+        ];
+        this.desinences.Subjuntivo.FuturoImperfecto = [
+            'uviere',
+            'uvieres',
+            'uviere',
+            'uviéremos',
+            'uviereis',
+            'uvieren'
+        ];
     }
 
     protected setImperativoAfirmativo(): void {
@@ -275,73 +373,88 @@ export class pagar extends amar {
     protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'ué';
-        this.desinences.Subjuntivo.Presente = ['ue', 'ues', 'ue', 'uemos', 'uéis', 'uen'];
+        this.desinences.Subjuntivo.Presente = [
+            'ue',
+            'ues',
+            'ue',
+            'uemos',
+            'uéis',
+            'uen'
+        ];
     }
 }
 
 export class pensar extends amar {
-    private replacement: string;
+    private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.replacement = this.stem.replace(/(.*)e/, '$1ie');
+        this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
     }
 
     protected setParticipio(): void {
         super.setParticipio();
         const PR = this.attributes['PR'] as string;
         if (PR) {
-            const [expression, replacement] = PR.split('/');
-            this.table.Impersonal.Participio[0] = this.table.Impersonal.Participio[0].replace(new RegExp(expression), replacement);
+            const [expression, alteredStem] = PR.split('/');
+            this.table.Impersonal.Participio[0] = 
+              this.table.Impersonal.Participio[0].replace(new RegExp(expression), alteredStem);
             this.participioCompuesto = this.table.Impersonal.Participio[0];
         }
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern_0125(this.replacement);
+        this.setIndicativoPresentePattern0125(this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern_0125(this.replacement);
+        this.setSubjuntivoPresentePattern0125(this.alteredStem);
     }
 }
 
 export class regar extends amar {
-    private replacement: string;
+    private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.replacement = this.stem.replace(/(.*)e/, '$1ie');
+        this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
     }
 
     protected configDesinences(): void {
         super.configDesinences();
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'ué';
-        this.desinences.Subjuntivo.Presente = ['ue', 'ues', 'ue', 'uemos', 'uéis', 'uen'];
+        this.desinences.Subjuntivo.Presente = [
+            'ue',
+            'ues',
+            'ue',
+            'uemos',
+            'uéis',
+            'uen'
+        ];
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern_0125(this.replacement);
+        this.setIndicativoPresentePattern0125(this.alteredStem);
     }
 
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern_0125(this.replacement);
+        this.setSubjuntivoPresentePattern0125(this.alteredStem);
     }
 }
 
 export class vaciar extends amar {
-    private replacement: string;
+    private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.replacement = this.stem.replace(/(.*)i/, '$1í');
+        this.alteredStem = this.stem.replace(/(.*)i/, '$1í');
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern_0125(this.replacement);
+        this.setIndicativoPresentePattern0125(this.alteredStem);
     }
 
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern_0125(this.replacement);
+        this.setSubjuntivoPresentePattern0125(this.alteredStem);
     }
 }
 
@@ -351,12 +464,13 @@ export class sacar extends amar {
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
-        this.setIndicativoPreteritoIndefinidoPattern_0(this.stem.replace(/c$/, 'qu'));
+        this.setIndicativoPreteritoIndefinidoPattern0(this.stem.replace(/c$/, 'qu'));
     }
     
     protected setSubjuntivoPresente(): void {
-        const replacement = this.stem.replace(/(.*)c/, '$1qu');
-        super.setSubjuntivoPresente(Array.from('012345').map(() => replacement));
+        const alteredStem = this.stem.replace(/(.*)c/, '$1qu');
+        super.setSubjuntivoPresente(Array.from('012345').map(() => 
+            alteredStem));
     }
 }
 
@@ -366,14 +480,16 @@ export class volcar extends amar {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern_0125(this.stem.replace(/(.*)o/, '$1ue'));
+        this.setIndicativoPresentePattern0125(this.stem.replace(/(.*)o/, '$1ue'));
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
-        this.setIndicativoPreteritoIndefinidoPattern_0(this.stem.replace(/c$/, 'qu'));
+        this.setIndicativoPreteritoIndefinidoPattern0(this.stem.replace(/c$/, 'qu'));
     }
     
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern_0125(this.stem.replace(/(.*)o(.*)c/, '$1ue$2qu'), this.stem.replace(/c$/, 'qu'));
+        this.setSubjuntivoPresentePattern0125(
+            this.stem.replace(/(.*)o(.*)c/, '$1ue$2qu'), 
+            this.stem.replace(/c$/, 'qu'));
     }
 }

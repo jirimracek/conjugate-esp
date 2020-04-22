@@ -1,19 +1,18 @@
 {
   "name": "conjugate-esp",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Spanish verb conjugator",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start": "npm run build && node dist/index.js",
     "build": "tsc",
     "prepare": "npm run build",
     "test": "tsc && jest -b1 --noStackTrace ",
     "verbose": "tsc && jest -b1 --verbose",
     "strings": "tsc && jest -b1 --noStackTrace --testPathPattern=stringutils",
     "cover": "jest --coverage",
-    "lint": "eslint --ext=ts src"
-
+    "lint": "eslint --ext .ts",
+    "flint": "eslint --fix --ext .ts"
   },
   "repository": {
     "type": "git",
@@ -36,13 +35,13 @@
   "dependencies": {},
   "devDependencies": {
     "@types/jest": "^25.2.1",
-    "@types/node": "^13.13.0",
+    "@types/node": "^13.13.2",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
-    "coveralls": "^3.0.11",
+    "coveralls": "^3.0.13",
     "eslint": "^6.8.0",
     "eslint-config-typescript": "^3.0.0",
-    "jest": "^25.3.0",
+    "jest": "^25.4.0",
     "ts-jest": "^25.4.0",
     "typescript": ">=3.8.3"
   }

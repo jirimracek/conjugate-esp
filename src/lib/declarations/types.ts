@@ -15,15 +15,16 @@ export type ConjugationTable = { [modekey: string]: { [timekey: string]: string[
 // attributes are attached to the model by colon = and separated by semicolon ';'
 // known attributes:
 //    defective types: { _d_:imorfo | eimorfo | imper | tercio | terciop | mmorfo | bimorfop | bimorfog | trimorfo | omorfo | ogmorfo }
-//    _pr_:RegExp/replacement - _participio r_eplace                - RegExp is the regular expression that Replaces the regular form (inhestar, pensar:PR=estad/iest - from inhestado to inhiesto)
-//    _pd_:RegExp/replacement - _participio d_ual                   - RegExp is the regular expression that creates the irregular participio form from the regular one
+//    PR:RegExp/replacement - _participio r_eplace                - RegExp is the regular expression that Replaces the regular form (inhestar, pensar:PR=estad/iest - from inhestado to inhiesto)
+//    PD:RegExp/replacement - _participio d_ual                   - RegExp is the regular expression that creates the irregular participio form from the regular one
 //                                                                       AND it gets added as a second participio. The first, REGULAR PARTICIPIO gets used for COMPUESTOS
-//    _pc_:RegExp/replacement - _participio c_ompuesto (irregular)  - same as PD, EXCEPT the second, IRREGULAR PARTICIPIO gets used for COMPUESTOS
-//    _d_:DefectiveType       - one of the Defective Types
-//    _ms_:boolean            - monosyllable ortho adjustment, drop accent
-//    _v_:string              - use for slight model changes, ex.: predecir, predeciré & prediré
+//    PC:RegExp/replacement - _participio c_ompuesto (irregular)  - same as PD, EXCEPT the second, IRREGULAR PARTICIPIO gets used for COMPUESTOS
+//    D:DefectiveType       - one of the Defective Types
+//    M:boolean            - monosyllable ortho adjustment, drop accent
+//    V:string              - use for slight model changes, ex.: predecir, predeciré & prediré
 
 export type DefectiveType = 'imorfo' | 'eimorfo' | 'imper' | 'tercio' | 'terciop' | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'ogmorfo' | 'osmorfo';
+
 export type AttributeValues = DefectiveType | boolean | string;
 
 export type AttributeKeys = 'PR' | 'PD' | 'PC' | 'D' | 'M' | 'V';

@@ -4,6 +4,7 @@
  * Copyright (c) 2020 Automation Controls & Engineering
  * @license * MIT License
 */
+/* eslint-disable max-len */
 import { Conjugator } from '../../index';
 import { ResultType, InfoType } from '../conjugator';
 import { ModelFactory } from '../factory';
@@ -104,7 +105,8 @@ describe('Model Test', () => {
 
         // undefine verb model data in templates
         mockjugator.undefineModelData('vivir');
-        expect(mockjugator.conjugate('vivir', 'formal')).toEqual([{ info: ERROR_MSG.MissingModelData.replace('VERB', 'vivir'), conjugation: {} }]);
+        expect(mockjugator.conjugate('vivir', 'formal')).
+            toEqual([{ info: ERROR_MSG.MissingModelData.replace('VERB', 'vivir'), conjugation: {} }]);
         mockjugator.restore();
         expect((mockjugator.conjugate('vivir', 'formal')[0].info as InfoType)['region']).toEqual('formal');
 
@@ -119,9 +121,11 @@ describe('Model Test', () => {
         mockjugator.restore();
 
         mockjugator.fakeUnimplemented('foobar', 'bar');
-        expect(mockjugator.conjugate('foobar')).toEqual([{ info: ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/, 'bar$1foobar$2castellano'), conjugation: {} }]);
+        expect(mockjugator.conjugate('foobar')).
+            toEqual([{ info: ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/, 'bar$1foobar$2castellano'), conjugation: {} }]);
         mockjugator.fakeUnimplemented('totally', 'bad');
-        expect(mockjugator.conjugate('totally', 'canarias')).toEqual([{ info: ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/, 'bad$1totally$2canarias'), conjugation: {} }]);
+        expect(mockjugator.conjugate('totally', 'canarias')).
+            toEqual([{ info: ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/, 'bad$1totally$2canarias'), conjugation: {} }]);
         mockjugator.restore();
 
         expect((mockjugator.conjugate('vivir')[0].info as InfoType)['defective']).toEqual(false);
@@ -133,10 +137,12 @@ describe('Model Test', () => {
 
     const conjugator = new Conjugator();
     test('Bad Input', () => {
-        expect(conjugator.conjugate('amarse', 'castellano')).toEqual([{ info: ERROR_MSG.UnknownVerb.replace('VERB', 'amarse'), conjugation: {} }]);
+        expect(conjugator.conjugate('amarse', 'castellano')).
+            toEqual([{ info: ERROR_MSG.UnknownVerb.replace('VERB', 'amarse'), conjugation: {} }]);
 
         // force bad region
-        expect(conjugator.conjugate('temer', 'castillano' as Regions)).toEqual([{ info: ERROR_MSG.UnknownRegion.replace('REGION', 'castillano'), conjugation: {} }]);
+        expect(conjugator.conjugate('temer', 'castillano' as Regions)).
+            toEqual([{ info: ERROR_MSG.UnknownRegion.replace('REGION', 'castillano'), conjugation: {} }]);
     });
 
     test('ModelFactory', () => {
@@ -165,9 +171,11 @@ describe('Model Test', () => {
     });
 
     test('Optional parameters', () => {
-        expect(conjugator.conjugate('amarse')).toEqual([{ info: ERROR_MSG.UnknownVerb.replace('VERB', 'amarse'), conjugation: {} }]);
+        expect(conjugator.conjugate('amarse')).
+            toEqual([{ info: ERROR_MSG.UnknownVerb.replace('VERB', 'amarse'), conjugation: {} }]);
         // force bad region
-        expect(conjugator.conjugate('temer', 'castillano' as Regions)).toEqual([{ info: ERROR_MSG.UnknownRegion.replace('REGION', 'castillano'), conjugation: {} }]);
+        expect(conjugator.conjugate('temer', 'castillano' as Regions)).
+            toEqual([{ info: ERROR_MSG.UnknownRegion.replace('REGION', 'castillano'), conjugation: {} }]);
         // good input, good answers
         expect(conjugator.conjugate('amar')).not.toEqual([]);
         expect((conjugator.conjugate('amar')[0].conjugation as ConjugationTable).Indicativo.Presente[0]).toEqual('yo amo');
@@ -193,7 +201,8 @@ describe('Conjugation Test', () => {
             regionsToTest.forEach(region => {
                 test(`${region}`, () => {
                     const conjugations: ResultType[] = conjugator.conjugate(verb, region);
-                    expect((conjugations[0].info as InfoType)['verb']).toEqual((conjugations[0].info as InfoType)['pronominal'] === true ? `${verb}se` : verb);
+                    expect((conjugations[0].info as InfoType)['verb']).
+                        toEqual((conjugations[0].info as InfoType)['pronominal'] === true ? `${verb}se` : verb);
                     expect((conjugations[0].info as InfoType)['region']).toEqual(region);
                 });
             });
