@@ -1,7 +1,10 @@
 # Changelog
 
-- 4/22/2020 (v 0.3.1)
+- 4/23/2020 (0.3.1)
+  - last round of cleanups, consolidated imperativo afirmativo monosyllabics
+  - implemented model venir
 
+- 4/22/2020 (0.3.1)
   - took some time to do a cleanup, setup lint and make the code a bit more readable and organized
   - removing dead code, cleaning the experimental before implementing the rest of the irregular models
 

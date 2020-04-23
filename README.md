@@ -7,10 +7,10 @@
 Spanish verb conjugator, uses model templates, pattern matching & logic to conjugate Spanish verbs in any of the regional varieties of castellano, voseo, formal, canarias
 
 - Defectives, multiple conjugations, exceptional cases (triple conjugations, dual participios, orthographical exceptions), etc.
-
-- Goals: correct, fast, small footprint
-
-- Version 0.3.1, updated on Wed 22 Apr 2020 10:51:38 PM CEST
+- Goals: correct, fast, small
+- Version 0.3.1
+- Last update on Thu 23 Apr 2020 03:54:13 PM CEST
+- See table of (working / to be implemented) models below
 
 ____
 
@@ -181,7 +181,7 @@ ____
 | sentir | &#x2718; |
 | ***servir*** | &#x2714; |
 | ***surgir*** | &#x2714; |
-| venir | &#x2718; |
+| ***venir*** | &#x2714; |
 | ***zurcir*** | &#x2714; |
 </td></tr> </table>
 
