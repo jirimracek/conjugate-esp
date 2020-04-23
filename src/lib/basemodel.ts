@@ -641,6 +641,155 @@ export abstract class BaseModel {
                 applyMonoRules(this.table.Subjuntivo.Presente[4]);
         }
     }
+
+    // Patterns
+    /**
+     * Indicativo presente common pattern
+     * 
+     *           person: 0 1 2 3 4 5
+     *       castellano: . . .     .
+     *            voseo: .   .   . .
+     *         canarias: . . .   . .
+     *           formal: . . .   . .
+     * 
+     * @param alteredStem marked as . 
+     */
+    protected setIndicativoPresentePattern0125(alteredStem: string): void {
+        switch (this.region) {
+            case 'castellano':
+                this.setTable('Indicativo', 'Presente', [
+                    alteredStem,
+                    alteredStem,
+                    alteredStem,
+                    this.stem,
+                    this.stem,
+                    alteredStem
+                ]);
+                break;
+            case 'voseo':
+                this.setTable('Indicativo', 'Presente', [
+                    alteredStem,
+                    this.stem,
+                    alteredStem,
+                    this.stem,
+                    alteredStem,
+                    alteredStem
+                ]);
+                break;
+            case 'canarias':
+            case 'formal':
+                this.setTable('Indicativo', 'Presente', [
+                    alteredStem,
+                    alteredStem,
+                    alteredStem,
+                    this.stem,
+                    alteredStem,
+                    alteredStem
+                ]);
+                break;
+        }
+    }
+
+    /**
+     * Subjuntivo presente common pattern
+     * 
+     *            person: 0 1 2 3 4 5
+     *        castellano: . . . * * .
+     *            others: . . . * . .
+     * 
+     * @param alteredStem marked as .
+     * @param secondAltered marked as * optional, defaults to original this.stem
+     */
+    protected setSubjuntivoPresentePattern0125(alteredStem: string, secondAltered = this.stem): void {
+        switch (this.region) {
+            case 'castellano':
+                this.setTable('Subjuntivo', 'Presente', [
+                    alteredStem,
+                    alteredStem,
+                    alteredStem,
+                    secondAltered,
+                    secondAltered,
+                    alteredStem
+                ]);
+                break;
+            case 'voseo':
+            case 'canarias':
+            case 'formal':
+                this.setTable('Subjuntivo', 'Presente', [
+                    alteredStem,
+                    alteredStem,
+                    alteredStem,
+                    secondAltered,
+                    alteredStem,
+                    alteredStem
+                ]);
+                break;
+        }
+    }
+    // Preterito Indefinido repeating pattern
+    /**
+     * Preterito Indefinido pattern 0
+     * 
+     *             person: 0 1 2 3 4 5
+     *         castellano: . 
+     *             others: 
+     * 
+     * @param alteredStem marked as .  (others use this.stem)
+     */
+    protected setIndicativoPreteritoIndefinidoPattern0 (alteredStem: string): void {
+        this.setTable('Indicativo', 'PreteritoIndefinido', [
+            alteredStem, 
+            ...Array.from('12345').map(() => this.stem)
+        ]);
+    }
+
+    // Another very common group
+    /**
+     * 
+     * Preterito Indefinido pattern 25
+     * 
+     *             person: 0 1 2 3 4 5
+     *         castellano:     .     .
+     *    voseo, canarias:     .   . .
+     *             formal:   . .   . .
+     * 
+     * @param alteredStem marked as .
+     */
+    protected setIndicativoPreteritoIndefinidoPattern25(alteredStem: string): void {
+        switch (this.region) {
+            case 'castellano':
+                this.setTable('Indicativo', 'PreteritoIndefinido', [
+                    this.stem,
+                    this.stem,
+                    alteredStem,
+                    this.stem,
+                    this.stem,
+                    alteredStem
+                ]);
+                break;
+            case 'voseo':
+            case 'canarias':
+                this.setTable('Indicativo', 'PreteritoIndefinido', [
+                    this.stem,
+                    this.stem,
+                    alteredStem,
+                    this.stem,
+                    alteredStem,
+                    alteredStem
+                ]);
+                break;
+            case 'formal':
+                this.setTable('Indicativo', 'PreteritoIndefinido', [
+                    this.stem,
+                    alteredStem,
+                    alteredStem,
+                    this.stem,
+                    alteredStem,
+                    alteredStem
+                ]);
+                break;
+        }
+    }
 }
 
 /**

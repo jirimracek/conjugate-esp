@@ -42,79 +42,79 @@ export class amar extends BaseModel {
     // castellano: . . .     .
     //      voseo: .   .   . .
     //  can & for: . . .   . . 
-    protected setIndicativoPresentePattern0125(alteredStem: string): void {
-        switch (this.region) {
-            case 'castellano':
-                this.setTable('Indicativo', 'Presente', [
-                    alteredStem, 
-                    alteredStem,
-                    alteredStem,
-                    this.stem,
-                    this.stem,
-                    alteredStem
-                ]);
-                break;
-            case 'voseo':
-                this.setTable('Indicativo', 'Presente', [
-                    alteredStem,
-                    this.stem,
-                    alteredStem,
-                    this.stem,
-                    alteredStem,
-                    alteredStem
-                ]);
-                break;
-            case 'canarias':
-            case 'formal':
-                this.setTable('Indicativo', 'Presente', [
-                    alteredStem,
-                    alteredStem,
-                    alteredStem,
-                    this.stem,
-                    alteredStem,
-                    alteredStem
-                ]);
-                break;
-        }
-    }
+    // protected setIndicativoPresentePattern0125(alteredStem: string): void {
+    //     switch (this.region) {
+    //         case 'castellano':
+    //             this.setTable('Indicativo', 'Presente', [
+    //                 alteredStem, 
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 this.stem,
+    //                 this.stem,
+    //                 alteredStem
+    //             ]);
+    //             break;
+    //         case 'voseo':
+    //             this.setTable('Indicativo', 'Presente', [
+    //                 alteredStem,
+    //                 this.stem,
+    //                 alteredStem,
+    //                 this.stem,
+    //                 alteredStem,
+    //                 alteredStem
+    //             ]);
+    //             break;
+    //         case 'canarias':
+    //         case 'formal':
+    //             this.setTable('Indicativo', 'Presente', [
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 this.stem,
+    //                 alteredStem,
+    //                 alteredStem
+    //             ]);
+    //             break;
+    //     }
+    // }
     // Corresponding subj. presente patterns
     //            person: 0 1 2 3 4 5     
     //        castellano: . . .     .
     // voseo & can & for: . . .   . . 
-    protected setSubjuntivoPresentePattern0125(alteredStem: string, secondAltered = this.stem): void {
-        switch (this.region) {
-            case 'castellano':
-                this.setTable('Subjuntivo', 'Presente',[
-                    alteredStem,
-                    alteredStem,
-                    alteredStem,
-                    secondAltered,
-                    secondAltered,
-                    alteredStem
-                ]);
-                break;
-            case 'voseo':
-            case 'canarias':
-            case 'formal':
-                this.setTable('Subjuntivo', 'Presente',[
-                    alteredStem,
-                    alteredStem,
-                    alteredStem,
-                    secondAltered,
-                    alteredStem,
-                    alteredStem
-                ]);
-                break;
-        }
-    }
+    // protected setSubjuntivoPresentePattern0125(alteredStem: string, secondAltered = this.stem): void {
+    //     switch (this.region) {
+    //         case 'castellano':
+    //             this.setTable('Subjuntivo', 'Presente',[
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 secondAltered,
+    //                 secondAltered,
+    //                 alteredStem
+    //             ]);
+    //             break;
+    //         case 'voseo':
+    //         case 'canarias':
+    //         case 'formal':
+    //             this.setTable('Subjuntivo', 'Presente',[
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 secondAltered,
+    //                 alteredStem,
+    //                 alteredStem
+    //             ]);
+    //             break;
+    //     }
+    // }
 
-    // Preterito Indefinido repeating pattern
-    protected setIndicativoPreteritoIndefinidoPattern0 (alteredStem: string): void {
-        this.setTable('Indicativo', 'PreteritoIndefinido', [
-            alteredStem, 
-            ...Array.from('12345').map(() => this.stem)
-        ]);
-    }
+    // // Preterito Indefinido repeating pattern
+    // protected setIndicativoPreteritoIndefinidoPattern0 (alteredStem: string): void {
+    //     this.setTable('Indicativo', 'PreteritoIndefinido', [
+    //         alteredStem, 
+    //         ...Array.from('12345').map(() => this.stem)
+    //     ]);
+    // }
 }
 
 export class actuar extends amar {
@@ -357,7 +357,7 @@ export class estar extends amar {
             switch (this.region) {
                 default:
                     this.table.Imperativo.Afirmativo[4] = clearLastAccent(this.table.Imperativo.Afirmativo[4]);
-                    // falls through
+                    // intentional fall through
                 case 'castellano':
                     this.table.Imperativo.Afirmativo[1] = clearLastAccent(this.table.Imperativo.Afirmativo[1]);
             }

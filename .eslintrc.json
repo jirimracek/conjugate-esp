@@ -9,7 +9,6 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended"
-        // "plugin:prettier/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -25,10 +24,8 @@
     },
     "plugins": [
         "@typescript-eslint"
-        // "prettier"
     ],
     "rules": {
-        // "prettier/prettier": 2,
         "array-element-newline": [
             "warn",
             "consistent"
@@ -43,6 +40,7 @@
             "error",
             "unix"
         ],
+        "no-fallthrough": "error",
         "quotes": [
             "error",
             "single"
@@ -64,7 +62,6 @@
             4,
             {
                 "SwitchCase": 1
-                // "ignoreComments": true
             }
         ],
         // "implicit-arrow-linebreak": [

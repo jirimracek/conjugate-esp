@@ -1,8 +1,8 @@
 # Changelog
 
-- 4/23/2020 (0.3.1)
+- 4/23/2020 (0.3.2)
   - last round of cleanups, consolidated imperativo afirmativo monosyllabics
-  - implemented model venir
+  - implemented models oír, plañir, prohibir, rehenchir, rehuir, reunir, salir, seguir, sentir, venir
 
 - 4/22/2020 (0.3.1)
   - took some time to do a cleanup, setup lint and make the code a bit more readable and organized

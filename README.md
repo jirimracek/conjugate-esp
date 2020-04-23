@@ -8,8 +8,8 @@ Spanish verb conjugator, uses model templates, pattern matching & logic to conju
 
 - Defectives, multiple conjugations, exceptional cases (triple conjugations, dual participios, orthographical exceptions), etc.
 - Goals: correct, fast, small
-- Version 0.3.1
-- Last update on Thu 23 Apr 2020 03:54:13 PM CEST
+- Version 0.3.2
+- Last update on Thu 23 Apr 2020 11:01:15 PM CEST
 - See table of (working / to be implemented) models below
 
 ____
@@ -97,6 +97,7 @@ ____
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
+|&#x2796;||
 </td><td>
 
 | ER            | |
@@ -140,6 +141,7 @@ ____
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
+|&#x2796;||
 </td><td>
 
 | IR            | |
@@ -167,18 +169,19 @@ ____
 | imprimir | &#x2718; |
 | ir | &#x2718; |
 | ***lucir*** | &#x2714; |
-| oír | &#x2718; |
-| plañir | &#x2718; |
+| ***oír*** | &#x2714; |
+| ***plañir*** | &#x2714; |
 | ***podrir*** | &#x2714; |
-| prohibir | &#x2718; |
+| ***prohibir*** | &#x2714; |
 | ***pudrir*** | &#x2714; |
-| rehenchir | &#x2718; |
-| rehuir | &#x2718; |
-| reunir | &#x2718; |
+| ***rehenchir*** | &#x2714; |
+| ***rehinchir*** | &#x2714; |
+| ***rehuir*** | &#x2714; |
+| ***reunir*** | &#x2714; |
 | ***reír*** | &#x2714; |
-| salir | &#x2718; |
-| seguir | &#x2718; |
-| sentir | &#x2718; |
+| ***salir*** | &#x2714; |
+| ***seguir*** | &#x2714; |
+| ***sentir*** | &#x2714; |
 | ***servir*** | &#x2714; |
 | ***surgir*** | &#x2714; |
 | ***venir*** | &#x2714; |

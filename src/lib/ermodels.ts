@@ -28,71 +28,71 @@ export class temer extends BaseModel {
     // castellano: . . .     .
     //      voseo: .   .   . .
     //  can & for: . . .   . . 
-    protected setIndicativoPresentePattern0125(alteredStem: string): void {
-        switch (this.region) {
-            case 'castellano':
-                this.setTable('Indicativo', 'Presente', [
-                    alteredStem,
-                    alteredStem,
-                    alteredStem,
-                    this.stem,
-                    this.stem,
-                    alteredStem
-                ]);
-                break;
-            case 'voseo':
-                this.setTable('Indicativo', 'Presente', [
-                    alteredStem,
-                    this.stem,
-                    alteredStem,
-                    this.stem,
-                    alteredStem,
-                    alteredStem
-                ]);
-                break;
-            case 'canarias':
-            case 'formal':
-                this.setTable('Indicativo', 'Presente', [
-                    alteredStem,
-                    alteredStem,
-                    alteredStem,
-                    this.stem,
-                    alteredStem,
-                    alteredStem
-                ]);
-                break;
-        }
-    }
+    // protected setIndicativoPresentePattern0125(alteredStem: string): void {
+    //     switch (this.region) {
+    //         case 'castellano':
+    //             this.setTable('Indicativo', 'Presente', [
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 this.stem,
+    //                 this.stem,
+    //                 alteredStem
+    //             ]);
+    //             break;
+    //         case 'voseo':
+    //             this.setTable('Indicativo', 'Presente', [
+    //                 alteredStem,
+    //                 this.stem,
+    //                 alteredStem,
+    //                 this.stem,
+    //                 alteredStem,
+    //                 alteredStem
+    //             ]);
+    //             break;
+    //         case 'canarias':
+    //         case 'formal':
+    //             this.setTable('Indicativo', 'Presente', [
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 this.stem,
+    //                 alteredStem,
+    //                 alteredStem
+    //             ]);
+    //             break;
+    //     }
+    // }
     // Corresponding subj. presente patterns
     //            person: 0 1 2 3 4 5     
     //        castellano: . . .     .
     // voseo & can & for: . . .   . . 
-    protected setSubjuntivoPresentePattern0125(alteredStem: string): void {
-        switch (this.region) {
-            case 'castellano':
-                this.setTable('Subjuntivo', 'Presente', [
-                    alteredStem,
-                    alteredStem,
-                    alteredStem,
-                    this.stem,
-                    this.stem,
-                    alteredStem
-                ]);
-                break;
-            case 'voseo':
-            case 'canarias':
-            case 'formal':
-                this.setTable('Subjuntivo', 'Presente', [
-                    alteredStem,
-                    alteredStem,
-                    alteredStem,
-                    this.stem,
-                    alteredStem,
-                    alteredStem
-                ]);
-                break;
-        }
-    }
+    // protected setSubjuntivoPresentePattern0125(alteredStem: string): void {
+    //     switch (this.region) {
+    //         case 'castellano':
+    //             this.setTable('Subjuntivo', 'Presente', [
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 this.stem,
+    //                 this.stem,
+    //                 alteredStem
+    //             ]);
+    //             break;
+    //         case 'voseo':
+    //         case 'canarias':
+    //         case 'formal':
+    //             this.setTable('Subjuntivo', 'Presente', [
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 alteredStem,
+    //                 this.stem,
+    //                 alteredStem,
+    //                 alteredStem
+    //             ]);
+    //             break;
+    //     }
+    // }
 }
 
 export class hacer extends temer {
