@@ -22,6 +22,10 @@ export class amar extends BaseModel {
         // Clone so we don't overwrite the template
         this.desinences = JSON.parse(JSON.stringify(AR));
 
+        // Voseo, 2nd singular -> accented version, which happens to be 2nd plural stripped of i
+        if (this.region === 'voseo') {
+            this.desinences.Indicativo.Presente[1] = this.desinences.Indicativo.Presente[4].replace(/i/,'');
+        } 
         // Give derived class a chance to modify the terms array one more time if needed
         this.configDesinences();
 
@@ -30,12 +34,8 @@ export class amar extends BaseModel {
     }
 
     // Give derived classes chance to modify terms arrays
-    protected configDesinences(): void {
-        // Adjust voseo, 2nd singular
-        if (this.region === 'voseo') {   
-            this.desinences.Indicativo.Presente[1] = 'ás';
-        }
-    }
+    protected configDesinences(): void { /* empty */ }
+
     // Repeated pattern of indicativo presente stem modifications
     // The matrix looks like this
     //     person: 0 1 2 3 4 5     
@@ -45,7 +45,7 @@ export class amar extends BaseModel {
     protected setIndicativoPresentePattern0125(alteredStem: string): void {
         switch (this.region) {
             case 'castellano':
-                super.setIndicativoPresente([
+                this.setTable('Indicativo', 'Presente', [
                     alteredStem, 
                     alteredStem,
                     alteredStem,
@@ -55,7 +55,7 @@ export class amar extends BaseModel {
                 ]);
                 break;
             case 'voseo':
-                super.setIndicativoPresente([
+                this.setTable('Indicativo', 'Presente', [
                     alteredStem,
                     this.stem,
                     alteredStem,
@@ -66,7 +66,7 @@ export class amar extends BaseModel {
                 break;
             case 'canarias':
             case 'formal':
-                super.setIndicativoPresente([
+                this.setTable('Indicativo', 'Presente', [
                     alteredStem,
                     alteredStem,
                     alteredStem,
@@ -84,7 +84,7 @@ export class amar extends BaseModel {
     protected setSubjuntivoPresentePattern0125(alteredStem: string, secondAltered = this.stem): void {
         switch (this.region) {
             case 'castellano':
-                super.setSubjuntivoPresente([
+                this.setTable('Subjuntivo', 'Presente',[
                     alteredStem,
                     alteredStem,
                     alteredStem,
@@ -96,7 +96,7 @@ export class amar extends BaseModel {
             case 'voseo':
             case 'canarias':
             case 'formal':
-                super.setSubjuntivoPresente([
+                this.setTable('Subjuntivo', 'Presente',[
                     alteredStem,
                     alteredStem,
                     alteredStem,
@@ -110,8 +110,10 @@ export class amar extends BaseModel {
 
     // Preterito Indefinido repeating pattern
     protected setIndicativoPreteritoIndefinidoPattern0 (alteredStem: string): void {
-        super.setIndicativoPreteritoIndefinido([alteredStem, ...Array.from('12345').map(() => 
-            this.stem)]);
+        this.setTable('Indicativo', 'PreteritoIndefinido', [
+            alteredStem, 
+            ...Array.from('12345').map(() => this.stem)
+        ]);
     }
 }
 
@@ -156,8 +158,8 @@ export class aguar extends amar {
     }
 
     protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente(Array.from('012345').map(() => 
-            this.alteredStem));
+        this.setTable('Subjuntivo', 'Presente',
+            Array.from('012345').map(() => this.alteredStem));
     }
 }
 
@@ -199,7 +201,6 @@ export class andar extends amar {
     }
 
     protected configDesinences(): void {
-        super.configDesinences();
         this.desinences.Indicativo.PreteritoIndefinido = [
             'uve', 
             'uviste',
@@ -247,8 +248,8 @@ export class cazar extends amar {
     }
 
     protected setSubjuntivoPresente(): void {
-        super.setSubjuntivoPresente(Array.from('012345').map(() => 
-            this.alteredStem));
+        this.setTable('Subjuntivo', 'Presente',
+            Array.from('012345').map(() => this.alteredStem));
     }
 }
 
@@ -307,7 +308,6 @@ export class estar extends amar {
         super(verb, type, region, attributes);
     }
     protected configDesinences(): void {
-        super.configDesinences();
         this.desinences.Indicativo.Presente = [
             'oy',
             'ás',
@@ -371,7 +371,6 @@ export class pagar extends amar {
         super(verb, type, region, attributes);
     }
     protected configDesinences(): void {
-        super.configDesinences();
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'ué';
         this.desinences.Subjuntivo.Presente = [
             'ue',
@@ -420,7 +419,6 @@ export class regar extends amar {
     }
 
     protected configDesinences(): void {
-        super.configDesinences();
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'ué';
         this.desinences.Subjuntivo.Presente = [
             'ue',
@@ -469,8 +467,8 @@ export class sacar extends amar {
     
     protected setSubjuntivoPresente(): void {
         const alteredStem = this.stem.replace(/(.*)c/, '$1qu');
-        super.setSubjuntivoPresente(Array.from('012345').map(() => 
-            alteredStem));
+        this.setTable('Subjuntivo', 'Presente',
+            Array.from('012345').map(() => alteredStem));
     }
 }
 
