@@ -35,86 +35,6 @@ export class amar extends BaseModel {
 
     // Give derived classes chance to modify terms arrays
     protected configDesinences(): void { /* empty */ }
-
-    // Repeated pattern of indicativo presente stem modifications
-    // The matrix looks like this
-    //     person: 0 1 2 3 4 5     
-    // castellano: . . .     .
-    //      voseo: .   .   . .
-    //  can & for: . . .   . . 
-    // protected setIndicativoPresentePattern0125(alteredStem: string): void {
-    //     switch (this.region) {
-    //         case 'castellano':
-    //             this.setTable('Indicativo', 'Presente', [
-    //                 alteredStem, 
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 this.stem,
-    //                 this.stem,
-    //                 alteredStem
-    //             ]);
-    //             break;
-    //         case 'voseo':
-    //             this.setTable('Indicativo', 'Presente', [
-    //                 alteredStem,
-    //                 this.stem,
-    //                 alteredStem,
-    //                 this.stem,
-    //                 alteredStem,
-    //                 alteredStem
-    //             ]);
-    //             break;
-    //         case 'canarias':
-    //         case 'formal':
-    //             this.setTable('Indicativo', 'Presente', [
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 this.stem,
-    //                 alteredStem,
-    //                 alteredStem
-    //             ]);
-    //             break;
-    //     }
-    // }
-    // Corresponding subj. presente patterns
-    //            person: 0 1 2 3 4 5     
-    //        castellano: . . .     .
-    // voseo & can & for: . . .   . . 
-    // protected setSubjuntivoPresentePattern0125(alteredStem: string, secondAltered = this.stem): void {
-    //     switch (this.region) {
-    //         case 'castellano':
-    //             this.setTable('Subjuntivo', 'Presente',[
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 secondAltered,
-    //                 secondAltered,
-    //                 alteredStem
-    //             ]);
-    //             break;
-    //         case 'voseo':
-    //         case 'canarias':
-    //         case 'formal':
-    //             this.setTable('Subjuntivo', 'Presente',[
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 secondAltered,
-    //                 alteredStem,
-    //                 alteredStem
-    //             ]);
-    //             break;
-    //     }
-    // }
-
-    // // Preterito Indefinido repeating pattern
-    // protected setIndicativoPreteritoIndefinidoPattern0 (alteredStem: string): void {
-    //     this.setTable('Indicativo', 'PreteritoIndefinido', [
-    //         alteredStem, 
-    //         ...Array.from('12345').map(() => this.stem)
-    //     ]);
-    // }
 }
 
 export class actuar extends amar {
@@ -125,7 +45,7 @@ export class actuar extends amar {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.alteredStem);
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
@@ -139,7 +59,7 @@ export class agorar extends amar {
         this.alteredStem = this.stem.replace(/or$/, 'üer');
     }
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.alteredStem);
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
@@ -169,7 +89,7 @@ export class ahincar extends amar {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.stem.replace(/i/, 'í'));
+        this.setIndicativoPresentePattern125(this.stem.replace(/i/, 'í'), this.stem.replace(/i/, 'í'));
     }
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.stem.replace(/inc/, 'ínqu'), this.stem.replace(/c/, 'qu'));
@@ -188,7 +108,7 @@ export class aislar extends amar {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.alteredStem);
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
@@ -266,7 +186,7 @@ export class contar extends amar {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.alteredStem);
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
@@ -278,7 +198,7 @@ export class enraizar extends amar {
     }
     protected setIndicativoPresente(): void {
         const alteredStem = this.stem.replace(/(.*)i/, '$1í');
-        this.setIndicativoPresentePattern0125(alteredStem);
+        this.setIndicativoPresentePattern125(alteredStem, alteredStem);
     }
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.stem.replace(/iz$/, 'íc'), this.stem.replace(/iz$/, 'ic'));
@@ -296,7 +216,7 @@ export class errar extends amar {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.alteredStem);
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
@@ -396,14 +316,13 @@ export class pensar extends amar {
         const PR = this.attributes['PR'] as string;
         if (PR) {
             const [expression, alteredStem] = PR.split('/');
-            this.table.Impersonal.Participio[0] = 
-              this.table.Impersonal.Participio[0].replace(new RegExp(expression), alteredStem);
-            this.participioCompuesto = this.table.Impersonal.Participio[0];
+            this.participioCompuesto = this.participioCompuesto.replace(expression,alteredStem);
+            this.table.Impersonal.Participio[0] = this.participioCompuesto;
         }
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.alteredStem);
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
@@ -431,7 +350,7 @@ export class regar extends amar {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.alteredStem);
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
 
     protected setSubjuntivoPresente(): void {
@@ -448,7 +367,7 @@ export class vaciar extends amar {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.alteredStem);
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
 
     protected setSubjuntivoPresente(): void {
@@ -478,7 +397,7 @@ export class volcar extends amar {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.stem.replace(/(.*)o/, '$1ue'));
+        this.setIndicativoPresentePattern125(this.stem.replace(/(.*)o/, '$1ue'), this.stem.replace(/(.*)o/, '$1ue'));
     }
 
     protected setIndicativoPreteritoIndefinido(): void {

@@ -22,77 +22,6 @@ export class temer extends BaseModel {
     }
 
     protected configDesinences(): void { /* empty */ }
-    // Repeated pattern of indicativo presente stem modifications
-    // The matrix looks like this
-    //     person: 0 1 2 3 4 5     
-    // castellano: . . .     .
-    //      voseo: .   .   . .
-    //  can & for: . . .   . . 
-    // protected setIndicativoPresentePattern0125(alteredStem: string): void {
-    //     switch (this.region) {
-    //         case 'castellano':
-    //             this.setTable('Indicativo', 'Presente', [
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 this.stem,
-    //                 this.stem,
-    //                 alteredStem
-    //             ]);
-    //             break;
-    //         case 'voseo':
-    //             this.setTable('Indicativo', 'Presente', [
-    //                 alteredStem,
-    //                 this.stem,
-    //                 alteredStem,
-    //                 this.stem,
-    //                 alteredStem,
-    //                 alteredStem
-    //             ]);
-    //             break;
-    //         case 'canarias':
-    //         case 'formal':
-    //             this.setTable('Indicativo', 'Presente', [
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 this.stem,
-    //                 alteredStem,
-    //                 alteredStem
-    //             ]);
-    //             break;
-    //     }
-    // }
-    // Corresponding subj. presente patterns
-    //            person: 0 1 2 3 4 5     
-    //        castellano: . . .     .
-    // voseo & can & for: . . .   . . 
-    // protected setSubjuntivoPresentePattern0125(alteredStem: string): void {
-    //     switch (this.region) {
-    //         case 'castellano':
-    //             this.setTable('Subjuntivo', 'Presente', [
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 this.stem,
-    //                 this.stem,
-    //                 alteredStem
-    //             ]);
-    //             break;
-    //         case 'voseo':
-    //         case 'canarias':
-    //         case 'formal':
-    //             this.setTable('Subjuntivo', 'Presente', [
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 alteredStem,
-    //                 this.stem,
-    //                 alteredStem,
-    //                 alteredStem
-    //             ]);
-    //             break;
-    //     }
-    // }
 }
 
 export class hacer extends temer {
@@ -257,7 +186,7 @@ export class mover extends temer {
         this.alteredStem = this.stem.replace(/(.*)o/, '$1ue');
     }
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.alteredStem);
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
@@ -450,7 +379,7 @@ export class poder extends temer {
         super.setGerundio(this.alteredStem);
     }
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.stem.replace(/o/, 'ue'));
+        this.setIndicativoPresentePattern125(this.stem.replace(/o/, 'ue'), this.stem.replace(/o/, 'ue'));
     }
     protected setIndicativoPreteritoIndefinido(): void {
         this.setTable('Indicativo', 'PreteritoIndefinido',
@@ -513,14 +442,6 @@ export class poner extends temer {
     protected setImperativoAfirmativo(): void {
         super.setImperativoAfirmativo();
         this.setImperativoAfirmativoMono(/(.*)p[oó]ne/, 'pon', 'pón');
-        // if (this.region === 'castellano' || this.region === 'canarias') {
-        //     this.table.Imperativo.Afirmativo[1] =
-        //         this.table.Imperativo.Afirmativo[1].replace(/(.*)p[oó]ne/, (match: string, p1: string): string => {
-        //             // if p1 ends with a space (tú pon: p1 ===  'tú ') - this is the mono we're looking for
-        //             if (/\s+$/.test(p1) || this.type === 'P') return `${p1}pon`;
-        //             return `${p1}pón`;   //  else p1 didn't end with a space (tú repon: p1 === 'tú re')
-        //         });
-        // }
     }
 }
 
@@ -542,7 +463,7 @@ export class querer extends temer {
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.alteredStem);
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
     protected setIndicativoPreteritoIndefinido(): void {
         const p = this.stem.replace(/uer/, 'u');
@@ -661,7 +582,7 @@ export class tender extends temer {
         this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
     }
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern0125(this.alteredStem);
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);

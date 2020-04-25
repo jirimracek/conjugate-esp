@@ -36,7 +36,6 @@ const regionsToTest = shuffle(['castellano', 'voseo', 'formal', 'canarias']) as 
 const verbSet: Set<string> = new Set();
 const temp = new Conjugator();
 const models: string[] = temp.getImplementedModels();
-
 models.forEach(m => verbSet.add(m));
 // some interesting verbs
 verbSet.add('abar');        // the only known trimorfo              'abar': { 'P': { 'amar': { 'D': 'trimorfo' } } },
@@ -57,18 +56,27 @@ verbSet.add('embaír');
 verbSet.add('empecer')      // the only known tercio                'empecer': { 'N': { 'nacer': { 'D': 'tercio' } } },
 verbSet.add('empedernir');  // the only bimorfop, dual defective    'empedernir': { 'N': [ { 'vivir': { 'D': 'bimorfop' } }, { 'vivir': { 'D': 'imorfo' } } ], 'P': [ { 'vivir': { 'D': 'bimorfop' } }, { 'vivir': { 'D': 'imorfo' } } ] },
 verbSet.add('errar');       // err -> yerr                          'errar': { 'N': [ 'errar', 'amar' ], 'P': [ 'errar', 'amar' ] },
+verbSet.add('escribir');  
+verbSet.add('erguir');  
+verbSet.add('freír');
 verbSet.add('guiar');       // dual vaciar with monosyll            'guiar': { 'N': [ 'vaciar', { 'vaciar': { 'M': 'true' } } ], 'P': [ 'vaciar', { 'vaciar': { 'M': 'true' } } ] },
 verbSet.add('hidropicar');  // sacar, dual, defective               'hidropicar': { 'N': [ 'sacar', { 'sacar': { 'D': 'imper' } } ], 'P': 'sacar' },
 verbSet.add('infecir');     //                                      'infecir': { 'N': { 'lucir': { 'PR': 'ido/to' } } },
 verbSet.add('inhestar');    // participio irregular, replace        'inhestar': { 'N': { 'pensar': { 'PR': 'estad/iest' } }
+verbSet.add('imprimir');  
+verbSet.add('ir');  
 verbSet.add('marcir');      // eimorfo                              'marcir': { 'N': [ 'zurcir', { 'zurcir': { 'D': 'eimorfo' } } ] },
+verbSet.add('morir');
 verbSet.add('predecir');    // the decir family of differences
 verbSet.add('pringar');     // dual pagar                           'pringar': { 'N': [ 'pagar', { 'pagar': { 'D': 'imper' } } ], 'P': 'pagar' },
+verbSet.add('proscribir');  
 verbSet.add('puar');        // dual, monosyllables                  'puar': { 'N': [ 'actuar', { 'actuar': { 'MS': 'true' } } ] },
 verbSet.add('redecir');     // the decir family of differences
+verbSet.add('reír');
 verbSet.add('reponer');     // ogmorfo                              'reponer': { 'N': [ 'poner', { 'poner': { 'D': 'ogmorfo' } } ], 'P': 'poner' },
 verbSet.add('responder');   // in the list already, quite unique, repuse version         'responder': { 'N': [ 'temer', 'responder' ] },
 verbSet.add('serenar');     // triple, defective in one, N&P        'serenar': { 'N': [ 'amar', { 'amar': { 'D': 'imper' } } ], 'P': 'amar' },
+verbSet.add('sofreír');
 verbSet.add('soler');       // the name said it all                 'soler': { 'N': [ { 'mover': { 'D': 'osmorfo' } }, { 'mover': { 'D': 'omorfo' } } ] },
 verbSet.add('tronar');      // from contar                          'tronar': { 'N': [ { 'contar': { 'D': 'imper' } }, 'contar' ], 'P': 'contar' },
 verbSet.add('ventar');      // triple, defective                    'ventar': { 'N': [ { 'pensar': { 'D': 'imper' } }, 'amar', 'pensar' ] },
@@ -167,7 +175,7 @@ describe('Model Test', () => {
     });
 
     test('getVerbList()', () => {
-        expect(conjugator.getVerbList().length).toBe(12818);       // number of verbs in the db
+        expect(conjugator.getVerbList().length).toBe(12817);       // number of verbs in the db
     });
 
     test('Optional parameters', () => {

@@ -1942,8 +1942,16 @@
   "N": "pagar"
  },
  "adscribir": {
-  "N": "escribir",
-  "P": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  },
+  "P": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "adsorber": {
   "N": "temer"
@@ -8255,7 +8263,7 @@
   "N": "bendecir"
  },
  "bendicir": {
-  "N": "bendecir"
+  "N": "zurcir"
  },
  "beneficiar": {
   "N": "amar",
@@ -10758,8 +10766,16 @@
   "N": "pagar"
  },
  "circunscribir": {
-  "N": "escribir",
-  "P": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  },
+  "P": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "circunstanciar": {
   "N": "amar"
@@ -11398,8 +11414,8 @@
   "P": "temer"
  },
  "comprimir": {
-  "N": "imprimir",
-  "P": "imprimir"
+  "N": "vivir",
+  "P": "vivir"
  },
  "comprobar": {
   "N": "contar"
@@ -12203,9 +12219,6 @@
  },
  "contravirar": {
   "N": "amar"
- },
- "contraír": {
-  "N": "contraír"
  },
  "contremecer": {
   "N": "nacer",
@@ -15176,7 +15189,7 @@
   "P": "poner"
  },
  "descomprimir": {
-  "N": "imprimir"
+  "N": "vivir"
  },
  "descomulgar": {
   "N": "pagar"
@@ -15364,7 +15377,11 @@
   "P": "vaciar"
  },
  "describir": {
-  "N": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "descrinar": {
   "N": "amar"
@@ -17272,7 +17289,7 @@
   "N": "amar"
  },
  "desoprimir": {
-  "N": "imprimir"
+  "N": "vivir"
  },
  "desorbitar": {
   "N": "amar",
@@ -20407,7 +20424,7 @@
   "N": "amar"
  },
  "emprimir": {
-  "N": "imprimir"
+  "N": "vivir"
  },
  "empringar": {
   "N": "pagar",
@@ -23831,7 +23848,11 @@
   "N": "amar"
  },
  "entremorir": {
-  "N": "dormir"
+  "N": {
+   "dormir": {
+    "PR": "orid/uert"
+   }
+  }
  },
  "entremostrar": {
   "N": "contar"
@@ -24321,11 +24342,19 @@
  "erguir": {
   "N": [
    "erguir",
-   "erguir"
+   {
+    "erguir": {
+     "V": "1"
+    }
+   }
   ],
   "P": [
    "erguir",
-   "erguir"
+   {
+    "erguir": {
+     "V": "1"
+    }
+   }
   ]
  },
  "ergullir": {
@@ -26150,7 +26179,7 @@
   "P": "amar"
  },
  "exprimir": {
-  "N": "imprimir"
+  "N": "vivir"
  },
  "expropiar": {
   "N": "amar"
@@ -27114,18 +27143,28 @@
  },
  "freír": {
   "N": [
-   "reír",
    {
     "reír": {
-     "M": "true"
+     "PD": "eíd/it"
+    }
+   },
+   {
+    "reír": {
+     "M": "true",
+     "PD": "eíd/it"
     }
    }
   ],
   "P": [
-   "reír",
    {
     "reír": {
-     "M": "true"
+     "PD": "eíd/it"
+    }
+   },
+   {
+    "reír": {
+     "M": "true",
+     "PD": "eíd/it"
     }
    }
   ]
@@ -28961,7 +29000,11 @@
   "N": "amar"
  },
  "imprimir": {
-  "N": "imprimir"
+  "N": {
+   "imprimir": {
+    "PD": "imid/es"
+   }
+  }
  },
  "improbar": {
   "N": "contar"
@@ -29457,8 +29500,16 @@
   "N": "amar"
  },
  "inscribir": {
-  "N": "escribir",
-  "P": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  },
+  "P": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "insculpir": {
   "N": "vivir"
@@ -32711,8 +32762,16 @@
   "P": "amar"
  },
  "morir": {
-  "N": "dormir",
-  "P": "dormir"
+  "N": {
+   "dormir": {
+    "PR": "orid/uert"
+   }
+  },
+  "P": {
+   "dormir": {
+    "PR": "orid/uert"
+   }
+  }
  },
  "mormar": {
   "P": "amar"
@@ -33515,7 +33574,7 @@
   "N": "amar"
  },
  "oprimir": {
-  "N": "imprimir"
+  "N": "vivir"
  },
  "oprobiar": {
   "N": "amar"
@@ -35470,8 +35529,16 @@
   "N": "amar"
  },
  "preinscribir": {
-  "N": "escribir",
-  "P": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  },
+  "P": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "preinstalar": {
   "N": "amar",
@@ -35504,7 +35571,11 @@
   "N": "vivir"
  },
  "premorir": {
-  "N": "dormir"
+  "N": {
+   "dormir": {
+    "PR": "orid/uert"
+   }
+  }
  },
  "premostrar": {
   "N": "contar"
@@ -35563,7 +35634,11 @@
   "N": "vivir"
  },
  "prescribir": {
-  "N": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "preseleccionar": {
   "N": "amar"
@@ -35904,7 +35979,11 @@
   "N": "vivir"
  },
  "proscribir": {
-  "N": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "prosear": {
   "N": "amar"
@@ -37714,7 +37793,11 @@
   "N": "amar"
  },
  "reimprimir": {
-  "N": "imprimir"
+  "N": {
+   "imprimir": {
+    "PD": "imid/es"
+   }
+  }
  },
  "reinar": {
   "N": [
@@ -38382,8 +38465,8 @@
   "P": "amar"
  },
  "reprimir": {
-  "N": "imprimir",
-  "P": "imprimir"
+  "N": "vivir",
+  "P": "vivir"
  },
  "reprobar": {
   "N": "contar"
@@ -38532,7 +38615,11 @@
   "N": "contar"
  },
  "rescribir": {
-  "N": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "resecar": {
   "N": "sacar",
@@ -40381,7 +40468,11 @@
   "N": "aislar"
  },
  "sobreimprimir": {
-  "N": "imprimir"
+  "N": {
+   "imprimir": {
+    "PD": "imid/es"
+   }
+  }
  },
  "sobrellavar": {
   "N": "amar"
@@ -40429,7 +40520,11 @@
   "N": "amar"
  },
  "sobrescribir": {
-  "N": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "sobreseer": {
   "N": "leer"
@@ -40536,7 +40631,11 @@
   "N": "amar"
  },
  "sofreír": {
-  "N": "reír"
+  "N": {
+   "reír": {
+    "PD": "eíd/it"
+   }
+  }
  },
  "sofrir": {
   "N": "vivir"
@@ -41015,8 +41114,16 @@
   "N": "amar"
  },
  "subscribir": {
-  "N": "escribir",
-  "P": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  },
+  "P": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "subseguir": {
   "N": "seguir",
@@ -41228,7 +41335,7 @@
   "N": "amar"
  },
  "suprimir": {
-  "N": "imprimir"
+  "N": "vivir"
  },
  "supurar": {
   "N": "amar",
@@ -41257,8 +41364,16 @@
   "N": "amar"
  },
  "suscribir": {
-  "N": "escribir",
-  "P": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  },
+  "P": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "suspender": {
   "N": "temer",
@@ -42235,7 +42350,11 @@
   "N": "tender"
  },
  "transcribir": {
-  "N": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "transcurrir": {
   "N": "vivir"
@@ -42419,7 +42538,11 @@
   "P": "contar"
  },
  "trascribir": {
-  "N": "escribir"
+  "N": {
+   "escribir": {
+    "PS": "ito/ipto"
+   }
+  }
  },
  "trascurrir": {
   "N": "vivir"

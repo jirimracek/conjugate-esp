@@ -1,5 +1,10 @@
 # Changelog
 
+- 4/25/2020 (0.4.0)
+  - asir, bendecir, ceñir, colegir, conducir, delinquir, distinguir, dormir, ir, imprimir, escribir, erguir
+  - dual participios
+  - finished IR verbs, version bump
+
 - 4/23/2020 (0.3.2)
   - last round of cleanups, consolidated imperativo afirmativo monosyllabics
   - implemented models oír, plañir, prohibir, rehenchir, rehuir, reunir, salir, seguir, sentir, venir

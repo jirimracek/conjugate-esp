@@ -8,8 +8,8 @@ Spanish verb conjugator, uses model templates, pattern matching & logic to conju
 
 - Defectives, multiple conjugations, exceptional cases (triple conjugations, dual participios, orthographical exceptions), etc.
 - Goals: correct, fast, small
-- Version 0.3.2
-- Last update on Thu 23 Apr 2020 11:01:15 PM CEST
+- Version 0.4.0
+- Last update on Sat 25 Apr 2020 08:57:36 PM CEST
 - See table of (working / to be implemented) models below
 
 ____
@@ -150,24 +150,22 @@ ____
 | ***abrir*** | &#x2714; |
 | ***adquirir*** | &#x2714; |
 | ***argüir*** | &#x2714; |
-| asir | &#x2718; |
+| ***asir*** | &#x2714; |
 | ***balbucir*** | &#x2714; |
-| bendecir | &#x2718; |
-| ceñir | &#x2718; |
-| colegir | &#x2718; |
-| conducir | &#x2718; |
-| contraír | &#x2718; |
+| ***bendecir*** | &#x2714; |
+| ***ceñir*** | &#x2714; |
+| ***colegir*** | &#x2714; |
+| ***conducir*** | &#x2714; |
 | ***decir*** | &#x2714; |
-| delinquir | &#x2718; |
+| ***delinquir*** | &#x2714; |
 | ***discernir*** | &#x2714; |
-| distinguir | &#x2718; |
-| dormir | &#x2718; |
+| ***distinguir*** | &#x2714; |
+| ***dormir*** | &#x2714; |
 | ***embaír*** | &#x2714; |
-| erguir | &#x2718; |
-| escribir | &#x2718; |
+| ***erguir*** | &#x2714; |
+| ***escribir*** | &#x2714; |
 | ***huir*** | &#x2714; |
-| imprimir | &#x2718; |
-| ir | &#x2718; |
+| ***ir*** | &#x2714; |
 | ***lucir*** | &#x2714; |
 | ***oír*** | &#x2714; |
 | ***plañir*** | &#x2714; |

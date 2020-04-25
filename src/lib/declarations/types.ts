@@ -26,7 +26,7 @@ export type ConjugationTable = { [modekey: string]: { [timekey: string]: string[
 // Types used to represent data in the verb definitions json file
 export type DefectiveType = 'imorfo' | 'eimorfo' | 'imper' | 'tercio' | 'terciop' | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'ogmorfo' | 'osmorfo';
 export type AttributeValues = DefectiveType | boolean | string;
-export type AttributeKeys = 'PR' | 'PD' | 'PC' | 'D' | 'M' | 'V';
+export type AttributeKeys = 'PR' | 'PD' | 'PS' | 'D' | 'M' | 'V';
 export type ModelAttributes = { [attributekey in AttributeKeys]?: AttributeValues };
 export type ModelWithAttributes = { [modelname: string]: ModelAttributes };
 export type Model = string | ModelWithAttributes;

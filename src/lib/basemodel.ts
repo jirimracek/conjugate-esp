@@ -647,49 +647,49 @@ export abstract class BaseModel {
      * Indicativo presente common pattern
      * 
      *           person: 0 1 2 3 4 5
-     *       castellano: . . .     .
-     *            voseo: .   .   . .
-     *         canarias: . . .   . .
-     *           formal: . . .   . .
+     *       castellano: . * *     *
+     *            voseo: .   *   * *
+     *         canarias: . * *   * *
+     *           formal: . * *   * *
      * 
-     * @param alteredStem marked as . 
+     * @param dot marked as . 
+     * @param star marked as *
      */
-    protected setIndicativoPresentePattern0125(alteredStem: string): void {
+    protected setIndicativoPresentePattern125(dot: string, star: string): void {
         switch (this.region) {
             case 'castellano':
                 this.setTable('Indicativo', 'Presente', [
-                    alteredStem,
-                    alteredStem,
-                    alteredStem,
+                    dot,
+                    star,
+                    star,
                     this.stem,
                     this.stem,
-                    alteredStem
+                    star
                 ]);
                 break;
             case 'voseo':
                 this.setTable('Indicativo', 'Presente', [
-                    alteredStem,
+                    dot,
                     this.stem,
-                    alteredStem,
+                    star,
                     this.stem,
-                    alteredStem,
-                    alteredStem
+                    star,
+                    star
                 ]);
                 break;
             case 'canarias':
             case 'formal':
                 this.setTable('Indicativo', 'Presente', [
-                    alteredStem,
-                    alteredStem,
-                    alteredStem,
+                    dot,
+                    star,
+                    star,
                     this.stem,
-                    alteredStem,
-                    alteredStem
+                    star,
+                    star
                 ]);
                 break;
         }
     }
-
     /**
      * Subjuntivo presente common pattern
      * 
@@ -697,31 +697,31 @@ export abstract class BaseModel {
      *        castellano: . . . * * .
      *            others: . . . * . .
      * 
-     * @param alteredStem marked as .
-     * @param secondAltered marked as * optional, defaults to original this.stem
+     * @param dot marked as .
+     * @param star marked as * optional, defaults to original this.stem
      */
-    protected setSubjuntivoPresentePattern0125(alteredStem: string, secondAltered = this.stem): void {
+    protected setSubjuntivoPresentePattern0125(dot: string, star = this.stem): void {
         switch (this.region) {
             case 'castellano':
                 this.setTable('Subjuntivo', 'Presente', [
-                    alteredStem,
-                    alteredStem,
-                    alteredStem,
-                    secondAltered,
-                    secondAltered,
-                    alteredStem
+                    dot,
+                    dot,
+                    dot,
+                    star,
+                    star,
+                    dot
                 ]);
                 break;
             case 'voseo':
             case 'canarias':
             case 'formal':
                 this.setTable('Subjuntivo', 'Presente', [
-                    alteredStem,
-                    alteredStem,
-                    alteredStem,
-                    secondAltered,
-                    alteredStem,
-                    alteredStem
+                    dot,
+                    dot,
+                    dot,
+                    star,
+                    dot,
+                    dot
                 ]);
                 break;
         }
@@ -734,11 +734,11 @@ export abstract class BaseModel {
      *         castellano: . 
      *             others: 
      * 
-     * @param alteredStem marked as .  (others use this.stem)
+     * @param dot marked as .  (others use this.stem)
      */
-    protected setIndicativoPreteritoIndefinidoPattern0 (alteredStem: string): void {
+    protected setIndicativoPreteritoIndefinidoPattern0 (dot: string): void {
         this.setTable('Indicativo', 'PreteritoIndefinido', [
-            alteredStem, 
+            dot, 
             ...Array.from('12345').map(() => this.stem)
         ]);
     }
@@ -753,18 +753,18 @@ export abstract class BaseModel {
      *    voseo, canarias:     .   . .
      *             formal:   . .   . .
      * 
-     * @param alteredStem marked as .
+     * @param dot marked as .
      */
-    protected setIndicativoPreteritoIndefinidoPattern25(alteredStem: string): void {
+    protected setIndicativoPreteritoIndefinidoPattern25(dot: string): void {
         switch (this.region) {
             case 'castellano':
                 this.setTable('Indicativo', 'PreteritoIndefinido', [
                     this.stem,
                     this.stem,
-                    alteredStem,
+                    dot,
                     this.stem,
                     this.stem,
-                    alteredStem
+                    dot
                 ]);
                 break;
             case 'voseo':
@@ -772,20 +772,20 @@ export abstract class BaseModel {
                 this.setTable('Indicativo', 'PreteritoIndefinido', [
                     this.stem,
                     this.stem,
-                    alteredStem,
+                    dot,
                     this.stem,
-                    alteredStem,
-                    alteredStem
+                    dot,
+                    dot
                 ]);
                 break;
             case 'formal':
                 this.setTable('Indicativo', 'PreteritoIndefinido', [
                     this.stem,
-                    alteredStem,
-                    alteredStem,
+                    dot,
+                    dot,
                     this.stem,
-                    alteredStem,
-                    alteredStem
+                    dot,
+                    dot
                 ]);
                 break;
         }
