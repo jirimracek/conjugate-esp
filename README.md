@@ -9,7 +9,7 @@ Spanish verb conjugator, uses model templates, pattern matching & logic to conju
 - Defectives, multiple conjugations, exceptional cases (triple conjugations, dual participios, orthographical exceptions), etc.
 - Goals: correct, fast, small
 - Version 0.4.0
-- Last update on Sat 25 Apr 2020 08:57:36 PM CEST
+- Last update on Sun 26 Apr 2020 11:03:13 PM CEST
 - See table of (working / to be implemented) models below
 
 ____
@@ -96,8 +96,6 @@ ____
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
-|&#x2796;||
-|&#x2796;||
 </td><td>
 
 | ER            | |
@@ -116,27 +114,25 @@ ____
 | ***placer*** | &#x2714; |
 | ***poder*** | &#x2714; |
 | ***poner*** | &#x2714; |
-| prever | &#x2718; |
+| ***prever*** | &#x2714; |
 | ***querer*** | &#x2714; |
 | ***raer*** | &#x2714; |
 | rehacer | &#x2718; |
 | ***responder*** | &#x2714; |
 | ***roer*** | &#x2714; |
-| romper | &#x2718; |
-| saber | &#x2718; |
-| ser | &#x2718; |
+| ***romper*** | &#x2714; |
+| ***saber*** | &#x2714; |
+| ***ser*** | &#x2714; |
 | ***tañer*** | &#x2714; |
 | ***tender*** | &#x2714; |
-| tener | &#x2718; |
-| torcer | &#x2718; |
-| traer | &#x2718; |
-| valer | &#x2718; |
+| ***tener*** | &#x2714; |
+| ***torcer*** | &#x2714; |
+| ***traer*** | &#x2714; |
+| ***valer*** | &#x2714; |
 | ***vencer*** | &#x2714; |
-| ver | &#x2718; |
-| volver | &#x2718; |
+| ***ver*** | &#x2714; |
+| ***volver*** | &#x2714; |
 | ***yacer*** | &#x2714; |
-|&#x2796;||
-|&#x2796;||
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||

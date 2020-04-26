@@ -1,5 +1,8 @@
 # Changelog
 
+- 4/26/2020 (0.4.0)
+  - added models prever, romper, saber, ser, tener, torcer, traer, valer, ver, volver
+
 - 4/25/2020 (0.4.0)
   - asir, bendecir, ceñir, colegir, conducir, delinquir, distinguir, dormir, ir, imprimir, escribir, erguir
   - dual participios

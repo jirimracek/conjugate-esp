@@ -2,7 +2,7 @@
 /**
  * @copyright 
  * Copyright (c) 2020 Jiri Mracek jiri@automationce.com 
- * Copyright (c) 2020 Automation Controls & Engineering
+ * Copyright (c) 2020 Automation Controls & Engineering, LLC
  * @license * MIT License
 */
 import { BaseModel } from './basemodel';
@@ -29,9 +29,8 @@ export class abrir extends vivir {
         super(verb, type, region, attributes);
     }
     protected setParticipio(): void {
-        this.table.Impersonal.Participio =
-            [`${this.stem}${this.desinences.Impersonal.Participio}`.replace(/rid/, 'iert')];
-        this.participioCompuesto = this.table.Impersonal.Participio[0];
+        this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`.replace(/rid/, 'iert');
+        this.table.Impersonal.Participio = [this.participioCompuesto];
     }
 }
 
@@ -390,9 +389,12 @@ export class decir extends bendecir {
     }
 
     protected setParticipio(): void {
-        this.table.Impersonal.Participio =
-            [`${this.stem}${this.desinences.Impersonal.Participio}`.replace(/ecid/, 'ich')];
-        this.participioCompuesto = this.table.Impersonal.Participio[0];
+        this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`.replace(/ecid/, 'ich');
+        this.table.Impersonal.Participio = [this.participioCompuesto];
+
+        // this.table.Impersonal.Participio =
+        //     [`${this.stem}${this.desinences.Impersonal.Participio}`.replace(/ecid/, 'ich')];
+        // this.participioCompuesto = this.table.Impersonal.Participio[0];
     }
 
     // where the ugly starts
@@ -998,10 +1000,8 @@ export class pudrir extends vivir {
     }
 
     protected setParticipio(): void {
-        this.table.Impersonal.Participio =
-            [`${this.alteredStem}${this.desinences.Impersonal.Participio}`];
-        this.participioCompuesto =
-            this.table.Impersonal.Participio[0];
+        this.participioCompuesto = `${this.alteredStem}${this.desinences.Impersonal.Participio}`;
+        this.table.Impersonal.Participio = [this.participioCompuesto];
     }
 
     protected setIndicativoPresente(): void {

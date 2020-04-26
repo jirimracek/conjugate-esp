@@ -658,35 +658,14 @@ export abstract class BaseModel {
     protected setIndicativoPresentePattern125(dot: string, star: string): void {
         switch (this.region) {
             case 'castellano':
-                this.setTable('Indicativo', 'Presente', [
-                    dot,
-                    star,
-                    star,
-                    this.stem,
-                    this.stem,
-                    star
-                ]);
+                this.setTable('Indicativo', 'Presente', [ dot, star, star, this.stem, this.stem, star ]);
                 break;
             case 'voseo':
-                this.setTable('Indicativo', 'Presente', [
-                    dot,
-                    this.stem,
-                    star,
-                    this.stem,
-                    star,
-                    star
-                ]);
+                this.setTable('Indicativo', 'Presente', [ dot, this.stem, star, this.stem, star, star ]);
                 break;
             case 'canarias':
             case 'formal':
-                this.setTable('Indicativo', 'Presente', [
-                    dot,
-                    star,
-                    star,
-                    this.stem,
-                    star,
-                    star
-                ]);
+                this.setTable('Indicativo', 'Presente', [ dot, star, star, this.stem, star, star ]);
                 break;
         }
     }
@@ -703,26 +682,12 @@ export abstract class BaseModel {
     protected setSubjuntivoPresentePattern0125(dot: string, star = this.stem): void {
         switch (this.region) {
             case 'castellano':
-                this.setTable('Subjuntivo', 'Presente', [
-                    dot,
-                    dot,
-                    dot,
-                    star,
-                    star,
-                    dot
-                ]);
+                this.setTable('Subjuntivo', 'Presente', [ dot, dot, dot, star, star, dot ]);
                 break;
             case 'voseo':
             case 'canarias':
             case 'formal':
-                this.setTable('Subjuntivo', 'Presente', [
-                    dot,
-                    dot,
-                    dot,
-                    star,
-                    dot,
-                    dot
-                ]);
+                this.setTable('Subjuntivo', 'Presente', [ dot, dot, dot, star, dot, dot ]);
                 break;
         }
     }
@@ -737,10 +702,7 @@ export abstract class BaseModel {
      * @param dot marked as .  (others use this.stem)
      */
     protected setIndicativoPreteritoIndefinidoPattern0 (dot: string): void {
-        this.setTable('Indicativo', 'PreteritoIndefinido', [
-            dot, 
-            ...Array.from('12345').map(() => this.stem)
-        ]);
+        this.setTable('Indicativo', 'PreteritoIndefinido', [ dot, ...Array.from('12345').map(() => this.stem) ]);
     }
 
     // Another very common group
@@ -758,35 +720,15 @@ export abstract class BaseModel {
     protected setIndicativoPreteritoIndefinidoPattern25(dot: string): void {
         switch (this.region) {
             case 'castellano':
-                this.setTable('Indicativo', 'PreteritoIndefinido', [
-                    this.stem,
-                    this.stem,
-                    dot,
-                    this.stem,
-                    this.stem,
-                    dot
-                ]);
+                /* eslint-disable-next-line max-len */
+                this.setTable('Indicativo', 'PreteritoIndefinido', [ this.stem, this.stem, dot, this.stem, this.stem, dot ]);
                 break;
             case 'voseo':
             case 'canarias':
-                this.setTable('Indicativo', 'PreteritoIndefinido', [
-                    this.stem,
-                    this.stem,
-                    dot,
-                    this.stem,
-                    dot,
-                    dot
-                ]);
+                this.setTable('Indicativo', 'PreteritoIndefinido', [ this.stem, this.stem, dot, this.stem, dot, dot ]);
                 break;
             case 'formal':
-                this.setTable('Indicativo', 'PreteritoIndefinido', [
-                    this.stem,
-                    dot,
-                    dot,
-                    this.stem,
-                    dot,
-                    dot
-                ]);
+                this.setTable('Indicativo', 'PreteritoIndefinido', [ this.stem, dot, dot, this.stem, dot, dot ]);
                 break;
         }
     }

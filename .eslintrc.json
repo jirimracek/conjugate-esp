@@ -94,5 +94,9 @@
         // "@typescript-eslint/member-delimiter-style": {"singleline": {"delimiter": "semi" | "comma" }}
         // "no-use-before-define":"off",
         // "@typescript-eslint/no-use-before-define": "off"
+        /* eslint-enable max-len */
+        /* eslint-disable-next-line max-len */
+        /* eslint-disable @typescript-eslint/class-name-casing */
+        /* eslint-disable array-element-newline */
     }
 }
