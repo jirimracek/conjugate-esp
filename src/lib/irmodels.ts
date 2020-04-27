@@ -14,6 +14,7 @@ export class vivir extends BaseModel {
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.desinences = JSON.parse(JSON.stringify(IR));
+
         if (this.region === 'voseo') {
             this.desinences.Indicativo.Presente[1] = this.desinences.Indicativo.Presente[4].replace(/i/, '');
         }

@@ -8,9 +8,10 @@ Spanish verb conjugator, uses model templates, pattern matching & logic to conju
 
 - Defectives, multiple conjugations, exceptional cases (triple conjugations, dual participios, orthographical exceptions), etc.
 - Goals: correct, fast, small
+- All models implemented, there are **12815 known verbs here**, any of which can be conjugated in any *mode / tense / regional* variety
+- See model table below
 - Version 0.5.0
-- Last update on Mon 27 Apr 2020 12:15:23 PM CEST
-- See table of (working / to be implemented) models below
+- Last update on Mon 27 Apr 2020 07:41:18 PM CEST
 
 ____
 
@@ -65,21 +66,21 @@ ____
 | ***ahincar*** | &#x2714; |
 | ***aislar*** | &#x2714; |
 | ***andar*** | &#x2714; |
-| aullar | &#x2718; |
-| avergonzar | &#x2718; |
-| cabrahigar | &#x2718; |
+| ***aullar*** | &#x2714; |
+| ***avergonzar*** | &#x2714; |
+| ***cabrahigar*** | &#x2714; |
 | ***cazar*** | &#x2714; |
-| colgar | &#x2718; |
+| ***colgar*** | &#x2714; |
 | ***contar*** | &#x2714; |
-| dar | &#x2718; |
-| desdar | &#x2718; |
-| desosar | &#x2718; |
-| empezar | &#x2718; |
+| ***dar*** | &#x2714; |
+| ***desdar*** | &#x2714; |
+| ***desosar*** | &#x2714; |
+| ***empezar*** | &#x2714; |
 | ***enraizar*** | &#x2714; |
 | ***errar*** | &#x2714; |
 | ***estar*** | &#x2714; |
-| forzar | &#x2718; |
-| jugar | &#x2718; |
+| ***forzar*** | &#x2714; |
+| ***jugar*** | &#x2714; |
 | ***pagar*** | &#x2714; |
 | ***pensar*** | &#x2714; |
 | ***regar*** | &#x2714; |
@@ -202,7 +203,7 @@ ____
 
 ## Rough stats
 
-- Gathered **12819** verbs from various resources, internet lists, books, etc.
+- Gathered verbs from various resources, internet lists, books, etc.
 - Of which
   - Probably at least half are unused as per la RAE but it's a fun challenge to try them all
   - Majority is conjugated per regular models (amar 8600+, temer 140+, vivir 290+)

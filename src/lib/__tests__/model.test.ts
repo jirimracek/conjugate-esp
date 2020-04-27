@@ -176,7 +176,7 @@ describe('Model Test', () => {
     });
 
     test('getVerbList()', () => {
-        expect(conjugator.getVerbList().length).toBe(12816);       // number of verbs in the db
+        expect(conjugator.getVerbList().length).toBe(12815);       // number of verbs in the db
     });
 
     test('Optional parameters', () => {

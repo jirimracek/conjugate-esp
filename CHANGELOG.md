@@ -1,6 +1,12 @@
 # Changelog
 
 - 4/27/2020 (0.5.0)
+  - aullar, avergonzar, cabrahigar, colgar, dar, desdar, desosar, empezar, forzar, jugar
+  - all models done, have 12815 verbs that can be conjugated
+  - version bump
+  - taking a few days off to think about it
+
+- 4/27/2020 (0.4.0)
   - added caber, caer, coger, leer, oler, rehacer
   - drop joguer - unused
   - done with -er models

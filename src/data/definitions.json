@@ -2841,7 +2841,7 @@
   "N": "amar"
  },
  "ahuciar": {
-  "N": "aullar"
+  "N": "amar"
  },
  "ahuecar": {
   "N": "sacar",
@@ -3572,8 +3572,8 @@
   "N": "amar"
  },
  "alongar": {
-  "N": "colgar",
-  "P": "colgar"
+  "N": "pagar",
+  "P": "pagar"
  },
  "aloquecer": {
   "N": "nacer",
@@ -7241,9 +7241,6 @@
  "aunar": {
   "N": "aullar",
   "P": "aullar"
- },
- "aungar": {
-  "N": "aullar"
  },
  "aupar": {
   "N": "aullar",
@@ -13632,8 +13629,8 @@
   "N": "amar"
  },
  "deprimir": {
-  "N": "aullar",
-  "P": "aullar"
+  "N": "vivir",
+  "P": "vivir"
  },
  "depurar": {
   "N": "amar",
@@ -14006,8 +14003,8 @@
   "P": "pagar"
  },
  "desahuciar": {
-  "N": "aullar",
-  "P": "aullar"
+  "N": "amar",
+  "P": "amar"
  },
  "desahumar": {
   "N": "aullar"
@@ -19621,7 +19618,7 @@
   "P": "amar"
  },
  "emborrajar": {
-  "N": "dar"
+  "N": "amar"
  },
  "emborrar": {
   "N": "amar"
@@ -22932,7 +22929,7 @@
   "P": "pensar"
  },
  "enmenzar": {
-  "N": "empezar"
+  "N": "cazar"
  },
  "enmerdar": {
   "N": "pensar",
@@ -30221,7 +30218,7 @@
   "N": "amar"
  },
  "jimenzar": {
-  "N": "empezar"
+  "N": "cazar"
  },
  "jimplar": {
   "N": "amar"
@@ -34994,7 +34991,7 @@
   "N": "amar"
  },
  "piular": {
-  "N": "aullar"
+  "N": "amar"
  },
  "pivotar": {
   "N": "amar"
@@ -38704,7 +38701,7 @@
   "N": "amar"
  },
  "resolgar": {
-  "N": "colgar"
+  "N": "pagar"
  },
  "resollar": {
   "N": "contar"
@@ -43011,7 +43008,7 @@
   "N": "amar"
  },
  "trompezar": {
-  "N": "empezar"
+  "N": "cazar"
  },
  "trompicar": {
   "N": "sacar"
