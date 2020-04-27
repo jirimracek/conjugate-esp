@@ -8,8 +8,8 @@ Spanish verb conjugator, uses model templates, pattern matching & logic to conju
 
 - Defectives, multiple conjugations, exceptional cases (triple conjugations, dual participios, orthographical exceptions), etc.
 - Goals: correct, fast, small
-- Version 0.4.0
-- Last update on Sun 26 Apr 2020 11:03:13 PM CEST
+- Version 0.5.0
+- Last update on Mon 27 Apr 2020 12:15:23 PM CEST
 - See table of (working / to be implemented) models below
 
 ____
@@ -101,23 +101,22 @@ ____
 | ER            | |
 |---------------|:-----------:|
 | **temer** | &#x2714; |
-| caber | &#x2718; |
-| caer | &#x2718; |
-| coger | &#x2718; |
+| ***caber*** | &#x2714; |
+| ***caer*** | &#x2714; |
+| ***coger*** | &#x2714; |
 | ***haber*** | &#x2714; |
 | ***hacer*** | &#x2714; |
-| joguer | &#x2718; |
-| leer | &#x2718; |
+| ***leer*** | &#x2714; |
 | ***mover*** | &#x2714; |
 | ***nacer*** | &#x2714; |
-| oler | &#x2718; |
+| ***oler*** | &#x2714; |
 | ***placer*** | &#x2714; |
 | ***poder*** | &#x2714; |
 | ***poner*** | &#x2714; |
 | ***prever*** | &#x2714; |
 | ***querer*** | &#x2714; |
 | ***raer*** | &#x2714; |
-| rehacer | &#x2718; |
+| ***rehacer*** | &#x2714; |
 | ***responder*** | &#x2714; |
 | ***roer*** | &#x2714; |
 | ***romper*** | &#x2714; |
@@ -133,6 +132,7 @@ ____
 | ***ver*** | &#x2714; |
 | ***volver*** | &#x2714; |
 | ***yacer*** | &#x2714; |
+|&#x2796;||
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||

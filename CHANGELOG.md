@@ -1,12 +1,18 @@
 # Changelog
 
+- 4/27/2020 (0.5.0)
+  - added caber, caer, coger, leer, oler, rehacer
+  - drop joguer - unused
+  - done with -er models
+  - version bump
+
 - 4/26/2020 (0.4.0)
   - added models prever, romper, saber, ser, tener, torcer, traer, valer, ver, volver
 
 - 4/25/2020 (0.4.0)
   - asir, bendecir, ceñir, colegir, conducir, delinquir, distinguir, dormir, ir, imprimir, escribir, erguir
   - dual participios
-  - finished IR verbs, version bump
+  - finished -ir verbs, version bump
 
 - 4/23/2020 (0.3.2)
   - last round of cleanups, consolidated imperativo afirmativo monosyllabics
@@ -19,20 +25,17 @@
 - 4/20/2020
   - monosyllabic accentuation rework, base class handles it now
   - time for cleanup
-
 - 4/19/2020
   - enraizar, yacer, huir, placer, podrir, pudrir, raer, reír, roer
   - offloaded model satisfacer, handled by hacer
   - defectives: **done**
   - dual, triple conjugations: **done**
-
 - 4/18/2020
   - condecir, contradecir, desdecir, predecir, entredecir, redecir, antedecir, decir, esperdecir, interdecir - difficult variety
   - got rid of predecir model - handled by decir
   - got rid of reponer model - handled by poner
   - zurcir, querer, tañer, tender - **done with defectives**
   - changed the database attributes configuration one more time, hopefully for the last time to verb:attrname=attrvalue:attrname=value ...
-
 - 4/17/2020
   - noticing some common regularities in irregular conjugations. Code shrinking is in order
   - models discernir, lucir, balbucir, regar, estar, haber, hacer, mover, poder, poner, decir

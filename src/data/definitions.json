@@ -17821,7 +17821,11 @@
   "N": "coger"
  },
  "desproveer": {
-  "N": "leer"
+  "N": {
+   "leer": {
+    "PD": "eíd/ist"
+   }
+  }
  },
  "despullar": {
   "N": "amar"
@@ -30259,9 +30263,6 @@
   "N": "temer",
   "P": "temer"
  },
- "joguer": {
-  "N": "joguer"
- },
  "jomar": {
   "N": "amar"
  },
@@ -36043,8 +36044,16 @@
   "N": "amar"
  },
  "proveer": {
-  "N": "leer",
-  "P": "leer"
+  "N": {
+   "leer": {
+    "PD": "eíd/ist"
+   }
+  },
+  "P": {
+   "leer": {
+    "PD": "eíd/ist"
+   }
+  }
  },
  "provenir": {
   "N": "venir"

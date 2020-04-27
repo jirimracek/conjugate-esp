@@ -70,6 +70,7 @@ verbSet.add('morir');
 verbSet.add('predecir');    // the decir family of differences
 verbSet.add('pringar');     // dual pagar                           'pringar': { 'N': [ 'pagar', { 'pagar': { 'D': 'imper' } } ], 'P': 'pagar' },
 verbSet.add('proscribir');  
+verbSet.add('proveer');  
 verbSet.add('puar');        // dual, monosyllables                  'puar': { 'N': [ 'actuar', { 'actuar': { 'MS': 'true' } } ] },
 verbSet.add('redecir');     // the decir family of differences
 verbSet.add('reír');
@@ -175,7 +176,7 @@ describe('Model Test', () => {
     });
 
     test('getVerbList()', () => {
-        expect(conjugator.getVerbList().length).toBe(12817);       // number of verbs in the db
+        expect(conjugator.getVerbList().length).toBe(12816);       // number of verbs in the db
     });
 
     test('Optional parameters', () => {
