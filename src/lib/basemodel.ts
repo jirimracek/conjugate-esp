@@ -294,70 +294,58 @@ export abstract class BaseModel {
         if (NO_IMPERATIVO_AFIRMATIVO.includes(this.defectiveAttributes)) {
             return;
         }
+        // 2nd person singular
+        if (this.type === 'N') {
+            if (this.region !== 'formal') {
+                this.table.Imperativo.Afirmativo[1] = this.table.Indicativo.Presente[1].replace(/s$/, '');
+            } else {
+                this.table.Imperativo.Afirmativo[1] = this.table.Subjuntivo.Presente[1];
+            }
+        } else {         // Pronominal
+            switch (this.region) {
+                case 'formal':
+                    this.table.Imperativo.Afirmativo[1] =
+                        esdrujula(this.table.Subjuntivo.Presente[1].replace(/^(.+?) (.*) (.*)$/, '$1 $3$2'));
+                    break;
+                case 'voseo':
+                    // https://enclave.rae.es/consultas-linguisticas/buscar?search=voseo
+                    this.table.Imperativo.Afirmativo[1] =
+                        clearAccents(this.table.Indicativo.Presente[1].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
+                    break;
+                default:         // castellano & canarias
+                    this.table.Imperativo.Afirmativo[1] =
+                        esdrujula(this.table.Indicativo.Presente[1].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
+                    break;
+            }
+        }
+
+        // nosotros
+        if (this.type === 'N') {
+            this.table.Imperativo.Afirmativo[3] = this.table.Subjuntivo.Presente[3];
+        } else {
+            this.table.Imperativo.Afirmativo[3] =
+                esdrujula(this.table.Subjuntivo.Presente[3].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
+        }
+
+        // 2nd person plural
         if (this.region === 'castellano') {
             if (this.type === 'N') {
-                this.table.Imperativo.Afirmativo[1] =
-                    this.table.Indicativo.Presente[1].replace(/s$/, '');
-
                 this.table.Imperativo.Afirmativo[4] =
                     `${this.pronouns.N.castellano[4]} ${this.verb.replace(/r$/, 'd')}`;
             } else {
-                this.table.Imperativo.Afirmativo[1] =
-                    esdrujula(this.table.Indicativo.Presente[1].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
-
                 // Tricky. Sounds simple, take infinitive, replace the 'r' with 'os'.  Accents matter
                 // Last syllable before 'os' needs to be strong.  Clear accents before strong-ifying 
                 // Do use pronouns.N (vosotros), it's not an error
                 this.table.Imperativo.Afirmativo[4] =
                     `${this.pronouns.N.castellano[4]} ${strongify(clearAccents(this.verb.replace(/r$/, '')), 1)}os`;
             }
-        }
-
-        if (this.region === 'voseo') {
+        } else {
             if (this.type === 'N') {
-                this.table.Imperativo.Afirmativo[1] =
-                    this.table.Indicativo.Presente[1].replace(/s$/, '');
-
-                this.table.Imperativo.Afirmativo[4] =
-                    this.table.Subjuntivo.Presente[4];
-            } else {
-                this.table.Imperativo.Afirmativo[1] =
-                    clearAccents(this.table.Indicativo.Presente[1].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
-
-                this.table.Imperativo.Afirmativo[4] =
-                    esdrujula(this.table.Subjuntivo.Presente[4].replace(/^(.+?) (.*) (.*)$/, '$1 $3$2'));
-            }
-        }
-
-        if (this.region === 'formal') {
-            if (this.type === 'N') {
-                [1, 4].forEach(index => this.table.Imperativo.Afirmativo[index] =
-                    this.table.Subjuntivo.Presente[index]);
-            } else {
-                [1, 4].forEach(index => this.table.Imperativo.Afirmativo[index] =
-                    esdrujula(this.table.Subjuntivo.Presente[index].replace(/^(.+?) (.*) (.*)$/, '$1 $3$2')));
-            }
-        }
-        if (this.region === 'canarias') {
-            if (this.type === 'N') {
-                this.table.Imperativo.Afirmativo[1] =
-                    this.table.Indicativo.Presente[1].replace(/s$/, '');
                 this.table.Imperativo.Afirmativo[4] = this.table.Subjuntivo.Presente[4];
             } else {
-                this.table.Imperativo.Afirmativo[1] =
-                    esdrujula(this.table.Indicativo.Presente[1].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
-
                 this.table.Imperativo.Afirmativo[4] =
                     esdrujula(this.table.Subjuntivo.Presente[4].replace(/^(.+?) (.*) (.*)$/, '$1 $3$2'));
             }
-        }
-
-        if (this.type === 'N') {
-            this.table.Imperativo.Afirmativo[3] =
-                this.table.Subjuntivo.Presente[3];
-        } else {
-            this.table.Imperativo.Afirmativo[3] =
-                esdrujula(this.table.Subjuntivo.Presente[3].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
         }
     }
 
@@ -658,14 +646,14 @@ export abstract class BaseModel {
     protected setIndicativoPresentePattern125(dot: string, star: string): void {
         switch (this.region) {
             case 'castellano':
-                this.setTable('Indicativo', 'Presente', [ dot, star, star, this.stem, this.stem, star ]);
+                this.setTable('Indicativo', 'Presente', [dot, star, star, this.stem, this.stem, star]);
                 break;
             case 'voseo':
-                this.setTable('Indicativo', 'Presente', [ dot, this.stem, star, this.stem, star, star ]);
+                this.setTable('Indicativo', 'Presente', [dot, this.stem, star, this.stem, star, star]);
                 break;
             case 'canarias':
             case 'formal':
-                this.setTable('Indicativo', 'Presente', [ dot, star, star, this.stem, star, star ]);
+                this.setTable('Indicativo', 'Presente', [dot, star, star, this.stem, star, star]);
                 break;
         }
     }
@@ -682,12 +670,12 @@ export abstract class BaseModel {
     protected setSubjuntivoPresentePattern0125(dot: string, star = this.stem): void {
         switch (this.region) {
             case 'castellano':
-                this.setTable('Subjuntivo', 'Presente', [ dot, dot, dot, star, star, dot ]);
+                this.setTable('Subjuntivo', 'Presente', [dot, dot, dot, star, star, dot]);
                 break;
             case 'voseo':
             case 'canarias':
             case 'formal':
-                this.setTable('Subjuntivo', 'Presente', [ dot, dot, dot, star, dot, dot ]);
+                this.setTable('Subjuntivo', 'Presente', [dot, dot, dot, star, dot, dot]);
                 break;
         }
     }
@@ -701,8 +689,8 @@ export abstract class BaseModel {
      * 
      * @param dot marked as .  (others use this.stem)
      */
-    protected setIndicativoPreteritoIndefinidoPattern0 (dot: string): void {
-        this.setTable('Indicativo', 'PreteritoIndefinido', [ dot, ...Array.from('12345').map(() => this.stem) ]);
+    protected setIndicativoPreteritoIndefinidoPattern0(dot: string): void {
+        this.setTable('Indicativo', 'PreteritoIndefinido', [dot, ...Array.from('12345').map(() => this.stem)]);
     }
 
     // Another very common group
@@ -721,14 +709,14 @@ export abstract class BaseModel {
         switch (this.region) {
             case 'castellano':
                 /* eslint-disable-next-line max-len */
-                this.setTable('Indicativo', 'PreteritoIndefinido', [ this.stem, this.stem, dot, this.stem, this.stem, dot ]);
+                this.setTable('Indicativo', 'PreteritoIndefinido', [this.stem, this.stem, dot, this.stem, this.stem, dot]);
                 break;
             case 'voseo':
             case 'canarias':
-                this.setTable('Indicativo', 'PreteritoIndefinido', [ this.stem, this.stem, dot, this.stem, dot, dot ]);
+                this.setTable('Indicativo', 'PreteritoIndefinido', [this.stem, this.stem, dot, this.stem, dot, dot]);
                 break;
             case 'formal':
-                this.setTable('Indicativo', 'PreteritoIndefinido', [ this.stem, dot, dot, this.stem, dot, dot ]);
+                this.setTable('Indicativo', 'PreteritoIndefinido', [this.stem, dot, dot, this.stem, dot, dot]);
                 break;
         }
     }
