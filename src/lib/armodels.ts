@@ -22,13 +22,12 @@ export class amar extends BaseModel {
         // Clone so we don't overwrite the template
         this.desinences = JSON.parse(JSON.stringify(AR));
 
-        // Give derived class a chance to modify the terms array one more time if needed
-        this.configDesinences();
-
         // Voseo, 2nd singular -> accented version, which happens to be 2nd plural stripped of i
         if (this.region === 'voseo') {
             this.desinences.Indicativo.Presente[1] = this.desinences.Indicativo.Presente[4].replace(/i/, '');
         }
+        // Give derived class a chance to modify the desinences as per model
+        this.configDesinences();
 
         // Finish desinences configuration in base class
         this.remapDesinencesByRegion();
@@ -277,15 +276,14 @@ export class contar extends amar {
     }
 }
 export class dar extends amar {
-    private alteredStem: string;
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.alteredStem = this.stem;
     }
 
     protected configDesinences(): void {
         this.desinences.Indicativo.Presente[0] = this.desinences.Indicativo.Presente[0].replace(/$/, 'y');
-        this.desinences.Indicativo.Presente[4] = this.desinences.Indicativo.Presente[4].replace(/á/, 'a');
+        [1, 4].forEach(i => this.desinences.Indicativo.Presente[i] =
+            this.desinences.Indicativo.Presente[i].replace(/á/, 'a'));
 
         [0, 1, 3, 4].forEach(i => this.desinences.Indicativo.PreteritoIndefinido[i] =
             this.desinences.Indicativo.PreteritoIndefinido[i].replace(/^./, 'i'));

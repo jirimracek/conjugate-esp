@@ -7,7 +7,7 @@
 import definitions from '../data/definitions.json';
 import { ModelFactory } from './factory';
 import { ConjugationTable, DB, Regions, PronominalKeys, 
-    VerbModelData, ModelAttributes, Model } from './declarations/types';
+    VerbModelData, ModelAttributes, Model, ModelWithAttributes } from './declarations/types';
 import { ERROR_MSG } from './declarations/constants';
 
 export type InfoType = { verb: string, model: string, region: string, pronominal: boolean, defective: boolean };
@@ -119,9 +119,9 @@ export class Conjugator {
         const list = Object.values(this.templates);   // can't tell the type yet
 
         function traverse(value?: Model | Model[]): void {
-            if (typeof value === 'string') {
+            if (typeof value === 'string') {         // can be a string
                 result.add(value);
-            } else if (Array.isArray(value)) {
+            } else if (Array.isArray(value)) {       // can be string[] or ModelWithAttributes[]
                 value.forEach(data => {
                     if (typeof data === 'string') {
                         result.add(data);
@@ -129,11 +129,17 @@ export class Conjugator {
                         result.add(Object.keys(data)[0]);
                     }
                 });
+            } else {
+                result.add(Object.keys(value as ModelWithAttributes)[0]);    // can be ModelWithAttributes
             }
         }
         (list as VerbModelData[]).forEach(value => {   // now we know the type
-            traverse(value.N);
-            traverse(value.P);
+            if (value.N) {
+                traverse(value.N);
+            }
+            if (value.P) {
+                traverse(value.P);
+            }
         });
         return Array.from(result);
     }

@@ -2,7 +2,9 @@
 docs
 *.map
 .vscode
+*.code-workspace
 # All test files
+
 
 # Logs
 logs
