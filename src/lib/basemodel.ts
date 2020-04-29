@@ -1,7 +1,7 @@
 /**
  * @copyright 
- * Copyright (c) 2020 Jiri Mracek jiri@automationce.com 
- * Copyright (c) 2020 Automation Controls & Engineering
+ * Copyright (c) 2020 Jiri Mracek, jiri@automationce.com 
+ * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
 import { PronominalKeys, Regions, ConjugationTable, ModelAttributes, DefectiveType, PronounsTable, ModeParam, ModeTimeParam } from './declarations/types';
@@ -237,15 +237,19 @@ export abstract class BaseModel {
     protected setIndicativoPresente(): void {
         this.setTable('Indicativo', 'Presente');
     }
+
     protected setIndicativoPreteritoImperfecto(): void {
         this.setTable('Indicativo', 'PreteritoImperfecto');
     }
+
     protected setIndicativoPreteritoIndefinido(): void {
         this.setTable('Indicativo', 'PreteritoIndefinido');
     }
+
     protected setIndicativoFuturoImperfecto(): void {
         this.setTable('Indicativo', 'FuturoImperfecto');
     }
+
     protected setIndicativoCondicionalSimple(): void {
         this.setTable('Indicativo', 'CondicionalSimple');
     }
@@ -255,12 +259,15 @@ export abstract class BaseModel {
     protected setSubjuntivoPresente(): void {
         this.setTable('Subjuntivo', 'Presente');
     }
+
     protected setSubjuntivoPreteritoImperfectoRa(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoRa');
     }
+
     protected setSubjuntivoPreteritoImperfectoSe(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoSe');
     }
+
     protected setSubjuntivoFuturoImperfecto(): void {
         this.setTable('Subjuntivo', 'FuturoImperfecto');
     }
@@ -372,6 +379,7 @@ export abstract class BaseModel {
                 });
         }
     }
+
     protected setImperativoNegativo(): void {
         if (NO_IMPERATIVO_NEGATIVO.includes(this.defectiveAttributes)) {
             return;
@@ -614,6 +622,7 @@ export abstract class BaseModel {
                 ].forEach(mode => this.table.Subjuntivo[mode] = Array.from(DASH6));
 
                 this.table.Imperativo.Negativo[3] = '-';
+                break;
         }
     }
 

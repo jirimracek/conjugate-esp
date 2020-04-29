@@ -3,6 +3,7 @@ docs
 *.map
 .vscode
 *.code-workspace
+*.tgz
 # All test files
 
 

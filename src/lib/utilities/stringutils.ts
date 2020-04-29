@@ -1,3 +1,9 @@
+/**
+ * @copyright 
+ * Copyright (c) 2020 Jiri Mracek, jiri@automationce.com 
+ * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
+ * @license * MIT License
+*/
 /* eslint-disable array-element-newline */
 /* eslint-disable max-len */
 const Plain: readonly string[] = [ 'a', 'e', 'i', 'o', 'u', 'ü'];

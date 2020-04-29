@@ -1,7 +1,7 @@
 /**
  * @copyright 
- * Copyright (c) 2020 Jiri Mracek jiri@automationce.com 
- * Copyright (c) 2020 Automation Controls & Engineering
+ * Copyright (c) 2020 Jiri Mracek, jiri@automationce.com 
+ * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
 import { ConjugationTable, PronounsTable, DefectiveType } from './types';
@@ -104,7 +104,7 @@ export const IR: Readonly<ConjugationTable> = {
 export const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
     'imper',
     'tercio',
-    'terciop', 
+    'terciop',
     'bimorfop',
     'omorfo',
     'osmorfo',
@@ -119,3 +119,8 @@ export const ERROR_MSG = {
     UnknownModel: 'Model MODEL not implemented, can not conjugate verb VERB, region REGION'
 }
 export const DASH6 = '------';
+
+// Temp arrays used to remap
+export const SIXARRAY = [0, 1, 2, 3, 4, 5];    // Use to remap all persons, etc
+export const FIVEARRAY = [1, 2, 3, 4, 5];      // Use to remap 5 persons or when the index itself doesn't matter!!!
+

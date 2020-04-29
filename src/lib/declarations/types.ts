@@ -1,7 +1,7 @@
 /**
  * @copyright 
- * Copyright (c) 2020 Jiri Mracek jiri@automationce.com 
- * Copyright (c) 2020 Automation Controls & Engineering
+ * Copyright (c) 2020 Jiri Mracek, jiri@automationce.com 
+ * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
 
@@ -15,13 +15,13 @@ export type ConjugationTable = { [modekey: string]: { [timekey: string]: string[
 // attributes are attached to the model by colon = and separated by semicolon ';'
 // known attributes:
 //    defective types: { D:imorfo | eimorfo | imper | tercio | terciop | mmorfo | bimorfop | bimorfog | trimorfo | omorfo | ogmorfo }
-//    PR:RegExp/replacement - _participio r_eplace                - RegExp is the regular expression that Replaces the regular form (inhestar, pensar:PR=estad/iest - from inhestado to inhiesto)
-//    PD:RegExp/replacement - _participio d_ual                   - RegExp is the regular expression that creates the irregular participio form from the regular one
+//    PR:RegExp/replacement - Participio Replace                - RegExp is the regular expression that Replaces the regular form (inhestar, pensar:PR=estad/iest - from inhestado to inhiesto)
+//    PD:RegExp/replacement - Participio Dual                   - RegExp is the regular expression that creates the irregular participio form from the regular one
 //                                                                       AND it gets added as a second participio. The first, REGULAR PARTICIPIO gets used for COMPUESTOS
-//    PC:RegExp/replacement - _participio c_ompuesto (irregular)  - same as PD, EXCEPT the second, IRREGULAR PARTICIPIO gets used for COMPUESTOS
+//    PC:RegExp/replacement - Participio Compuesto (irregular)  - same as PD, EXCEPT the second, IRREGULAR PARTICIPIO gets used for COMPUESTOS
 //    D:DefectiveType       - one of the Defective Types
-//    M:boolean            - monosyllable ortho adjustment, drop accent
-//    V:string              - use for slight model changes, ex.: predecir, predeciré & prediré
+//    M:boolean             - Monosyllable ortho adjustment, drop accent
+//    V:string              - use for other model changes, duals, triples, ex.: predecir, predeciré & prediré
 
 // Types used to represent data in the verb definitions json file
 export type DefectiveType = 'imorfo' | 'eimorfo' | 'imper' | 'tercio' | 'terciop' | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'ogmorfo' | 'osmorfo';

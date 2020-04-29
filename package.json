@@ -1,7 +1,7 @@
 {
-  "name": "conjugate-esp",
-  "version": "0.5.0",
-  "description": "Spanish verb conjugator",
+  "name": "@jirimracek/conjugate-esp",
+  "version": "0.6.0",
+  "description": "Spanish verb conjugator, castellano, voseo, canarias, formal",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -9,8 +9,8 @@
     "prepare": "npm run build",
     "test": "tsc && jest -b1 --noStackTrace ",
     "verbose": "tsc && jest -b1 --verbose",
-    "strings": "tsc && jest -b1 --noStackTrace --testPathPattern=stringutils",
     "cover": "jest --coverage",
+    "cover-verbose": "jest --coverage --verbose",
     "lint": "eslint --ext .ts",
     "flint": "eslint --fix --ext .ts"
   },
@@ -22,6 +22,10 @@
     "spanish",
     "verb",
     "conjugation",
+    "voseo",
+    "castellano",
+    "canarias",
+    "formal",
     "nodejs",
     "JavaScript",
     "TypeScript"
@@ -42,6 +46,7 @@
     "eslint": "^6.8.0",
     "eslint-config-typescript": "^3.0.0",
     "jest": "^25.4.0",
+    "np": "^6.2.3",
     "ts-jest": "^25.4.0",
     "typescript": ">=3.8.3"
   }

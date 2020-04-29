@@ -29,13 +29,7 @@
         "array-element-newline": [
             "warn",
             "consistent"
-            // {"multiline": true, "minItems": 3}
         ],
-        // "array-bracket-newline": [
-        //     "warn",
-        //     "consistent"
-        // {"multiline": true, "minItems": 3}
-        // ],
         "linebreak-style": [
             "error",
             "unix"
@@ -64,21 +58,6 @@
                 "SwitchCase": 1
             }
         ],
-        // "implicit-arrow-linebreak": [
-        //     "error",
-        //     "beside"
-        // ],
-        // "newline-per-chained-call": "warn",
-        // "object-curly-newline": [
-        //     "warn",
-        //     {
-        //         "consistent": true
-        //     }
-        // ],
-        // "arrow-body-style": [
-        // "error",
-        // "never"
-        // ],
         "no-extra-semi": "warn",
         "@typescript-eslint/member-delimiter-style": [
             "warn",
@@ -89,9 +68,6 @@
                 }
             }
         ]
-        // "@typescript-eslint/member-delimiter-style": ["error", 
-        //     {"singleline": {"delimiter": "coma", "requireLast": false }, "overrides": {"type": {"singleline": {"delimiter": "coma"}}}}]
-        // "@typescript-eslint/member-delimiter-style": {"singleline": {"delimiter": "semi" | "comma" }}
         // "no-use-before-define":"off",
         // "@typescript-eslint/no-use-before-define": "off"
         /* eslint-enable max-len */

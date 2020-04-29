@@ -1,7 +1,7 @@
 /**
  * @copyright 
- * Copyright (c) 2020 Jiri Mracek jiri@automationce.com 
- * Copyright (c) 2020 Automation Controls & Engineering
+ * Copyright (c) 2020 Jiri Mracek, jiri@automationce.com 
+ * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
 import definitions from '../data/definitions.json';
@@ -15,7 +15,7 @@ export type ErrorType = { message: string };
 export type ResultType = { info: InfoType | ErrorType, conjugation: ConjugationTable };
 
 /**
- * Create instance of Conjugator, 2 public methods: conjugate() and getVerbList()
+ * Create instance of Conjugator, then
  * 
  * conjugator.conjugate(verb, region?)
  * 
@@ -28,21 +28,7 @@ export class Conjugator {
     protected templates: DB = definitions;
     protected factory = new ModelFactory();
 
-    constructor() {
-        // empty
-    }
-
-    /**
-     * get sorted list of known verbs
-     */
-    public getVerbList(): string[] {
-        try {
-            return Object.keys(this.templates).sort(function (a, b) { return a.localeCompare(b); });
-        } catch (error) {
-            console.error('No verbs - check definitions.json file');
-            return [];
-        }
-    }
+    constructor() { /* empty */ }
 
     /**
      * 
@@ -108,6 +94,18 @@ export class Conjugator {
         } catch (error) {
             // console.error(error);
             return [{ info: error.message, conjugation: {} }];
+        }
+    }
+
+    /**
+     * get sorted list of known verbs
+     */
+    public getVerbList(): string[] {
+        try {
+            return Object.keys(this.templates).sort(function (a, b) { return a.localeCompare(b); });
+        } catch (error) {
+            console.error('No verbs - check definitions.json file');
+            return [];
         }
     }
 

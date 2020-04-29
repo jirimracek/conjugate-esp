@@ -12,7 +12,6 @@
   "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)$",
   "coverageDirectory": "coverage",
   "collectCoverageFrom": [
-    "src/**/*.{ts,js}",
-    "!src/**/*.d.ts"
+    "src/**/*.ts"
   ]
 }

@@ -4,14 +4,26 @@
 [![Coverage Status](https://coveralls.io/repos/github/jirimracek/conjugate-esp/badge.svg?branch=master)](https://coveralls.io/github/jirimracek/conjugate-esp?branch=master)
 ![GitHub](https://img.shields.io/github/license/jirimracek/conjugate-esp)
 
-Spanish verb conjugator, uses model templates, pattern matching & logic to conjugate Spanish verbs in any of the regional varieties of castellano, voseo, formal, canarias
+Spanish verb conjugator, uses templates, pattern matching & logic to conjugate verbs in any of the regional varieties of castellano, voseo, formal, canarias
 
-- Defectives, multiple conjugations, exceptional cases (triple conjugations, dual participios, orthographical exceptions), etc.
-- Goals: correct, fast, small
-- All models implemented, there are **12815 known verbs here**, any of which can be conjugated in any *mode / tense / regional* variety
-- See model table below
-- Version 0.5.0
-- Last update on Mon 27 Apr 2020 07:41:18 PM CEST
+- Project goals: correct, detailed, complete, fast & small (yes, you can have it all)
+- As of version 0.5.0 all 98 models (see table below) are implemented and tested
+- 12815 known verbs, 3 regular, 95 irregular models
+- Includes castellano, voseo, formal, canarias varieties & complicated cases
+  - defectives
+  - multiple (dual & triple) conjugations
+  - dual participios
+  - orthographical changes
+
+____
+
+- Current version 0.6.0
+- Updated on Wed 29 Apr 2020 02:31:20 PM CEST
+
+____
+
+- Many thanks to [Estudio Sampere Salamanca, España](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html "Sampere Salamanca")
+  - ***Esther González, Ester García, María Ballesteros*** you're my heroes
 
 ____
 
@@ -44,15 +56,27 @@ ____
    console.log(`${verbs.length} known verbs`);
 ```
 
+### Returns JSON formatted tables
+
+- Impersonal
+  - Infinitivo, Gerundio,Participio
+- Indicativo
+  - Simple
+    - Presente, Pretérito Imperfecto, Pretérito Indefinido, Futuro Imperfecto, Condicional Simple
+  - Compuesto
+    - Pretérito Perfecto, Pretérito Pluscuamperfecto, Pretérito Anterior, Futuro Perfecto, Condicional Compuesto
+- Subjuntivo
+  - Simple
+    - Presente, Pretérito Imperfecto Ra, Pretérito Imperfecto Se, Futuro Imperfecto
+  - Compuesto
+    - Pretérito Perfecto, Pretérito Pluscuamperfecto Ra, Pretérito Pluscuamperfecto Se, Futuro Perfecto
+- Imperativo
+  - Afirmativo
+  - Negativo
+
 ____
 
-### Many thanks for not getting tired of my questions
-
-- [Estudio Sampere Salamanca España](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html "Sampere Salamanca") ***Esther González, Ester García, María Ballesteros*** you're my heroes
-
-____
-
-### Models
+### Implemented and tested conjugation models
 
 <table>
 <tr><td>
@@ -87,6 +111,7 @@ ____
 | ***sacar*** | &#x2714; |
 | ***vaciar*** | &#x2714; |
 | ***volcar*** | &#x2714; |
+|&#x2796;||
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
@@ -139,6 +164,7 @@ ____
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
+|&#x2796;||
 </td><td>
 
 | IR            | |
@@ -162,6 +188,7 @@ ____
 | ***erguir*** | &#x2714; |
 | ***escribir*** | &#x2714; |
 | ***huir*** | &#x2714; |
+| ***imprimir*** | &#x2714; |
 | ***ir*** | &#x2714; |
 | ***lucir*** | &#x2714; |
 | ***oír*** | &#x2714; |
@@ -187,29 +214,16 @@ ____
 
 ## Resources
 
-- [Estudio Sampere Salamanca](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html "Sampere Salamanca")
+- [Estudio Sampere Salamanca](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html "Sampere Salamanca") - great place to study Spanish
 
 - [Real Academia Española](https://www.rae.es "RAE")
 
-- [Vadémecum del verbo español, Pedro Gomis Blanco, Laura Segura Calvo](https://www.amazon.es/Vad%C3%A9mecum-verbo-espa%C3%B1ol-Pedro-Blanco/dp/8497783875 "Amazon.es")
+- [RAE Enclave](https://enclave.rae.es "Enclave") - paid subscription, much recommended
 
 - [Rodríguez-Rodríguez, G; Carreras-Riudavets, F; Hernández-Figueroa, Z; (2009). Conjugación de verbos en español - Conjugador TIP](https://tulengua.es "Conjugador TIP")
 
 - [Diccionario panhispánico de dudas](https://www.casadellibro.com/libro-diccionario-panhispanico-de-dudas-2-ed/9788429406238/1051481 "Casa del libro" )
 
+- [Vadémecum del verbo español, Pedro Gomis Blanco, Laura Segura Calvo](https://www.amazon.es/Vad%C3%A9mecum-verbo-espa%C3%B1ol-Pedro-Blanco/dp/8497783875 "Amazon.es") - while a good technical reference on verb usage, this book contains many conjugation table and index errors, use with extreme caution
+
 - ... and many others
-
-____
-
-## Rough stats
-
-- Gathered verbs from various resources, internet lists, books, etc.
-- Of which
-  - Probably at least half are unused as per la RAE but it's a fun challenge to try them all
-  - Majority is conjugated per regular models (amar 8600+, temer 140+, vivir 290+)
-  - There are about 130 defectives of 11 categories, some are single model, others are duals
-  - There are about 180 dual verbs conjugated as per 2 models (different models or same model non-defective / defective) and about 6 triples (yacer, roer, ...)
-- Models involved in defectives
-  - actuar aislar amar cazar contar discernir embaír estar haber hacer lucir mover nacer pagar pensar poder poner querer responder sacar servir surgir tañer temer tender vaciar vivir zurcir
-- Additional models involved in multiples
-  - enraizar errar huir vencer placer podrir pudrir raer regar reír responder roer volcar yacer

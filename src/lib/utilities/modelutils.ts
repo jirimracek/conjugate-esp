@@ -1,7 +1,7 @@
 /**
  * @copyright 
- * Copyright (c) 2020 Jiri Mracek jiri@automationce.com 
- * Copyright (c) 2020 Automation Controls & Engineering
+ * Copyright (c) 2020 Jiri Mracek, jiri@automationce.com 
+ * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
 
@@ -27,26 +27,21 @@ export function json2Text(table: ConjugationTable): string[] {
  */
 export function text2Json(table: string[]): ConjugationTable {
     const retVal: ConjugationTable = {} as ConjugationTable;
-    const temp = table.map(m =>
-        m);   // Make a copy so it doesn't get overwritten
-
-    [
-        'Impersonal',
+    const temp = table.map(m => m);   // Make a copy so it doesn't get overwritten
+    ['Impersonal',
         'Indicativo',
         'Subjuntivo',
         'Imperativo'
     ].forEach(mode =>
         retVal[mode] = {});
 
-    [
-        'Infinitivo',
+    ['Infinitivo',
         'Gerundio',
         'Participio'
     ].forEach(type =>
         retVal.Impersonal[type] = [temp.shift() as string]);
 
-    [
-        'Presente',
+    ['Presente',
         'PreteritoImperfecto',
         'PreteritoIndefinido',
         'FuturoImperfecto',
@@ -59,8 +54,7 @@ export function text2Json(table: string[]): ConjugationTable {
     ].forEach(time =>
         retVal['Indicativo'][time] = temp.splice(0, 6));
 
-    [
-        'Presente',
+    ['Presente',
         'PreteritoImperfectoRa',
         'PreteritoImperfectoSe',
         'FuturoImperfecto',
@@ -71,10 +65,7 @@ export function text2Json(table: string[]): ConjugationTable {
     ].forEach(time =>
         retVal['Subjuntivo'][time] = temp.splice(0, 6));
 
-    [
-        'Afirmativo',
-        'Negativo'
-    ].forEach(mode =>
+    ['Afirmativo', 'Negativo'].forEach(mode =>
         retVal['Imperativo'][mode] = temp.splice(0, 6));
 
     return retVal;

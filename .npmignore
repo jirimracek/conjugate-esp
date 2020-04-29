@@ -1,5 +1,11 @@
 src/
 docs/
 e2e/
+coverage/
+.vscode/
+*.code-workspace
 *.tgz
+.eslint*
+.markdown*
+.travis*
 *.map
