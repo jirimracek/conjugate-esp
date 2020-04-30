@@ -130,7 +130,7 @@ export class hacer extends temer {
 
     protected setParticipio(): void {
         this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`.replace(/acid/, 'ech');
-        this.table.Impersonal.Participio = [this.participioCompuesto];
+        this.table.Impersonal.Participio = this.participioCompuesto;
     }
 
     protected configDesinences(): void {
@@ -332,7 +332,7 @@ export class leer extends temer {
             this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`;
             this.participioCompuesto =
                 `${this.participioCompuesto}/${this.participioCompuesto.replace(searchValue, replaceValue)}`;
-            this.table.Impersonal.Participio = [this.participioCompuesto];
+            this.table.Impersonal.Participio = this.participioCompuesto;
         } else {
             super.setParticipio();
         }
@@ -619,7 +619,7 @@ export class poner extends temer {
 
     protected setParticipio(): void {
         this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`.replace(/onid/, 'uest');
-        this.table.Impersonal.Participio = [this.participioCompuesto];
+        this.table.Impersonal.Participio = this.participioCompuesto;
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
@@ -817,7 +817,7 @@ export class romper extends temer {
 
     protected setParticipio(): void {
         this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`.replace(/mp/, 't');
-        this.table.Impersonal.Participio = [this.participioCompuesto];
+        this.table.Impersonal.Participio = this.participioCompuesto;
     }
 
 }
@@ -1190,7 +1190,7 @@ export class volver extends temer {
 
     protected setParticipio(): void {
         this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`.replace(/olv/, 'uel');
-        this.table.Impersonal.Participio = [this.participioCompuesto];
+        this.table.Impersonal.Participio = this.participioCompuesto;
     }
 
     protected setIndicativoPresente(): void {

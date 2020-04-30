@@ -520,7 +520,7 @@ export class pensar extends amar {
         if (PR) {
             const [expression, alteredStem] = PR.split('/');
             this.participioCompuesto = this.participioCompuesto.replace(expression, alteredStem);
-            this.table.Impersonal.Participio[0] = this.participioCompuesto;
+            this.table.Impersonal.Participio = this.participioCompuesto;
         }
     }
 

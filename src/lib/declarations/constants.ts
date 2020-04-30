@@ -4,7 +4,7 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { ConjugationTable, PronounsTable, DefectiveType } from './types';
+import { PronounsTable, DefectiveType, CompSubTable, SubjuntivoSubSimpleKey, IndicativoSubCompKey, IndicativoSubSimpleKey, SubjuntivoSubCompKey, DTable } from './types';
 
 export const PRONOUNS: Readonly<PronounsTable> = {
     N: {
@@ -22,7 +22,7 @@ export const PRONOUNS: Readonly<PronounsTable> = {
 }
 
 // The composite verb auxiliar haber forms
-export const AUX: Readonly<ConjugationTable> = {
+export const AUX: Readonly<CompSubTable> = {
     Indicativo: {
         PreteritoPerfecto: ['he', 'has', 'ha', 'hemos', 'habéis', 'han'],
         PreteritoPluscuamperfecto: ['había', 'habías', 'había', 'habíamos', 'habíais', 'habían'],
@@ -39,7 +39,7 @@ export const AUX: Readonly<ConjugationTable> = {
 }
 
 // The desinences (endings) of conjugated forms
-export const AR: Readonly<ConjugationTable> = {
+export const AR: Readonly<DTable> = {
     Impersonal: {
         Infinitivo: ['ar', 'arse'],
         Gerundio: ['ando', 'ándose'],
@@ -60,7 +60,7 @@ export const AR: Readonly<ConjugationTable> = {
     }
 }
 
-export const ER: Readonly<ConjugationTable> = {
+export const ER: Readonly<DTable> = {
     Impersonal: {
         Infinitivo: ['er', 'erse'],
         Gerundio: ['iendo', 'iéndose'],
@@ -81,7 +81,7 @@ export const ER: Readonly<ConjugationTable> = {
     }
 }
 
-export const IR: Readonly<ConjugationTable> = {
+export const IR: Readonly<DTable> = {
     Impersonal: {
         Infinitivo: ['ir', 'irse'],
         Gerundio: ['iendo', 'iéndose'],
@@ -111,7 +111,7 @@ export const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
     'ogmorfo'
 ];
 
-export const INDICATIVO_SIMPLE_KEYS: string[] = [
+export const INDICATIVO_SIMPLE_KEYS: IndicativoSubSimpleKey[] = [
     'Presente',
     'PreteritoImperfecto',
     'PreteritoIndefinido',
@@ -119,14 +119,14 @@ export const INDICATIVO_SIMPLE_KEYS: string[] = [
     'CondicionalSimple'
 ];
 
-export const SUBJUNTIVO_SIMPLE_KEYS: string[] = [
+export const SUBJUNTIVO_SIMPLE_KEYS: SubjuntivoSubSimpleKey[] = [
     'Presente',
     'PreteritoImperfectoRa',
     'PreteritoImperfectoSe',
     'FuturoImperfecto'
 ];
 
-export const INDICATIVO_COMP_KEYS: string[] = [
+export const INDICATIVO_COMP_KEYS: IndicativoSubCompKey[] = [
     'PreteritoPerfecto',
     'PreteritoPluscuamperfecto',
     'PreteritoAnterior',
@@ -134,7 +134,7 @@ export const INDICATIVO_COMP_KEYS: string[] = [
     'CondicionalCompuesto'
 ];
 
-export const SUBJUNTIVO_COMP_KEYS: string[] = [
+export const SUBJUNTIVO_COMP_KEYS: SubjuntivoSubCompKey[] = [
     'PreteritoPerfecto',
     'PreteritoPluscuamperfectoRa',
     'PreteritoPluscuamperfectoSe',

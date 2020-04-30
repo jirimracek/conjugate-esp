@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 import { BaseModel } from './basemodel';
-import { PronominalKeys, Regions, ModelAttributes } from './declarations/types';
+import { PronominalKeys, Regions, ModelAttributes, SubjuntivoSubSimpleKey, IndicativoSubSimpleKey } from './declarations/types';
 import { IR, AR, SIXARRAY, FIVEARRAY } from './declarations/constants';
 
 /* eslint-disable @typescript-eslint/class-name-casing */
@@ -31,7 +31,7 @@ export class abrir extends vivir {
 
     protected setParticipio(): void {
         this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`.replace(/rid/, 'iert');
-        this.table.Impersonal.Participio = [this.participioCompuesto];
+        this.table.Impersonal.Participio = this.participioCompuesto;
     }
 }
 
@@ -408,7 +408,7 @@ export class decir extends bendecir {
 
     protected setParticipio(): void {
         this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`.replace(/ecid/, 'ich');
-        this.table.Impersonal.Participio = [this.participioCompuesto];
+        this.table.Impersonal.Participio = this.participioCompuesto;
     }
 
     // where the ugly starts
@@ -516,7 +516,7 @@ export class dormir extends vivir {
         if (PR) {
             const [expression, alteredStem] = PR.split('/');
             this.participioCompuesto = this.participioCompuesto.replace(expression, alteredStem);
-            this.table.Impersonal.Participio[0] = this.participioCompuesto;
+            this.table.Impersonal.Participio = this.participioCompuesto;
         }
     }
 
@@ -573,8 +573,8 @@ export class embaír extends vivir {
             ['PreteritoImperfectoRa',
                 'PreteritoImperfectoSe',
                 'FuturoImperfecto'
-            ].forEach(modeTime => this.desinences.Subjuntivo[modeTime][i] =
-                this.desinences.Subjuntivo[modeTime][i].replace(pattern, alteredStem))
+            ].forEach(modeTime => this.desinences.Subjuntivo[modeTime as SubjuntivoSubSimpleKey][i] =
+                this.desinences.Subjuntivo[modeTime as SubjuntivoSubSimpleKey][i].replace(pattern, alteredStem))
         );
 
         pattern = /ie/;
@@ -582,8 +582,8 @@ export class embaír extends vivir {
         ['PreteritoImperfectoRa',
             'PreteritoImperfectoSe',
             'FuturoImperfecto'
-        ].forEach(modeTime => this.desinences.Subjuntivo[modeTime][4] =
-            this.desinences.Subjuntivo[modeTime][4].replace(pattern, alteredStem));
+        ].forEach(modeTime => this.desinences.Subjuntivo[modeTime as SubjuntivoSubSimpleKey][4] =
+            this.desinences.Subjuntivo[modeTime as SubjuntivoSubSimpleKey][4].replace(pattern, alteredStem));
     }
 }
 
@@ -664,10 +664,10 @@ export class escribir extends vivir {
         this.participioCompuesto = `${this.stem.replace(/b$/, '')}${this.desinences.Impersonal.Participio}`;
         if (this.participioSecundario) {
             const [searchValue, replaceValue] = this.participioSecundario.split('/');
-            this.table.Impersonal.Participio = [
-                `${this.participioCompuesto}/${this.participioCompuesto.replace(searchValue, replaceValue)}`];
+            this.table.Impersonal.Participio = 
+                `${this.participioCompuesto}/${this.participioCompuesto.replace(searchValue, replaceValue)}`;
         } else {
-            this.table.Impersonal.Participio = [this.participioCompuesto];
+            this.table.Impersonal.Participio = this.participioCompuesto;
         }
     }
 }
@@ -694,8 +694,8 @@ export class huir extends vivir {
         ['PreteritoImperfectoRa',
             'PreteritoImperfectoSe',
             'FuturoImperfecto'
-        ].map(time => this.desinences.Subjuntivo[time] =
-            this.desinences.Subjuntivo[time].map(d => d.replace(/^i/, 'y')));
+        ].map(time => this.desinences.Subjuntivo[time as SubjuntivoSubSimpleKey] =
+            this.desinences.Subjuntivo[time as SubjuntivoSubSimpleKey].map(d => d.replace(/^i/, 'y')));
 
         switch (this.region) {
             case 'castellano':
@@ -733,7 +733,7 @@ export class imprimir extends vivir {
         this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`;
         this.participioCompuesto =
             `${this.participioCompuesto}/${this.participioCompuesto.replace(searchValue, replaceValue)}`;
-        this.table.Impersonal.Participio = [this.participioCompuesto];
+        this.table.Impersonal.Participio = this.participioCompuesto;
     }
 }
 
@@ -830,7 +830,7 @@ export class lucir extends vivir {
         if (PR) {
             const [expression, alteredStem] = PR.split('/');
             this.participioCompuesto = this.participioCompuesto.replace(expression, alteredStem);
-            this.table.Impersonal.Participio[0] = this.participioCompuesto;
+            this.table.Impersonal.Participio = this.participioCompuesto;
         }
     }
 
@@ -1045,7 +1045,7 @@ export class pudrir extends vivir {
 
     protected setParticipio(): void {
         this.participioCompuesto = `${this.alteredStem}${this.desinences.Impersonal.Participio}`;
-        this.table.Impersonal.Participio = [this.participioCompuesto];
+        this.table.Impersonal.Participio = this.participioCompuesto;
     }
 
     protected setIndicativoPresente(): void {
@@ -1208,7 +1208,7 @@ export class reír extends vivir {
             this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`;
             this.participioCompuesto =
                 `${this.participioCompuesto}/${this.participioCompuesto.replace(searchValue, replaceValue)}`;
-            this.table.Impersonal.Participio = [this.participioCompuesto];
+            this.table.Impersonal.Participio = this.participioCompuesto;
         } else {
             super.setParticipio();
         }
@@ -1287,8 +1287,8 @@ export class salir extends vivir {
     protected configDesinences(): void {
         this.desinences.Indicativo.Presente[0] = this.desinences.Indicativo.Presente[0].replace(/^/, 'g');
         ['FuturoImperfecto', 'CondicionalSimple'].forEach(modeTime => {
-            this.desinences.Indicativo[modeTime] =
-                this.desinences.Indicativo[modeTime].map(d => d.replace(/^i/, ''));
+            this.desinences.Indicativo[modeTime as IndicativoSubSimpleKey] =
+                this.desinences.Indicativo[modeTime as IndicativoSubSimpleKey].map(d => d.replace(/^i/, ''));
         });
         this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(d => d.replace(/^/, 'g'));
     }
@@ -1470,8 +1470,8 @@ export class venir extends vivir {
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
         this.desinences.Indicativo.PreteritoIndefinido[2] = 'o';
         ['FuturoImperfecto', 'CondicionalSimple'].forEach(modeTime => {
-            this.desinences.Indicativo[modeTime] =
-                this.desinences.Indicativo[modeTime].map(d => d.replace(/^i/, ''));
+            this.desinences.Indicativo[modeTime as IndicativoSubSimpleKey] =
+                this.desinences.Indicativo[modeTime as IndicativoSubSimpleKey].map(d => d.replace(/^i/, ''));
         });
         this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(d => d.replace(/^/, 'g'));
     }

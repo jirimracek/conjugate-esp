@@ -4,7 +4,11 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { PronominalKeys, Regions, ModelAttributes, DefectiveType, PronounsTable, ModeParam, ModeTimeParam, ConjugationTable } from './declarations/types';
+import {
+    PronominalKeys, Regions, ModelAttributes, DefectiveType, PronounsTable, SimpleModeKey, ConjugationTable, RTable,
+    CompSubTable, ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey, IndicativoSubSimpleKey,
+    ImperativoSubKey, DTable, SubjuntivoSubSimpleKey
+} from './declarations/types';
 import { INDICATIVO_SIMPLE_KEYS, SUBJUNTIVO_SIMPLE_KEYS, INDICATIVO_COMP_KEYS, SUBJUNTIVO_COMP_KEYS } from './declarations/constants';
 import { PRONOUNS, AUX, NO_IMPERATIVO_AFIRMATIVO, NO_IMPERATIVO_NEGATIVO, DASH6 } from './declarations/constants';
 import { clearAccents, esdrujula, strongify, applyMonoRules } from './utilities/stringutils';
@@ -15,15 +19,15 @@ export abstract class BaseModel {
     protected type: PronominalKeys;
     protected region: Regions;
 
-    protected desinences: ConjugationTable = {};
-    protected table: ConjugationTable = {};
+    protected desinences: DTable;
+    protected table: RTable;
     protected participioCompuesto = '';
 
     protected version: string;
     protected attributes: ModelAttributes;
 
     private pronouns: PronounsTable;
-    private auxHaber: ConjugationTable;
+    private auxHaber: CompSubTable;
     private defectiveAttributes: DefectiveType;
     private monoSyllables: boolean;
 
@@ -50,13 +54,61 @@ export abstract class BaseModel {
         }
 
         // initialize result conjugation table
-        ['Impersonal',
-            'Indicativo',
-            'Subjuntivo',
-            'Imperativo'
-        ].forEach(mode => this.table[mode] = {});
-        this.table.Imperativo.Afirmativo = Array.from(DASH6);
-        this.table.Imperativo.Negativo = Array.from(DASH6);
+        this.table = {
+            Impersonal: {
+                Infinitivo: '',
+                Gerundio: '',
+                Participio: ''
+            },
+            Indicativo: {
+                Presente: [],
+                PreteritoImperfecto: [],
+                PreteritoIndefinido: [],
+                FuturoImperfecto: [],
+                CondicionalSimple: [],
+                PreteritoPerfecto: [],
+                PreteritoPluscuamperfecto: [],
+                PreteritoAnterior: [],
+                FuturoPerfecto: [],
+                CondicionalCompuesto: []
+            },
+            Subjuntivo: {
+                Presente: [],
+                PreteritoImperfectoRa: [],
+                PreteritoImperfectoSe: [],
+                FuturoImperfecto: [],
+                PreteritoPerfecto: [],
+                PreteritoPluscuamperfectoRa: [],
+                PreteritoPluscuamperfectoSe: [],
+                FuturoPerfecto: []
+
+            },
+            Imperativo: {
+                Afirmativo: Array.from(DASH6),
+                Negativo: Array.from(DASH6)
+            }
+        }
+
+        this.desinences = {
+            Impersonal: {
+                Infinitivo: [],
+                Gerundio: [],
+                Participio: []
+            },
+            Indicativo: {
+                Presente: [],
+                PreteritoImperfecto: [],
+                PreteritoIndefinido: [],
+                FuturoImperfecto: [],
+                CondicionalSimple: []
+            },
+            Subjuntivo: {
+                Presente: [],
+                PreteritoImperfectoRa: [],
+                PreteritoImperfectoSe: [],
+                FuturoImperfecto: []
+            }
+        }
     }
 
     /**
@@ -67,17 +119,17 @@ export abstract class BaseModel {
         // Remap terminations based on region
         if (this.region === 'voseo') {
             // Then, 2nd plural -> ustedes 
-            INDICATIVO_SIMPLE_KEYS.forEach(mode => 
+            INDICATIVO_SIMPLE_KEYS.forEach(mode =>
                 this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]);
 
-            SUBJUNTIVO_SIMPLE_KEYS.forEach(mode => 
+            SUBJUNTIVO_SIMPLE_KEYS.forEach(mode =>
                 this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
 
             // Remap auxiliary Haber
-            INDICATIVO_COMP_KEYS.forEach(mode => 
+            INDICATIVO_COMP_KEYS.forEach(mode =>
                 this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
 
-            SUBJUNTIVO_COMP_KEYS.forEach(mode => 
+            SUBJUNTIVO_COMP_KEYS.forEach(mode =>
                 this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
 
         } else if (this.region === 'formal') {
@@ -104,16 +156,16 @@ export abstract class BaseModel {
 
         } else if (this.region === 'canarias') {
             // Canarias, 2nd singular remains the same, 2nd plural -> ustedes
-            INDICATIVO_SIMPLE_KEYS.forEach(mode => 
+            INDICATIVO_SIMPLE_KEYS.forEach(mode =>
                 this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]);
 
-            SUBJUNTIVO_SIMPLE_KEYS.forEach(mode => 
+            SUBJUNTIVO_SIMPLE_KEYS.forEach(mode =>
                 this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
 
-            INDICATIVO_COMP_KEYS.forEach(mode => 
+            INDICATIVO_COMP_KEYS.forEach(mode =>
                 this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
 
-            SUBJUNTIVO_COMP_KEYS.forEach(mode => 
+            SUBJUNTIVO_COMP_KEYS.forEach(mode =>
                 this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
         }
     }
@@ -151,23 +203,21 @@ export abstract class BaseModel {
 
     private setInfinitivo(): void {
         this.table.Impersonal.Infinitivo =
-            [`${this.stem}${(this.type === 'N' ?
+            `${this.stem}${(this.type === 'N' ?
                 this.desinences.Impersonal.Infinitivo[0] :
-                this.desinences.Impersonal.Infinitivo[1])}`
-            ];
+                this.desinences.Impersonal.Infinitivo[1])}`;
     }
 
     protected setGerundio(root?: string): void {
         this.table.Impersonal.Gerundio =
-            [`${root ? root : this.stem}${this.type == 'N' ?
+            `${root ? root : this.stem}${this.type == 'N' ?
                 this.desinences.Impersonal.Gerundio[0] :
-                this.desinences.Impersonal.Gerundio[1]}`
-            ];
+                this.desinences.Impersonal.Gerundio[1]}`;
     }
 
     protected setParticipio(): void {
-        this.table.Impersonal.Participio = [`${this.stem}${this.desinences.Impersonal.Participio}`];
-        this.participioCompuesto = this.table.Impersonal.Participio[0];
+        this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`;
+        this.table.Impersonal.Participio = this.participioCompuesto;
     }
 
     /////////////////////////////////////////////////////////////////
@@ -177,15 +227,25 @@ export abstract class BaseModel {
      * Called from the base class if the verb stem doesn't change or
      * from derived, which may change stems per each person.  
      * @param mode 
-     * @param time 
+     * @param key 
      * @param roots optional array of desired stems, override in derived classes
      */
-    protected setTable(mode: ModeParam, time: ModeTimeParam, roots?: string[]): void {
-        this.table[mode][time] =
-            this.desinences[mode][time].map((desinence, index) =>
-                `${this.pronouns[this.type][this.region][index]} ${roots ?
-                    roots[index] :
-                    this.stem}${desinence}`.trim());
+    // protected setTable(mode: ModeParam, key: ModeTimeParam , roots?: string[]): void {
+    protected setTable(mode: SimpleModeKey, key: IndicativoSubSimpleKey | SubjuntivoSubSimpleKey, roots?: string[]): void {
+        if (mode === 'Indicativo') {
+            this.table[mode][key as IndicativoSubSimpleKey] = this.desinences[mode][key as IndicativoSubSimpleKey]
+                .map((desinence: string, index: number) =>
+                    `${this.pronouns[this.type][this.region][index]} ${roots ?
+                        roots[index] :
+                        this.stem}${desinence}`.trim());
+        }
+        if (mode === 'Subjuntivo') {
+            this.table[mode][key as SubjuntivoSubSimpleKey] = this.desinences[mode][key as SubjuntivoSubSimpleKey]
+                .map((desinence: string, index: number) =>
+                    `${this.pronouns[this.type][this.region][index]} ${roots ?
+                        roots[index] :
+                        this.stem}${desinence}`.trim());
+        }
     }
 
     // // Indicativo simple
@@ -346,22 +406,26 @@ export abstract class BaseModel {
                 // Tricky, need to look at the original desinence this was built with
                 // Nonpronominal and the desinence doesn't start with ií, nuke
                 if (this.type === 'N' && /^[^ií]/.test(this.desinences.Impersonal.Gerundio[0])) {
-                    this.table.Impersonal.Gerundio = ['-'];
+                    this.table.Impersonal.Gerundio = '-';
                 } else if (this.type === 'P' && /^[^ií]/.test(this.desinences.Impersonal.Gerundio[1])) {
-                    this.table.Impersonal.Gerundio = ['-'];
+                    this.table.Impersonal.Gerundio = '-';
                 }
 
-                ['Indicativo',
-                    'Subjuntivo'
-                ].forEach(mode => {
-                    Object.keys(this.desinences[mode]).forEach(time => {
-                        this.desinences[mode][time].forEach((d, i) => {
-                            if (/^[^ií]/.test(d)) {
-                                this.table[mode][time][i] = '-';
-                            }
-                        });
+                Object.keys(this.desinences.Indicativo).forEach(time => {
+                    this.desinences.Indicativo[time as IndicativoSubSimpleKey].forEach((d, i) => {
+                        if (/^[^ií]/.test(d)) {
+                            this.table.Indicativo[time as IndicativoSubSimpleKey][i] = '-';
+                        }
                     });
                 });
+                Object.keys(this.desinences.Subjuntivo).forEach(time => {
+                    this.desinences.Subjuntivo[time as SubjuntivoSubSimpleKey].forEach((d, i) => {
+                        if (/^[^ií]/.test(d)) {
+                            this.table.Subjuntivo[time as SubjuntivoSubSimpleKey][i] = '-';
+                        }
+                    });
+                });
+
                 // Imperativos zapping time: look at the last word, the next character just past the stem.length.  
                 // If it's [ií], let it through, zap otherwise
                 [1, 3, 4].forEach(index => {
@@ -380,17 +444,21 @@ export abstract class BaseModel {
                 });
                 break;
             case 'eimorfo':     // only ones whose desinence starts with  e or i, zap everything else
-                ['Indicativo',
-                    'Subjuntivo'
-                ].forEach(mode => {
-                    Object.keys(this.desinences[mode]).forEach(time => {
-                        this.desinences[mode][time].forEach((d, i) => {
-                            if (/^[^iíeé]/.test(d)) {
-                                this.table[mode][time][i] = '-';
-                            }
-                        });
+                Object.keys(this.desinences.Indicativo).forEach(time => {
+                    this.desinences.Indicativo[time as IndicativoSubSimpleKey].forEach((d, i) => {
+                        if (/^[^iíeé]/.test(d)) {
+                            this.table.Indicativo[time as IndicativoSubSimpleKey][i] = '-';
+                        }
                     });
                 });
+                Object.keys(this.desinences.Subjuntivo).forEach(time => {
+                    this.desinences.Subjuntivo[time as SubjuntivoSubSimpleKey].forEach((d, i) => {
+                        if (/^[^iíeé]/.test(d)) {
+                            this.table.Subjuntivo[time as SubjuntivoSubSimpleKey][i] = '-';
+                        }
+                    });
+                });
+
                 [1, 3, 4].forEach(index => {
                     const last = this.table.Imperativo.Afirmativo[index].split(' ').pop();
                     if (last && /^[^iíeé]/.test(last[this.stem.length])) {
@@ -409,20 +477,17 @@ export abstract class BaseModel {
                 this.table.Subjuntivo.PreteritoPerfecto = Array.from(DASH6);
                 break;
             case 'imper': // infinitivo, gerundio, participio y en las terceras personas del singular
-                ['Indicativo',
-                    'Subjuntivo'
-                ].forEach(mode => {
-                    Object.keys(this.table[mode]).forEach(time => {
-                        [0, 1, 3, 4, 5].forEach(index => this.table[mode][time][index] = '-');
-                    });
-                });
+                Object.keys(this.table.Indicativo).forEach(time =>
+                    [0, 1, 3, 4, 5].forEach(index => this.table.Indicativo[time as IndicativoSubKey][index] = '-'));
+
+                Object.keys(this.table.Subjuntivo).forEach(time =>
+                    [0, 1, 3, 4, 5].forEach(index => this.table.Subjuntivo[time as SubjuntivoSubKey][index] = '-'));
+
                 break;
             case 'tercio':
                 // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos D= tercio
                 // Verbo empecer
-                ['Gerundio',
-                    'Participio'
-                ].forEach(v => this.table.Impersonal[v] = ['-']);
+                (['Gerundio', 'Participio'] as ImpersonalSubKey[]).forEach(v => this.table.Impersonal[v] = '-');
                 // Simple indicative
                 INDICATIVO_SIMPLE_KEYS.forEach(time => [0, 1, 3, 4].forEach(i => this.table.Indicativo[time][i] = '-'));
 
@@ -438,13 +503,11 @@ export abstract class BaseModel {
             case 'terciop':
                 // terciopersonal, v2 - infinitivo, gerundio, participio y en terceras personas
                 // Verbo: acaecer, acontecer
-                ['Indicativo',
-                    'Subjuntivo'
-                ].forEach(mode => {
-                    Object.keys(this.table[mode]).forEach(time => {
-                        [0, 1, 3, 4].forEach(index => this.table[mode][time][index] = '-');
-                    });
-                });
+                Object.keys(this.table.Indicativo).forEach(time =>
+                    [0, 1, 3, 4].forEach(index => this.table.Indicativo[time as IndicativoSubKey][index] = '-'));
+
+                Object.keys(this.table.Subjuntivo).forEach(time =>
+                    [0, 1, 3, 4].forEach(index => this.table.Subjuntivo[time as SubjuntivoSubKey][index] = '-'));
                 break;
 
                 // case 'mmorfo':
@@ -452,15 +515,15 @@ export abstract class BaseModel {
 
             case 'bimorfop':
                 //  bimorfo(p) - sólo en infinitivo y en participio - zap everything else indiscriminantly
-                this.table.Impersonal.Gerundio = ['-'];
-                ['Indicativo',
-                    'Subjuntivo',
-                    'Imperativo'
-                ].forEach(mode => {
-                    Object.keys(this.table[mode]).forEach(time => {
-                        this.table[mode][time] = Array.from(DASH6);
-                    });
-                });
+                this.table.Impersonal.Gerundio = '-';
+                Object.keys(this.table.Indicativo).forEach(time =>
+                    this.table.Indicativo[time as IndicativoSubKey] = Array.from(DASH6));
+
+                Object.keys(this.table.Subjuntivo).forEach(time =>
+                    this.table.Subjuntivo[time as SubjuntivoSubKey] = Array.from(DASH6));
+
+                Object.keys(this.table.Imperativo).forEach(time =>
+                    this.table.Imperativo[time as ImperativoSubKey] = Array.from(DASH6));
                 break;
 
                 // case 'bimorfog':
@@ -469,21 +532,17 @@ export abstract class BaseModel {
             case 'trimorfo':
                 // trimorfo infinitivo y en las segundas personas del imperativo
                 // Verbo abar
-                ['Gerundio',
-                    'Participio'
-                ].forEach(v => this.table.Impersonal[v] = ['-']);
+                ['Gerundio', 'Participio'].forEach(v =>
+                    this.table.Impersonal[v as ImpersonalSubKey] = '-');
 
-                ['Indicativo',
-                    'Subjuntivo'
-                ].forEach(mode => {
-                    Object.keys(this.table[mode]).forEach(time => {
-                        this.table[mode][time] = Array.from(DASH6);
-                    });
-                });
+                Object.keys(this.table.Indicativo).forEach(time =>
+                    this.table.Indicativo[time as IndicativoSubKey] = Array.from(DASH6));
 
-                Object.keys(this.table.Imperativo).forEach(mode => {
-                    [2, 3].forEach(index => this.table.Imperativo[mode][index] = '-');
-                });
+                Object.keys(this.table.Subjuntivo).forEach(time =>
+                    this.table.Subjuntivo[time as SubjuntivoSubKey] = Array.from(DASH6));
+
+                Object.keys(this.table.Imperativo).forEach(mode =>
+                    [2, 3].forEach(index => this.table.Imperativo[mode as ImperativoSubKey][index] = '-'));
                 break;
 
             case 'omorfo':
@@ -492,47 +551,42 @@ export abstract class BaseModel {
                     'CondicionalSimple',
                     'PreteritoAnterior',
                     'FuturoPerfecto',
-                    'CondicionalCompuesto'
-                ].forEach(mode => this.table.Indicativo[mode] = Array.from(DASH6));
+                    'CondicionalCompuesto'].forEach(mode =>
+                    this.table.Indicativo[mode as IndicativoSubKey] = Array.from(DASH6));
 
-                ['FuturoImperfecto',
-                    'FuturoPerfecto'
-                ].forEach(time => this.table.Subjuntivo[time] =
-                    Array.from(DASH6));
+                ['FuturoImperfecto', 'FuturoPerfecto'].forEach(time =>
+                    this.table.Subjuntivo[time as SubjuntivoSubKey] = Array.from(DASH6));
 
                 this.table.Imperativo.Negativo[3] = '-';
                 break;
             case 'ogmorfo':
-                ['Infinitivo',
-                    'Gerundio',
-                    'Participio'
-                ].forEach(v => this.table.Impersonal[v] = ['-']);
+                ['Infinitivo', 'Gerundio', 'Participio'].forEach(v =>
+                    this.table.Impersonal[v as ImpersonalSubKey] = '-');
 
                 ['Presente',
                     'PreteritoImperfecto',
                     'FuturoImperfecto',
                     'CondicionalSimple',
-                    ...INDICATIVO_COMP_KEYS
-                ].forEach(mode => this.table.Indicativo[mode] = Array.from(DASH6));
+                    ...INDICATIVO_COMP_KEYS].forEach(mode =>
+                    this.table.Indicativo[mode as IndicativoSubKey] = Array.from(DASH6));
 
                 ['Presente',
                     'FuturoImperfecto',
-                    ...SUBJUNTIVO_COMP_KEYS
-                ].forEach(mode => this.table.Subjuntivo[mode] = Array.from(DASH6));
+                    ...SUBJUNTIVO_COMP_KEYS].forEach(mode =>
+                    this.table.Subjuntivo[mode as SubjuntivoSubKey] = Array.from(DASH6));
 
                 break;
             case 'osmorfo':
-                this.table.Impersonal.Participio = ['-'];
+                this.table.Impersonal.Participio = '-';
 
                 ['PreteritoIndefinido',
                     'FuturoImperfecto',
                     'CondicionalSimple',
-                    ...INDICATIVO_COMP_KEYS
-                ].forEach(mode => this.table.Indicativo[mode] = Array.from(DASH6));
+                    ...INDICATIVO_COMP_KEYS].forEach(mode =>
+                    this.table.Indicativo[mode as IndicativoSubKey] = Array.from(DASH6));
 
-                ['FuturoImperfecto',
-                    ...SUBJUNTIVO_COMP_KEYS
-                ].forEach(mode => this.table.Subjuntivo[mode] = Array.from(DASH6));
+                ['FuturoImperfecto', ...SUBJUNTIVO_COMP_KEYS].forEach(mode =>
+                    this.table.Subjuntivo[mode as SubjuntivoSubKey] = Array.from(DASH6));
 
                 this.table.Imperativo.Negativo[3] = '-';
                 break;

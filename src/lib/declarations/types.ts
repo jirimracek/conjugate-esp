@@ -7,7 +7,53 @@
 
 // Conjugation table format used:
 //   internally - see constants 
-export type ConjugationTable = { [modekey: string]: { [timekey: string]: string[] } };
+export type ConjugationTable = { [modekey: string]: { [timekey: string]: string[] | string } };
+export type CompSubTable = { [modekey: string]: { [timekey: string]: string[] } };
+// export type SimpleSubTable = { [modekey: string]: { [timekey: string]: string[] } };
+// export type ImpersonalSubTable = { [modekey: string]: { [timekey: string]: string[] } };
+// export type DesinencesTable = { [modekey: string]: { [timekey: string]: string[] } };
+// export type TableKey = 'Impersonal' | 'Indicativo' | 'Subjuntivo' | 'Imperativo';
+export type ImpersonalSubKey = 'Infinitivo' | 'Gerundio' | 'Participio';
+
+export type IndicativoSubSimpleKey = 'Presente' | 'PreteritoImperfecto' | 'PreteritoIndefinido' | 'FuturoImperfecto' | 'CondicionalSimple';
+export type IndicativoSubCompKey = 'PreteritoPerfecto' | 'PreteritoPluscuamperfecto' | 'PreteritoAnterior' | 'FuturoPerfecto' | 'CondicionalCompuesto';
+export type IndicativoSubKey = IndicativoSubSimpleKey | IndicativoSubCompKey;
+
+export type SubjuntivoSubSimpleKey = 'Presente'| 'PreteritoImperfectoRa'| 'PreteritoImperfectoSe'| 'FuturoImperfecto';
+export type SubjuntivoSubCompKey = 'PreteritoPerfecto' | 'PreteritoPluscuamperfectoRa' | 'PreteritoPluscuamperfectoSe' | 'FuturoPerfecto';
+export type SubjuntivoSubKey = SubjuntivoSubSimpleKey | SubjuntivoSubCompKey;
+
+export type ImperativoSubKey = 'Afirmativo' | 'Negativo';
+
+export type SimpleModeKey = 'Indicativo' | 'Subjuntivo';
+// export type ModeTimeParam = 'Presente' | 'PreteritoImperfecto' | 'PreteritoIndefinido' |
+//     'FuturoImperfecto' | 'CondicionalSimple' | 'PreteritoImperfectoRa' | 'PreteritoImperfectoSe';
+
+export type DTable = {
+    Impersonal: {
+        [subkey in ImpersonalSubKey]: string []
+    },
+    Indicativo: {
+        [subkey in IndicativoSubSimpleKey]: string[]
+    },
+    Subjuntivo: {
+        [subkey in SubjuntivoSubSimpleKey]: string[]
+    }
+}
+export type RTable = {
+    Impersonal: {
+        [subkey in ImpersonalSubKey]: string
+    },
+    Indicativo: {
+        [subkey in IndicativoSubKey]: string[]
+    },
+    Subjuntivo: {
+        [subkey in SubjuntivoSubKey]: string[]
+    },
+    Imperativo: {
+        [subkey in ImperativoSubKey]: string[]
+    }
+}
 //   externally - json format of what the consumer receives
 export type Results = { [modekey: string]: { [timekey: string]: string[] | string } };
 
@@ -41,7 +87,4 @@ export type Regions = 'castellano' | 'voseo' | 'canarias' | 'formal';
 // Use to hold mode pronouns
 export type PronounsTable = { [key in PronominalKeys]: { [key in Regions]: string[] } };
 
-export type ModeParam = 'Indicativo' | 'Subjuntivo';
-export type ModeTimeParam = 'Presente' | 'PreteritoImperfecto' | 'PreteritoIndefinido' |
-    'FuturoImperfecto' | 'CondicionalSimple' | 'PreteritoImperfectoRa' | 'PreteritoImperfectoSe';
 
