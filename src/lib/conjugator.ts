@@ -6,13 +6,13 @@
 */
 import definitions from '../data/definitions.json';
 import { ModelFactory } from './factory';
-import { ConjugationTable, DB, Regions, PronominalKeys, 
-    VerbModelData, ModelAttributes, Model, ModelWithAttributes } from './declarations/types';
+import { DB, Regions, PronominalKeys, VerbModelData, ModelAttributes, ConjugationTable } from './declarations/types';
 import { ERROR_MSG } from './declarations/constants';
 
 export type InfoType = { verb: string, model: string, region: string, pronominal: boolean, defective: boolean };
-export type ErrorType = { message: string };
-export type ResultType = { info: InfoType | ErrorType, conjugation: ConjugationTable };
+export type ErrorType = { ERROR: { message: string } };
+export type ResultType = { info: InfoType, conjugation: ConjugationTable };
+export type OutputType = ResultType[] | ErrorType;
 
 /**
  * Create instance of Conjugator, then
@@ -31,17 +31,18 @@ export class Conjugator {
     constructor() { /* empty */ }
 
     /**
+     * Sync version
      * 
      * @param verb required
      * @param region optional castellano|voseo|canarias|formal 
      */
-    public conjugate(verb: string, region: Regions = 'castellano'): ResultType[] {
+    public conjugateSync(verb: string, region: Regions = 'castellano'): ResultType[] | ErrorType {
         const result: ResultType[] = [];
         try {
             if (!this.templates) {
                 throw new Error(ERROR_MSG.UndefinedTemplates);
             }
-            if (!this.getVerbList().includes(verb)) {
+            if (!this.getVerbListSync().includes(verb)) {
                 throw new Error(ERROR_MSG.UnknownVerb.replace('VERB', verb));
             }
             if (!['castellano', 'voseo', 'canarias', 'formal'].includes(region)) {
@@ -57,7 +58,7 @@ export class Conjugator {
             const modelTemplates: [string, PronominalKeys, Regions, ModelAttributes][] = [];
             (Object.keys(verbModelData) as PronominalKeys[]).forEach(pronominalKey => {
                 // string | [string | ModelWithAttrs] | ModelWithAttrs
-                const models = [verbModelData[pronominalKey]].flat();          
+                const models = [verbModelData[pronominalKey]].flat();
                 models.forEach(model => {
                     if (typeof model === 'string') {
                         modelTemplates.push([model, pronominalKey, region, {}]);
@@ -73,76 +74,96 @@ export class Conjugator {
                 const [modelName, pronominalKey, region, attributes] = template;
                 if (!this.factory.isImplemented(modelName)) {
                     throw new Error(
-                        ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/, 
+                        ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/,
                             `${modelName}$1${verb}$2${region}`));
                 }
 
                 const model = this.factory.getModel(verb, modelName, pronominalKey, region, attributes);
 
                 result.push({
-                    info: { 
-                        verb: pronominalKey === 'P' ?  `${verb}se` : verb, 
-                        model: modelName, 
-                        region: region, 
-                        pronominal: (pronominalKey === 'P'), 
-                        defective: !!(attributes['D']) },
-                    conjugation: model.getConjugationOf()
+                    info: {
+                        verb: pronominalKey === 'P' ? `${verb}se` : verb,
+                        model: modelName,
+                        region: region,
+                        pronominal: (pronominalKey === 'P'),
+                        defective: !!(attributes['D'])
+                    },
+                    conjugation: model.getConjugation()
                 });
             });
             return result;
-
         } catch (error) {
-            // console.error(error);
-            return [{ info: error.message, conjugation: {} }];
+            console.error(error);
+            return { ERROR: { message: error.message } };
         }
     }
 
     /**
-     * get sorted list of known verbs
+     * async version
+     * 
+     * @param verb to conjugate
+     * @param region 
      */
-    public getVerbList(): string[] {
+    public conjugate(verb: string, region: Regions = 'castellano'): Promise<ResultType[]> {
+        return new Promise((resolve, reject) => {
+            const result: OutputType = this.conjugateSync(verb, region);
+            if (Array.isArray(result)) {
+                resolve(result);
+            } else {
+                reject(result);
+            }
+        });
+    }
+
+    /**
+     * get sorted list of known verbs,
+     */
+    public getVerbListSync(): string[] {
         try {
             return Object.keys(this.templates).sort(function (a, b) { return a.localeCompare(b); });
         } catch (error) {
-            console.error('No verbs - check definitions.json file');
-            return [];
+            console.error(ERROR_MSG.NoVerbs, error.message);
+            return [ERROR_MSG.NoVerbs];
+        }
+    }
+
+    public getVerbList(): Promise<string[]> {
+        return new Promise((resolve, reject) => {
+            const result = this.getVerbListSync();
+            if (result.length > 1) {
+                resolve(result);
+            } else {
+                reject(result);
+            }
+        });
+    }
+
+
+    /**
+     * list of all models, sync version
+     * 
+     */
+    public getModelsSync(): string[] {
+        try {
+            return this.factory.getModels();
+        } catch (error) {
+            console.error(ERROR_MSG.NoModels, error.message);
+            return [ERROR_MSG.NoModels];
         }
     }
 
     /**
-     * Get complete list of all known models
+     * list of all models
+     * 
      */
-    public getModels(): string[] {
-        const result: Set<string> = new Set();
-        const list = Object.values(this.templates);   // can't tell the type yet
-
-        function traverse(value?: Model | Model[]): void {
-            if (typeof value === 'string') {         // can be a string
-                result.add(value);
-            } else if (Array.isArray(value)) {       // can be string[] or ModelWithAttributes[]
-                value.forEach(data => {
-                    if (typeof data === 'string') {
-                        result.add(data);
-                    } else {
-                        result.add(Object.keys(data)[0]);
-                    }
-                });
+    public getModels(): Promise<string[]> {
+        return new Promise((resolve, reject) => {
+            const result = this.getModelsSync();
+            if (result.length > 1) {
+                resolve(result);
             } else {
-                result.add(Object.keys(value as ModelWithAttributes)[0]);    // can be ModelWithAttributes
-            }
-        }
-        (list as VerbModelData[]).forEach(value => {   // now we know the type
-            if (value.N) {
-                traverse(value.N);
-            }
-            if (value.P) {
-                traverse(value.P);
+                reject(result);
             }
         });
-        return Array.from(result);
-    }
-
-    public getImplementedModels(): string[] {
-        return this.getModels().filter(m => this.factory.isImplemented(m));
     }
 }

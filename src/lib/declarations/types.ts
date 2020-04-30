@@ -7,8 +7,9 @@
 
 // Conjugation table format used:
 //   internally - see constants 
-//   externally - json format of what the consumer receives
 export type ConjugationTable = { [modekey: string]: { [timekey: string]: string[] } };
+//   externally - json format of what the consumer receives
+export type Results = { [modekey: string]: { [timekey: string]: string[] | string } };
 
 // Attributes
 // attribute has form of attrname : string | boolean

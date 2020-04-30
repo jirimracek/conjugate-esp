@@ -62,6 +62,10 @@
         "@typescript-eslint/member-delimiter-style": [
             "warn",
             {
+                "multiline": {
+                    "delimiter": "comma",
+                    "requireLast": false
+                },
                 "singleline": {
                     "delimiter": "comma",
                     "requireLast": false

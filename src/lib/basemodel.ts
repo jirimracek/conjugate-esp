@@ -4,7 +4,8 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { PronominalKeys, Regions, ConjugationTable, ModelAttributes, DefectiveType, PronounsTable, ModeParam, ModeTimeParam } from './declarations/types';
+import { PronominalKeys, Regions, ModelAttributes, DefectiveType, PronounsTable, ModeParam, ModeTimeParam, ConjugationTable } from './declarations/types';
+import { INDICATIVO_SIMPLE_KEYS, SUBJUNTIVO_SIMPLE_KEYS, INDICATIVO_COMP_KEYS, SUBJUNTIVO_COMP_KEYS } from './declarations/constants';
 import { PRONOUNS, AUX, NO_IMPERATIVO_AFIRMATIVO, NO_IMPERATIVO_NEGATIVO, DASH6 } from './declarations/constants';
 import { clearAccents, esdrujula, strongify, applyMonoRules } from './utilities/stringutils';
 
@@ -66,104 +67,58 @@ export abstract class BaseModel {
         // Remap terminations based on region
         if (this.region === 'voseo') {
             // Then, 2nd plural -> ustedes 
-            ['Presente',
-                'PreteritoImperfecto',
-                'PreteritoIndefinido',
-                'FuturoImperfecto',
-                'CondicionalSimple'
-            ].forEach(mode => this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]);
+            INDICATIVO_SIMPLE_KEYS.forEach(mode => 
+                this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]);
 
-            ['Presente',
-                'PreteritoImperfectoRa',
-                'PreteritoImperfectoSe',
-                'FuturoImperfecto'
-            ].forEach(mode => this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
+            SUBJUNTIVO_SIMPLE_KEYS.forEach(mode => 
+                this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
 
-            // Remap auxiary Haber
-            ['PreteritoPerfecto',
-                'PreteritoPluscuamperfecto',
-                'PreteritoAnterior',
-                'FuturoPerfecto',
-                'CondicionalCompuesto'
-            ].forEach(mode => this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
+            // Remap auxiliary Haber
+            INDICATIVO_COMP_KEYS.forEach(mode => 
+                this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
 
-            ['PreteritoPerfecto',
-                'PreteritoPluscuamperfectoRa',
-                'PreteritoPluscuamperfectoSe',
-                'FuturoPerfecto'
-            ].forEach(mode => this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
+            SUBJUNTIVO_COMP_KEYS.forEach(mode => 
+                this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
 
         } else if (this.region === 'formal') {
             // Castellano formal, 2nd singular -> usted, 2nd plural -> ustedes
-            ['Presente',
-                'PreteritoImperfecto',
-                'PreteritoIndefinido',
-                'FuturoImperfecto',
-                'CondicionalSimple'
-            ].forEach(mode => {
+            INDICATIVO_SIMPLE_KEYS.forEach(mode => {
                 this.desinences.Indicativo[mode][1] = this.desinences.Indicativo[mode][2];
                 this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]
             });
 
-            ['Presente',
-                'PreteritoImperfectoRa',
-                'PreteritoImperfectoSe',
-                'FuturoImperfecto'
-            ].forEach(mode => {
+            SUBJUNTIVO_SIMPLE_KEYS.forEach(mode => {
                 this.desinences.Subjuntivo[mode][1] = this.desinences.Subjuntivo[mode][2];
                 this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]
             });
 
-            ['PreteritoPerfecto',
-                'PreteritoPluscuamperfecto',
-                'PreteritoAnterior',
-                'FuturoPerfecto',
-                'CondicionalCompuesto'
-            ].forEach(mode => {
+            INDICATIVO_COMP_KEYS.forEach(mode => {
                 this.auxHaber.Indicativo[mode][1] = this.auxHaber.Indicativo[mode][2];
                 this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]
             });
 
-            ['PreteritoPerfecto',
-                'PreteritoPluscuamperfectoRa',
-                'PreteritoPluscuamperfectoSe',
-                'FuturoPerfecto'
-            ].forEach(mode => {
+            SUBJUNTIVO_COMP_KEYS.forEach(mode => {
                 this.auxHaber.Subjuntivo[mode][1] = this.auxHaber.Subjuntivo[mode][2];
                 this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]
             });
 
         } else if (this.region === 'canarias') {
             // Canarias, 2nd singular remains the same, 2nd plural -> ustedes
-            ['Presente',
-                'PreteritoImperfecto',
-                'PreteritoIndefinido',
-                'FuturoImperfecto',
-                'CondicionalSimple'
-            ].forEach(mode => this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]);
+            INDICATIVO_SIMPLE_KEYS.forEach(mode => 
+                this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]);
 
-            ['Presente',
-                'PreteritoImperfectoRa',
-                'PreteritoImperfectoSe',
-                'FuturoImperfecto'
-            ].forEach(mode => this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
+            SUBJUNTIVO_SIMPLE_KEYS.forEach(mode => 
+                this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
 
-            ['PreteritoPerfecto',
-                'PreteritoPluscuamperfecto',
-                'PreteritoAnterior',
-                'FuturoPerfecto',
-                'CondicionalCompuesto'
-            ].forEach(mode => this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
+            INDICATIVO_COMP_KEYS.forEach(mode => 
+                this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
 
-            ['PreteritoPerfecto',
-                'PreteritoPluscuamperfectoRa',
-                'PreteritoPluscuamperfectoSe',
-                'FuturoPerfecto'
-            ].forEach(mode => this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
+            SUBJUNTIVO_COMP_KEYS.forEach(mode => 
+                this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
         }
     }
 
-    public getConjugationOf(): ConjugationTable {
+    public getConjugation(): ConjugationTable {
 
         this.setInfinitivo();
         this.setGerundio();
@@ -275,22 +230,13 @@ export abstract class BaseModel {
     /////////////////////////////////////////////////////////////////
     // compuestos
     private setCompuestos(): void {
-        ['PreteritoPerfecto',
-            'PreteritoPluscuamperfecto',
-            'PreteritoAnterior',
-            'FuturoPerfecto',
-            'CondicionalCompuesto'
-        ].forEach(time => {
+        INDICATIVO_COMP_KEYS.forEach(time => {
             this.table.Indicativo[time] =
                 this.auxHaber.Indicativo[time].map((aux, index) =>
                     `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
         });
 
-        ['PreteritoPerfecto',
-            'PreteritoPluscuamperfectoRa',
-            'PreteritoPluscuamperfectoSe',
-            'FuturoPerfecto'
-        ].forEach(time => this.table.Subjuntivo[time] =
+        SUBJUNTIVO_COMP_KEYS.forEach(time => this.table.Subjuntivo[time] =
             this.auxHaber.Subjuntivo[time].map((aux, index) =>
                 `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim())
         );
@@ -478,33 +424,14 @@ export abstract class BaseModel {
                     'Participio'
                 ].forEach(v => this.table.Impersonal[v] = ['-']);
                 // Simple indicative
-                ['Presente',
-                    'PreteritoImperfecto',
-                    'PreteritoIndefinido',
-                    'FuturoImperfecto',
-                    'CondicionalSimple'
-                ].forEach(time => [0, 1, 3, 4].forEach(i => this.table.Indicativo[time][i] = '-'));
+                INDICATIVO_SIMPLE_KEYS.forEach(time => [0, 1, 3, 4].forEach(i => this.table.Indicativo[time][i] = '-'));
 
                 // Simple subjuntive
-                ['Presente',
-                    'PreteritoImperfectoRa',
-                    'PreteritoImperfectoSe',
-                    'FuturoImperfecto'
-                ].forEach(time => [0, 1, 3, 4].forEach(i => this.table.Subjuntivo[time][i] = '-'));
+                SUBJUNTIVO_SIMPLE_KEYS.forEach(time => [0, 1, 3, 4].forEach(i => this.table.Subjuntivo[time][i] = '-'));
 
                 // Indicative compuesto
-                ['PreteritoPerfecto',
-                    'PreteritoPluscuamperfecto',
-                    'PreteritoAnterior',
-                    'FuturoPerfecto',
-                    'CondicionalCompuesto'
-                ].forEach(time => this.table.Indicativo[time] = Array.from(DASH6));    // all 6x
-
-                ['PreteritoPerfecto',
-                    'PreteritoPluscuamperfectoRa',
-                    'PreteritoPluscuamperfectoSe',
-                    'FuturoPerfecto'
-                ].forEach(time => this.table.Subjuntivo[time] = Array.from(DASH6));
+                INDICATIVO_COMP_KEYS.forEach(time => this.table.Indicativo[time] = Array.from(DASH6));    // all 6x
+                SUBJUNTIVO_COMP_KEYS.forEach(time => this.table.Subjuntivo[time] = Array.from(DASH6));
 
                 break;
 
@@ -585,19 +512,12 @@ export abstract class BaseModel {
                     'PreteritoImperfecto',
                     'FuturoImperfecto',
                     'CondicionalSimple',
-                    'PreteritoPerfecto',
-                    'PreteritoPluscuamperfecto',
-                    'PreteritoAnterior',
-                    'FuturoPerfecto',
-                    'CondicionalCompuesto'
+                    ...INDICATIVO_COMP_KEYS
                 ].forEach(mode => this.table.Indicativo[mode] = Array.from(DASH6));
 
                 ['Presente',
                     'FuturoImperfecto',
-                    'PreteritoPluscuamperfectoRa',
-                    'PreteritoPluscuamperfectoSe',
-                    'FuturoPerfecto',
-                    'PreteritoPerfecto'
+                    ...SUBJUNTIVO_COMP_KEYS
                 ].forEach(mode => this.table.Subjuntivo[mode] = Array.from(DASH6));
 
                 break;
@@ -607,18 +527,11 @@ export abstract class BaseModel {
                 ['PreteritoIndefinido',
                     'FuturoImperfecto',
                     'CondicionalSimple',
-                    'PreteritoPerfecto',
-                    'PreteritoPluscuamperfecto',
-                    'PreteritoAnterior',
-                    'FuturoPerfecto',
-                    'CondicionalCompuesto'
+                    ...INDICATIVO_COMP_KEYS
                 ].forEach(mode => this.table.Indicativo[mode] = Array.from(DASH6));
 
                 ['FuturoImperfecto',
-                    'PreteritoPerfecto',
-                    'PreteritoPluscuamperfectoRa',
-                    'PreteritoPluscuamperfectoSe',
-                    'FuturoPerfecto'
+                    ...SUBJUNTIVO_COMP_KEYS
                 ].forEach(mode => this.table.Subjuntivo[mode] = Array.from(DASH6));
 
                 this.table.Imperativo.Negativo[3] = '-';

@@ -8,7 +8,7 @@
     "build": "tsc",
     "prepare": "npm run build",
     "test": "tsc && jest -b1 --noStackTrace ",
-    "verbose": "tsc && jest -b1 --verbose",
+    "test-verbose": "tsc && jest -b1 --verbose",
     "cover": "jest --coverage",
     "cover-verbose": "jest --coverage --verbose",
     "lint": "eslint --ext .ts",

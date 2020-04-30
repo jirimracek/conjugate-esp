@@ -37,6 +37,14 @@ export class ModelFactory {
     public isImplemented(name: string): boolean {
         return !!(ar[name as ArKey] || er[name as ErKey] || ir[name as IrKey]);
     }
+
+    public getModels(): string[] {
+        const models: Set<string> = new Set();
+        Object.keys(ar).forEach(m => models.add(m));
+        Object.keys(er).forEach(m => models.add(m));
+        Object.keys(ir).forEach(m => models.add(m));
+        return Array.from(models);
+    }
 }
 
 

@@ -110,14 +110,49 @@ export const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
     'osmorfo',
     'ogmorfo'
 ];
+
+export const INDICATIVO_SIMPLE_KEYS: string[] = [
+    'Presente',
+    'PreteritoImperfecto',
+    'PreteritoIndefinido',
+    'FuturoImperfecto',
+    'CondicionalSimple'
+];
+
+export const SUBJUNTIVO_SIMPLE_KEYS: string[] = [
+    'Presente',
+    'PreteritoImperfectoRa',
+    'PreteritoImperfectoSe',
+    'FuturoImperfecto'
+];
+
+export const INDICATIVO_COMP_KEYS: string[] = [
+    'PreteritoPerfecto',
+    'PreteritoPluscuamperfecto',
+    'PreteritoAnterior',
+    'FuturoPerfecto',
+    'CondicionalCompuesto'
+];
+
+export const SUBJUNTIVO_COMP_KEYS: string[] = [
+    'PreteritoPerfecto',
+    'PreteritoPluscuamperfectoRa',
+    'PreteritoPluscuamperfectoSe',
+    'FuturoPerfecto'
+];
+
+
 export const NO_IMPERATIVO_NEGATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'ogmorfo'];
 export const ERROR_MSG = {
-    UndefinedTemplates: 'Undefined templates - check definitions.json file',
-    UnknownVerb: 'Unknown verb VERB',
-    UnknownRegion: 'Unknown region REGION',
-    MissingModelData: 'Missing verb VERB model data - check definitions.json file',
-    UnknownModel: 'Model MODEL not implemented, can not conjugate verb VERB, region REGION'
+    UnknownVerb: 'Input error, unknown verb VERB',
+    UnknownRegion: 'Input error, invalid region REGION',
+    UnknownModel: 'Internal error, model MODEL not implemented, can\'t conjugate VERB, REGION, contact maintainer',
+    UndefinedTemplates: 'Internal error, undefined templates, check definitions.json file, contact maintainer',
+    MissingModelData: 'Internal error, missing verb VERB model data?, check definitions.json file, contact maintainer',
+    NoVerbs: 'Internal error, no verbs, check definitions.json file, contact maintainer',
+    NoModels: 'Internal error, no models, check definitions.json file, contact maintainer'
 }
+
 export const DASH6 = '------';
 
 // Temp arrays used to remap
