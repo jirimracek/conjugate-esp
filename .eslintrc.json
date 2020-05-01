@@ -40,8 +40,8 @@
             "single"
         ],
         "semi": [
-            "off",
-            "never"
+            "error",
+            "always"
         ],
         "max-len": [
             "warn",
@@ -59,6 +59,8 @@
             }
         ],
         "no-extra-semi": "warn",
+        "no-unused-vars":"error",
+        "eqeqeq":"error",
         "@typescript-eslint/member-delimiter-style": [
             "warn",
             {

@@ -4,10 +4,9 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { BaseModel } from './basemodel';
-import { clearLastAccent } from './utilities/stringutils';
-import { PronominalKeys, Regions, ModelAttributes } from './declarations/types';
-import { AR } from './declarations/constants';
+import { BaseModel, ModelAttributes, AR } from './basemodel';
+import { clearLastAccent } from './stringutils';
+import { PronominalKeys, Regions } from './types';
 
 const DIndicativoPreteritoIndefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis', 'uvieron'];
 const DSubjuntivoPresente = [ 'ue', 'ues', 'ue', 'uemos', 'uéis', 'uen' ];
@@ -215,7 +214,7 @@ export class colgar extends amar {
         this.desinences.Indicativo.PreteritoIndefinido[0] =
             this.desinences.Indicativo.PreteritoIndefinido[0].replace(/^/, 'u');
         this.desinences.Subjuntivo.Presente =
-            this.desinences.Subjuntivo.Presente.map(d => d.replace(/^/, 'u'))
+            this.desinences.Subjuntivo.Presente.map(d => d.replace(/^/, 'u'));
     }
 
     protected setIndicativoPresente(): void {
@@ -472,7 +471,7 @@ export class forzar extends amar {
     }
 
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern0125(this.stem.replace(/orz/, 'uerc'), this.stem.replace(/z/, 'c'))
+        this.setSubjuntivoPresentePattern0125(this.stem.replace(/orz/, 'uerc'), this.stem.replace(/z/, 'c'));
     }
 }
 
@@ -491,7 +490,7 @@ export class jugar extends amar {
     }
 
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern0125(this.stem.replace(/g$/, 'egu'), this.stem.replace(/g$/, 'gu'))
+        this.setSubjuntivoPresentePattern0125(this.stem.replace(/g$/, 'egu'), this.stem.replace(/g$/, 'gu'));
     }
 }
 

@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 // npm t -- --watch
-import { clearAccents, esdrujula, clearLastAccent, syllabify, strongify, applyMonoRules } from '../utilities/stringutils';
+import { clearAccents, esdrujula, clearLastAccent, syllabify, strongify, applyMonoRules } from '../lib/stringutils';
 // silence legit warnings during tests 
 // (they're useful in production, thus the conditions provoking these warnings
 //  should be tested here but we don't want to clutter the terminal during test)
@@ -140,7 +140,7 @@ describe('String Utils', () => {
         expect(esdrujula('usted amollentense')).toEqual('usted amolléntense');
         expect(esdrujula('usted igualense')).toEqual('usted iguálense');
         expect(esdrujula('usted ionicense')).toEqual('usted ionícense');
-        expect(esdrujula('usted santigüense')).toEqual('usted santígüense')
+        expect(esdrujula('usted santigüense')).toEqual('usted santígüense');
 
         expect(esdrujula('nosotros aguaitemonos')).toEqual('nosotros aguaitémonos');
         expect(esdrujula('nosotros aguantemonos')).toEqual('nosotros aguantémonos');

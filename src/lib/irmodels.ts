@@ -4,10 +4,12 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { BaseModel } from './basemodel';
-import { PronominalKeys, Regions, ModelAttributes, SubjuntivoSubSimpleKey, IndicativoSubSimpleKey } from './declarations/types';
-import { IR, AR, SIXARRAY, FIVEARRAY } from './declarations/constants';
+import { BaseModel, IR, AR, ModelAttributes } from './basemodel';
+import { PronominalKeys, Regions, SubjuntivoSubSimpleKey, IndicativoSubSimpleKey } from './types';
 
+// Temp arrays used to remap
+const SIXARRAY = [0, 1, 2, 3, 4, 5];    // Use to remap all persons, etc
+const FIVEARRAY = [1, 2, 3, 4, 5];      // Use to remap 5 persons or when the index itself doesn't matter!!!
 /* eslint-disable @typescript-eslint/class-name-casing */
 export class vivir extends BaseModel {
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
@@ -914,7 +916,7 @@ export class prohibir extends vivir {
 
     public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.alteredStem = this.stem.replace(/(.*)i/, '$1í')
+        this.alteredStem = this.stem.replace(/(.*)i/, '$1í');
     }
 
     protected setIndicativoPresente(): void {
@@ -1452,7 +1454,6 @@ export class surgir extends vivir {
         this.setTable('Subjuntivo', 'Presente', SIXARRAY.map(() => this.alteredStem));
     }
 }
-
 export class venir extends vivir {
     private alteredStem: string;
     private secondAlteredStem: string;

@@ -5,12 +5,12 @@
  * @license * MIT License
 */
 /* eslint-disable max-len */
-import { Conjugator } from '../../index';
-import { InfoType, OutputType, ResultType, ErrorType } from '../conjugator';
-import { ModelFactory } from '../factory';
-import { Empty } from '../basemodel';
-import { Regions, VerbModelData, DB } from '../declarations/types'
-import { ERROR_MSG } from '../declarations/constants';
+import { Conjugator } from '../index';
+import { InfoType, OutputType, ResultType, ErrorType } from '../lib/conjugator';
+import { ModelFactory } from '../lib/factory';
+import { Empty, VerbModelData, VerbModelTemplates } from '../lib/basemodel';
+import { Regions } from '../lib/types';
+import { ERROR_MSG } from '../lib/conjugator';
 
 const VERB_COUNT = 12815;
 const MODEL_COUNT = 99;
@@ -42,7 +42,7 @@ models.forEach(m => verbSet.add(m));
 // some interesting verbs
 verbSet.add('abar');        // the only known trimorfo              'abar': { 'P': { 'amar': { 'D': 'trimorfo' } } },
 verbSet.add('abolir');      // interesting imorfo                   'abolir': { 'N': [ 'vivir', { 'vivir': { 'D': 'imorfo' } } ] },
-verbSet.add('acostumbrar')  // omorfo                               'acostumbrar': { 'N': [ 'amar', { 'amar': { 'D': 'omorfo' } } ], 'P': 'amar' },
+verbSet.add('acostumbrar');  // omorfo                               'acostumbrar': { 'N': [ 'amar', { 'amar': { 'D': 'omorfo' } } ], 'P': 'amar' },
 verbSet.add('aclarar');     // dual, defective                      'aclarar': { 'N': [ 'amar', { 'amar': { 'd': 'imper' } } ], 'P': 'amar' },
 verbSet.add('acontecer');   // single defective                     'acontecer': { 'N': { 'nacer': { 'D': 'terciop' } } },
 verbSet.add('adecuar');     // dual, non defective                  'adecuar': { 'N': [ 'amar', 'actuar' ], 'P': [ 'amar', 'actuar' ]
@@ -55,7 +55,7 @@ verbSet.add('degollar');    // contar, o -> üe
 verbSet.add('derrocar');    // dual volcar, sacar                   'derrocar': { 'N': [ 'volcar', 'sacar' ], 'P': 'volcar' },
 verbSet.add('desvaír');     // dual, ír, defective in both N&P      'desvaír': { 'N': [ { 'embaír': { 'D': 'imorfo' } }, 'embaír' ], 'P': [ { 'embaír': { 'D': 'imorfo' } }, 'embaír' ] },
 verbSet.add('embaír');
-verbSet.add('empecer')      // the only known tercio                'empecer': { 'N': { 'nacer': { 'D': 'tercio' } } },
+verbSet.add('empecer');      // the only known tercio                'empecer': { 'N': { 'nacer': { 'D': 'tercio' } } },
 verbSet.add('empedernir');  // the only bimorfop, dual defective    'empedernir': { 'N': [ { 'vivir': { 'D': 'bimorfop' } }, { 'vivir': { 'D': 'imorfo' } } ], 'P': [ { 'vivir': { 'D': 'bimorfop' } }, { 'vivir': { 'D': 'imorfo' } } ] },
 verbSet.add('errar');       // err -> yerr                          'errar': { 'N': [ 'errar', 'amar' ], 'P': [ 'errar', 'amar' ] },
 verbSet.add('escribir');
@@ -88,7 +88,7 @@ const verbs: string[] = Array.from(verbSet);
 
 // Derive to get access to templates
 class MockJugator extends Conjugator {
-    private savedTemplates: DB;
+    private savedTemplates: VerbModelTemplates;
     private savedFactory: ModelFactory;
     constructor() {
         super();

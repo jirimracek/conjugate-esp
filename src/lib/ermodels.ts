@@ -4,9 +4,8 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { BaseModel } from './basemodel';
-import { PronominalKeys, Regions, ModelAttributes } from './declarations/types';
-import { ER, SIXARRAY, FIVEARRAY } from './declarations/constants';
+import { BaseModel, ER, ModelAttributes } from './basemodel';
+import { PronominalKeys, Regions } from './types';
 
 // Repeated desinence patterns
 const DIndicativoPreteritoIndefinido = ['í', 'íste', 'yó', 'ímos', 'ísteis', 'yeron'];
@@ -15,6 +14,10 @@ const DIndicativoCondicionalSimple = ['ría', 'rías', 'ría', 'ríamos', 'ríai
 const DSubjuntivoPreteritoImperfectoRa = ['yera', 'yeras', 'yera', 'yéramos', 'yerais', 'yeran'];
 const DSubjuntivoPreteritoImperfectoSe = ['yese', 'yeses', 'yese', 'yésemos', 'yeseis', 'yesen'];
 const DSubjuntivoFuturoImperfecto = ['yere', 'yeres', 'yere', 'yéremos', 'yereis', 'yeren'];
+
+// Temp arrays used to remap
+const SIXARRAY = [0, 1, 2, 3, 4, 5];    // Use to remap all persons, etc
+const FIVEARRAY = [1, 2, 3, 4, 5];      // Use to remap 5 persons or when the index itself doesn't matter!!!
 
 /* eslint-disable @typescript-eslint/class-name-casing */
 export class temer extends BaseModel {

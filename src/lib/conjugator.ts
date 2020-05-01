@@ -6,13 +6,23 @@
 */
 import definitions from '../data/definitions.json';
 import { ModelFactory } from './factory';
-import { DB, Regions, PronominalKeys, VerbModelData, ModelAttributes, ConjugationTable } from './declarations/types';
-import { ERROR_MSG } from './declarations/constants';
+import { Regions, PronominalKeys } from './types';
+import { VerbModelTemplates, VerbModelData, ModelAttributes, ResultTable } from './basemodel';
 
 export type InfoType = { verb: string, model: string, region: string, pronominal: boolean, defective: boolean };
 export type ErrorType = { ERROR: { message: string } };
-export type ResultType = { info: InfoType, conjugation: ConjugationTable };
+export type ResultType = { info: InfoType, conjugation: ResultTable };
 export type OutputType = ResultType[] | ErrorType;
+
+export const ERROR_MSG = {
+    UnknownVerb: 'Input error, unknown verb VERB',
+    UnknownRegion: 'Input error, invalid region REGION',
+    UnknownModel: 'Internal error, model MODEL not implemented, can\'t conjugate VERB, REGION, contact maintainer',
+    UndefinedTemplates: 'Internal error, undefined templates, check definitions.json file, contact maintainer',
+    MissingModelData: 'Internal error, missing verb VERB model data?, check definitions.json file, contact maintainer',
+    NoVerbs: 'Internal error, no verbs, check definitions.json file, contact maintainer',
+    NoModels: 'Internal error, no models, check definitions.json file, contact maintainer'
+};
 
 /**
  * Create instance of Conjugator, then
@@ -25,7 +35,7 @@ export type OutputType = ResultType[] | ErrorType;
  * 
  */
 export class Conjugator {
-    protected templates: DB = definitions;
+    protected templates: VerbModelTemplates = definitions;
     protected factory = new ModelFactory();
 
     constructor() { /* empty */ }

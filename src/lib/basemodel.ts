@@ -5,13 +5,202 @@
  * @license * MIT License
 */
 import {
-    PronominalKeys, Regions, ModelAttributes, DefectiveType, PronounsTable, SimpleModeKey, ConjugationTable, RTable,
-    CompSubTable, ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey, IndicativoSubSimpleKey,
-    ImperativoSubKey, DTable, SubjuntivoSubSimpleKey
-} from './declarations/types';
-import { INDICATIVO_SIMPLE_KEYS, SUBJUNTIVO_SIMPLE_KEYS, INDICATIVO_COMP_KEYS, SUBJUNTIVO_COMP_KEYS } from './declarations/constants';
-import { PRONOUNS, AUX, NO_IMPERATIVO_AFIRMATIVO, NO_IMPERATIVO_NEGATIVO, DASH6 } from './declarations/constants';
-import { clearAccents, esdrujula, strongify, applyMonoRules } from './utilities/stringutils';
+    PronominalKeys, Regions, SimpleModeKey, 
+    ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey, IndicativoSubSimpleKey,
+    ImperativoSubKey, SubjuntivoSubSimpleKey, IndicativoSubCompKey, SubjuntivoSubCompKey
+} from './types';
+import { clearAccents, esdrujula, strongify, applyMonoRules } from './stringutils';
+
+
+// Attributes
+// attribute has form of attrname : string | boolean
+// attributes are attached to the model by colon = and separated by semicolon ';'
+// known attributes:
+//    defective types: { D:imorfo | eimorfo | imper | tercio | terciop | mmorfo | bimorfop | bimorfog | trimorfo | omorfo | ogmorfo }
+//    PR:RegExp/replacement - Participio Replace                - RegExp is the regular expression that Replaces the regular form (inhestar, pensar:PR=estad/iest - from inhestado to inhiesto)
+//    PD:RegExp/replacement - Participio Dual                   - RegExp is the regular expression that creates the irregular participio form from the regular one
+//                                                                       AND it gets added as a second participio. The first, REGULAR PARTICIPIO gets used for COMPUESTOS
+//    PC:RegExp/replacement - Participio Compuesto (irregular)  - same as PD, EXCEPT the second, IRREGULAR PARTICIPIO gets used for COMPUESTOS
+//    D:DefectiveType       - one of the Defective Types
+//    M:boolean             - Monosyllable ortho adjustment, drop accent
+//    V:string              - use for other model changes, duals, triples, ex.: predecir, predeciré & prediré
+
+// Types used to represent data in the verb definitions json file
+type DefectiveType = 'imorfo' | 'eimorfo' | 'imper' | 'tercio' | 'terciop'
+    | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'ogmorfo' | 'osmorfo';
+type AttributeValues = DefectiveType | boolean | string;
+type AttributeKeys = 'PR' | 'PD' | 'PS' | 'D' | 'M' | 'V';
+type ModelWithAttributes = { [modelname: string]: ModelAttributes };
+type Model = string | ModelWithAttributes;
+type CompSubTable = { [modekey: string]: { [timekey: string]: string[] } };
+type PronounsTable = { [key in PronominalKeys]: { [key in Regions]: string[] } };
+
+type DesinenceTable = {
+    Impersonal: {
+        [subkey in ImpersonalSubKey]: string[]
+    },
+    Indicativo: {
+        [subkey in IndicativoSubSimpleKey]: string[]
+    },
+    Subjuntivo: {
+        [subkey in SubjuntivoSubSimpleKey]: string[]
+    }
+}
+export type ResultTable = {
+    Impersonal: {
+        [subkey in ImpersonalSubKey]: string
+    },
+    Indicativo: {
+        [subkey in IndicativoSubKey]: string[]
+    },
+    Subjuntivo: {
+        [subkey in SubjuntivoSubKey]: string[]
+    },
+    Imperativo: {
+        [subkey in ImperativoSubKey]: string[]
+    }
+}
+
+export type ModelAttributes = { [attributekey in AttributeKeys]?: AttributeValues };
+export type VerbModelData = { [key in PronominalKeys]?: Model[] | Model };
+export type VerbModelTemplates = { [verbname: string]: VerbModelData };
+
+// The desinences (endings) of conjugated forms
+export const AR: Readonly<DesinenceTable> = {
+    Impersonal: {
+        Infinitivo: ['ar', 'arse'],
+        Gerundio: ['ando', 'ándose'],
+        Participio: ['ado']
+    },
+    Indicativo: {
+        Presente: ['o', 'as', 'a', 'amos', 'áis', 'an'],
+        PreteritoImperfecto: ['aba', 'abas', 'aba', 'ábamos', 'abais', 'aban'],
+        PreteritoIndefinido: ['é', 'aste', 'ó', 'amos', 'asteis', 'aron'],
+        FuturoImperfecto: ['aré', 'arás', 'ará', 'aremos', 'aréis', 'arán'],
+        CondicionalSimple: ['aría', 'arías', 'aría', 'aríamos', 'aríais', 'arían']
+    },
+    Subjuntivo: {
+        Presente: ['e', 'es', 'e', 'emos', 'éis', 'en'],
+        PreteritoImperfectoRa: ['ara', 'aras', 'ara', 'áramos', 'arais', 'aran'],
+        PreteritoImperfectoSe: ['ase', 'ases', 'ase', 'ásemos', 'aseis', 'asen'],
+        FuturoImperfecto: ['are', 'ares', 'are', 'áremos', 'areis', 'aren']
+    }
+};
+
+export const ER: Readonly<DesinenceTable> = {
+    Impersonal: {
+        Infinitivo: ['er', 'erse'],
+        Gerundio: ['iendo', 'iéndose'],
+        Participio: ['ido']
+    },
+    Indicativo: {
+        Presente: ['o', 'es', 'e', 'emos', 'éis', 'en'],
+        PreteritoImperfecto: ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'],
+        PreteritoIndefinido: ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'],
+        FuturoImperfecto: ['eré', 'erás', 'erá', 'eremos', 'eréis', 'erán'],
+        CondicionalSimple: ['ería', 'erías', 'ería', 'eríamos', 'eríais', 'erían']
+    },
+    Subjuntivo: {
+        Presente: ['a', 'as', 'a', 'amos', 'áis', 'an'],
+        PreteritoImperfectoRa: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
+        PreteritoImperfectoSe: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
+        FuturoImperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
+    }
+};
+
+export const IR: Readonly<DesinenceTable> = {
+    Impersonal: {
+        Infinitivo: ['ir', 'irse'],
+        Gerundio: ['iendo', 'iéndose'],
+        Participio: ['ido']
+    },
+    Indicativo: {
+        Presente: ['o', 'es', 'e', 'imos', 'ís', 'en'],
+        PreteritoImperfecto: ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'],
+        PreteritoIndefinido: ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'],
+        FuturoImperfecto: ['iré', 'irás', 'irá', 'iremos', 'iréis', 'irán'],
+        CondicionalSimple: ['iría', 'irías', 'iría', 'iríamos', 'iríais', 'irían']
+    },
+    Subjuntivo: {
+        Presente: ['a', 'as', 'a', 'amos', 'áis', 'an'],
+        PreteritoImperfectoRa: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
+        PreteritoImperfectoSe: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
+        FuturoImperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
+    }
+};
+const PRONOUNS: Readonly<PronounsTable> = {
+    N: {
+        castellano: ['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos'],
+        voseo: ['yo', 'vos', 'él', 'nosotros', 'ustedes', 'ellos'],
+        formal: ['yo', 'usted', 'él', 'nosotros', 'ustedes', 'ellos'],
+        canarias: ['yo', 'tú', 'él', 'nosotros', 'ustedes', 'ellos']
+    },
+    P: {
+        castellano: ['yo me', 'tú te', 'él se', 'nosotros nos', 'vosotros os', 'ellos se'],
+        voseo: ['yo me', 'vos te', 'él se', 'nosotros nos', 'ustedes se', 'ellos se'],
+        formal: ['yo me', 'usted se', 'él se', 'nosotros nos', 'ustedes se', 'ellos se'],
+        canarias: ['yo me', 'tú te', 'él se', 'nosotros nos', 'ustedes se', 'ellos se']
+    }
+};
+
+// The composite verb auxiliar haber forms
+const AUX: Readonly<CompSubTable> = {
+    Indicativo: {
+        PreteritoPerfecto: ['he', 'has', 'ha', 'hemos', 'habéis', 'han'],
+        PreteritoPluscuamperfecto: ['había', 'habías', 'había', 'habíamos', 'habíais', 'habían'],
+        PreteritoAnterior: ['hube', 'hubiste', 'hubo', 'hubimos', 'hubisteis', 'hubieron'],
+        FuturoPerfecto: ['habré', 'habrás', 'habrá', 'habremos', 'habréis', 'habrán'],
+        CondicionalCompuesto: ['habría', 'habrías', 'habría', 'habríamos', 'habríais', 'habrían']
+    },
+    Subjuntivo: {
+        PreteritoPerfecto: ['haya', 'hayas', 'haya', 'hayamos', 'hayáis', 'hayan'],
+        PreteritoPluscuamperfectoRa: ['hubiera', 'hubieras', 'hubiera', 'hubiéramos', 'hubierais', 'hubieran'],
+        PreteritoPluscuamperfectoSe: ['hubiese', 'hubieses', 'hubiese', 'hubiésemos', 'hubieseis', 'hubiesen'],
+        FuturoPerfecto: ['hubiere', 'hubieres', 'hubiere', 'hubiéremos', 'hubiereis', 'hubieren']
+    }
+};
+const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
+    'imper',
+    'tercio',
+    'terciop',
+    'bimorfop',
+    'omorfo',
+    'osmorfo',
+    'ogmorfo'
+];
+
+const INDICATIVO_SIMPLE_KEYS: IndicativoSubSimpleKey[] = [
+    'Presente',
+    'PreteritoImperfecto',
+    'PreteritoIndefinido',
+    'FuturoImperfecto',
+    'CondicionalSimple'
+];
+
+const SUBJUNTIVO_SIMPLE_KEYS: SubjuntivoSubSimpleKey[] = [
+    'Presente',
+    'PreteritoImperfectoRa',
+    'PreteritoImperfectoSe',
+    'FuturoImperfecto'
+];
+
+const INDICATIVO_COMP_KEYS: IndicativoSubCompKey[] = [
+    'PreteritoPerfecto',
+    'PreteritoPluscuamperfecto',
+    'PreteritoAnterior',
+    'FuturoPerfecto',
+    'CondicionalCompuesto'
+];
+
+const SUBJUNTIVO_COMP_KEYS: SubjuntivoSubCompKey[] = [
+    'PreteritoPerfecto',
+    'PreteritoPluscuamperfectoRa',
+    'PreteritoPluscuamperfectoSe',
+    'FuturoPerfecto'
+];
+
+const NO_IMPERATIVO_NEGATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'ogmorfo'];
+const DASH6 = '------';
 
 export abstract class BaseModel {
     protected verb: string;
@@ -19,8 +208,8 @@ export abstract class BaseModel {
     protected type: PronominalKeys;
     protected region: Regions;
 
-    protected desinences: DTable;
-    protected table: RTable;
+    protected desinences: DesinenceTable;
+    protected table: ResultTable;
     protected participioCompuesto = '';
 
     protected version: string;
@@ -87,7 +276,7 @@ export abstract class BaseModel {
                 Afirmativo: Array.from(DASH6),
                 Negativo: Array.from(DASH6)
             }
-        }
+        };
 
         this.desinences = {
             Impersonal: {
@@ -108,7 +297,7 @@ export abstract class BaseModel {
                 PreteritoImperfectoSe: [],
                 FuturoImperfecto: []
             }
-        }
+        };
     }
 
     /**
@@ -136,22 +325,22 @@ export abstract class BaseModel {
             // Castellano formal, 2nd singular -> usted, 2nd plural -> ustedes
             INDICATIVO_SIMPLE_KEYS.forEach(mode => {
                 this.desinences.Indicativo[mode][1] = this.desinences.Indicativo[mode][2];
-                this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]
+                this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5];
             });
 
             SUBJUNTIVO_SIMPLE_KEYS.forEach(mode => {
                 this.desinences.Subjuntivo[mode][1] = this.desinences.Subjuntivo[mode][2];
-                this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]
+                this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5];
             });
 
             INDICATIVO_COMP_KEYS.forEach(mode => {
                 this.auxHaber.Indicativo[mode][1] = this.auxHaber.Indicativo[mode][2];
-                this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]
+                this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5];
             });
 
             SUBJUNTIVO_COMP_KEYS.forEach(mode => {
                 this.auxHaber.Subjuntivo[mode][1] = this.auxHaber.Subjuntivo[mode][2];
-                this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]
+                this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5];
             });
 
         } else if (this.region === 'canarias') {
@@ -170,7 +359,7 @@ export abstract class BaseModel {
         }
     }
 
-    public getConjugation(): ConjugationTable {
+    public getConjugation(): ResultTable {
 
         this.setInfinitivo();
         this.setGerundio();
@@ -210,7 +399,7 @@ export abstract class BaseModel {
 
     protected setGerundio(root?: string): void {
         this.table.Impersonal.Gerundio =
-            `${root ? root : this.stem}${this.type == 'N' ?
+            `${root ? root : this.stem}${this.type === 'N' ?
                 this.desinences.Impersonal.Gerundio[0] :
                 this.desinences.Impersonal.Gerundio[1]}`;
     }

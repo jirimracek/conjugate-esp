@@ -4,8 +4,8 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { PronominalKeys, Regions, ModelAttributes } from './declarations/types';
-import { BaseModel, Empty } from './basemodel';
+import { PronominalKeys, Regions } from './types';
+import { BaseModel, Empty, ModelAttributes } from './basemodel';
 import * as ar from './armodels';
 import * as er from './ermodels';
 import * as ir from './irmodels';

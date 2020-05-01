@@ -167,7 +167,7 @@ export function applyMonoRules(phrase: string): string {
 
     // If a strong one has an accent, remove it
     if (/[áéó]/.test(last)) {
-        words.push(clearAccents(last))
+        words.push(clearAccents(last));
         return words.join(' ');
     }
     
@@ -179,7 +179,7 @@ export function applyMonoRules(phrase: string): string {
     // No strongs, remove accent
     // in theory we allow for an accent on the first one but we don't seem to have that case
     if (/[iu][íú][iu]*/.test(last)) {
-        words.push(clearAccents(last))
+        words.push(clearAccents(last));
         return words.join(' ');
     }
     return phrase;
