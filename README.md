@@ -7,8 +7,9 @@
 Spanish verb conjugator, uses templates, pattern matching & logic to conjugate verbs in any of the regional varieties of castellano, voseo, formal, canarias
 
 - Project goals: correct, detailed, complete, fast & small (yes, you can have it all)
-- As of version 0.5.0 all 99 models (see table below) are implemented and tested
-- 12815 known verbs, 3 regular, 95 irregular models
+- As of version 0.5.0 and above, includes
+  - 12815 known verbs
+  - 99 implemented and tested models
 - Includes castellano, voseo, formal, canarias varieties & complicated cases
   - defectives
   - multiple (dual & triple) conjugations
@@ -17,8 +18,8 @@ Spanish verb conjugator, uses templates, pattern matching & logic to conjugate v
 
 ____
 
-- Current version 0.7.0
-- Updated on Fri 01 May 2020 07:24:32 PM CEST
+- Current version 1.0.1
+- Updated on Fri 01 May 2020 09:55:42 PM CEST
 
 ____
 
@@ -27,33 +28,34 @@ ____
 
 ____
 
-## Usage
+## Simple usage
+
+- clone repository / download or
+- npm i @jirimracek/conjugate-esp
 
 ```typescript
- TypeScript
-   import { Conjugator } from  <path to install>
-   const cng = new Conjugator();
-   try {   // sync, formal (usted, ustedes)
-       const temer = cng.conjugateSync('adscribir', 'formal');
-       console.log(JSON.stringify(temer, null, 1));
-   } catch (error) {
-       console.error(error);
-   }
-   // async (promise), voseo
-   cng.conjugate('soler', 'voseo')
+  TypeScript
+    // one of
+    import { Conjugator } from  <path to install>                 // local install
+    import { Conjugator } from  '@jirimracek/conjugate-esp';      // npm installed
+    const cng = new Conjugator();
+    const table = cng.conjugateSync('adscribir', 'formal');       // sync, formal (usted, ustedes)
+    console.log(JSON.stringify(table, null, 1));
+    cng.conjugate('soler', 'voseo')                               // async (promise), voseo
       .then(table => console.log(JSON.stringify(table, null, 1)))
-      .catch(error => console.error(error))
+      .catch(error => console.error(error));
 ```
 
 ```javascript
- JavaScript
-   // need to run tsc first to build the *dist* directory
-   const CNG = require('<path to install>/dist');
-   const cng = new CNG.Conjugator();
-   // ... same code as above
+  JavaScript
+    // one of:
+    const CNG = require('<path to install>/dist');       // local install
+    const CNG = require("@jirimracek/conjugate-esp");    // npm installed
+    const cng = new CNG.Conjugator();
+    // ... same code as above
 ```
 
-### Returns JSON formatted tables
+### Returns array of tables or error message object, in JSON format
 
 - Impersonal
   - Infinitivo, Gerundio,Participio

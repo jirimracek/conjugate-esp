@@ -1,5 +1,10 @@
 # Changelog
 
+- 5/1/2020 (1.0.1)
+  - bumping version, npm published
+  - README update for npm
+  - shrank the definitions file as (hopefully) it's unlikely that we'll be modifying it again
+
 - 5/1/2020 (0.7.0)
   - major cleanup, one more round
   - **interface change** - old sync only methods renamed to <*>Sync()
