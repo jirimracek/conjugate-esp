@@ -4,8 +4,10 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { BaseModel, ER, ModelAttributes } from './basemodel';
-import { PronominalKeys, Regions } from './types';
+import { BaseModel, ModelAttributes, DesinenceTable } from './basemodel';
+import { PronominalKey, Regions } from './types';
+
+/* Do not export anything but classes from these model files, model factory depends on these exports */
 
 // Repeated desinence patterns
 const DIndicativoPreteritoIndefinido = ['í', 'íste', 'yó', 'ímos', 'ísteis', 'yeron'];
@@ -19,9 +21,30 @@ const DSubjuntivoFuturoImperfecto = ['yere', 'yeres', 'yere', 'yéremos', 'yerei
 const SIXARRAY = [0, 1, 2, 3, 4, 5];    // Use to remap all persons, etc
 const FIVEARRAY = [1, 2, 3, 4, 5];      // Use to remap 5 persons or when the index itself doesn't matter!!!
 
+const ER: Readonly<DesinenceTable> = {
+    Impersonal: {
+        Infinitivo: ['er', 'erse'],
+        Gerundio: ['iendo', 'iéndose'],
+        Participio: ['ido']
+    },
+    Indicativo: {
+        Presente: ['o', 'es', 'e', 'emos', 'éis', 'en'],
+        PreteritoImperfecto: ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'],
+        PreteritoIndefinido: ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'],
+        FuturoImperfecto: ['eré', 'erás', 'erá', 'eremos', 'eréis', 'erán'],
+        CondicionalSimple: ['ería', 'erías', 'ería', 'eríamos', 'eríais', 'erían']
+    },
+    Subjuntivo: {
+        Presente: ['a', 'as', 'a', 'amos', 'áis', 'an'],
+        PreteritoImperfectoRa: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
+        PreteritoImperfectoSe: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
+        FuturoImperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
+    }
+};
+
 /* eslint-disable @typescript-eslint/class-name-casing */
 export class temer extends BaseModel {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.desinences = JSON.parse(JSON.stringify(ER));
 
@@ -41,7 +64,7 @@ export class caber extends temer {
     private alteredStemArray: string[];
     private secondAlteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/ab/, 'up');
         this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
@@ -88,7 +111,7 @@ export class caber extends temer {
 
 }
 export class caer extends temer {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -109,7 +132,7 @@ export class coger extends temer {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/g$/, 'j');
         this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
@@ -127,7 +150,7 @@ export class coger extends temer {
 }
 
 export class hacer extends temer {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -219,7 +242,7 @@ export class hacer extends temer {
 }
 
 export class rehacer extends hacer {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -251,7 +274,7 @@ export class rehacer extends hacer {
 }
 
 export class haber extends temer {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -324,7 +347,7 @@ export class haber extends temer {
 export class leer extends temer {
     private participioDual: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.participioDual = this.attributes.PD as string;
     }
@@ -359,7 +382,7 @@ export class leer extends temer {
 export class mover extends temer {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)o/, '$1ue');
     }
@@ -376,7 +399,7 @@ export class mover extends temer {
 export class nacer extends temer {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/s?c$/, 'zc');
     }
@@ -395,7 +418,7 @@ export class nacer extends temer {
 export class oler extends temer {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/^o/, 'hue');
     }
@@ -412,7 +435,7 @@ export class oler extends temer {
 export class placer extends temer {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/c$/, 'zc');
     }
@@ -558,7 +581,7 @@ export class poder extends temer {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/o/, 'u');
         this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
@@ -604,7 +627,7 @@ export class poner extends temer {
     private alteredStemArray: string[];
     private secondAlteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/on$/, 'us');
         this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
@@ -662,7 +685,7 @@ export class poner extends temer {
 }
 
 export class prever extends temer {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -693,7 +716,7 @@ export class querer extends temer {
     private alteredStem: string;
     private secondAlteredArray: string[];
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/ue/, 'uie');
         const secondAltered = this.stem.replace(/er$/, 'is');
@@ -733,7 +756,7 @@ export class querer extends temer {
 }
 
 export class raer extends temer {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -760,7 +783,7 @@ export class raer extends temer {
 export class responder extends temer {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/sp.*/, 'p');
     }
@@ -775,7 +798,7 @@ export class responder extends temer {
     }
 }
 export class roer extends temer {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -809,7 +832,7 @@ export class roer extends temer {
 }
 
 export class romper extends temer {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -828,7 +851,7 @@ export class saber extends temer {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/ab/, 'up');
         this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
@@ -886,7 +909,7 @@ export class ser extends temer {
     private alteredeStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredeStem = this.stem.replace(/s/, 'fu');
         this.alteredStemArray = SIXARRAY.map(() => this.alteredeStem);
@@ -945,7 +968,7 @@ export class ser extends temer {
 }
 
 export class tañer extends temer {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -969,7 +992,7 @@ export class tañer extends temer {
 export class tender extends temer {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
     }
@@ -986,7 +1009,7 @@ export class tender extends temer {
 export class tener extends temer {
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         const alteredStem = this.stem.replace(/(.*)en/, '$1uv');
         this.alteredStemArray = SIXARRAY.map(() => alteredStem);
@@ -1038,7 +1061,7 @@ export class tener extends temer {
 export class torcer extends temer {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/o(r?)c/, 'ue$1z');
     }
@@ -1053,7 +1076,7 @@ export class torcer extends temer {
 }
 export class traer extends temer {
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -1095,7 +1118,7 @@ export class traer extends temer {
 }
 
 export class valer extends temer {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -1119,7 +1142,7 @@ export class valer extends temer {
 export class vencer extends temer {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/c$/, 'z');
     }
@@ -1140,7 +1163,7 @@ export class vencer extends temer {
 export class ver extends temer {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/$/, 'e');
     }
@@ -1181,7 +1204,7 @@ export class ver extends temer {
 export class volver extends temer {
     private alteredStem: string;
     
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)o/, '$1ue');
     }
@@ -1208,7 +1231,7 @@ export class volver extends temer {
 export class yacer extends temer {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         switch (this.version) {
             case '0':

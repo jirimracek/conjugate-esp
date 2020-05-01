@@ -4,4 +4,5 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-export { Conjugator } from './lib/conjugator';
+export { Conjugator, Info, ErrorType, Result } from './lib/conjugator';
+export { ResultTable } from './lib/basemodel';

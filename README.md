@@ -7,7 +7,7 @@
 Spanish verb conjugator, uses templates, pattern matching & logic to conjugate verbs in any of the regional varieties of castellano, voseo, formal, canarias
 
 - Project goals: correct, detailed, complete, fast & small (yes, you can have it all)
-- As of version 0.5.0 all 98 models (see table below) are implemented and tested
+- As of version 0.5.0 all 99 models (see table below) are implemented and tested
 - 12815 known verbs, 3 regular, 95 irregular models
 - Includes castellano, voseo, formal, canarias varieties & complicated cases
   - defectives
@@ -17,8 +17,8 @@ Spanish verb conjugator, uses templates, pattern matching & logic to conjugate v
 
 ____
 
-- Current version 0.6.0
-- Updated on Wed 29 Apr 2020 08:24:02 PM CEST
+- Current version 0.7.0
+- Updated on Fri 01 May 2020 07:24:32 PM CEST
 
 ____
 
@@ -31,29 +31,26 @@ ____
 
 ```typescript
  TypeScript
-   // <path to install>/index.ts exports Conjugator
-   import { Conjugator } from '<path to install>';
+   import { Conjugator } from  <path to install>
    const cng = new Conjugator();
+   try {   // sync, formal (usted, ustedes)
+       const temer = cng.conjugateSync('adscribir', 'formal');
+       console.log(JSON.stringify(temer, null, 1));
+   } catch (error) {
+       console.error(error);
+   }
+   // async (promise), voseo
+   cng.conjugate('soler', 'voseo')
+      .then(table => console.log(JSON.stringify(table, null, 1)))
+      .catch(error => console.error(error))
 ```
 
 ```javascript
  JavaScript
-   // You'll need to build the *dist* directory with tsc as it's not pushed to the repository
+   // need to run tsc first to build the *dist* directory
    const CNG = require('<path to install>/dist');
    const cng = new CNG.Conjugator();
-```
-
-```javascript
-   const amar = cng.conjugate('amar');                // castellano (tú, vosotros), default region
-   console.log(JSON.stringify(amar, null, 1));
-   const temer = cng.conjugate('temer', 'formal');    // formal (usted, ustedes)
-   console.log(JSON.stringify(temer, null, 1));
-   const vivir = cng.conjugate('vivir', 'voseo');     // voseo (vos, ustedes)
-   console.log(JSON.stringify(vivir, null, 1));
-   const comer = cng.conjugate('comer', 'canarias');  // canarias (tú, ustedes)
-   console.log(JSON.stringify(comer, null, 1));
-   const verbs = cng.getVerbList();                   // get list of verbs (string[])
-   console.log(`${verbs.length} known verbs`);
+   // ... same code as above
 ```
 
 ### Returns JSON formatted tables
@@ -216,14 +213,12 @@ ____
 
 - [Estudio Sampere Salamanca](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html "Sampere Salamanca") - great place to study Spanish
 
-- [Real Academia Española](https://www.rae.es "RAE")
+- [RAE main page](https://www.rae.es "RAE") and their (paid subscription, much recommended) [RAE Enclave](https://enclave.rae.es "Enclave")
 
-- [RAE Enclave](https://enclave.rae.es "Enclave") - paid subscription, much recommended
-
-- [Rodríguez-Rodríguez, G; Carreras-Riudavets, F; Hernández-Figueroa, Z; (2009). Conjugación de verbos en español - Conjugador TIP](https://tulengua.es "Conjugador TIP")
+- [Rodríguez-Rodríguez, G; Carreras-Riudavets, F; Hernández-Figueroa, Z; (2009). Conjugación de verbos en español - Conjugador TIP](https://tulengua.es "Conjugador TIP") - excellent book, about the most accurate and complete web conjugator I found
 
 - [Diccionario panhispánico de dudas](https://www.casadellibro.com/libro-diccionario-panhispanico-de-dudas-2-ed/9788429406238/1051481 "Casa del libro" )
 
-- [Vadémecum del verbo español, Pedro Gomis Blanco, Laura Segura Calvo](https://www.amazon.es/Vad%C3%A9mecum-verbo-espa%C3%B1ol-Pedro-Blanco/dp/8497783875 "Amazon.es") - while a good technical reference on verb usage, this book contains many conjugation table and index errors, use with extreme caution
+- [Vadémecum del verbo español, Pedro Gomis Blanco, Laura Segura Calvo](https://www.amazon.es/Vad%C3%A9mecum-verbo-espa%C3%B1ol-Pedro-Blanco/dp/8497783875 "Amazon.es") - good technical reference on verb usage, but has many errors (tables, verb -> model index), use with extreme caution
 
 - ... and many others

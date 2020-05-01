@@ -1,7 +1,7 @@
-src/
 docs/
-e2e/
+*/__tests__/*
 coverage/
+src/
 .vscode/
 *.code-workspace
 *.tgz
@@ -9,3 +9,6 @@ coverage/
 .markdown*
 .travis*
 *.map
+jest.config.json
+ROADMAP.*
+CHANGELOG.*

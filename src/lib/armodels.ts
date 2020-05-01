@@ -4,22 +4,45 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { BaseModel, ModelAttributes, AR } from './basemodel';
+
+/* Do not export anything but classes from these model files, model factory depends on these exports */
+
+import { BaseModel, ModelAttributes, DesinenceTable } from './basemodel';
 import { clearLastAccent } from './stringutils';
-import { PronominalKeys, Regions } from './types';
+import { PronominalKey, Regions } from './types';
 
 const DIndicativoPreteritoIndefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis', 'uvieron'];
-const DSubjuntivoPresente = [ 'ue', 'ues', 'ue', 'uemos', 'uéis', 'uen' ];
+const DSubjuntivoPresente = ['ue', 'ues', 'ue', 'uemos', 'uéis', 'uen'];
 const DSubjuntivoPreteritoImperfectoRa = ['uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais', 'uvieran'];
 const DSubjuntivoPreteritoImperfectoSe = ['uviese', 'uvieses', 'uviese', 'uviésemos', 'uvieseis', 'uviesen'];
 const DSubjuntivoFuturoImperfecto = ['uviere', 'uvieres', 'uviere', 'uviéremos', 'uviereis', 'uvieren'];
 
+const AR: Readonly<DesinenceTable> = {
+    Impersonal: {
+        Infinitivo: ['ar', 'arse'],
+        Gerundio: ['ando', 'ándose'],
+        Participio: ['ado']
+    },
+    Indicativo: {
+        Presente: ['o', 'as', 'a', 'amos', 'áis', 'an'],
+        PreteritoImperfecto: ['aba', 'abas', 'aba', 'ábamos', 'abais', 'aban'],
+        PreteritoIndefinido: ['é', 'aste', 'ó', 'amos', 'asteis', 'aron'],
+        FuturoImperfecto: ['aré', 'arás', 'ará', 'aremos', 'aréis', 'arán'],
+        CondicionalSimple: ['aría', 'arías', 'aría', 'aríamos', 'aríais', 'arían']
+    },
+    Subjuntivo: {
+        Presente: ['e', 'es', 'e', 'emos', 'éis', 'en'],
+        PreteritoImperfectoRa: ['ara', 'aras', 'ara', 'áramos', 'arais', 'aran'],
+        PreteritoImperfectoSe: ['ase', 'ases', 'ase', 'ásemos', 'aseis', 'asen'],
+        FuturoImperfecto: ['are', 'ares', 'are', 'áremos', 'areis', 'aren']
+    }
+};
 /* eslint-disable @typescript-eslint/class-name-casing */
 /**
  * @class base class for all -ar conjugations
  */
 export class amar extends BaseModel {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
 
         // Initialize termination table, map ar terminations to the base
@@ -44,7 +67,7 @@ export class amar extends BaseModel {
 export class actuar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)u/, '$1ú');
     }
@@ -61,7 +84,7 @@ export class actuar extends amar {
 export class agorar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/or$/, 'üer');
     }
@@ -78,7 +101,7 @@ export class agorar extends amar {
 export class aguar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/u$/, 'ü');
     }
@@ -94,7 +117,7 @@ export class aguar extends amar {
 }
 
 export class ahincar extends amar {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -114,7 +137,7 @@ export class ahincar extends amar {
 export class aislar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/i/, 'í');
     }
@@ -129,7 +152,7 @@ export class aislar extends amar {
 }
 
 export class andar extends amar {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -144,7 +167,7 @@ export class andar extends amar {
 export class aullar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/u/, 'ú');
     }
@@ -161,7 +184,7 @@ export class aullar extends amar {
 export class avergonzar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/o/, 'üe');
     }
@@ -181,7 +204,7 @@ export class avergonzar extends amar {
 export class cabrahigar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/i/, 'í');
     }
@@ -205,7 +228,7 @@ export class cabrahigar extends amar {
 export class colgar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/o/, 'ue');
     }
@@ -229,7 +252,7 @@ export class colgar extends amar {
 export class cazar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/z$/, 'c');
     }
@@ -247,7 +270,7 @@ export class cazar extends amar {
 export class contar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)o/, (match: string, p1: string): string => {
             if (p1.endsWith('g')) {
@@ -267,7 +290,7 @@ export class contar extends amar {
 }
 
 export class dar extends amar {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -322,7 +345,7 @@ export class dar extends amar {
 }
 
 export class desdar extends dar {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -344,7 +367,7 @@ export class desdar extends dar {
 export class desosar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/o/, 'hue');
     }
@@ -361,7 +384,7 @@ export class desosar extends amar {
 export class empezar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/e(.?)z$/, 'ie$1z');
     }
@@ -380,7 +403,7 @@ export class empezar extends amar {
 }
 
 export class enraizar extends amar {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -401,7 +424,7 @@ export class enraizar extends amar {
 export class errar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/^/, 'y');
     }
@@ -416,7 +439,7 @@ export class errar extends amar {
 }
 
 export class estar extends amar {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -457,7 +480,7 @@ export class estar extends amar {
 }
 
 export class forzar extends amar {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -476,7 +499,7 @@ export class forzar extends amar {
 }
 
 export class jugar extends amar {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -495,7 +518,7 @@ export class jugar extends amar {
 }
 
 export class pagar extends amar {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -508,7 +531,7 @@ export class pagar extends amar {
 export class pensar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
     }
@@ -535,7 +558,7 @@ export class pensar extends amar {
 export class regar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
     }
@@ -557,7 +580,7 @@ export class regar extends amar {
 export class vaciar extends amar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)i/, '$1í');
     }
@@ -572,7 +595,7 @@ export class vaciar extends amar {
 }
 
 export class sacar extends amar {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
@@ -588,7 +611,7 @@ export class sacar extends amar {
 }
 
 export class volcar extends amar {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 

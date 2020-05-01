@@ -6,11 +6,10 @@
 */
 /* eslint-disable max-len */
 import { Conjugator } from '../index';
-import { InfoType, OutputType, ResultType, ErrorType } from '../lib/conjugator';
+import { Info, Result, ErrorType, VerbModelData, VerbModelTemplates } from '../lib/conjugator';
 import { ModelFactory } from '../lib/factory';
-import { Empty, VerbModelData, VerbModelTemplates } from '../lib/basemodel';
 import { Regions } from '../lib/types';
-import { ERROR_MSG } from '../lib/conjugator';
+import { errorMsg } from '../lib/conjugator';
 
 const VERB_COUNT = 12815;
 const MODEL_COUNT = 99;
@@ -119,30 +118,30 @@ describe('Model Test', () => {
     test('Internals + sync', () => {
         // Corrupted definitions file / missing templates - this should never happen
         const mockjugator = new MockJugator();
-        let result: OutputType = mockjugator.conjugateSync('vivir', 'formal');
+        let result: Result[] | ErrorType = mockjugator.conjugateSync('vivir', 'formal');
         expect(result).toBeInstanceOf(Array);
-        expect(((result as ResultType[])[0].info as InfoType).model).toEqual('vivir');
+        expect(((result as Result[])[0].info as Info).model).toEqual('vivir');
 
         // undefine verb model data in templates
         mockjugator.undefineModelData('vivir');
         result = mockjugator.conjugateSync('vivir', 'formal');
         expect(result).not.toBeInstanceOf(Array);
-        expect(result).toEqual({ ERROR: { message: ERROR_MSG.MissingModelData.replace('VERB', 'vivir') } });
+        expect(result).toEqual({ ERROR: { message: errorMsg.noModelData.replace('VERB', 'vivir') } });
 
         mockjugator.restore();
         result = mockjugator.conjugateSync('vivir', 'formal');
         expect(result).toBeInstanceOf(Array);
-        expect(((result as ResultType[])[0].info as InfoType).region).toEqual('formal');
+        expect(((result as Result[])[0].info as Info).region).toEqual('formal');
 
         mockjugator.deleteTemplates();
         result = mockjugator.conjugateSync('amar', 'castellano');
         expect(result).not.toBeInstanceOf(Array);
-        expect(result as ErrorType).toEqual({ ERROR: { message: ERROR_MSG.UndefinedTemplates } });
+        expect(result as ErrorType).toEqual({ ERROR: { message: errorMsg.noTemplates } });
 
-        expect(mockjugator.getVerbListSync()).toEqual([ERROR_MSG.NoVerbs]);
+        expect(mockjugator.getVerbListSync()).toEqual([errorMsg.noVerbs]);
 
         mockjugator.deleteFactory();      // really break it
-        expect(mockjugator.getModelsSync()).toEqual([ERROR_MSG.NoModels]);
+        expect(mockjugator.getModelsSync()).toEqual([errorMsg.noModels]);
 
         mockjugator.restore();
 
@@ -152,7 +151,7 @@ describe('Model Test', () => {
         expect(result).
             toEqual({
                 ERROR: {
-                    message: ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/,
+                    message: errorMsg.unknownModel.replace(/MODEL(.*)VERB(.*)REGION/,
                         'bar$1foobar$2castellano')
                 }
             });
@@ -160,15 +159,15 @@ describe('Model Test', () => {
         mockjugator.fakeUnimplemented('totally', 'bad');
         result = mockjugator.conjugateSync('totally', 'bad' as Regions);        // Force bad region
         expect(result).not.toBeInstanceOf(Array);
-        expect((result as ErrorType)).toEqual({ ERROR: { message: ERROR_MSG.UnknownRegion.replace(/REGION/, 'bad') } });
+        expect((result as ErrorType)).toEqual({ ERROR: { message: errorMsg.unknownRegion.replace(/REGION/, 'bad') } });
 
         mockjugator.restore();
         result = mockjugator.conjugateSync('vivir');
-        expect((result as ResultType[])[0].info.defective).toEqual(false);
+        expect((result as Result[])[0].info.defective).toEqual(false);
         result = mockjugator.conjugateSync('amar');
-        expect((result as ResultType[])[0].info.pronominal).toEqual(false);
+        expect((result as Result[])[0].info.pronominal).toEqual(false);
         result = mockjugator.conjugateSync('temer');
-        expect((result as ResultType[])[0].info.verb).toEqual('temer');
+        expect((result as Result[])[0].info.verb).toEqual('temer');
     });
 
     test('Async resolve', () => {
@@ -193,7 +192,7 @@ describe('Model Test', () => {
 
         // get a verb
         mockjugator.conjugate('dar')
-            .then(value => expect(((value as ResultType[])[0].info.verb)).toEqual('dar'))
+            .then(value => expect(((value as Result[])[0].info.verb)).toEqual('dar'))
             .catch(() => expect(true).not.toBe(true))               // << unreachable, we hope
             .finally(() => expect(true).toBe(true));                   // << always happens
     });
@@ -204,12 +203,12 @@ describe('Model Test', () => {
         broken.deleteTemplates();
         broken.getVerbList()
             .then(() => fail())              // we should never get here
-            .catch(value => expect(value).toEqual([ERROR_MSG.NoVerbs]));
+            .catch(value => expect(value).toEqual([errorMsg.noVerbs]));
 
         broken.deleteFactory();      // really break it
         broken.getModels()
             .then(value => fail(value))
-            .catch(reason => expect(reason).toEqual([ERROR_MSG.NoModels]))
+            .catch(reason => expect(reason).toEqual([errorMsg.noModels]))
             .finally(() => expect(true).toBe(true));
     });
 
@@ -218,19 +217,19 @@ describe('Model Test', () => {
     const conjugator = new Conjugator();
     test('Bad Input', () => {
         expect(conjugator.conjugateSync('amarse', 'castellano')).
-            toEqual({ ERROR: { message: ERROR_MSG.UnknownVerb.replace('VERB', 'amarse') } });
+            toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'amarse') } });
 
         conjugator.conjugate('vivirse')
             .then(value => console.error(`Should never get here, ${value}`))
             .catch(error => {
                 // console.log('Rejected', error);
                 expect(error).not.toBeInstanceOf(Array);
-                expect(error).toEqual({ ERROR: { message: ERROR_MSG.UnknownVerb.replace('VERB', 'vivirse') } });
+                expect(error).toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'vivirse') } });
             });
 
         // force bad region
         expect(conjugator.conjugateSync('temer', 'castillano' as Regions)).
-            toEqual({ ERROR: { message: ERROR_MSG.UnknownRegion.replace('REGION', 'castillano') } });
+            toEqual({ ERROR: { message: errorMsg.unknownRegion.replace('REGION', 'castillano') } });
 
 
         conjugator.conjugate('vivir', 'castilgano' as Regions)
@@ -238,12 +237,12 @@ describe('Model Test', () => {
             .catch(error => {
                 // console.log('Rejected', error);
                 expect(error).not.toBeInstanceOf(Array);
-                expect(error).toEqual({ ERROR: { message: ERROR_MSG.UnknownRegion.replace('REGION', 'castilgano') } });
+                expect(error).toEqual({ ERROR: { message: errorMsg.unknownRegion.replace('REGION', 'castilgano') } });
             });
 
 
         expect(conjugator.conjugateSync('yo momma')).
-            toEqual({ ERROR: { message: ERROR_MSG.UnknownVerb.replace('VERB', 'yo momma') } });
+            toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'yo momma') } });
 
         conjugator.conjugate('yo')
             .then(value => {
@@ -252,29 +251,20 @@ describe('Model Test', () => {
             })
             .catch(error => {
                 // console.log('Rejected', error);
-                expect(error).toEqual({ ERROR: { message: ERROR_MSG.UnknownVerb.replace('VERB', 'yo') } });
+                expect(error).toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'yo') } });
             });
     });
 
     test('ModelFactory', () => {
         const testFactory = new ModelFactory();
         // serenar is not a model, getModel should return Empty
-        expect(testFactory.getModel('serenar', 'serenar', 'N', 'castellano', {})).toBeInstanceOf(Empty);
-        expect(testFactory.getModel('amar', 'invalid', 'N', 'canarias', {})).toBeInstanceOf(Empty);
+        expect(testFactory.getModel('serenar', 'serenar', 'N', 'castellano', {})).toBeUndefined();
+        expect(testFactory.getModel('amar', 'invalid', 'N', 'canarias', {})).toBeUndefined();
 
         // legit existing models
-        expect(testFactory.getModel('amar', 'amar', 'P', 'voseo', {})).not.toBeInstanceOf(Empty);
-        expect(testFactory.getModel('amar', 'vivir', 'P', 'formal', {})).not.toBeInstanceOf(Empty);
-        expect(testFactory.getModel('amar', 'temer', 'P', 'castellano', {})).not.toBeInstanceOf(Empty);
-
-        expect(testFactory.isImplemented('amar')).toBeTruthy();
-        expect(testFactory.isImplemented('temer')).toBeTruthy();
-        expect(testFactory.isImplemented('vivir')).toBeTruthy();
-
-        expect(testFactory.isImplemented('amar_')).toBeFalsy();
-        expect(testFactory.isImplemented('teemar')).toBeFalsy();
-        expect(testFactory.isImplemented('.vivir')).toBeFalsy();
-
+        expect(testFactory.getModel('amar', 'amar', 'P', 'voseo', {})).toBeDefined();
+        expect(testFactory.getModel('amar', 'vivir', 'P', 'formal', {})).toBeDefined();
+        expect(testFactory.getModel('amar', 'temer', 'P', 'castellano', {})).toBeDefined();
     });
 
     test('getVerbList()', () => {
@@ -282,14 +272,14 @@ describe('Model Test', () => {
     });
 
     test('Optional parameters', () => {
-        let result: OutputType = conjugator.conjugateSync('amarse');
+        let result: Result[] | ErrorType = conjugator.conjugateSync('amarse');
         expect(result).not.toBeInstanceOf(Array);
-        expect(result).toEqual({ ERROR: { message: ERROR_MSG.UnknownVerb.replace('VERB', 'amarse') } });
+        expect(result).toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'amarse') } });
 
         // force bad region
         result = conjugator.conjugateSync('temer', 'castillano' as Regions);
         expect(result).not.toBeInstanceOf(Array);
-        expect(result).toEqual({ ERROR: { message: ERROR_MSG.UnknownRegion.replace('REGION', 'castillano') } });
+        expect(result).toEqual({ ERROR: { message: errorMsg.unknownRegion.replace('REGION', 'castillano') } });
 
         // good input, good answers
         result = conjugator.conjugateSync('amar');
@@ -298,14 +288,14 @@ describe('Model Test', () => {
 
         result = conjugator.conjugateSync('amar');
         expect(result).toBeInstanceOf(Array);
-        expect((result as ResultType[])[0]['info']).toBeDefined();
-        expect((result as ResultType[])[0].info.model).toEqual('amar');
-        expect((result as ResultType[])[0].conjugation.Indicativo.Presente[0]).toEqual('yo amo');
+        expect((result as Result[])[0]['info']).toBeDefined();
+        expect((result as Result[])[0].info.model).toEqual('amar');
+        expect((result as Result[])[0].conjugation.Indicativo.Presente[0]).toEqual('yo amo');
 
         result = conjugator.conjugateSync('vivir');
         expect(result).toBeInstanceOf(Array);
-        expect((result as ResultType[])[0].info.pronominal).toBe(false);
-        expect((result as ResultType[])[0].conjugation.Subjuntivo.Presente[2]).toEqual('él viva');
+        expect((result as Result[])[0].info.pronominal).toBe(false);
+        expect((result as Result[])[0].conjugation.Subjuntivo.Presente[2]).toEqual('él viva');
     });
 
     verbsToTest = shuffle(conjugator.getVerbListSync().filter(verb => verbs.includes(verb)));
@@ -336,13 +326,13 @@ describe('Conjugation Test', () => {
         describe(`${verb}`, () => {
             regionsToTest.forEach(region => {
                 test(`${region}`, () => {
-                    const conjugations: OutputType = conjugator.conjugateSync(verb, region);
+                    const conjugations: Result[] | ErrorType = conjugator.conjugateSync(verb, region);
                     if (!Array.isArray(conjugations)) {
                         fail(conjugations);
                     }
-                    expect((conjugations[0].info as InfoType)['verb']).
-                        toEqual((conjugations[0].info as InfoType)['pronominal'] === true ? `${verb}se` : verb);
-                    expect((conjugations[0].info as InfoType)['region']).toEqual(region);
+                    expect((conjugations[0].info as Info)['verb']).
+                        toEqual((conjugations[0].info as Info)['pronominal'] === true ? `${verb}se` : verb);
+                    expect((conjugations[0].info as Info)['region']).toEqual(region);
                 });
             });
         });

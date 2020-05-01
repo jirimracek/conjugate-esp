@@ -4,8 +4,8 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { PronominalKeys, Regions } from './types';
-import { BaseModel, Empty, ModelAttributes } from './basemodel';
+import { PronominalKey, Regions } from './types';
+import { BaseModel, ModelAttributes } from './basemodel';
 import * as ar from './armodels';
 import * as er from './ermodels';
 import * as ir from './irmodels';
@@ -19,7 +19,7 @@ export class ModelFactory {
         // empty
     }
 
-    public getModel(verb: string, modelName: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes): BaseModel {
+    public getModel(verb: string, modelName: string, type: PronominalKey, region: Regions, attributes: ModelAttributes): BaseModel | undefined {
         if (ar[modelName as ArKey]) {
             return new ar[modelName as ArKey](verb, type, region, attributes);
         } else if (er[modelName as ErKey]) {
@@ -27,15 +27,7 @@ export class ModelFactory {
         } else if (ir[modelName as IrKey]) {
             return new ir[modelName as IrKey](verb, type, region, attributes);
         }
-        return new Empty(verb, type, region, attributes);
-    }
-
-    /**
-     * Development helper
-     * @param model 
-     */
-    public isImplemented(name: string): boolean {
-        return !!(ar[name as ArKey] || er[name as ErKey] || ir[name as IrKey]);
+        return undefined;
     }
 
     public getModels(): string[] {

@@ -6,23 +6,26 @@
 */
 import definitions from '../data/definitions.json';
 import { ModelFactory } from './factory';
-import { Regions, PronominalKeys } from './types';
-import { VerbModelTemplates, VerbModelData, ModelAttributes, ResultTable } from './basemodel';
+import { Regions, PronominalKey } from './types';
+import { ModelAttributes, ResultTable, Model } from './basemodel';
 
-export type InfoType = { verb: string, model: string, region: string, pronominal: boolean, defective: boolean };
+
+export type VerbModelData = { [key in PronominalKey]?: Model[] | Model };
+export type Info = { verb: string, model: string, region: string, pronominal: boolean, defective: boolean };
 export type ErrorType = { ERROR: { message: string } };
-export type ResultType = { info: InfoType, conjugation: ResultTable };
-export type OutputType = ResultType[] | ErrorType;
+export type Result = { info: Info, conjugation: ResultTable };
 
-export const ERROR_MSG = {
-    UnknownVerb: 'Input error, unknown verb VERB',
-    UnknownRegion: 'Input error, invalid region REGION',
-    UnknownModel: 'Internal error, model MODEL not implemented, can\'t conjugate VERB, REGION, contact maintainer',
-    UndefinedTemplates: 'Internal error, undefined templates, check definitions.json file, contact maintainer',
-    MissingModelData: 'Internal error, missing verb VERB model data?, check definitions.json file, contact maintainer',
-    NoVerbs: 'Internal error, no verbs, check definitions.json file, contact maintainer',
-    NoModels: 'Internal error, no models, check definitions.json file, contact maintainer'
+export const errorMsg = {
+    unknownVerb: 'Input error, unknown verb VERB',
+    unknownRegion: 'Input error, invalid region REGION',
+    unknownModel: 'Internal error, model MODEL not implemented, can\'t conjugate VERB, REGION, contact maintainer',
+    noTemplates: 'Internal error, undefined templates, check definitions.json file, contact maintainer',
+    noModelData: 'Internal error, missing verb VERB model data?, check definitions.json file, contact maintainer',
+    noVerbs: 'Internal error, no verbs, check definitions.json file, contact maintainer',
+    noModels: 'Internal error, no models, check definitions.json file, contact maintainer'
 };
+
+export type VerbModelTemplates = { [verbname: string]: VerbModelData };
 
 /**
  * Create instance of Conjugator, then
@@ -46,27 +49,27 @@ export class Conjugator {
      * @param verb required
      * @param region optional castellano|voseo|canarias|formal 
      */
-    public conjugateSync(verb: string, region: Regions = 'castellano'): ResultType[] | ErrorType {
-        const result: ResultType[] = [];
+    public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | ErrorType {
+        const result: Result[] = [];
         try {
             if (!this.templates) {
-                throw new Error(ERROR_MSG.UndefinedTemplates);
+                throw new Error(errorMsg.noTemplates);
             }
             if (!this.getVerbListSync().includes(verb)) {
-                throw new Error(ERROR_MSG.UnknownVerb.replace('VERB', verb));
+                throw new Error(errorMsg.unknownVerb.replace('VERB', verb));
             }
             if (!['castellano', 'voseo', 'canarias', 'formal'].includes(region)) {
-                throw new Error(ERROR_MSG.UnknownRegion.replace('REGION', region));
+                throw new Error(errorMsg.unknownRegion.replace('REGION', region));
             }
 
             const verbModelData = this.templates[verb] as VerbModelData;
             if (!verbModelData) {
-                throw new Error(ERROR_MSG.MissingModelData.replace('VERB', verb));
+                throw new Error(errorMsg.noModelData.replace('VERB', verb));
             }
 
             // Things we need to know to construct the model 
-            const modelTemplates: [string, PronominalKeys, Regions, ModelAttributes][] = [];
-            (Object.keys(verbModelData) as PronominalKeys[]).forEach(pronominalKey => {
+            const modelTemplates: [string, PronominalKey, Regions, ModelAttributes][] = [];
+            (Object.keys(verbModelData) as PronominalKey[]).forEach(pronominalKey => {
                 // string | [string | ModelWithAttrs] | ModelWithAttrs
                 const models = [verbModelData[pronominalKey]].flat();
                 models.forEach(model => {
@@ -82,13 +85,12 @@ export class Conjugator {
             // Construct each model based on its recipe and get the verb conjugated based on given model
             modelTemplates.forEach(template => {
                 const [modelName, pronominalKey, region, attributes] = template;
-                if (!this.factory.isImplemented(modelName)) {
+                const model = this.factory.getModel(verb, modelName, pronominalKey, region, attributes);
+                if (!model) {
                     throw new Error(
-                        ERROR_MSG.UnknownModel.replace(/MODEL(.*)VERB(.*)REGION/,
+                        errorMsg.unknownModel.replace(/MODEL(.*)VERB(.*)REGION/,
                             `${modelName}$1${verb}$2${region}`));
                 }
-
-                const model = this.factory.getModel(verb, modelName, pronominalKey, region, attributes);
 
                 result.push({
                     info: {
@@ -114,9 +116,9 @@ export class Conjugator {
      * @param verb to conjugate
      * @param region 
      */
-    public conjugate(verb: string, region: Regions = 'castellano'): Promise<ResultType[]> {
+    public conjugate(verb: string, region: Regions = 'castellano'): Promise<Result[] | ErrorType> {
         return new Promise((resolve, reject) => {
-            const result: OutputType = this.conjugateSync(verb, region);
+            const result: Result[] | ErrorType = this.conjugateSync(verb, region);
             if (Array.isArray(result)) {
                 resolve(result);
             } else {
@@ -132,8 +134,8 @@ export class Conjugator {
         try {
             return Object.keys(this.templates).sort(function (a, b) { return a.localeCompare(b); });
         } catch (error) {
-            console.error(ERROR_MSG.NoVerbs, error.message);
-            return [ERROR_MSG.NoVerbs];
+            console.error(errorMsg.noVerbs, error.message);
+            return [errorMsg.noVerbs];
         }
     }
 
@@ -157,8 +159,8 @@ export class Conjugator {
         try {
             return this.factory.getModels();
         } catch (error) {
-            console.error(ERROR_MSG.NoModels, error.message);
-            return [ERROR_MSG.NoModels];
+            console.error(errorMsg.noModels, error.message);
+            return [errorMsg.noModels];
         }
     }
 

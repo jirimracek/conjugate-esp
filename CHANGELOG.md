@@ -1,5 +1,12 @@
 # Changelog
 
+- 5/1/2020 (0.7.0)
+  - major cleanup, one more round
+  - **interface change** - old sync only methods renamed to <*>Sync()
+  - simplified directory structure, removed unneeded complexity
+  - type, export, const isolation to live only where they are needed
+  - ready to publish to npm, I think
+
 - 4/29/2020 (0.6.0)
   - minor changes to imperativo afirmativo
   - fix to getModels()

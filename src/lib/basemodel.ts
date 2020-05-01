@@ -4,13 +4,8 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import {
-    PronominalKeys, Regions, SimpleModeKey, 
-    ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey, IndicativoSubSimpleKey,
-    ImperativoSubKey, SubjuntivoSubSimpleKey, IndicativoSubCompKey, SubjuntivoSubCompKey
-} from './types';
+import { PronominalKey, Regions, IndicativoSubSimpleKey, SubjuntivoSubSimpleKey, } from './types';
 import { clearAccents, esdrujula, strongify, applyMonoRules } from './stringutils';
-
 
 // Attributes
 // attribute has form of attrname : string | boolean
@@ -29,13 +24,28 @@ import { clearAccents, esdrujula, strongify, applyMonoRules } from './stringutil
 type DefectiveType = 'imorfo' | 'eimorfo' | 'imper' | 'tercio' | 'terciop'
     | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'ogmorfo' | 'osmorfo';
 type AttributeValues = DefectiveType | boolean | string;
-type AttributeKeys = 'PR' | 'PD' | 'PS' | 'D' | 'M' | 'V';
-type ModelWithAttributes = { [modelname: string]: ModelAttributes };
-type Model = string | ModelWithAttributes;
-type CompSubTable = { [modekey: string]: { [timekey: string]: string[] } };
-type PronounsTable = { [key in PronominalKeys]: { [key in Regions]: string[] } };
 
-type DesinenceTable = {
+type AttributeKeys = 'PR' | 'PD' | 'PS' | 'D' | 'M' | 'V';
+
+type CompSubTable = { [modekey: string]: { [timekey: string]: string[] } };
+type PronounsTable = { [key in PronominalKey]: { [key in Regions]: string[] } };
+
+type IndicativoSubjuntivoModeKey = 'Indicativo' | 'Subjuntivo';
+type ImperativoSubKey = 'Afirmativo' | 'Negativo';
+type ImpersonalSubKey = 'Infinitivo' | 'Gerundio' | 'Participio';
+
+// Compuestos keys
+type IndicativoSubCompKey = 'PreteritoPerfecto' | 'PreteritoPluscuamperfecto'
+    | 'PreteritoAnterior' | 'FuturoPerfecto' | 'CondicionalCompuesto';
+type SubjuntivoSubCompKey = 'PreteritoPerfecto' | 'PreteritoPluscuamperfectoRa'
+    | 'PreteritoPluscuamperfectoSe' | 'FuturoPerfecto';
+
+// Combined simple and compuestos
+type IndicativoSubKey = IndicativoSubSimpleKey | IndicativoSubCompKey;
+type SubjuntivoSubKey = SubjuntivoSubSimpleKey | SubjuntivoSubCompKey;
+
+
+export type DesinenceTable = {
     Impersonal: {
         [subkey in ImpersonalSubKey]: string[]
     },
@@ -46,6 +56,7 @@ type DesinenceTable = {
         [subkey in SubjuntivoSubSimpleKey]: string[]
     }
 }
+
 export type ResultTable = {
     Impersonal: {
         [subkey in ImpersonalSubKey]: string
@@ -62,72 +73,9 @@ export type ResultTable = {
 }
 
 export type ModelAttributes = { [attributekey in AttributeKeys]?: AttributeValues };
-export type VerbModelData = { [key in PronominalKeys]?: Model[] | Model };
-export type VerbModelTemplates = { [verbname: string]: VerbModelData };
+export type ModelWithAttributes = { [modelname: string]: ModelAttributes };
+export type Model = string | ModelWithAttributes;
 
-// The desinences (endings) of conjugated forms
-export const AR: Readonly<DesinenceTable> = {
-    Impersonal: {
-        Infinitivo: ['ar', 'arse'],
-        Gerundio: ['ando', 'ándose'],
-        Participio: ['ado']
-    },
-    Indicativo: {
-        Presente: ['o', 'as', 'a', 'amos', 'áis', 'an'],
-        PreteritoImperfecto: ['aba', 'abas', 'aba', 'ábamos', 'abais', 'aban'],
-        PreteritoIndefinido: ['é', 'aste', 'ó', 'amos', 'asteis', 'aron'],
-        FuturoImperfecto: ['aré', 'arás', 'ará', 'aremos', 'aréis', 'arán'],
-        CondicionalSimple: ['aría', 'arías', 'aría', 'aríamos', 'aríais', 'arían']
-    },
-    Subjuntivo: {
-        Presente: ['e', 'es', 'e', 'emos', 'éis', 'en'],
-        PreteritoImperfectoRa: ['ara', 'aras', 'ara', 'áramos', 'arais', 'aran'],
-        PreteritoImperfectoSe: ['ase', 'ases', 'ase', 'ásemos', 'aseis', 'asen'],
-        FuturoImperfecto: ['are', 'ares', 'are', 'áremos', 'areis', 'aren']
-    }
-};
-
-export const ER: Readonly<DesinenceTable> = {
-    Impersonal: {
-        Infinitivo: ['er', 'erse'],
-        Gerundio: ['iendo', 'iéndose'],
-        Participio: ['ido']
-    },
-    Indicativo: {
-        Presente: ['o', 'es', 'e', 'emos', 'éis', 'en'],
-        PreteritoImperfecto: ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'],
-        PreteritoIndefinido: ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'],
-        FuturoImperfecto: ['eré', 'erás', 'erá', 'eremos', 'eréis', 'erán'],
-        CondicionalSimple: ['ería', 'erías', 'ería', 'eríamos', 'eríais', 'erían']
-    },
-    Subjuntivo: {
-        Presente: ['a', 'as', 'a', 'amos', 'áis', 'an'],
-        PreteritoImperfectoRa: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
-        PreteritoImperfectoSe: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
-        FuturoImperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
-    }
-};
-
-export const IR: Readonly<DesinenceTable> = {
-    Impersonal: {
-        Infinitivo: ['ir', 'irse'],
-        Gerundio: ['iendo', 'iéndose'],
-        Participio: ['ido']
-    },
-    Indicativo: {
-        Presente: ['o', 'es', 'e', 'imos', 'ís', 'en'],
-        PreteritoImperfecto: ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'],
-        PreteritoIndefinido: ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'],
-        FuturoImperfecto: ['iré', 'irás', 'irá', 'iremos', 'iréis', 'irán'],
-        CondicionalSimple: ['iría', 'irías', 'iría', 'iríamos', 'iríais', 'irían']
-    },
-    Subjuntivo: {
-        Presente: ['a', 'as', 'a', 'amos', 'áis', 'an'],
-        PreteritoImperfectoRa: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
-        PreteritoImperfectoSe: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
-        FuturoImperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
-    }
-};
 const PRONOUNS: Readonly<PronounsTable> = {
     N: {
         castellano: ['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos'],
@@ -159,6 +107,7 @@ const AUX: Readonly<CompSubTable> = {
         FuturoPerfecto: ['hubiere', 'hubieres', 'hubiere', 'hubiéremos', 'hubiereis', 'hubieren']
     }
 };
+
 const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
     'imper',
     'tercio',
@@ -167,6 +116,11 @@ const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
     'omorfo',
     'osmorfo',
     'ogmorfo'
+];
+const IMPERSONAL_KEYS: ImpersonalSubKey[] = [
+    'Infinitivo',
+    'Gerundio',
+    'Participio'
 ];
 
 const INDICATIVO_SIMPLE_KEYS: IndicativoSubSimpleKey[] = [
@@ -199,13 +153,18 @@ const SUBJUNTIVO_COMP_KEYS: SubjuntivoSubCompKey[] = [
     'FuturoPerfecto'
 ];
 
+const IMPERATIVO_KEYS: ImperativoSubKey[] = [
+    'Afirmativo',
+    'Negativo'
+];
+
 const NO_IMPERATIVO_NEGATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'ogmorfo'];
 const DASH6 = '------';
 
 export abstract class BaseModel {
     protected verb: string;
     protected stem = '';
-    protected type: PronominalKeys;
+    protected type: PronominalKey;
     protected region: Regions;
 
     protected desinences: DesinenceTable;
@@ -220,7 +179,7 @@ export abstract class BaseModel {
     private defectiveAttributes: DefectiveType;
     private monoSyllables: boolean;
 
-    protected constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
+    protected constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         this.verb = verb;
         this.stem = verb.replace(/..$/, '');
         this.type = type;
@@ -242,61 +201,28 @@ export abstract class BaseModel {
             this.pronouns.P[this.region] = Array.from('012345').map(() => ' ');   // count them. 6
         }
 
-        // initialize result conjugation table
+        // initialize empty result conjugation table
         this.table = {
-            Impersonal: {
-                Infinitivo: '',
-                Gerundio: '',
-                Participio: ''
-            },
-            Indicativo: {
-                Presente: [],
-                PreteritoImperfecto: [],
-                PreteritoIndefinido: [],
-                FuturoImperfecto: [],
-                CondicionalSimple: [],
-                PreteritoPerfecto: [],
-                PreteritoPluscuamperfecto: [],
-                PreteritoAnterior: [],
-                FuturoPerfecto: [],
-                CondicionalCompuesto: []
-            },
-            Subjuntivo: {
-                Presente: [],
-                PreteritoImperfectoRa: [],
-                PreteritoImperfectoSe: [],
-                FuturoImperfecto: [],
-                PreteritoPerfecto: [],
-                PreteritoPluscuamperfectoRa: [],
-                PreteritoPluscuamperfectoSe: [],
-                FuturoPerfecto: []
-
-            },
-            Imperativo: {
-                Afirmativo: Array.from(DASH6),
-                Negativo: Array.from(DASH6)
-            }
+            Impersonal: Object.fromEntries([...IMPERSONAL_KEYS.map(key => [key, ''])]),
+            Indicativo: Object.fromEntries([
+                ...INDICATIVO_SIMPLE_KEYS.map(key => [key, []]),
+                ...INDICATIVO_COMP_KEYS.map(key => [key, []])]),
+            Subjuntivo: Object.fromEntries([
+                ...SUBJUNTIVO_SIMPLE_KEYS.map(key => [key, []]),
+                ...SUBJUNTIVO_COMP_KEYS.map(key => [key, []])]),
+            Imperativo: Object.fromEntries([...IMPERATIVO_KEYS.map(key => [key, Array.from(DASH6)])])
         };
 
+        // initialize empty desinences table
         this.desinences = {
-            Impersonal: {
-                Infinitivo: [],
-                Gerundio: [],
-                Participio: []
-            },
-            Indicativo: {
-                Presente: [],
-                PreteritoImperfecto: [],
-                PreteritoIndefinido: [],
-                FuturoImperfecto: [],
-                CondicionalSimple: []
-            },
-            Subjuntivo: {
-                Presente: [],
-                PreteritoImperfectoRa: [],
-                PreteritoImperfectoSe: [],
-                FuturoImperfecto: []
-            }
+            Impersonal: Object.fromEntries([...IMPERSONAL_KEYS.map(key => [key, []])]),
+            Indicativo: Object.fromEntries([
+                ...INDICATIVO_SIMPLE_KEYS.map(key => [key, []]),
+                ...INDICATIVO_COMP_KEYS.map(key => [key, []])]),
+            Subjuntivo: Object.fromEntries([
+                ...SUBJUNTIVO_SIMPLE_KEYS.map(key => [key, []]),
+                ...SUBJUNTIVO_COMP_KEYS.map(key => [key, []])]),
+
         };
     }
 
@@ -420,7 +346,7 @@ export abstract class BaseModel {
      * @param roots optional array of desired stems, override in derived classes
      */
     // protected setTable(mode: ModeParam, key: ModeTimeParam , roots?: string[]): void {
-    protected setTable(mode: SimpleModeKey, key: IndicativoSubSimpleKey | SubjuntivoSubSimpleKey, roots?: string[]): void {
+    protected setTable(mode: IndicativoSubjuntivoModeKey, key: IndicativoSubSimpleKey | SubjuntivoSubSimpleKey, roots?: string[]): void {
         if (mode === 'Indicativo') {
             this.table[mode][key as IndicativoSubSimpleKey] = this.desinences[mode][key as IndicativoSubSimpleKey]
                 .map((desinence: string, index: number) =>
@@ -884,15 +810,6 @@ export abstract class BaseModel {
                 this.setTable('Indicativo', 'PreteritoIndefinido', [this.stem, dot, dot, this.stem, dot, dot]);
                 break;
         }
-    }
-}
-
-/**
- * Return empty object on failure
- */
-export class Empty extends BaseModel {
-    public constructor(verb: string, type: PronominalKeys, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
     }
 }
 
