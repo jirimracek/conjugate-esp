@@ -1,5 +1,8 @@
 # Changelog
 
+- 5/4/2020 (1.0.2)
+  - more def file shrinking, sync with npm
+
 - 5/1/2020 (1.0.1)
   - bumping version, npm published
   - README update for npm

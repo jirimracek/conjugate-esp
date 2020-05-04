@@ -7,10 +7,9 @@
 Spanish verb conjugator, uses templates, pattern matching & logic to conjugate verbs in any of the regional varieties of castellano, voseo, formal, canarias
 
 - Project goals: correct, detailed, complete, fast & small (yes, you can have it all)
-- As of version 0.5.0 and above, includes
-  - 12815 known verbs
-  - 99 implemented and tested models
-- Includes castellano, voseo, formal, canarias varieties & complicated cases
+- 12815 known verbs, 99 tested models
+- castellano, voseo, formal, canarias varieties
+- complicated cases
   - defectives
   - multiple (dual & triple) conjugations
   - dual participios
@@ -18,8 +17,8 @@ Spanish verb conjugator, uses templates, pattern matching & logic to conjugate v
 
 ____
 
-- Current version 1.0.1
-- Updated on Fri 01 May 2020 09:55:42 PM CEST
+- Current version 1.0.2
+- Updated on Mon 04 May 2020 02:55:30 PM CEST
 
 ____
 
@@ -39,6 +38,7 @@ ____
     import { Conjugator } from  <path to install>                 // local install
     import { Conjugator } from  '@jirimracek/conjugate-esp';      // npm installed
     const cng = new Conjugator();
+
     const table = cng.conjugateSync('adscribir', 'formal');       // sync, formal (usted, ustedes)
     console.log(JSON.stringify(table, null, 1));
     cng.conjugate('soler', 'voseo')                               // async (promise), voseo
@@ -58,7 +58,7 @@ ____
 ### Returns array of tables or error message object, in JSON format
 
 - Impersonal
-  - Infinitivo, Gerundio,Participio
+  - Infinitivo, Gerundio, Participio
 - Indicativo
   - Simple
     - Presente, Pretérito Imperfecto, Pretérito Indefinido, Futuro Imperfecto, Condicional Simple
