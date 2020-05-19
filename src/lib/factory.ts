@@ -31,8 +31,7 @@ export class ModelFactory {
     }
 
     public getModels(): string[] {
-        const models: Set<string> = new Set();
-        Object.keys(ar).forEach(m => models.add(m));
+        const models: Set<string> = new Set(Object.keys(ar));
         Object.keys(er).forEach(m => models.add(m));
         Object.keys(ir).forEach(m => models.add(m));
         return Array.from(models);

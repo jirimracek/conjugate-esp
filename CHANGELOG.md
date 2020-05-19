@@ -1,5 +1,10 @@
 # Changelog
 
+- 5/19/2020 (1.1.0)
+  - changed regular models from [amar, temer, vivir ] to [hablar, temer, partir] so the reflexives can be shown in models table
+  - this is potentially an interface breaking change if you counted on [amar, temer, vivir]
+  - added a few exports
+
 - 5/4/2020 (1.0.2)
   - more def file shrinking, sync with npm
 

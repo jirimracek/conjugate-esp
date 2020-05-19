@@ -41,7 +41,7 @@ const AR: Readonly<DesinenceTable> = {
 /**
  * @class base class for all -ar conjugations
  */
-export class amar extends BaseModel {
+export class hablar extends BaseModel {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
 
@@ -64,7 +64,7 @@ export class amar extends BaseModel {
     protected configDesinences(): void { /* empty */ }
 }
 
-export class actuar extends amar {
+export class actuar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -81,7 +81,7 @@ export class actuar extends amar {
     }
 }
 
-export class agorar extends amar {
+export class agorar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -98,7 +98,7 @@ export class agorar extends amar {
     }
 }
 
-export class aguar extends amar {
+export class aguar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -116,7 +116,7 @@ export class aguar extends amar {
     }
 }
 
-export class ahincar extends amar {
+export class ahincar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -134,7 +134,7 @@ export class ahincar extends amar {
     }
 }
 
-export class aislar extends amar {
+export class aislar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -151,7 +151,7 @@ export class aislar extends amar {
     }
 }
 
-export class andar extends amar {
+export class andar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -164,7 +164,7 @@ export class andar extends amar {
     }
 }
 
-export class aullar extends amar {
+export class aullar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -181,7 +181,7 @@ export class aullar extends amar {
     }
 }
 
-export class avergonzar extends amar {
+export class avergonzar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -201,7 +201,7 @@ export class avergonzar extends amar {
         this.setSubjuntivoPresentePattern0125(this.stem.replace(/onz/, 'üenc'), this.stem.replace(/z$/, 'c'));
     }
 }
-export class cabrahigar extends amar {
+export class cabrahigar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -225,7 +225,7 @@ export class cabrahigar extends amar {
     }
 }
 
-export class colgar extends amar {
+export class colgar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -249,7 +249,7 @@ export class colgar extends amar {
     }
 }
 
-export class cazar extends amar {
+export class cazar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -267,7 +267,7 @@ export class cazar extends amar {
     }
 }
 
-export class contar extends amar {
+export class contar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -289,7 +289,7 @@ export class contar extends amar {
     }
 }
 
-export class dar extends amar {
+export class dar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -364,7 +364,7 @@ export class desdar extends dar {
     }
 }
 
-export class desosar extends amar {
+export class desosar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -381,7 +381,7 @@ export class desosar extends amar {
     }
 }
 
-export class empezar extends amar {
+export class empezar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -402,7 +402,7 @@ export class empezar extends amar {
     }
 }
 
-export class enraizar extends amar {
+export class enraizar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -421,7 +421,7 @@ export class enraizar extends amar {
     }
 }
 
-export class errar extends amar {
+export class errar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -438,7 +438,7 @@ export class errar extends amar {
     }
 }
 
-export class estar extends amar {
+export class estar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -479,7 +479,7 @@ export class estar extends amar {
     }
 }
 
-export class forzar extends amar {
+export class forzar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -498,7 +498,7 @@ export class forzar extends amar {
     }
 }
 
-export class jugar extends amar {
+export class jugar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -517,7 +517,7 @@ export class jugar extends amar {
     }
 }
 
-export class pagar extends amar {
+export class pagar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -528,7 +528,7 @@ export class pagar extends amar {
     }
 }
 
-export class pensar extends amar {
+export class pensar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -555,7 +555,7 @@ export class pensar extends amar {
     }
 }
 
-export class regar extends amar {
+export class regar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -577,7 +577,7 @@ export class regar extends amar {
     }
 }
 
-export class vaciar extends amar {
+export class vaciar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -594,7 +594,7 @@ export class vaciar extends amar {
     }
 }
 
-export class sacar extends amar {
+export class sacar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -610,7 +610,7 @@ export class sacar extends amar {
     }
 }
 
-export class volcar extends amar {
+export class volcar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }

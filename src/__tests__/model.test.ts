@@ -39,24 +39,24 @@ const temp = new Conjugator();
 const models: string[] = temp.getModelsSync();
 models.forEach(m => verbSet.add(m));
 // some interesting verbs
-verbSet.add('abar');        // the only known trimorfo              'abar': { 'P': { 'amar': { 'D': 'trimorfo' } } },
-verbSet.add('abolir');      // interesting imorfo                   'abolir': { 'N': [ 'vivir', { 'vivir': { 'D': 'imorfo' } } ] },
-verbSet.add('acostumbrar');  // omorfo                               'acostumbrar': { 'N': [ 'amar', { 'amar': { 'D': 'omorfo' } } ], 'P': 'amar' },
-verbSet.add('aclarar');     // dual, defective                      'aclarar': { 'N': [ 'amar', { 'amar': { 'd': 'imper' } } ], 'P': 'amar' },
+verbSet.add('abar');        // the only known trimorfo              'abar': { 'P': { 'hablar': { 'D': 'trimorfo' } } },
+verbSet.add('abolir');      // interesting imorfo                   'abolir': { 'N': [ 'partir', { 'partir': { 'D': 'imorfo' } } ] },
+verbSet.add('acostumbrar');  // omorfo                               'acostumbrar': { 'N': [ 'hablar', { 'hablar': { 'D': 'omorfo' } } ], 'P': 'hablar' },
+verbSet.add('aclarar');     // dual, defective                      'aclarar': { 'N': [ 'hablar', { 'hablar': { 'd': 'imper' } } ], 'P': 'hablar' },
 verbSet.add('acontecer');   // single defective                     'acontecer': { 'N': { 'nacer': { 'D': 'terciop' } } },
-verbSet.add('adecuar');     // dual, non defective                  'adecuar': { 'N': [ 'amar', 'actuar' ], 'P': [ 'amar', 'actuar' ]
-verbSet.add('antojar');     // defective terciopersonal v2          'antojar': { 'P': { 'amar': { 'D': 'terciop' } } },
+verbSet.add('adecuar');     // dual, non defective                  'adecuar': { 'N': [ 'hablar', 'actuar' ], 'P': [ 'hablar', 'actuar' ]
+verbSet.add('antojar');     // defective terciopersonal v2          'antojar': { 'P': { 'hablar': { 'D': 'terciop' } } },
 verbSet.add('autosatisfacer');     // odd version of hacer          'autosatisfacer': { 'N': [ 'hacer', { 'hacer': { 'V': '1' } } ],
 verbSet.add('balbucir');    // combo of ir & ar verb, very unique, in the model list
-verbSet.add('colorir');     // imorfo                               'colorir': { 'N': { 'vivir': { 'D': 'imorfo' } } },
+verbSet.add('colorir');     // imorfo                               'colorir': { 'N': { 'partir': { 'D': 'imorfo' } } },
 verbSet.add('condecir');    // the decir family of differences      'condecir': { 'N': [ { 'decir': { 'V': '1' } }, { 'decir': { 'D': 'terciop' } }, { 'decir': { 'V': '2' } } ] },
 verbSet.add('degollar');    // contar, o -> üe
 verbSet.add('derrocar');    // dual volcar, sacar                   'derrocar': { 'N': [ 'volcar', 'sacar' ], 'P': 'volcar' },
 verbSet.add('desvaír');     // dual, ír, defective in both N&P      'desvaír': { 'N': [ { 'embaír': { 'D': 'imorfo' } }, 'embaír' ], 'P': [ { 'embaír': { 'D': 'imorfo' } }, 'embaír' ] },
 verbSet.add('embaír');
 verbSet.add('empecer');      // the only known tercio                'empecer': { 'N': { 'nacer': { 'D': 'tercio' } } },
-verbSet.add('empedernir');  // the only bimorfop, dual defective    'empedernir': { 'N': [ { 'vivir': { 'D': 'bimorfop' } }, { 'vivir': { 'D': 'imorfo' } } ], 'P': [ { 'vivir': { 'D': 'bimorfop' } }, { 'vivir': { 'D': 'imorfo' } } ] },
-verbSet.add('errar');       // err -> yerr                          'errar': { 'N': [ 'errar', 'amar' ], 'P': [ 'errar', 'amar' ] },
+verbSet.add('empedernir');  // the only bimorfop, dual defective    'empedernir': { 'N': [ { 'partir': { 'D': 'bimorfop' } }, { 'partir': { 'D': 'imorfo' } } ], 'P': [ { 'partir': { 'D': 'bimorfop' } }, { 'partir': { 'D': 'imorfo' } } ] },
+verbSet.add('errar');       // err -> yerr                          'errar': { 'N': [ 'errar', 'hablar' ], 'P': [ 'errar', 'hablar' ] },
 verbSet.add('escribir');
 verbSet.add('erguir');
 verbSet.add('freír');
@@ -77,11 +77,11 @@ verbSet.add('redecir');     // the decir family of differences
 verbSet.add('reír');
 verbSet.add('reponer');     // ogmorfo                              'reponer': { 'N': [ 'poner', { 'poner': { 'D': 'ogmorfo' } } ], 'P': 'poner' },
 verbSet.add('responder');   // in the list already, quite unique, repuse version         'responder': { 'N': [ 'temer', 'responder' ] },
-verbSet.add('serenar');     // triple, defective in one, N&P        'serenar': { 'N': [ 'amar', { 'amar': { 'D': 'imper' } } ], 'P': 'amar' },
+verbSet.add('serenar');     // triple, defective in one, N&P        'serenar': { 'N': [ 'hablar', { 'hablar': { 'D': 'imper' } } ], 'P': 'hablar' },
 verbSet.add('sofreír');
 verbSet.add('soler');       // the name said it all                 'soler': { 'N': [ { 'mover': { 'D': 'osmorfo' } }, { 'mover': { 'D': 'omorfo' } } ] },
 verbSet.add('tronar');      // from contar                          'tronar': { 'N': [ { 'contar': { 'D': 'imper' } }, 'contar' ], 'P': 'contar' },
-verbSet.add('ventar');      // triple, defective                    'ventar': { 'N': [ { 'pensar': { 'D': 'imper' } }, 'amar', 'pensar' ] },
+verbSet.add('ventar');      // triple, defective                    'ventar': { 'N': [ { 'pensar': { 'D': 'imper' } }, 'hablar', 'pensar' ] },
 
 const verbs: string[] = Array.from(verbSet);
 
@@ -118,23 +118,23 @@ describe('Model Test', () => {
     test('Internals + sync', () => {
         // Corrupted definitions file / missing templates - this should never happen
         const mockjugator = new MockJugator();
-        let result: Result[] | ErrorType = mockjugator.conjugateSync('vivir', 'formal');
+        let result: Result[] | ErrorType = mockjugator.conjugateSync('partir', 'formal');
         expect(result).toBeInstanceOf(Array);
-        expect(((result as Result[])[0].info as Info).model).toEqual('vivir');
+        expect(((result as Result[])[0].info as Info).model).toEqual('partir');
 
         // undefine verb model data in templates
-        mockjugator.undefineModelData('vivir');
-        result = mockjugator.conjugateSync('vivir', 'formal');
+        mockjugator.undefineModelData('partir');
+        result = mockjugator.conjugateSync('partir', 'formal');
         expect(result).not.toBeInstanceOf(Array);
-        expect(result).toEqual({ ERROR: { message: errorMsg.noModelData.replace('VERB', 'vivir') } });
+        expect(result).toEqual({ ERROR: { message: errorMsg.noModelData.replace('VERB', 'partir') } });
 
         mockjugator.restore();
-        result = mockjugator.conjugateSync('vivir', 'formal');
+        result = mockjugator.conjugateSync('partir', 'formal');
         expect(result).toBeInstanceOf(Array);
         expect(((result as Result[])[0].info as Info).region).toEqual('formal');
 
         mockjugator.deleteTemplates();
-        result = mockjugator.conjugateSync('amar', 'castellano');
+        result = mockjugator.conjugateSync('hablar', 'castellano');
         expect(result).not.toBeInstanceOf(Array);
         expect(result as ErrorType).toEqual({ ERROR: { message: errorMsg.noTemplates } });
 
@@ -162,9 +162,9 @@ describe('Model Test', () => {
         expect((result as ErrorType)).toEqual({ ERROR: { message: errorMsg.unknownRegion.replace(/REGION/, 'bad') } });
 
         mockjugator.restore();
-        result = mockjugator.conjugateSync('vivir');
+        result = mockjugator.conjugateSync('partir');
         expect((result as Result[])[0].info.defective).toEqual(false);
-        result = mockjugator.conjugateSync('amar');
+        result = mockjugator.conjugateSync('hablar');
         expect((result as Result[])[0].info.pronominal).toEqual(false);
         result = mockjugator.conjugateSync('temer');
         expect((result as Result[])[0].info.verb).toEqual('temer');
@@ -216,15 +216,15 @@ describe('Model Test', () => {
 
     const conjugator = new Conjugator();
     test('Bad Input', () => {
-        expect(conjugator.conjugateSync('amarse', 'castellano')).
-            toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'amarse') } });
+        expect(conjugator.conjugateSync('hablarse', 'castellano')).
+            toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'hablarse') } });
 
-        conjugator.conjugate('vivirse')
+        conjugator.conjugate('partirse')
             .then(value => console.error(`Should never get here, ${value}`))
             .catch(error => {
                 // console.log('Rejected', error);
                 expect(error).not.toBeInstanceOf(Array);
-                expect(error).toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'vivirse') } });
+                expect(error).toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'partirse') } });
             });
 
         // force bad region
@@ -232,7 +232,7 @@ describe('Model Test', () => {
             toEqual({ ERROR: { message: errorMsg.unknownRegion.replace('REGION', 'castillano') } });
 
 
-        conjugator.conjugate('vivir', 'castilgano' as Regions)
+        conjugator.conjugate('partir', 'castilgano' as Regions)
             .then(value => console.error(`Should never get here, ${value}`))
             .catch(error => {
                 // console.log('Rejected', error);
@@ -259,12 +259,12 @@ describe('Model Test', () => {
         const testFactory = new ModelFactory();
         // serenar is not a model, getModel should return Empty
         expect(testFactory.getModel('serenar', 'serenar', 'N', 'castellano', {})).toBeUndefined();
-        expect(testFactory.getModel('amar', 'invalid', 'N', 'canarias', {})).toBeUndefined();
+        expect(testFactory.getModel('hablar', 'invalid', 'N', 'canarias', {})).toBeUndefined();
 
         // legit existing models
-        expect(testFactory.getModel('amar', 'amar', 'P', 'voseo', {})).toBeDefined();
-        expect(testFactory.getModel('amar', 'vivir', 'P', 'formal', {})).toBeDefined();
-        expect(testFactory.getModel('amar', 'temer', 'P', 'castellano', {})).toBeDefined();
+        expect(testFactory.getModel('hablar', 'hablar', 'P', 'voseo', {})).toBeDefined();
+        expect(testFactory.getModel('hablar', 'partir', 'P', 'formal', {})).toBeDefined();
+        expect(testFactory.getModel('hablar', 'temer', 'P', 'castellano', {})).toBeDefined();
     });
 
     test('getVerbList()', () => {
@@ -272,9 +272,9 @@ describe('Model Test', () => {
     });
 
     test('Optional parameters', () => {
-        let result: Result[] | ErrorType = conjugator.conjugateSync('amarse');
+        let result: Result[] | ErrorType = conjugator.conjugateSync('hablarse');           // hablarse can't be used, use 'hablar'
         expect(result).not.toBeInstanceOf(Array);
-        expect(result).toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'amarse') } });
+        expect(result).toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'hablarse') } });
 
         // force bad region
         result = conjugator.conjugateSync('temer', 'castillano' as Regions);
@@ -282,20 +282,20 @@ describe('Model Test', () => {
         expect(result).toEqual({ ERROR: { message: errorMsg.unknownRegion.replace('REGION', 'castillano') } });
 
         // good input, good answers
-        result = conjugator.conjugateSync('amar');
+        result = conjugator.conjugateSync('hablar');
         expect(result).toBeInstanceOf(Array);
         expect(result).not.toEqual([]);
 
-        result = conjugator.conjugateSync('amar');
+        result = conjugator.conjugateSync('hablar');
         expect(result).toBeInstanceOf(Array);
         expect((result as Result[])[0]['info']).toBeDefined();
-        expect((result as Result[])[0].info.model).toEqual('amar');
-        expect((result as Result[])[0].conjugation.Indicativo.Presente[0]).toEqual('yo amo');
+        expect((result as Result[])[0].info.model).toEqual('hablar');
+        expect((result as Result[])[0].conjugation.Indicativo.Presente[0]).toEqual('yo hablo');
 
-        result = conjugator.conjugateSync('vivir');
+        result = conjugator.conjugateSync('partir');
         expect(result).toBeInstanceOf(Array);
         expect((result as Result[])[0].info.pronominal).toBe(false);
-        expect((result as Result[])[0].conjugation.Subjuntivo.Presente[2]).toEqual('él viva');
+        expect((result as Result[])[0].conjugation.Subjuntivo.Presente[2]).toEqual('él parta');
     });
 
     verbsToTest = shuffle(conjugator.getVerbListSync().filter(verb => verbs.includes(verb)));

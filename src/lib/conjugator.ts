@@ -9,6 +9,8 @@ import { ModelFactory } from './factory';
 import { Regions, PronominalKey } from './types';
 import { ModelAttributes, ResultTable, Model } from './basemodel';
 
+export { Regions, PronominalKey, ResultTable };
+
 
 export type VerbModelData = { [key in PronominalKey]?: Model[] | Model };
 export type Info = { verb: string, model: string, region: string, pronominal: boolean, defective: boolean };
@@ -46,7 +48,8 @@ export class Conjugator {
     /**
      * Sync version
      * 
-     * @param verb required
+     * @param verb required - base verb form (no pronominal ending 'se'). Ex.: 'hablar', not 'hablarse'.  
+     * Returned Result[] includes pronominal as well as defective conjugations where appropriate
      * @param region optional castellano|voseo|canarias|formal 
      */
     public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | ErrorType {

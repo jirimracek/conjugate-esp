@@ -36,7 +36,7 @@ const IR: Readonly<DesinenceTable> = {
 };
 
 /* eslint-disable @typescript-eslint/class-name-casing */
-export class vivir extends BaseModel {
+export class partir extends BaseModel {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.desinences = JSON.parse(JSON.stringify(IR));
@@ -51,7 +51,7 @@ export class vivir extends BaseModel {
     protected configDesinences(): void { /* empty */ }
 }
 
-export class abrir extends vivir {
+export class abrir extends partir {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -63,7 +63,7 @@ export class abrir extends vivir {
 }
 
 
-export class asir extends vivir {
+export class asir extends partir {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -76,7 +76,7 @@ export class asir extends vivir {
     }
 }
 
-export class adquirir extends vivir {
+export class adquirir extends partir {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -93,7 +93,7 @@ export class adquirir extends vivir {
     }
 }
 
-export class argüir extends vivir {
+export class argüir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
@@ -165,8 +165,8 @@ export class argüir extends vivir {
     }
 }
 
-// Really special - combination of vivir & amar
-export class balbucir extends vivir {
+// Really special - combination of partir & hablar
+export class balbucir extends partir {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -191,7 +191,7 @@ export class balbucir extends vivir {
     }
 }
 
-export class bendecir extends vivir {
+export class bendecir extends partir {
     protected alteredStem: string;
     protected alteredStemArray: string[];
 
@@ -267,7 +267,7 @@ export class bendecir extends vivir {
     }
 }
 
-export class ceñir extends vivir {
+export class ceñir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
@@ -323,7 +323,7 @@ export class ceñir extends vivir {
     }
 }
 
-export class colegir extends vivir {
+export class colegir extends partir {
     private alteredStem: string;
     private secondAlteredStem: string;
     private alteredStemArray: string[];
@@ -366,7 +366,7 @@ export class colegir extends vivir {
     }
 }
 
-export class conducir extends vivir {
+export class conducir extends partir {
     private alteredStem: string;
     private secondAlteredStem: string;
     private alteredStemArray: string[];
@@ -464,7 +464,7 @@ export class decir extends bendecir {
     }
 }
 
-export class delinquir extends vivir {
+export class delinquir extends partir {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -484,7 +484,7 @@ export class delinquir extends vivir {
     }
 }
 
-export class discernir extends vivir {
+export class discernir extends partir {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -500,7 +500,7 @@ export class discernir extends vivir {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
     }
 }
-export class distinguir extends vivir {
+export class distinguir extends partir {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -520,7 +520,7 @@ export class distinguir extends vivir {
     }
 }
 
-export class dormir extends vivir {
+export class dormir extends partir {
     private alteredStem: string;
     private secondAlteredStem: string;
     private alteredStemArray: string[];
@@ -572,7 +572,7 @@ export class dormir extends vivir {
 
 }
 
-export class embaír extends vivir {
+export class embaír extends partir {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -613,7 +613,7 @@ export class embaír extends vivir {
     }
 }
 
-export class erguir extends vivir {
+export class erguir extends partir {
     private alteredStem: string;
     private secondAlteredStem: string;
     private thirdAlteredStem: string;
@@ -674,7 +674,7 @@ export class erguir extends vivir {
     }
 }
 
-export class escribir extends vivir {
+export class escribir extends partir {
     private participioSecundario: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -698,7 +698,7 @@ export class escribir extends vivir {
     }
 }
 
-export class huir extends vivir {
+export class huir extends partir {
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
@@ -745,7 +745,7 @@ export class huir extends vivir {
     }
 }
 
-export class imprimir extends vivir {
+export class imprimir extends partir {
     private participioDual: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -763,7 +763,7 @@ export class imprimir extends vivir {
     }
 }
 
-export class ir extends vivir {
+export class ir extends partir {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -842,7 +842,7 @@ export class ir extends vivir {
     }
 }
 
-export class lucir extends vivir {
+export class lucir extends partir {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -873,7 +873,7 @@ export class lucir extends vivir {
     }
 }
 
-export class oír extends vivir {
+export class oír extends partir {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -909,7 +909,7 @@ export class oír extends vivir {
     }
 }
 
-export class plañir extends vivir {
+export class plañir extends partir {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
@@ -935,7 +935,7 @@ export class plañir extends vivir {
     }
 }
 
-export class prohibir extends vivir {
+export class prohibir extends partir {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -952,7 +952,7 @@ export class prohibir extends vivir {
     }
 }
 
-export class podrir extends vivir {
+export class podrir extends partir {
     private alteredStem: string;
     protected alteredStemArray: string[];
 
@@ -1059,7 +1059,7 @@ export class podrir extends vivir {
     }
 }
 
-export class pudrir extends vivir {
+export class pudrir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
@@ -1148,7 +1148,7 @@ export class pudrir extends vivir {
     }
 }
 
-export class rehenchir extends vivir {
+export class rehenchir extends partir {
     protected alteredStem: string;
     protected alteredStemArray: string[];
     private secondAlteredStem: string;
@@ -1214,7 +1214,7 @@ export class rehuir extends huir {
     }
 }
 
-export class reír extends vivir {
+export class reír extends partir {
     private alteredStem: string;
     private secondAlteredStem: string;
     private alteredStemArray: string[];
@@ -1284,7 +1284,7 @@ export class reír extends vivir {
     }
 }
 
-export class reunir extends vivir {
+export class reunir extends partir {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -1301,7 +1301,7 @@ export class reunir extends vivir {
     }
 }
 
-export class salir extends vivir {
+export class salir extends partir {
     private alteredStemArray: string[];
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -1333,7 +1333,7 @@ export class salir extends vivir {
     }
 }
 
-export class seguir extends vivir {
+export class seguir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
     private secondAlteredStem: string;
@@ -1377,7 +1377,7 @@ export class seguir extends vivir {
 
 }
 
-export class sentir extends vivir {
+export class sentir extends partir {
     private alteredStem: string;
     private secondAlteredStem: string;
     private alteredStemArray: string[];
@@ -1418,7 +1418,7 @@ export class sentir extends vivir {
     }
 }
 
-export class servir extends vivir {
+export class servir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
@@ -1460,7 +1460,7 @@ export class servir extends vivir {
 }
 
 
-export class surgir extends vivir {
+export class surgir extends partir {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -1478,7 +1478,7 @@ export class surgir extends vivir {
         this.setTable('Subjuntivo', 'Presente', SIXARRAY.map(() => this.alteredStem));
     }
 }
-export class venir extends vivir {
+export class venir extends partir {
     private alteredStem: string;
     private secondAlteredStem: string;
     private secondAlteredStemArray: string[];
@@ -1542,7 +1542,7 @@ export class venir extends vivir {
     }
 }
 
-export class zurcir extends vivir {
+export class zurcir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 

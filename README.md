@@ -17,8 +17,8 @@ Spanish verb conjugator, uses templates, pattern matching & logic to conjugate v
 
 ____
 
-- Current version 1.0.2
-- Updated on Mon 04 May 2020 02:55:30 PM CEST
+- Current version 1.1.0
+- Updated on Tue 19 May 2020 10:36:45 AM CEST
 
 ____
 
@@ -42,8 +42,8 @@ ____
     const table = cng.conjugateSync('adscribir', 'formal');       // sync, formal (usted, ustedes)
     console.log(JSON.stringify(table, null, 1));
     cng.conjugate('soler', 'voseo')                               // async (promise), voseo
-      .then(table => console.log(JSON.stringify(table, null, 1)))
-      .catch(error => console.error(error));
+      .then(table => console.log(JSON.stringify(table, null, 1))) // returns Result[]
+      .catch(error => console.error(error));                      // should not error
 ```
 
 ```javascript
@@ -55,7 +55,7 @@ ____
     // ... same code as above
 ```
 
-### Returns array of tables or error message object, in JSON format
+### Returns array of tables or error, either as JSON
 
 - Impersonal
   - Infinitivo, Gerundio, Participio
@@ -82,7 +82,7 @@ ____
 
 | AR            | |
 |---------------|:-----------:|
-| **amar** | &#x2714; |
+| **hablar** | &#x2714; |
 | ***actuar*** | &#x2714; |
 | ***agorar*** | &#x2714; |
 | ***aguar*** | &#x2714; |
@@ -168,7 +168,7 @@ ____
 
 | IR            | |
 |---------------|:-----------:|
-| **vivir** | &#x2714; |
+| **partir** | &#x2714; |
 | ***abrir*** | &#x2714; |
 | ***adquirir*** | &#x2714; |
 | ***argüir*** | &#x2714; |
@@ -221,6 +221,6 @@ ____
 
 - [Diccionario panhispánico de dudas](https://www.casadellibro.com/libro-diccionario-panhispanico-de-dudas-2-ed/9788429406238/1051481 "Casa del libro" )
 
-- [Vadémecum del verbo español, Pedro Gomis Blanco, Laura Segura Calvo](https://www.amazon.es/Vad%C3%A9mecum-verbo-espa%C3%B1ol-Pedro-Blanco/dp/8497783875 "Amazon.es") - good technical reference on verb usage, but has many errors (tables, verb -> model index), use with extreme caution
+- [Vadémecum del verbo español, Pedro Gomis Blanco, Laura Segura Calvo](https://www.amazon.es/Vad%C3%A9mecum-verbo-espa%C3%B1ol-Pedro-Blanco/dp/8497783875 "Amazon.es") - good technical reference on verb usage, but has many errors (tables, verb to model index), use with extreme caution
 
 - ... and many others
