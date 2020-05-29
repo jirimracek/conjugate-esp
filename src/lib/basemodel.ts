@@ -117,13 +117,13 @@ const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
     'osmorfo',
     'ogmorfo'
 ];
-const IMPERSONAL_KEYS: ImpersonalSubKey[] = [
+export const IMPERSONAL_KEYS: ImpersonalSubKey[] = [
     'Infinitivo',
     'Gerundio',
     'Participio'
 ];
 
-const INDICATIVO_SIMPLE_KEYS: IndicativoSubSimpleKey[] = [
+export const INDICATIVO_SIMPLE_KEYS: IndicativoSubSimpleKey[] = [
     'Presente',
     'PreteritoImperfecto',
     'PreteritoIndefinido',
@@ -131,14 +131,14 @@ const INDICATIVO_SIMPLE_KEYS: IndicativoSubSimpleKey[] = [
     'CondicionalSimple'
 ];
 
-const SUBJUNTIVO_SIMPLE_KEYS: SubjuntivoSubSimpleKey[] = [
+export const SUBJUNTIVO_SIMPLE_KEYS: SubjuntivoSubSimpleKey[] = [
     'Presente',
     'PreteritoImperfectoRa',
     'PreteritoImperfectoSe',
     'FuturoImperfecto'
 ];
 
-const INDICATIVO_COMP_KEYS: IndicativoSubCompKey[] = [
+export const INDICATIVO_COMP_KEYS: IndicativoSubCompKey[] = [
     'PreteritoPerfecto',
     'PreteritoPluscuamperfecto',
     'PreteritoAnterior',
@@ -146,14 +146,14 @@ const INDICATIVO_COMP_KEYS: IndicativoSubCompKey[] = [
     'CondicionalCompuesto'
 ];
 
-const SUBJUNTIVO_COMP_KEYS: SubjuntivoSubCompKey[] = [
+export const SUBJUNTIVO_COMP_KEYS: SubjuntivoSubCompKey[] = [
     'PreteritoPerfecto',
     'PreteritoPluscuamperfectoRa',
     'PreteritoPluscuamperfectoSe',
     'FuturoPerfecto'
 ];
 
-const IMPERATIVO_KEYS: ImperativoSubKey[] = [
+export const IMPERATIVO_KEYS: ImperativoSubKey[] = [
     'Afirmativo',
     'Negativo'
 ];

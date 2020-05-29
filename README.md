@@ -17,8 +17,8 @@ Spanish verb conjugator, uses templates, pattern matching & logic to conjugate v
 
 ____
 
-- Current version 1.1.0
-- Updated on Tue 19 May 2020 10:36:45 AM CEST
+- Current version 1.1.1
+- Updated on Fri 29 May 2020 11:57:28 AM CEST
 
 ____
 
