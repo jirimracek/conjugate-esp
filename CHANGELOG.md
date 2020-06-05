@@ -1,5 +1,9 @@
 # Changelog
 
+- 6/5/2020 (1.1.2)
+  - more exports made available in the index file
+  - this is likely the last version that supports unknown / unused (per la RAE) verbs
+
 - 5/29/2020 (1.1.1)
   - exported a few basemodel.ts constants
 
