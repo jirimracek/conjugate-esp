@@ -641,8 +641,18 @@ export abstract class BaseModel {
                     this.table.Imperativo[time as ImperativoSubKey] = Array.from(DASH6));
                 break;
 
-                // case 'bimorfog':
-                //     break;
+            case 'bimorfog':
+                //  bimorfo(g) - sólo en infinitivo y en gerundio - zap everything else indiscriminantly
+                this.table.Impersonal.Participio = '-';
+                Object.keys(this.table.Indicativo).forEach(time =>
+                    this.table.Indicativo[time as IndicativoSubKey] = Array.from(DASH6));
+
+                Object.keys(this.table.Subjuntivo).forEach(time =>
+                    this.table.Subjuntivo[time as SubjuntivoSubKey] = Array.from(DASH6));
+
+                Object.keys(this.table.Imperativo).forEach(time =>
+                    this.table.Imperativo[time as ImperativoSubKey] = Array.from(DASH6));
+                break;
 
             case 'trimorfo':
                 // trimorfo infinitivo y en las segundas personas del imperativo

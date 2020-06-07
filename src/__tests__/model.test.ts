@@ -11,8 +11,8 @@ import { ModelFactory } from '../lib/factory';
 import { Regions } from '../lib/types';
 import { errorMsg } from '../lib/conjugator';
 
-const VERB_COUNT = 12815;
-const MODEL_COUNT = 99;
+const VERB_COUNT = 10567;
+const MODEL_COUNT = 98;
 // Disable thrown messages
 beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(() => { /* empty */ });
@@ -46,7 +46,6 @@ verbSet.add('aclarar');     // dual, defective                      'aclarar': {
 verbSet.add('acontecer');   // single defective                     'acontecer': { 'N': { 'nacer': { 'D': 'terciop' } } },
 verbSet.add('adecuar');     // dual, non defective                  'adecuar': { 'N': [ 'hablar', 'actuar' ], 'P': [ 'hablar', 'actuar' ]
 verbSet.add('antojar');     // defective terciopersonal v2          'antojar': { 'P': { 'hablar': { 'D': 'terciop' } } },
-verbSet.add('autosatisfacer');     // odd version of hacer          'autosatisfacer': { 'N': [ 'hacer', { 'hacer': { 'V': '1' } } ],
 verbSet.add('balbucir');    // combo of ir & ar verb, very unique, in the model list
 verbSet.add('colorir');     // imorfo                               'colorir': { 'N': { 'partir': { 'D': 'imorfo' } } },
 verbSet.add('condecir');    // the decir family of differences      'condecir': { 'N': [ { 'decir': { 'V': '1' } }, { 'decir': { 'D': 'terciop' } }, { 'decir': { 'V': '2' } } ] },
@@ -61,8 +60,6 @@ verbSet.add('escribir');
 verbSet.add('erguir');
 verbSet.add('freír');
 verbSet.add('guiar');       // dual vaciar with monosyll            'guiar': { 'N': [ 'vaciar', { 'vaciar': { 'M': 'true' } } ], 'P': [ 'vaciar', { 'vaciar': { 'M': 'true' } } ] },
-verbSet.add('hidropicar');  // sacar, dual, defective               'hidropicar': { 'N': [ 'sacar', { 'sacar': { 'D': 'imper' } } ], 'P': 'sacar' },
-verbSet.add('infecir');     //                                      'infecir': { 'N': { 'lucir': { 'PR': 'ido/to' } } },
 verbSet.add('inhestar');    // participio irregular, replace        'inhestar': { 'N': { 'pensar': { 'PR': 'estad/iest' } }
 verbSet.add('imprimir');
 verbSet.add('ir');
@@ -73,10 +70,12 @@ verbSet.add('pringar');     // dual pagar                           'pringar': {
 verbSet.add('proscribir');
 verbSet.add('proveer');
 verbSet.add('puar');        // dual, monosyllables                  'puar': { 'N': [ 'actuar', { 'actuar': { 'MS': 'true' } } ] },
+verbSet.add('raspahilar');  // the only bimorfog we have
 verbSet.add('redecir');     // the decir family of differences
 verbSet.add('reír');
 verbSet.add('reponer');     // ogmorfo                              'reponer': { 'N': [ 'poner', { 'poner': { 'D': 'ogmorfo' } } ], 'P': 'poner' },
 verbSet.add('responder');   // in the list already, quite unique, repuse version         'responder': { 'N': [ 'temer', 'responder' ] },
+verbSet.add('satisfacer');  
 verbSet.add('serenar');     // triple, defective in one, N&P        'serenar': { 'N': [ 'hablar', { 'hablar': { 'D': 'imper' } } ], 'P': 'hablar' },
 verbSet.add('sofreír');
 verbSet.add('soler');       // the name said it all                 'soler': { 'N': [ { 'mover': { 'D': 'osmorfo' } }, { 'mover': { 'D': 'omorfo' } } ] },

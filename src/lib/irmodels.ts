@@ -850,15 +850,16 @@ export class lucir extends partir {
         this.alteredStem = this.stem.replace(/(.*)c/, '$1zc');
     }
 
-    protected setParticipio(): void {
-        super.setParticipio();
-        const PR = this.attributes.PR as string;
-        if (PR) {
-            const [expression, alteredStem] = PR.split('/');
-            this.participioCompuesto = this.participioCompuesto.replace(expression, alteredStem);
-            this.table.Impersonal.Participio = this.participioCompuesto;
-        }
-    }
+    // no longer needed as infecir was removed as unknown per la RAE
+    // protected setParticipio(): void {
+    //     super.setParticipio();
+    //     const PR = this.attributes.PR as string;
+    //     if (PR) {
+    //         const [expression, alteredStem] = PR.split('/');
+    //         this.participioCompuesto = this.participioCompuesto.replace(expression, alteredStem);
+    //         this.table.Impersonal.Participio = this.participioCompuesto;
+    //     }
+    // }
 
     protected setIndicativoPresente(): void {
         this.setTable('Indicativo', 'Presente', [
@@ -1189,13 +1190,13 @@ export class rehenchir extends partir {
     }
 }
 
-export class rehinchir extends rehenchir {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-        this.alteredStem = this.stem;
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
-    }
-}
+// export class rehinchir extends rehenchir {
+//     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
+//         super(verb, type, region, attributes);
+//         this.alteredStem = this.stem;
+//         this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+//     }
+// }
 
 export class rehuir extends huir {
     private alteredStem: string;

@@ -1,5 +1,9 @@
 # Changelog
 
+- 6/7/2020 (1.2.0)
+  - removed 2248 verbs unknown to or deemed unused by la RAE
+  - this may be a content breaking change, as model rehinchir was removed (unknown)
+
 - 6/5/2020 (1.1.2)
   - more exports made available in the index file
   - this is likely the last version that supports unknown / unused (per la RAE) verbs

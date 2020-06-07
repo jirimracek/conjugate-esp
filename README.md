@@ -7,8 +7,8 @@
 Spanish verb conjugator, uses templates, pattern matching & logic to conjugate verbs in any of the regional varieties of castellano, voseo, formal, canarias
 
 - Project goals: correct, detailed, complete, fast & small (yes, you can have it all)
-- 12815 known verbs, 99 tested models
-- castellano, voseo, formal, canarias varieties
+- 10567 (known & used in current language as per la RAE) verbs, tested, 98 models
+- castellano, voseo, formal, canarias
 - complicated cases
   - defectives
   - multiple (dual & triple) conjugations
@@ -17,8 +17,8 @@ Spanish verb conjugator, uses templates, pattern matching & logic to conjugate v
 
 ____
 
-- Current version 1.1.2 - last version that includes verbs deemed unused or unknown by the RAE
-- Updated on Fri 05 Jun 2020 02:20:07 PM CEST
+- Current version 1.2.0 - includes only RAE known/used verbs, **this release removed 2248 unknown/unused verbs**
+- Updated on Sun 07 Jun 2020 06:30:11 PM CEST
 
 ____
 
@@ -120,7 +120,6 @@ ____
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
-|&#x2796;||
 </td><td>
 
 | ER            | |
@@ -163,7 +162,6 @@ ____
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
-|&#x2796;||
 </td><td>
 
 | IR            | |
@@ -196,7 +194,6 @@ ____
 | ***prohibir*** | &#x2714; |
 | ***pudrir*** | &#x2714; |
 | ***rehenchir*** | &#x2714; |
-| ***rehinchir*** | &#x2714; |
 | ***rehuir*** | &#x2714; |
 | ***reunir*** | &#x2714; |
 | ***reír*** | &#x2714; |
