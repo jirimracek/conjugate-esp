@@ -1,4 +1,83 @@
-# Things to do, wishlist, crimes committed, etc
+# Things to do, wishlists, plans, crimes committed, etc
+
+- Tue 27 Oct 2020 06:07:18 PM CET, version 1.2.1
+  - possible upcoming changes
+    - 1999 &amp; 2010 orthography rules - this concerns monosyllable orthographical changes as per la RAE
+      - pre 1999 ***rió*** is the accepted version
+      - 1999 through 2010 both ***rió*** and ***rio*** are tolerated
+      - past year 2010 it is no longer acceptable to write ***rió***, the new correct form is ***rio*** with **no accent**
+      - will add a new info header entry and deliver pre-2010 orthography only if it's requested
+      - will add a new optional parameter to *conjugate() / conjugateSync()*
+      - affected verbs
+        - chiar (vaciar)
+        - ciar (vaciar)
+        - criar (vaciar)
+        - fiar (vaciar)
+        - fluir (huir)
+        - freír (reír)
+        - fruir (huir)
+        - gruir (huir)
+        - guiar (vaciar)
+        - huir (huir)
+        - liar (vaciar)
+        - luir (huir)
+        - miar (vaciar)
+        - muir (huir)
+        - piar (vaciar)
+        - puar (actuar)
+        - reír (reír)
+        - ruar (actuar)
+        - triar (vaciar)
+      - info header data will change (new info header entry) this should go to a **major version update**
+
+    - dropping imprimir from model list and splitting dual participios
+      - verbs that allow dual participio currently clump both participios together (imprimido/impreso, freído/frito, proveído/provisto and their derivatives).  They really should be listed separately, should have their own array for each participio
+      - result data format will change, this should go into a **major version update**
+
+    - model changes - choose models that also have a pronominal version whenever possible - see wishlist below
+      - list of proposed **changes from -> to** and other models with no pronominal versions - no changes. Notes: no P == there are no pronominal verbs using this model
+        - AR
+          - **agorar -> engorar/se**
+          - **aullar -> aunar/se**
+          - cabrahigar - noP, self model
+          - **cazar -> rozar/se**
+          - desdar - no P, self model
+          - desosar - no P, self model
+          - **empezar -> tropezar/se**
+          - **pensar -> sentar/se**
+        - ER
+          - caber - no P, self model
+          - **leer -> creer/se**
+          - placer - leave alone, dual conjugation, second conjugation only for itself
+          - poder - no P, self model
+          - **prever -> rever/se**
+          - querer - no P, self model
+          - raer - no P, self model, dual
+          - responder - no P, self model, dual
+          - **roer -> corroer/se**
+          - ser - no P, self model
+          - tañer - no P
+          - yacer - no P, self model
+        - IR
+          - adquirir - no P
+          - argüir - no P
+          - balbucir - no P, self model
+          - bendecir - np P, self model
+          - **colegir -> corregir**
+          - delinquir - no P, self model
+          - discernir - no P, self model
+          - imprimir - no P
+          - oír - no P
+          - **prohibir -> cohibir**
+          - **surgir -> exigir**
+      - this should go into a **major version update**
+
+  - investigating what would it take to insert *highlight markers* - something that can be used to highlight the irregular changes from what the verb would have looked like if it was regular. For example
+    - if poner was a regular verb, the first person indicative presente would be '*pono*', which of course it is not, it is *pongo*.  If the conjugation is marked, let's say with a dot '.' character, we would get back 'po.n.go' - with a marker to indicate that the 'n' is the irregular deviation from regular conjugation that can be shown as "po**n**go" or whatever the consumer wants
+    - colgar, subj. presente *cuelgue* would become 'c.ue.lg.u.e' (c**ue**lg**u**e) or should it be 'c.uelgu.e' (c**uelgu**e)?  Hmmmm
+    - what to do with 'missing parts'?  Hacer, futuro isn't '*haceré*' but *haré*.  'h.ar.é' (h**ar**é) to mark the change so it can be visually noted?
+    - the marker should be easily replaceable by a regex and would always come in pairs
+    - likely additional parameter to *conjugate() / conjugateSync()*, meaning a **minor version change** but the result format change seems to require a **major version update**  
 
 - 6/7/2020, version 1.2.0
   - new wishlist

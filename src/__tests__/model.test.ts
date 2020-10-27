@@ -96,7 +96,7 @@ class MockJugator extends Conjugator {
         this.savedFactory = this.factory;
     }
     public deleteTemplates(): void {
-        delete this.templates;
+        this.templates = undefined as unknown as VerbModelTemplates;
     }
     public undefineModelData(verb: string): void {
         this.templates[verb] = undefined as unknown as VerbModelData;
@@ -109,7 +109,7 @@ class MockJugator extends Conjugator {
         this.templates[verb] = { 'N': model } as VerbModelData;
     }
     public deleteFactory(): void {
-        delete (this.factory);
+        this.factory = undefined as unknown as ModelFactory;
     }
 }
 

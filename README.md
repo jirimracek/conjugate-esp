@@ -7,9 +7,9 @@
 Spanish verb conjugator, uses templates, pattern matching & logic to conjugate verbs in any of the regional varieties of castellano, voseo, formal, canarias
 
 - Project goals: correct, detailed, complete, fast & small (yes, you can have it all)
-- 10567 (known & used in current language as per la RAE) verbs, tested, 98 models
-- castellano, voseo, formal, canarias
-- complicated cases
+- 10567 verbs, tested, 98 models
+- includes only current, RAE recognized as known & used verbs
+  - regional varieties of castellano, voseo, formal, canarias
   - defectives
   - multiple (dual & triple) conjugations
   - dual participios
@@ -17,8 +17,9 @@ Spanish verb conjugator, uses templates, pattern matching & logic to conjugate v
 
 ____
 
-- Current version 1.2.0 - includes only RAE known/used verbs, **this release removed 2248 unknown/unused verbs**
-- Updated on Sun 07 Jun 2020 06:30:11 PM CEST
+- Current version 1.2.1 - dev packages upgrade, TypeScript 4.0 updates
+- **Please see updated ROADMAP for future, possibly breaking changes**, see CHANGELOG for details of this release
+- Updated on Tue 27 Oct 2020 06:07:18 PM CET
 
 ____
 

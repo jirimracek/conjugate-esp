@@ -41,7 +41,7 @@ export type VerbModelTemplates = { [verbname: string]: VerbModelData };
  */
 export class Conjugator {
     protected templates: VerbModelTemplates = definitions;
-    protected factory = new ModelFactory();
+    protected factory: ModelFactory = new ModelFactory();
 
     constructor() { /* empty */ }
 
@@ -79,8 +79,8 @@ export class Conjugator {
                     if (typeof model === 'string') {
                         modelTemplates.push([model, pronominalKey, region, {}]);
                     } else {                                                   // ModelWithAttrs
-                        const [name, attributes] = (Object.entries(model) as [[string, ModelAttributes]]).flat();
-                        modelTemplates.push([name, pronominalKey, region, attributes]);
+                        const [name, attributes] = (Object.entries(model as {}) as [[string, ModelAttributes]]).flat();
+                        modelTemplates.push([name as string, pronominalKey, region, attributes as ModelAttributes]);
                     }
                 });
             });

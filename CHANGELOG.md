@@ -1,5 +1,9 @@
 # Changelog
 
+- Tue 27 Oct 2020 06:07:18 PM CET, version 1.2.1
+  - toolset update to current npm packages, TypeScript 4.0 updates
+  - updated ROADMAP with planned changes - please read, there may be some breaking changes coming down the pipe, I was inert for way too long ;)
+
 - 6/7/2020 (1.2.0)
   - removed 2248 verbs unknown to or deemed unused by la RAE
   - this may be a content breaking change, as model rehinchir was removed (unknown)
