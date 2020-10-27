@@ -17,9 +17,9 @@ Spanish verb conjugator, uses templates, pattern matching & logic to conjugate v
 
 ____
 
-- Current version 1.2.1 - dev packages upgrade, TypeScript 4.0 updates
+- Current version 1.2.2 - (TypeScript 4.0.x), sync package files
 - **Please see updated ROADMAP for future, possibly breaking changes**, see CHANGELOG for details of this release
-- Updated on Tue 27 Oct 2020 06:07:18 PM CET
+- Updated on Tue 27 Oct 2020 07:56:09 PM CET
 
 ____
 
