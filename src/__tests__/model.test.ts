@@ -60,7 +60,7 @@ verbSet.add('escribir');
 verbSet.add('erguir');
 verbSet.add('freír');
 verbSet.add('guiar');       // dual vaciar with monosyll            'guiar': { 'N': [ 'vaciar', { 'vaciar': { 'M': 'true' } } ], 'P': [ 'vaciar', { 'vaciar': { 'M': 'true' } } ] },
-verbSet.add('inhestar');    // participio irregular, replace        'inhestar': { 'N': { 'pensar': { 'PR': 'estad/iest' } }
+verbSet.add('inhestar');    // participio irregular, replace        'inhestar': { 'N': { 'acertar': { 'PR': 'estad/iest' } }
 verbSet.add('imprimir');
 verbSet.add('ir');
 verbSet.add('marcir');      // eimorfo                              'marcir': { 'N': [ 'zurcir', { 'zurcir': { 'D': 'eimorfo' } } ] },
@@ -80,7 +80,7 @@ verbSet.add('serenar');     // triple, defective in one, N&P        'serenar': {
 verbSet.add('sofreír');
 verbSet.add('soler');       // the name said it all                 'soler': { 'N': [ { 'mover': { 'D': 'osmorfo' } }, { 'mover': { 'D': 'omorfo' } } ] },
 verbSet.add('tronar');      // from contar                          'tronar': { 'N': [ { 'contar': { 'D': 'imper' } }, 'contar' ], 'P': 'contar' },
-verbSet.add('ventar');      // triple, defective                    'ventar': { 'N': [ { 'pensar': { 'D': 'imper' } }, 'hablar', 'pensar' ] },
+verbSet.add('ventar');      // triple, defective                    'ventar': { 'N': [ { 'acertar': { 'D': 'imper' } }, 'hablar', 'acertar' ] },
 
 const verbs: string[] = Array.from(verbSet);
 

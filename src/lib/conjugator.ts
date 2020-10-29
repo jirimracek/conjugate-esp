@@ -7,7 +7,7 @@
 import definitions from '../data/definitions.json';
 import { ModelFactory } from './factory';
 import { Regions, PronominalKey } from './types';
-import { ModelAttributes, ResultTable, Model } from './basemodel';
+import { ModelAttributes, ResultTable, Model, ModelWithAttributes } from './basemodel';
 
 export { Regions, PronominalKey, ResultTable };
 
@@ -79,7 +79,7 @@ export class Conjugator {
                     if (typeof model === 'string') {
                         modelTemplates.push([model, pronominalKey, region, {}]);
                     } else {                                                   // ModelWithAttrs
-                        const [name, attributes] = (Object.entries(model as {}) as [[string, ModelAttributes]]).flat();
+                        const [name, attributes] = (Object.entries(model as ModelWithAttributes)).flat();
                         modelTemplates.push([name as string, pronominalKey, region, attributes as ModelAttributes]);
                     }
                 });

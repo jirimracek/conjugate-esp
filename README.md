@@ -17,9 +17,9 @@ Spanish verb conjugator, uses templates, pattern matching & logic to conjugate v
 
 ____
 
-- Current version 1.2.2 - (TypeScript 4.0.x), sync package files
-- **Please see updated ROADMAP for future, possibly breaking changes**, see CHANGELOG for details of this release
-- Updated on Tue 27 Oct 2020 07:56:09 PM CET
+- Latest version 2.0.0, updated on Thu 29 Oct 2020 07:46:44 PM CET - **major number changed, possibly breaking changes**
+  - see CHANGELOG for details
+  - see ROADMAP for future proposed changes
 
 ____
 
@@ -84,31 +84,31 @@ ____
 | AR            | |
 |---------------|:-----------:|
 | **hablar** | &#x2714; |
+| ***acertar*** | &#x2714; |
 | ***actuar*** | &#x2714; |
-| ***agorar*** | &#x2714; |
 | ***aguar*** | &#x2714; |
 | ***ahincar*** | &#x2714; |
 | ***aislar*** | &#x2714; |
 | ***andar*** | &#x2714; |
-| ***aullar*** | &#x2714; |
+| ***aunar*** | &#x2714; |
 | ***avergonzar*** | &#x2714; |
 | ***cabrahigar*** | &#x2714; |
-| ***cazar*** | &#x2714; |
 | ***colgar*** | &#x2714; |
 | ***contar*** | &#x2714; |
 | ***dar*** | &#x2714; |
 | ***desdar*** | &#x2714; |
 | ***desosar*** | &#x2714; |
-| ***empezar*** | &#x2714; |
+| ***engorar*** | &#x2714; |
 | ***enraizar*** | &#x2714; |
 | ***errar*** | &#x2714; |
 | ***estar*** | &#x2714; |
 | ***forzar*** | &#x2714; |
 | ***jugar*** | &#x2714; |
 | ***pagar*** | &#x2714; |
-| ***pensar*** | &#x2714; |
 | ***regar*** | &#x2714; |
+| ***rozar*** | &#x2714; |
 | ***sacar*** | &#x2714; |
+| ***tropezar*** | &#x2714; |
 | ***vaciar*** | &#x2714; |
 | ***volcar*** | &#x2714; |
 |&#x2796;||
@@ -129,21 +129,21 @@ ____
 | ***caber*** | &#x2714; |
 | ***caer*** | &#x2714; |
 | ***coger*** | &#x2714; |
+| ***corroer*** | &#x2714; |
+| ***creer*** | &#x2714; |
 | ***haber*** | &#x2714; |
 | ***hacer*** | &#x2714; |
-| ***leer*** | &#x2714; |
 | ***mover*** | &#x2714; |
 | ***nacer*** | &#x2714; |
 | ***oler*** | &#x2714; |
 | ***placer*** | &#x2714; |
 | ***poder*** | &#x2714; |
 | ***poner*** | &#x2714; |
-| ***prever*** | &#x2714; |
 | ***querer*** | &#x2714; |
 | ***raer*** | &#x2714; |
 | ***rehacer*** | &#x2714; |
 | ***responder*** | &#x2714; |
-| ***roer*** | &#x2714; |
+| ***rever*** | &#x2714; |
 | ***romper*** | &#x2714; |
 | ***saber*** | &#x2714; |
 | ***ser*** | &#x2714; |
@@ -175,10 +175,12 @@ ____
 | ***balbucir*** | &#x2714; |
 | ***bendecir*** | &#x2714; |
 | ***ceñir*** | &#x2714; |
-| ***colegir*** | &#x2714; |
+| ***cohibir*** | &#x2714; |
 | ***conducir*** | &#x2714; |
+| ***corregir*** | &#x2714; |
 | ***decir*** | &#x2714; |
 | ***delinquir*** | &#x2714; |
+| ***dirigir*** | &#x2714; |
 | ***discernir*** | &#x2714; |
 | ***distinguir*** | &#x2714; |
 | ***dormir*** | &#x2714; |
@@ -192,7 +194,6 @@ ____
 | ***oír*** | &#x2714; |
 | ***plañir*** | &#x2714; |
 | ***podrir*** | &#x2714; |
-| ***prohibir*** | &#x2714; |
 | ***pudrir*** | &#x2714; |
 | ***rehenchir*** | &#x2714; |
 | ***rehuir*** | &#x2714; |
@@ -202,7 +203,6 @@ ____
 | ***seguir*** | &#x2714; |
 | ***sentir*** | &#x2714; |
 | ***servir*** | &#x2714; |
-| ***surgir*** | &#x2714; |
 | ***venir*** | &#x2714; |
 | ***zurcir*** | &#x2714; |
 </td></tr> </table>

@@ -37,7 +37,7 @@ const AR: Readonly<DesinenceTable> = {
         FuturoImperfecto: ['are', 'ares', 'are', 'áremos', 'areis', 'aren']
     }
 };
-/* eslint-disable @typescript-eslint/class-name-casing */
+/* eslint-disable @typescript-eslint/naming-convention */
 /**
  * @class base class for all -ar conjugations
  */
@@ -64,6 +64,33 @@ export class hablar extends BaseModel {
     protected configDesinences(): void { /* empty */ }
 }
 
+export class acertar extends hablar {
+    private alteredStem: string;
+
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
+    }
+
+    protected setParticipio(): void {
+        super.setParticipio();
+        const PR = this.attributes['PR'] as string;
+        if (PR) {
+            const [expression, alteredStem] = PR.split('/');
+            this.participioCompuesto = this.participioCompuesto.replace(expression, alteredStem);
+            this.table.Impersonal.Participio = this.participioCompuesto;
+        }
+    }
+
+    protected setIndicativoPresente(): void {
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
+    }
+
+    protected setSubjuntivoPresente(): void {
+        this.setSubjuntivoPresentePattern0125(this.alteredStem);
+    }
+}
+
 export class actuar extends hablar {
     private alteredStem: string;
 
@@ -81,7 +108,7 @@ export class actuar extends hablar {
     }
 }
 
-export class agorar extends hablar {
+export class engorar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -164,7 +191,7 @@ export class andar extends hablar {
     }
 }
 
-export class aullar extends hablar {
+export class aunar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
@@ -246,24 +273,6 @@ export class colgar extends hablar {
 
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
-    }
-}
-
-export class cazar extends hablar {
-    private alteredStem: string;
-
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-        this.alteredStem = this.stem.replace(/z$/, 'c');
-    }
-
-    protected setIndicativoPreteritoIndefinido(): void {
-        this.setIndicativoPreteritoIndefinidoPattern0(this.alteredStem);
-    }
-
-    protected setSubjuntivoPresente(): void {
-        this.setTable('Subjuntivo', 'Presente',
-            Array.from('012345').map(() => this.alteredStem));
     }
 }
 
@@ -378,27 +387,6 @@ export class desosar extends hablar {
 
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
-    }
-}
-
-export class empezar extends hablar {
-    private alteredStem: string;
-
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-        this.alteredStem = this.stem.replace(/e(.?)z$/, 'ie$1z');
-    }
-
-    protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
-    }
-
-    protected setIndicativoPreteritoIndefinido(): void {
-        this.setIndicativoPreteritoIndefinidoPattern0(this.stem.replace(/z$/, 'c'));
-    }
-
-    protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern0125(this.stem.replace(/e(.?)z$/, 'ie$1c'), this.stem.replace(/z$/, 'c'));
     }
 }
 
@@ -528,33 +516,6 @@ export class pagar extends hablar {
     }
 }
 
-export class pensar extends hablar {
-    private alteredStem: string;
-
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-        this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
-    }
-
-    protected setParticipio(): void {
-        super.setParticipio();
-        const PR = this.attributes['PR'] as string;
-        if (PR) {
-            const [expression, alteredStem] = PR.split('/');
-            this.participioCompuesto = this.participioCompuesto.replace(expression, alteredStem);
-            this.table.Impersonal.Participio = this.participioCompuesto;
-        }
-    }
-
-    protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
-    }
-
-    protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern0125(this.alteredStem);
-    }
-}
-
 export class regar extends hablar {
     private alteredStem: string;
 
@@ -577,20 +538,21 @@ export class regar extends hablar {
     }
 }
 
-export class vaciar extends hablar {
+export class rozar extends hablar {
     private alteredStem: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.alteredStem = this.stem.replace(/(.*)i/, '$1í');
+        this.alteredStem = this.stem.replace(/z$/, 'c');
     }
 
-    protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
+    protected setIndicativoPreteritoIndefinido(): void {
+        this.setIndicativoPreteritoIndefinidoPattern0(this.alteredStem);
     }
 
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern0125(this.alteredStem);
+        this.setTable('Subjuntivo', 'Presente',
+            Array.from('012345').map(() => this.alteredStem));
     }
 }
 
@@ -610,6 +572,43 @@ export class sacar extends hablar {
     }
 }
 
+export class tropezar extends hablar {
+    private alteredStem: string;
+
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.alteredStem = this.stem.replace(/e(.?)z$/, 'ie$1z');
+    }
+
+    protected setIndicativoPresente(): void {
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
+    }
+
+    protected setIndicativoPreteritoIndefinido(): void {
+        this.setIndicativoPreteritoIndefinidoPattern0(this.stem.replace(/z$/, 'c'));
+    }
+
+    protected setSubjuntivoPresente(): void {
+        this.setSubjuntivoPresentePattern0125(this.stem.replace(/e(.?)z$/, 'ie$1c'), this.stem.replace(/z$/, 'c'));
+    }
+}
+
+export class vaciar extends hablar {
+    private alteredStem: string;
+
+    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, type, region, attributes);
+        this.alteredStem = this.stem.replace(/(.*)i/, '$1í');
+    }
+
+    protected setIndicativoPresente(): void {
+        this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
+    }
+
+    protected setSubjuntivoPresente(): void {
+        this.setSubjuntivoPresentePattern0125(this.alteredStem);
+    }
+}
 export class volcar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);

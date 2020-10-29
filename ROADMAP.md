@@ -8,6 +8,7 @@
       - past year 2010 it is no longer acceptable to write ***rió***, the new correct form is ***rio*** with **no accent**
       - will add a new info header entry and deliver pre-2010 orthography only if it's requested
       - will add a new optional parameter to *conjugate() / conjugateSync()*
+      - more info <https://www.rae.es/espanol-al-dia/palabras-como-guion-truhan-fie-liais-etc-se-escriben-sin-tilde>
       - affected verbs
         - chiar (vaciar)
         - ciar (vaciar)
@@ -44,7 +45,7 @@
           - desdar - no P, self model
           - desosar - no P, self model
           - **empezar -> tropezar/se**
-          - **pensar -> sentar/se**
+          - **pensar -> acertar/se**
         - ER
           - caber - no P, self model
           - **leer -> creer/se**
@@ -63,13 +64,13 @@
           - argüir - no P
           - balbucir - no P, self model
           - bendecir - np P, self model
-          - **colegir -> corregir**
+          - **colegir -> corregir/se**
           - delinquir - no P, self model
           - discernir - no P, self model
           - imprimir - no P
           - oír - no P
-          - **prohibir -> cohibir**
-          - **surgir -> exigir**
+          - **prohibir -> cohibir/se**
+          - **surgir -> dirigir/se**
       - this should go into a **major version update**
 
   - investigating what would it take to insert *highlight markers* - something that can be used to highlight the irregular changes from what the verb would have looked like if it was regular. For example

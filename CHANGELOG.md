@@ -1,7 +1,33 @@
 # Changelog
 
+- Thu 29 Oct 2020 07:46:44 PM CET, 2.0.0
+  - updated .travis.yml to node 13.14.0 - seems that it no longer worked with 13.8.x
+  - possible **breaking changes**
+    - removed exports from index.ts as they're not needed for basic functionality
+      - INDICATIVO_SIMPLE_KEYS
+      - INDICATIVO_COMP_KEYS
+      - SUBJUNTIVO_SIMPLE_KEYS
+      - SUBJUNTIVO_COMP_KEYS
+      - IMPERATIVO_KEYS
+      - if needed, they can still be imported from lib/basemodel
+    - models changed
+      - AR
+        - agorar -> engorar/se
+        - aullar -> aunar/se
+        - cazar -> rozar/se
+        - empezar -> tropezar/se
+        - pensar -> acertar/se
+      - ER
+        - leer -> creer/se
+        - prever -> rever/se
+        - roer -> corroer/se
+      - IR
+        - colegir -> corregir/se
+        - prohibir -> cohibir/se
+        - surgir -> dirigir/se
+
 - Tue 27 Oct 2020 07:56:09 PM CET, version 1.2.2
-  - sync packaged-lock.json
+  - sync packaged-lock.jso
 
 - Tue 27 Oct 2020 06:07:18 PM CET, version 1.2.1
   - toolset update to current npm packages, TypeScript 4.0 updates
