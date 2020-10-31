@@ -48,6 +48,16 @@ export class partir extends BaseModel {
         this.remapDesinencesByRegion();
     }
 
+    protected setParticipio(): void {
+        super.setParticipio();
+        const PR = this.attributes['PR'] as string;
+        if (PR) {
+            const [expression, alteredStem] = PR.split('/');
+            this.participioCompuesto = this.participioCompuesto.replace(expression, alteredStem);
+            this.table.Impersonal.Participio = this.participioCompuesto;
+        }
+    }
+
     protected configDesinences(): void { /* empty */ }
 }
 
@@ -572,16 +582,6 @@ export class dormir extends partir {
         super.setGerundio(this.alteredStem);
     }
 
-    protected setParticipio(): void {
-        super.setParticipio();
-        const PR = this.attributes.PR as string;
-        if (PR) {
-            const [expression, alteredStem] = PR.split('/');
-            this.participioCompuesto = this.participioCompuesto.replace(expression, alteredStem);
-            this.table.Impersonal.Participio = this.participioCompuesto;
-        }
-    }
-
     protected setIndicativoPresente(): void {
         this.setIndicativoPresentePattern125(this.secondAlteredStem, this.secondAlteredStem);
     }
@@ -781,24 +781,6 @@ export class huir extends partir {
     }
 }
 
-export class imprimir extends partir {
-    private participioDual: string;
-
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-        this.participioDual = this.attributes.PD as string;
-    }
-
-    protected setParticipio(): void {
-        // participioDual always exists on imprimir verbs
-        const [searchValue, replaceValue] = this.participioDual.split('/');
-        this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`;
-        this.participioCompuesto =
-            `${this.participioCompuesto}/${this.participioCompuesto.replace(searchValue, replaceValue)}`;
-        this.table.Impersonal.Participio = this.participioCompuesto;
-    }
-}
-
 export class ir extends partir {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
@@ -885,17 +867,6 @@ export class lucir extends partir {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)c/, '$1zc');
     }
-
-    // no longer needed as infecir was removed as unknown per la RAE
-    // protected setParticipio(): void {
-    //     super.setParticipio();
-    //     const PR = this.attributes.PR as string;
-    //     if (PR) {
-    //         const [expression, alteredStem] = PR.split('/');
-    //         this.participioCompuesto = this.participioCompuesto.replace(expression, alteredStem);
-    //         this.table.Impersonal.Participio = this.participioCompuesto;
-    //     }
-    // }
 
     protected setIndicativoPresente(): void {
         this.setTable('Indicativo', 'Presente', [
@@ -1238,26 +1209,12 @@ export class reír extends partir {
     private alteredStem: string;
     private secondAlteredStem: string;
     private alteredStemArray: string[];
-    private participioDual: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/e$/, '');
         this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/e$/, 'í');
-        this.participioDual = this.attributes.PD as string;
-    }
-
-    protected setParticipio(): void {
-        if (this.participioDual) {
-            const [searchValue, replaceValue] = this.participioDual.split('/');
-            this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`;
-            this.participioCompuesto =
-                `${this.participioCompuesto}/${this.participioCompuesto.replace(searchValue, replaceValue)}`;
-            this.table.Impersonal.Participio = this.participioCompuesto;
-        } else {
-            super.setParticipio();
-        }
     }
 
     protected configDesinences(): void {

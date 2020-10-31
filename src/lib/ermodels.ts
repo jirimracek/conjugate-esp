@@ -55,6 +55,16 @@ export class temer extends BaseModel {
         this.remapDesinencesByRegion();
     }
 
+    protected setParticipio(): void {
+        super.setParticipio();
+        const PR = this.attributes['PR'] as string;
+        if (PR) {
+            const [expression, alteredStem] = PR.split('/');
+            this.participioCompuesto = this.participioCompuesto.replace(expression, alteredStem);
+            this.table.Impersonal.Participio = this.participioCompuesto;
+        }
+    }
+
     protected configDesinences(): void { /* empty */ }
 }
 
@@ -186,23 +196,9 @@ export class corroer extends temer {
 }
 
 export class creer extends temer {
-    private participioDual: string;
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.participioDual = this.attributes.PD as string;
-    }
-
-    protected setParticipio(): void {
-        if (this.participioDual) {
-            const [searchValue, replaceValue] = this.participioDual.split('/');
-            this.participioCompuesto = `${this.stem}${this.desinences.Impersonal.Participio}`;
-            this.participioCompuesto =
-                `${this.participioCompuesto}/${this.participioCompuesto.replace(searchValue, replaceValue)}`;
-            this.table.Impersonal.Participio = this.participioCompuesto;
-        } else {
-            super.setParticipio();
-        }
     }
 
     protected configDesinences(): void {

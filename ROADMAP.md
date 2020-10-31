@@ -29,13 +29,23 @@
         - reír (reír)
         - ruar (actuar)
         - triar (vaciar)
-      - info header data will change (new info header entry) this should go to a **major version update**
+      - info **header data** will change (new info header entry) this should go to a **major version update**
 
-    - dropping imprimir from model list and splitting dual participios
+    - (done in 2.0.1) dropping imprimir from model list and splitting dual participios
       - verbs that allow dual participio currently clump both participios together (imprimido/impreso, freído/frito, proveído/provisto and their derivatives).  They really should be listed separately, should have their own array for each participio
+      - affected verbs
+        - imprimir, imprimido / impreso
+        - reimprimir, reimprimido / reimpreso
+        - sobreimprimir, sobreimprimido / sobreimpreso
+        - freír, freído / frito  - freír also has an orthography modification coming, see above
+        - refreír, refreído / refrito
+        - sofreír, sofreído / sofrito
+        - proveer, proveído / provisto
+        - desproveer, desproveído / desprovisto
+      - should add new **header data entry**?  Why? There isn't any reason for doing so, is there?
       - result data format will change, this should go into a **major version update**
 
-    - model changes - choose models that also have a pronominal version whenever possible - see wishlist below
+    - (done in 2.0.0) model changes - choose models that also have a pronominal version whenever possible - see wishlist below
       - list of proposed **changes from -> to** and other models with no pronominal versions - no changes. Notes: no P == there are no pronominal verbs using this model
         - AR
           - **agorar -> engorar/se**
@@ -78,6 +88,7 @@
     - colgar, subj. presente *cuelgue* would become 'c.ue.lg.u.e' (c**ue**lg**u**e) or should it be 'c.uelgu.e' (c**uelgu**e)?  Hmmmm
     - what to do with 'missing parts'?  Hacer, futuro isn't '*haceré*' but *haré*.  'h.ar.é' (h**ar**é) to mark the change so it can be visually noted?
     - the marker should be easily replaceable by a regex and would always come in pairs
+    - will add new **header data entry**
     - likely additional parameter to *conjugate() / conjugateSync()*, meaning a **minor version change** but the result format change seems to require a **major version update**  
 
 - 6/7/2020, version 1.2.0

@@ -7,7 +7,7 @@
 Spanish verb conjugator, uses templates, pattern matching & logic to conjugate verbs in any of the regional varieties of castellano, voseo, formal, canarias
 
 - Project goals: correct, detailed, complete, fast & small (yes, you can have it all)
-- 10567 verbs, tested, 98 models
+- 10567 verbs, tested, 97 models
 - includes only current, RAE recognized as known & used verbs
   - regional varieties of castellano, voseo, formal, canarias
   - defectives
@@ -17,8 +17,8 @@ Spanish verb conjugator, uses templates, pattern matching & logic to conjugate v
 
 ____
 
-- Latest version 2.0.0, updated on Thu 29 Oct 2020 07:46:44 PM CET - **major number changed, possibly breaking changes**
-  - see CHANGELOG for details
+- Latest version 2.0.1, updated on Sat 31 Oct 2020 11:02:19 PM CET **this release may be a breaking change**
+  - see CHANGELOG for details, *TL;DR version: input/output formats didn't change, the result content / order may have changed*
   - see ROADMAP for future proposed changes
 
 ____
@@ -120,7 +120,6 @@ ____
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
-|&#x2796;||
 </td><td>
 
 | ER            | |
@@ -162,7 +161,6 @@ ____
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
-|&#x2796;||
 </td><td>
 
 | IR            | |
@@ -188,7 +186,6 @@ ____
 | ***erguir*** | &#x2714; |
 | ***escribir*** | &#x2714; |
 | ***huir*** | &#x2714; |
-| ***imprimir*** | &#x2714; |
 | ***ir*** | &#x2714; |
 | ***lucir*** | &#x2714; |
 | ***oír*** | &#x2714; |

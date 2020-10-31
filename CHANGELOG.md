@@ -1,5 +1,27 @@
 # Changelog
 
+- Sat 31 Oct 2020 11:02:19 PM CET, 2.0.1
+  - likely a **breaking change**, keep reading ...
+  - switched from Travis CI to GitHub Actions - Travis CI seemed to be taking forever.  And for some reason coveralls isn't working anymore.  Not willing to investigate, GH Actions offer Linux, Win and OSX as platforms.  And it seems to be working well
+  - using node v14.15.0 in dev, build and tests now get verified on matrix of [[12.x, 14.x, 15.x], [Linux, Windows, Macos]]
+  - dropped Coveralls, replacing with ... probably Codecov
+  - dropped imprimir model - other than the dual participio it follows regular partir conjugation.  If I kept it as a model than I should have added all of the dual participio verbs below as models as well.  There is no need to do that
+  - split dual participios into their individual arrays.  They are no longer clumped together as in, for example, *he imprimido/impreso* but separated into their own individual arrays in the results, the regular participio result array always preceeds the irregular one.  So now we have 2 arrays, one with *he imprimido*, the other with *he impreso*.
+    - affected verbs
+      - imprimir, imprimido / impreso
+      - reimprimir, reimprimido / reimpreso
+      - sobreimprimir, sobreimprimido / sobreimpreso
+      - freír, freído / frito  - freír also has an orthography modification change coming
+      - refreír, refreído / refrito
+      - sofreír, sofreído / sofrito
+      - proveer, proveído / provisto
+      - desproveer, desproveído / desprovisto
+    - removed code that dealt with PD - Dual Participio attributes, all of the above is now handled by a PR (participio replace attribute) in definitions.json
+  - the effect of the above is
+    - no change to input/output format
+    - additional output arrays for the listed verbs, the order of output arrays may have changed
+    - the relevant verb participios and compuestos forms are no longer listed as regular/irregular, insted each regular and irregular gets its own list (array) in the result
+
 - Thu 29 Oct 2020 07:46:44 PM CET, 2.0.0
   - updated .travis.yml to node 13.14.0 - seems that it no longer worked with 13.8.x
   - possible **breaking changes**
