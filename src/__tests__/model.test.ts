@@ -12,7 +12,7 @@ import { Regions } from '../lib/types';
 import { errorMsg } from '../lib/conjugator';
 
 const VERB_COUNT = 10567;
-const MODEL_COUNT = 98;
+const MODEL_COUNT = 97;
 // Disable thrown messages
 beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(() => { /* empty */ });
@@ -75,7 +75,7 @@ verbSet.add('redecir');     // the decir family of differences
 verbSet.add('reír');
 verbSet.add('reponer');     // ogmorfo                              'reponer': { 'N': [ 'poner', { 'poner': { 'D': 'ogmorfo' } } ], 'P': 'poner' },
 verbSet.add('responder');   // in the list already, quite unique, repuse version         'responder': { 'N': [ 'temer', 'responder' ] },
-verbSet.add('satisfacer');  
+verbSet.add('satisfacer');
 verbSet.add('serenar');     // triple, defective in one, N&P        'serenar': { 'N': [ 'hablar', { 'hablar': { 'D': 'imper' } } ], 'P': 'hablar' },
 verbSet.add('sofreír');
 verbSet.add('soler');       // the name said it all                 'soler': { 'N': [ { 'mover': { 'D': 'osmorfo' } }, { 'mover': { 'D': 'omorfo' } } ] },
@@ -113,37 +113,47 @@ class MockJugator extends Conjugator {
     }
 }
 
-describe('Model Test', () => {
-    test('Internals + sync', () => {
-        // Corrupted definitions file / missing templates - this should never happen
-        const mockjugator = new MockJugator();
+// Test synchronous functions
+describe('Model Test Sync', () => {
+    test('Internals Sync', () => {
+        // expect correct data
+        let mockjugator = new MockJugator();
         let result: Result[] | ErrorType = mockjugator.conjugateSync('partir', 'formal');
         expect(result).toBeInstanceOf(Array);
         expect(((result as Result[])[0].info as Info).model).toEqual('partir');
 
-        // undefine verb model data in templates
+        // undefine verb model data in templates, expect error message
         mockjugator.undefineModelData('partir');
         result = mockjugator.conjugateSync('partir', 'formal');
         expect(result).not.toBeInstanceOf(Array);
         expect(result).toEqual({ ERROR: { message: errorMsg.noModelData.replace('VERB', 'partir') } });
 
-        mockjugator.restore();
+        // restore to valid state, verify it's good
+        mockjugator = new MockJugator();
         result = mockjugator.conjugateSync('partir', 'formal');
         expect(result).toBeInstanceOf(Array);
         expect(((result as Result[])[0].info as Info).region).toEqual('formal');
 
+        // break it, expect error message
         mockjugator.deleteTemplates();
         result = mockjugator.conjugateSync('hablar', 'castellano');
         expect(result).not.toBeInstanceOf(Array);
         expect(result as ErrorType).toEqual({ ERROR: { message: errorMsg.noTemplates } });
 
+        // expect error message again, can't get verblist
         expect(mockjugator.getVerbListSync()).toEqual([errorMsg.noVerbs]);
 
-        mockjugator.deleteFactory();      // really break it
+        // really break it, no factory, expect error
+        mockjugator.deleteFactory();
         expect(mockjugator.getModelsSync()).toEqual([errorMsg.noModels]);
 
-        mockjugator.restore();
+        // restore to valid state, verify it's good
+        mockjugator = new MockJugator();
+        result = mockjugator.conjugateSync('comer', 'voseo');
+        expect(result).toBeInstanceOf(Array);
+        expect(((result as Result[])[0].info as Info).verb).toEqual('comer');
 
+        // polute the db with verb:model that isn't implemented, expect error
         mockjugator.fakeUnimplemented('foobar', 'bar');
         result = mockjugator.conjugateSync('foobar');
         expect(result).not.toBeInstanceOf(Array);
@@ -155,12 +165,14 @@ describe('Model Test', () => {
                 }
             });
 
+        // Force bad region, expect error
         mockjugator.fakeUnimplemented('totally', 'bad');
-        result = mockjugator.conjugateSync('totally', 'bad' as Regions);        // Force bad region
+        result = mockjugator.conjugateSync('totally', 'bad' as Regions);
         expect(result).not.toBeInstanceOf(Array);
         expect((result as ErrorType)).toEqual({ ERROR: { message: errorMsg.unknownRegion.replace(/REGION/, 'bad') } });
 
-        mockjugator.restore();
+        // Couple of 'normal' tests
+        mockjugator = new MockJugator();
         result = mockjugator.conjugateSync('partir');
         expect((result as Result[])[0].info.defective).toEqual(false);
         result = mockjugator.conjugateSync('hablar');
@@ -169,89 +181,17 @@ describe('Model Test', () => {
         expect((result as Result[])[0].info.verb).toEqual('temer');
     });
 
-    test('Async resolve', () => {
-        const mockjugator = new MockJugator();
-        let a = 0;
-        mockjugator.getVerbList()
-            .then(value => {
-                a = value.length;
-                expect(a).toBe(VERB_COUNT);
-            })
-            .catch(error => console.error(`Should never get here, ${error}`));
-        expect(a).toBe(0);
-
-        mockjugator.getModels()
-            .then(value => {
-                a = value.length;
-                expect(a).toBe(MODEL_COUNT);
-            })
-            .catch(error => console.error(`Should never get here, ${error}`));
-
-        expect(a).toBe(0);             // <<< a should not have changed by now
-
-        // get a verb
-        mockjugator.conjugate('dar')
-            .then(value => expect(((value as Result[])[0].info.verb)).toEqual('dar'))
-            .catch(() => expect(true).not.toBe(true))               // << unreachable, we hope
-            .finally(() => expect(true).toBe(true));                   // << always happens
-    });
-
-    test('Async reject broken', () => {
-        // make a broken mock
-        const broken = new MockJugator();
-        broken.deleteTemplates();
-        broken.getVerbList()
-            .then(() => fail())              // we should never get here
-            .catch(value => expect(value).toEqual([errorMsg.noVerbs]));
-
-        broken.deleteFactory();      // really break it
-        broken.getModels()
-            .then(value => fail(value))
-            .catch(reason => expect(reason).toEqual([errorMsg.noModels]))
-            .finally(() => expect(true).toBe(true));
-    });
-
-
-
     const conjugator = new Conjugator();
-    test('Bad Input', () => {
+    test('Bad Input Sync', () => {
         expect(conjugator.conjugateSync('hablarse', 'castellano')).
             toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'hablarse') } });
-
-        conjugator.conjugate('partirse')
-            .then(value => console.error(`Should never get here, ${value}`))
-            .catch(error => {
-                // console.log('Rejected', error);
-                expect(error).not.toBeInstanceOf(Array);
-                expect(error).toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'partirse') } });
-            });
 
         // force bad region
         expect(conjugator.conjugateSync('temer', 'castillano' as Regions)).
             toEqual({ ERROR: { message: errorMsg.unknownRegion.replace('REGION', 'castillano') } });
 
-
-        conjugator.conjugate('partir', 'castilgano' as Regions)
-            .then(value => console.error(`Should never get here, ${value}`))
-            .catch(error => {
-                // console.log('Rejected', error);
-                expect(error).not.toBeInstanceOf(Array);
-                expect(error).toEqual({ ERROR: { message: errorMsg.unknownRegion.replace('REGION', 'castilgano') } });
-            });
-
-
         expect(conjugator.conjugateSync('yo momma')).
             toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'yo momma') } });
-
-        conjugator.conjugate('yo')
-            .then(value => {
-                // console.log('Resolved', value);
-                fail(value);
-            })
-            .catch(error => {
-                // console.log('Rejected', error);
-                expect(error).toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'yo') } });
-            });
     });
 
     test('ModelFactory', () => {
@@ -266,8 +206,9 @@ describe('Model Test', () => {
         expect(testFactory.getModel('hablar', 'temer', 'P', 'castellano', {})).toBeDefined();
     });
 
-    test('getVerbList()', () => {
-        expect(conjugator.getVerbListSync().length).toBe(VERB_COUNT);       // number of verbs in the db
+    test('Sync verb and model count', async () => {
+        expect(conjugator.getVerbListSync().length).toEqual(VERB_COUNT);
+        expect(conjugator.getModelsSync().length).toEqual(MODEL_COUNT);
     });
 
     test('Optional parameters', () => {
@@ -306,18 +247,62 @@ describe('Model Test', () => {
             }
         });
     });
+});
 
-    test('Async', () => {
-        let a = 0;
-        conjugator.getVerbList().then(value => {
-            a = value.length;
-            expect(a).toBe(VERB_COUNT);
-        });
-        expect(a).toBe(0);
 
+// Async tests
+// Required reading:
+// https://jestjs.io/docs/en/asynchronous
+describe('Model Test Async', () => {
+    test('Async verb and model count', async () => {
+        const mockjugator = new MockJugator();
+        await mockjugator.getVerbList().then(value => expect(value.length).toEqual(VERB_COUNT));
+        await mockjugator.getModels().then(value => expect(value.length).toEqual(MODEL_COUNT));
+    });
+
+    test('Async broken templates', () => {
+        // make a broken mock
+        const broken = new MockJugator();
+        broken.deleteTemplates();
+        // return expect(broken.getVerbList()).resolves.toEqual([errorMsg.noVerbs]);
+        return expect(broken.getVerbList()).rejects.toEqual([errorMsg.noVerbs]);
+    });
+
+    test('Async no factory', () => {
+        const broken = new MockJugator();
+        broken.deleteFactory();      // really break it
+        // return expect(broken.getModels()).resolves.toEqual([errorMsg.noModels]);
+        return expect(broken.getModels()).rejects.toEqual([errorMsg.noModels]);
+    });
+
+    test('Async badly formed verb (includes "se")', () => {
+        const conjugator = new Conjugator();
+        return conjugator.conjugate('partirse').
+            catch(e => expect(e).toEqual({ 'ERROR': { 'message': errorMsg.unknownVerb.replace('VERB', 'partirse') } }));
+    });
+
+    test('Async bad region', () => {
+        const conjugator = new Conjugator();
+        return conjugator.conjugate('partir', 'castilgano' as Regions).
+            catch(e => expect(e).toEqual({ 'ERROR': { 'message': errorMsg.unknownRegion.replace('REGION', 'castilgano') } }));
+    });
+
+    test('Async unknown verb', () => {
+        const conjugator = new Conjugator();
+        return conjugator.conjugate('yo').
+            catch(e => expect(e).toEqual({ 'ERROR': { 'message': errorMsg.unknownVerb.replace('VERB', 'yo') } }));
+    });
+
+    test('Async known verb', () => {
+        const conjugator = new Conjugator();
+        return conjugator.conjugate('haber').
+            then(result => expect((result as Result[])[0].conjugation.Subjuntivo.Presente[1]).toEqual('tú hayas'));
     });
 });
 
+
+// Conjugate each verb / region matrix - there is no verification whether the conjugation is correct
+// we're just running functional testing here, we should be able to conjugate each verb / each region
 describe('Conjugation Test', () => {
     const conjugator = new Conjugator();
     verbsToTest = shuffle(conjugator.getVerbListSync().filter(verb => verbs.includes(verb)));

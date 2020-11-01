@@ -1,5 +1,8 @@
 # Changelog
 
+- Sun 01 Nov 2020 11:17:31 PM CET, 2.0.3
+  - fixed tests - incompetent coding on my part was causing false positives testing async code
+
 - Sun 01 Nov 2020 03:28:31 PM CET, 2.0.2
   - GitHub Actions - added Coveralls again
 
