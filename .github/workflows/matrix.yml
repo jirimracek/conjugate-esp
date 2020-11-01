@@ -9,10 +9,6 @@ on:
   pull_request:
     branches: [ master ]
 
-on:
-  workflow_dispatch:
-    branches: [ master ]
-
 jobs:
   build:
     runs-on: ${{ matrix.os }}
