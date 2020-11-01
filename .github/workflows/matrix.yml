@@ -1,12 +1,16 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Matrix Build
+name: Build Matrix
 
 on:
   push:
     branches: [ master ]
   pull_request:
+    branches: [ master ]
+
+on:
+  workflow_dispatch:
     branches: [ master ]
 
 jobs:
@@ -26,3 +30,9 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm run cover
+    
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+

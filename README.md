@@ -1,6 +1,6 @@
 # conjugate-esp
 
-[![Build Status](https://travis-ci.org/jirimracek/conjugate-esp.svg?branch=master)](https://travis-ci.org/jirimracek/conjugate-esp)
+[![Matrix Build](https://github.com/jirimracek/conjugate-esp/workflows/Matrix%20Build/badge.svg?branch=master)](https://github.com/jirimracek/conjugate-esp/actions?query=workflow%3A%22Matrix+Build%22)
 [![Coverage Status](https://coveralls.io/repos/github/jirimracek/conjugate-esp/badge.svg?branch=master)](https://coveralls.io/github/jirimracek/conjugate-esp?branch=master)
 ![GitHub](https://img.shields.io/github/license/jirimracek/conjugate-esp)
 
@@ -17,8 +17,8 @@ Spanish verb conjugator, uses templates, pattern matching & logic to conjugate v
 
 ____
 
-- Latest version 2.0.1, updated on Sat 31 Oct 2020 11:02:19 PM CET **this release may be a breaking change**
-  - see CHANGELOG for details, *TL;DR version: input/output formats didn't change, the result content / order may have changed*
+- Latest version 2.0.2, updated on Sun 01 Nov 2020 03:28:31 PM CET
+  - see CHANGELOG for details
   - see ROADMAP for future proposed changes
 
 ____

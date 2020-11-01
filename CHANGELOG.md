@@ -1,5 +1,8 @@
 # Changelog
 
+- Sun 01 Nov 2020 03:28:31 PM CET, 2.0.2
+  - GitHub Actions - added Coveralls again
+
 - Sat 31 Oct 2020 11:02:19 PM CET, 2.0.1
   - likely a **breaking change**, keep reading ...
   - switched from Travis CI to GitHub Actions - Travis CI seemed to be taking forever.  And for some reason coveralls isn't working anymore.  Not willing to investigate, GH Actions offer Linux, Win and OSX as platforms.  And it seems to be working well
