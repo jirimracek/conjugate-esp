@@ -42,7 +42,7 @@ export class partir extends BaseModel {
         this.desinences = JSON.parse(JSON.stringify(IR));
 
         if (this.region === 'voseo') {
-            this.desinences.Indicativo.Presente[1] = this.desinences.Indicativo.Presente[4].replace(/i/, '');
+            this.desinences.Indicativo.Presente[1] = 'ís';
         }
         this.configDesinences();
         this.remapDesinencesByRegion();
@@ -778,6 +778,15 @@ export class huir extends partir {
                 this.desinences.Indicativo.PreteritoIndefinido[4] =
                     this.desinences.Indicativo.PreteritoIndefinido[4].replace(/i/, 'y');
         }
+
+        // 2010 orthography
+        if ( typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
+            if (this.region === 'voseo') {
+                this.desinences.Indicativo.Presente[1] = 'is';
+            }
+            this.desinences.Indicativo.Presente[4] = 'is';
+            this.desinences.Indicativo.PreteritoIndefinido[0] = 'i';
+        }
     }
 }
 
@@ -1229,6 +1238,11 @@ export class reír extends partir {
             'ísteis',
             'ieron'
         ];
+        // 2010 orthography
+        if ( typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
+            this.desinences.Indicativo.PreteritoIndefinido[2] = 'io';
+            this.desinences.Subjuntivo.Presente[4] = 'ais';
+        }
     }
 
     protected setGerundio(): void {

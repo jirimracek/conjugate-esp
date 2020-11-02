@@ -51,7 +51,7 @@ export class hablar extends BaseModel {
 
         // Voseo, 2nd singular -> accented version, which happens to be 2nd plural stripped of i
         if (this.region === 'voseo') {
-            this.desinences.Indicativo.Presente[1] = this.desinences.Indicativo.Presente[4].replace(/i/, '');
+            this.desinences.Indicativo.Presente[1] = 'ás';
         }
         // Give derived class a chance to modify the desinences as per model
         this.configDesinences();
@@ -97,6 +97,19 @@ export class actuar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)u/, '$1ú');
+    }
+
+    protected configDesinences(): void {
+        // 2010 orthography
+        if ( typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
+            if (this.region === 'voseo') {
+                this.desinences.Indicativo.Presente[1] = 'as';
+            }
+            this.desinences.Indicativo.Presente[4] = 'ais';
+            this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
+            this.desinences.Indicativo.PreteritoIndefinido[2] = 'o';
+            this.desinences.Subjuntivo.Presente[4] = 'eis';
+        }
     }
 
     protected setIndicativoPresente(): void {
@@ -599,6 +612,19 @@ export class vaciar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)i/, '$1í');
+    }
+
+    protected configDesinences(): void {
+        // 2010 orthography
+        if ( typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
+            if (this.region === 'voseo') {
+                this.desinences.Indicativo.Presente[1] = 'as';
+            }
+            this.desinences.Indicativo.Presente[4] = 'ais';
+            this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
+            this.desinences.Indicativo.PreteritoIndefinido[2] = 'o';
+            this.desinences.Subjuntivo.Presente[4] = 'eis';
+        }
     }
 
     protected setIndicativoPresente(): void {

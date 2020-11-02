@@ -1,5 +1,10 @@
 # Changelog
 
+- Tue 03 Nov 2020 12:13:31 AM CET, 2.0.4
+  - 1999 &amp; 2010 orthography rules - this concerns monosyllable orthographical changes as per la RAE
+  - see [ROADMAP](ROADMAP.md) for description
+  - partially done, still need to add the info header info
+
 - Sun 01 Nov 2020 11:17:31 PM CET, 2.0.3
   - fixed tests - incompetent coding on my part was causing false positives testing async code
 

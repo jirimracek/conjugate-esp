@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 import { PronominalKey, Regions, IndicativoSubSimpleKey, SubjuntivoSubSimpleKey, } from './types';
-import { clearAccents, esdrujula, strongify, applyMonoRules } from './stringutils';
+import { clearAccents, esdrujula, strongify } from './stringutils';
 
 // Attributes
 // attribute has form of attrname : string | boolean
@@ -179,7 +179,7 @@ export abstract class BaseModel {
     private pronouns: PronounsTable;
     private auxHaber: CompSubTable;
     private defectiveAttributes: DefectiveType;
-    private monoSyllables: boolean;
+    // private monoSyllables: boolean;
 
     protected constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         this.verb = verb;
@@ -192,7 +192,7 @@ export abstract class BaseModel {
         this.pronouns = JSON.parse(JSON.stringify(PRONOUNS));
         this.auxHaber = JSON.parse(JSON.stringify(AUX));
         this.version = (attributes.V ? attributes.V : '0') as string;
-        this.monoSyllables = attributes['M'] as boolean;
+        // this.monoSyllables = attributes['M'] as boolean;
 
         // Modify this.pronouns tables as per selected defective attributes
         // Normally we use the PRONOMBRES table.  A few defective forms dictate that the pronouns
@@ -307,8 +307,6 @@ export abstract class BaseModel {
 
         // Compuestos never get overriden in derived classes
         this.setCompuestos();
-
-        this.applyMono();
 
         this.setImperativoAfirmativo();
         this.setImperativoNegativo();
@@ -717,19 +715,6 @@ export abstract class BaseModel {
 
                 this.table.Imperativo.Negativo[3] = '-';
                 break;
-        }
-    }
-
-    private applyMono(): void {
-        if (this.monoSyllables) {             // strip monosyllable accents where applicable
-            [1, 4].forEach(i => this.table.Indicativo.Presente[i] =
-                applyMonoRules(this.table.Indicativo.Presente[i]));
-
-            [0, 1, 2].forEach(i => this.table.Indicativo.PreteritoIndefinido[i] =
-                applyMonoRules(this.table.Indicativo.PreteritoIndefinido[i]));
-
-            this.table.Subjuntivo.Presente[4] =
-                applyMonoRules(this.table.Subjuntivo.Presente[4]);
         }
     }
 
