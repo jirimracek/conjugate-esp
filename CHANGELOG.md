@@ -1,6 +1,6 @@
 # Changelog
 
-- Thu 05 Nov 2020 07:38:28 PM CET, 2.1.1
+- Thu 05 Nov 2020 08:16:11 PM CET, 2.1.2
   - trimming for npm publish
   - updated tsconfig to es2020
   - changed Info::ortho type to string, Info::highlight to boolean

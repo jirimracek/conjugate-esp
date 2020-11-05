@@ -1,6 +1,6 @@
 # Basic usage details
 
-- updated on Thu 05 Nov 2020 07:38:28 PM CET, version 2.1.1
+- updated on Thu 05 Nov 2020 08:16:11 PM CET, version 2.1.2
 - Simple usage
 
 ## Simple installation and use

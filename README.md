@@ -17,8 +17,8 @@ This project uses templates, pattern matching & logic to conjugate Spanish verbs
 
 ____
 
-- Version 2.1.1
-- Updated Thu 05 Nov 2020 07:38:28 PM CET
+- Version 2.1.2
+- Updated Thu 05 Nov 2020 08:16:11 PM CET
   - TL;DR
     - changes concerning pre and past 2010 orthography rules, added info header entry, added tests
     - minor cleanup before npm publish
