@@ -1,6 +1,6 @@
 # Basic usage details
 
-- updated on Thu 05 Nov 2020 02:29:31 PM CET, version 2.1.0
+- updated on Thu 05 Nov 2020 07:38:28 PM CET, version 2.1.1
 - Simple usage
 
 ## Simple installation and use
@@ -120,7 +120,7 @@ ____
   - ErrorType is defined as *type ErrorType = { ERROR: { message: string } }*
   - Result is defined as *type Result = { info: Info, conjugation: ResultTable }*
   - see conjugator.ts for error messages, definitions of *ErrorType* and *Result*
-  - see basemodel.ts for definition of ResultTable
+  - see basemodel.ts for definition of *Info* and *ResultTable*
   - the structure of ResultTable is as follows
   - Impersonal
     - Infinitivo, Gerundio, Participio

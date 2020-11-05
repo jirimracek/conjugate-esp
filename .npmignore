@@ -3,6 +3,7 @@ docs/
 coverage/
 src/
 .vscode/
+.github/
 *.code-workspace
 *.tgz
 .eslint*

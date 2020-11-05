@@ -17,10 +17,11 @@ This project uses templates, pattern matching & logic to conjugate Spanish verbs
 
 ____
 
-- Version 2.1.0
-- Updated Thu 05 Nov 2020 02:29:31 PM CET
+- Version 2.1.1
+- Updated Thu 05 Nov 2020 07:38:28 PM CET
   - TL;DR
     - changes concerning pre and past 2010 orthography rules, added info header entry, added tests
+    - minor cleanup before npm publish
   - see [CHANGELOG](CHANGELOG.md) for details
   - see [ROADMAP](ROADMAP.md) for future changes and ideas
   - see [USAGE](USAGE.md) for public interfaces and more info
@@ -32,7 +33,7 @@ ____
 
 ____
 
-## Basic usage, see [USAGE](USAGE.md) for details
+## Basic usage, see the repository [USAGE.md file](USAGE.md) for details
 
 ### Installation
 

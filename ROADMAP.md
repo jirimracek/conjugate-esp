@@ -1,7 +1,7 @@
 # Things to do, wishlists, plans, crimes committed, etc
 
 - Tue 27 Oct 2020 07:56:09 PM CET, version 1.2.2
-  - (updated on Thu 05 Nov 2020 02:29:31 PM CET, version 2.1.0)
+  - (updated on Thu 05 Nov 2020 07:38:28 PM CET, version 2.1.1)
   - possible upcoming changes
     - 1999 &amp; 2010 orthography rules - this concerns monosyllable orthographical changes as per la RAE
       - pre 1999 ***rió*** is the accepted version

@@ -1,5 +1,10 @@
 # Changelog
 
+- Thu 05 Nov 2020 07:38:28 PM CET, 2.1.1
+  - trimming for npm publish
+  - updated tsconfig to es2020
+  - changed Info::ortho type to string, Info::highlight to boolean
+
 - Thu 05 Nov 2020 02:29:31 PM CET, 2.1.0
   - 2010 orthography completed
     - new optional parameters to Conjugator::constructor, *ortho* and *highlight*

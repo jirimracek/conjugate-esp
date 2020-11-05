@@ -17,8 +17,8 @@ export type Info = {
     region: string,
     pronominal: boolean,
     defective: boolean,
-    ortho?: Orthography,
-    highlight?: Highlight
+    ortho?: string,
+    highlight?: boolean
 };
 
 export type ErrorType = { ERROR: { message: string } };
