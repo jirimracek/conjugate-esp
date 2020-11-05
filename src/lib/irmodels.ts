@@ -1189,14 +1189,6 @@ export class rehenchir extends partir {
     }
 }
 
-// export class rehinchir extends rehenchir {
-//     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-//         super(verb, type, region, attributes);
-//         this.alteredStem = this.stem;
-//         this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
-//     }
-// }
-
 export class rehuir extends huir {
     private alteredStem: string;
 

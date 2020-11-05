@@ -19,7 +19,6 @@ describe('String Utils', () => {
 
         expect(clearLastAccent('él puó')).toBe('él puo');
 
-
         expect(clearAccents('')).toBe('');
         expect(clearAccents(undefined as unknown as string)).toBe('');
         expect(clearAccents('abcd')).toBe('abcd');
@@ -68,8 +67,6 @@ describe('String Utils', () => {
         expect(syllabify('ionizate')).toEqual(['io', 'ni', 'za', 'te']);
         expect(syllabify('redondeate')).toEqual(['re', 'don', 'de', 'a', 'te']);
         expect(syllabify('sobreaguense')).toEqual(['so', 'bre', 'a', 'guen', 'se']);
-
-
 
         // Accentuated
         expect(syllabify('aguáitate')).toEqual(['a', 'guái', 'ta', 'te']);
@@ -150,7 +147,6 @@ describe('String Utils', () => {
         expect(esdrujula('nosotros azoemonos')).toEqual('nosotros azoémonos');
         expect(esdrujula('nosotros ionicemonos')).toEqual('nosotros ionicémonos');
         expect(esdrujula('nosotros electrosoldamonos')).toEqual('nosotros electrosoldámonos');
-
 
         expect(esdrujula('ustedes aguaitense')).toEqual('ustedes aguáitense');
         expect(esdrujula('ustedes amaestrense')).toEqual('ustedes amaéstrense');

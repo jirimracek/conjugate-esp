@@ -1,5 +1,18 @@
 # Changelog
 
+- Thu 05 Nov 2020 02:29:31 PM CET, 2.1.0
+  - 2010 orthography completed
+    - new optional parameters to Conjugator::constructor, *ortho* and *highlight*
+    - Conjugator:: constructor(*ortho: Orthography = '2010', highlight: Highlight = false*)
+      - (dropped the parameters from Conjugator::conjugate() from publish 2.0.4 - that was a Bad Idea&trade;)
+    - info array may have an optional entry 'ortho': '1999'|'2010' - only verbs that are subject to the new rules
+    - short &amp; sweet (see [RODMAP](ROADMAP.md) for more info)
+      - 2010 (or not specified) - 2010 will be used and you get the monosyllabic versions without accent
+      - 1999                    - both monosyllabic versions, one with and the other without accent
+    - verification tests added
+    - this is for the upcoming desired hightlighting functionality and obviously it doesn't do anything
+    - added [USAGE](USAGE.md) document
+
 - Tue 03 Nov 2020 12:13:31 AM CET, 2.0.4
   - 1999 &amp; 2010 orthography rules - this concerns monosyllable orthographical changes as per la RAE
   - see [ROADMAP](ROADMAP.md) for description

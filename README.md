@@ -1,26 +1,29 @@
-# conjugate-esp
+# Spanish verb conjugator
 
 [![Matrix Build](https://github.com/jirimracek/conjugate-esp/workflows/Matrix%20Build/badge.svg?branch=master)](https://github.com/jirimracek/conjugate-esp/actions?query=workflow%3A%22Matrix+Build%22)
 [![Coverage Status](https://coveralls.io/repos/github/jirimracek/conjugate-esp/badge.svg?branch=master)](https://coveralls.io/github/jirimracek/conjugate-esp?branch=master)
 ![GitHub](https://img.shields.io/github/license/jirimracek/conjugate-esp)
 
-Spanish verb conjugator, uses templates, pattern matching & logic to conjugate verbs in any of the regional varieties of castellano, voseo, formal, canarias
+This project uses templates, pattern matching & logic to conjugate Spanish verbs, there are no lookup tables, no databases, no dependencies.  While the development depends on few external packages, the deployed npm has no dependencies
 
-- Project goals: correct, detailed, complete, fast & small (yes, you can have it all)
-- 10567 verbs, tested, 97 models
-- includes only current, RAE recognized as known & used verbs
+- Project goals: correct, detailed, complete, independent, fast & small (yes, you can have it all)
+- 10567 tested verbs, uses 97 models
+- includes only current, RAE recognized as known &amp; used verbs
   - regional varieties of castellano, voseo, formal, canarias
   - defectives
   - multiple (dual & triple) conjugations
   - dual participios
-  - orthographical changes
+  - orthographical changes (1999 and 2010)
 
 ____
 
-- Latest version 2.0.4, updated on Tue 03 Nov 2020 12:13:31 AM CET
-  - TL;DR - internal changes concerning pre and past 2010 orthography rules
+- Version 2.1.0
+- Updated Thu 05 Nov 2020 02:29:31 PM CET
+  - TL;DR
+    - changes concerning pre and past 2010 orthography rules, added info header entry, added tests
   - see [CHANGELOG](CHANGELOG.md) for details
   - see [ROADMAP](ROADMAP.md) for future changes and ideas
+  - see [USAGE](USAGE.md) for public interfaces and more info
 
 ____
 
@@ -29,35 +32,48 @@ ____
 
 ____
 
-## Simple usage
+## Basic usage, see [USAGE](USAGE.md) for details
 
-- clone repository / download or
+### Installation
+
+- clone / download gitHub repository
 - npm i @jirimracek/conjugate-esp
 
-```typescript
-  TypeScript
-    // one of
-    import { Conjugator } from  <path to install>                 // local install
-    import { Conjugator } from  '@jirimracek/conjugate-esp';      // npm installed
-    const cng = new Conjugator();
+### TypeScript use
 
-    const table = cng.conjugateSync('adscribir', 'formal');       // sync, formal (usted, ustedes)
+```typescript
+    // Uncomment one of the following 2 lines based on install type
+    // import { Conjugator } from  <path to install>                 // locally installed from repository
+    // import { Conjugator } from  '@jirimracek/conjugate-esp';      // npm installed
+    //
+    const cng = new Conjugator();
+    cng.setOrthography('2010');                                   // defaults to '2010'
+    // cng.setOrthography('1999');                                // use 1999 orthography rules
+    /*
+    * main entry points (see below for more details, parameters, return types)
+    * sync:  conjugateSync()
+    * async: conjugate()
+    */
+    const table = cng.conjugateSync('adscribir', 'formal');       // sync, formal, returns Result[] | ErrorType
     console.log(JSON.stringify(table, null, 1));
-    cng.conjugate('soler', 'voseo')                               // async (promise), voseo
-      .then(table => console.log(JSON.stringify(table, null, 1))) // returns Result[]
-      .catch(error => console.error(error));                      // should not error
+    cng.conjugate('soler', 'voseo')                               // async, voseo, returns Promise<Result[] | ErrorType>
+      .then(table => console.log(JSON.stringify(table, null, 1))) // process correct result
+      .catch(error => console.error(error));                      // catch error
 ```
+
+### JavaScript use
 
 ```javascript
-  JavaScript
-    // one of:
-    const CNG = require('<path to install>/dist');       // local install
-    const CNG = require("@jirimracek/conjugate-esp");    // npm installed
+    // Uncomment one of the following 2 lines based on install type
+    // const CNG = require('<path to install>/dist');       // localy installed from repository
+    // const CNG = require("@jirimracek/conjugate-esp");    // npm installed
     const cng = new CNG.Conjugator();
-    // ... same code as above
+    // ... same code as TypeScript above
 ```
 
-### Returns array of tables or error, either as JSON
+____
+
+### Returns array of tables or error, see [USAGE](USAGE.md)
 
 - Impersonal
   - Infinitivo, Gerundio, Participio

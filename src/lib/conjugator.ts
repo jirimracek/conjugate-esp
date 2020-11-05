@@ -10,12 +10,23 @@ import { Regions, PronominalKey, Orthography, Highlight } from './types';
 import { ModelAttributes, ResultTable, Model, ModelWithAttributes } from './basemodel';
 
 export { Regions, PronominalKey, ResultTable };
-
-
 export type VerbModelData = { [key in PronominalKey]?: Model[] | Model };
-export type Info = { verb: string, model: string, region: string, pronominal: boolean, defective: boolean };
+export type Info = {
+    verb: string,
+    model: string,
+    region: string,
+    pronominal: boolean,
+    defective: boolean,
+    ortho?: Orthography,
+    highlight?: Highlight
+};
+
 export type ErrorType = { ERROR: { message: string } };
-export type Result = { info: Info, conjugation: ResultTable };
+export type Result = {
+    info: Info,
+    conjugation: ResultTable
+};
+export type VerbModelTemplates = { [verbname: string]: VerbModelData };
 
 export const errorMsg = {
     unknownVerb: 'Input error, unknown verb VERB',
@@ -26,8 +37,6 @@ export const errorMsg = {
     noVerbs: 'Internal error, no verbs, check definitions.json file, contact maintainer',
     noModels: 'Internal error, no models, check definitions.json file, contact maintainer'
 };
-
-export type VerbModelTemplates = { [verbname: string]: VerbModelData };
 
 /**
  * Create instance of Conjugator, then
@@ -43,19 +52,43 @@ export type VerbModelTemplates = { [verbname: string]: VerbModelData };
 export class Conjugator {
     protected templates: VerbModelTemplates = definitions;
     protected factory: ModelFactory = new ModelFactory();
+    private orthography: Orthography;
+    private highlight: Highlight;
 
-    constructor() { /* empty */ }
+    /**
+     * 
+     * @param ortho optional, 1999|2010, default 2010 - use 2010 orthography 
+     * @param highlight optional, true|false, insert highlight chars, default false
+     */
+    constructor(ortho: Orthography = '2010', highlight: Highlight = false) {
+        this.orthography = ortho;
+        this.highlight = highlight;
+    }
+
+    public setOrthography (ortho: Orthography): void {
+        this.orthography = ortho;
+    }
+
+    public getOrthography (): Orthography {
+        return this.orthography;
+    }
+
+    public setHighlight (highlight: Highlight): void {
+        this.highlight = highlight;
+    }
+
+    public getHighlight(): Highlight {
+        return this.highlight;
+    }
 
     /**
      * Sync version, call conjugate() for async
      * 
-     * @param verb required - base verb form (no pronominal ending 'se'). Ex.: 'hablar', not 'hablarse'.  
-     * Returned Result[] includes pronominal as well as defective conjugations where appropriate
-     * @param region optional, castellano | voseo | canarias | formal, default: castellano
-     * @param ortho optional, pre2010 | 2010, default: 2010 - use 2010 orthography only (rio only), pre2010 returns both (rio and rió)
-     * @param highlight optional, true | false, default: false - if true, insert highlight characters
+     * @param verb required - base verb, no pronominal 'se', use 'hablar', not 'hablarse'  
+     * Returned Result[] includes pronominals and defectives if appropriate
+     * @param region optional, castellano|voseo|canarias|formal, default castellano
      */
-    public conjugateSync(verb: string, region: Regions = 'castellano', ortho: Orthography = '2010', highlight: Highlight = false): Result[] | ErrorType {
+    public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | ErrorType {
         const result: Result[] = [];
         try {
             if (!this.templates) {
@@ -81,20 +114,17 @@ export class Conjugator {
                 models.forEach(model => {
                     if (typeof model === 'string') {
                         modelTemplates.push([model, pronominalKey, region, {}]);
-                    } else {                                                   
+                    } else {
                         // it's a ModelWithAttrs
                         const [name, attributes] =
                             (Object.entries(model as ModelWithAttributes)).flat() as [string, ModelAttributes];
-                        // if ortho is strict 2010 and M attr exists and it's falue is 'false' then skip this model
-                        // if (ortho === '2010' && attributes['M'] !== 'undefined' && attributes['M'] === 'false') {
-                        //     console.log(`Skip ${verb}, ${name}, M=${attributes['M']}`);
-                        // } else {
-                        //     modelTemplates.push([name as string, pronominalKey, region, attributes]);
-                        // }
-                        if (ortho !== '2010' || attributes['M'] === 'undefined' || attributes['M'] !== 'false') {
+                        // if ortho is not 2010 or M is undefined or M is defined and not false 
+                        //   then use this model, otherwise skip it.  See types.ts for more info
+                        if (this.orthography !== '2010' || typeof attributes['M'] === 'undefined' || 
+                            attributes['M'] !== 'false') {
                             modelTemplates.push([name as string, pronominalKey, region, attributes]);
-                        // } else {
-                        //     console.log(`Skip ${verb}, ${name}, M=${attributes['M']}`);
+                            // } else {
+                            //     console.log(`Skip ${verb}, ${name}, M=${attributes['M']}`);
                         }
                     }
                 });
@@ -110,14 +140,28 @@ export class Conjugator {
                             `${modelName}$1${verb}$2${region}`));
                 }
 
+                const info: Info = {
+                    verb: pronominalKey === 'P' ? `${verb}se` : verb,
+                    model: modelName,
+                    region: region,
+                    pronominal: (pronominalKey === 'P'),
+                    defective: !!(attributes['D'])
+                };
+
+                if (typeof attributes['M'] !== 'undefined') {
+                    if (attributes.M === 'true') {
+                        info.ortho = '2010';
+                    } else {
+                        info.ortho = '1999';
+                    }
+                }
+
+                if (this.highlight) {
+                    info.highlight = this.highlight;
+                }
+
                 result.push({
-                    info: {
-                        verb: pronominalKey === 'P' ? `${verb}se` : verb,
-                        model: modelName,
-                        region: region,
-                        pronominal: (pronominalKey === 'P'),
-                        defective: !!(attributes['D'])
-                    },
+                    info,
                     conjugation: model.getConjugation()
                 });
             });
@@ -131,15 +175,13 @@ export class Conjugator {
     /**
      * Async version, conjugateSync() for sync version
      * 
-     * @param verb required - base verb form (no pronominal ending 'se'). Ex.: 'hablar', not 'hablarse'.  
-     * Returned Result[] includes pronominal as well as defective conjugations where appropriate
-     * @param region optional, castellano | voseo | canarias | formal, default: castellano
-     * @param ortho optional, pre2010 | 2010, default: 2010 - use 2010 orthography
-     * @param highlight optional, true | false, default: false - if true, insert highlight characters
+     * @param verb required - base verb, no pronominal 'se', use 'hablar', not 'hablarse'  
+     * Returned Result[] includes pronominals and defectives if appropriate
+     * @param region optional, castellano|voseo|canarias|formal, default castellano
      */
-    public conjugate(verb: string, region: Regions = 'castellano', ortho: Orthography = '2010', highlight: Highlight = false): Promise<Result[] | ErrorType> {
+    public conjugate(verb: string, region: Regions = 'castellano'): Promise<Result[] | ErrorType> {
         return new Promise((resolve, reject) => {
-            const result: Result[] | ErrorType = this.conjugateSync(verb, region, ortho, highlight);
+            const result: Result[] | ErrorType = this.conjugateSync(verb, region);
             if (Array.isArray(result)) {
                 resolve(result);
             } else {

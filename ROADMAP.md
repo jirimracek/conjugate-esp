@@ -1,13 +1,15 @@
 # Things to do, wishlists, plans, crimes committed, etc
 
 - Tue 27 Oct 2020 07:56:09 PM CET, version 1.2.2
+  - (updated on Thu 05 Nov 2020 02:29:31 PM CET, version 2.1.0)
   - possible upcoming changes
     - 1999 &amp; 2010 orthography rules - this concerns monosyllable orthographical changes as per la RAE
       - pre 1999 ***rió*** is the accepted version
       - 1999 through 2010 both ***rió*** and ***rio*** are tolerated
       - past year 2010 it is no longer acceptable to write ***rió***, the new correct form is ***rio*** with **no accent**
       - will add a new info header entry and deliver pre-2010 orthography only if it's requested
-      - will add a new optional parameter to *conjugate() / conjugateSync()*
+      - ~~will add a new optional parameter to *conjugate() / conjugateSync()*~~ -that was a Bad Idea&trade;
+      - add new optional parameter to **Conjugator::constructor(ortho: Orthography = '2010')** instead and set &amp; get methods
       - more info <https://www.rae.es/espanol-al-dia/palabras-como-guion-truhan-fie-liais-etc-se-escriben-sin-tilde>
       - affected verbs
         - chiar (vaciar)
@@ -89,7 +91,8 @@
     - what to do with 'missing parts'?  Hacer, futuro isn't '*haceré*' but *haré*.  'h.ar.é' (h**ar**é) to mark the change so it can be visually noted?
     - the marker should be easily replaceable by a regex and would always come in pairs
     - will add new **header data entry**
-    - likely additional parameter to *conjugate() / conjugateSync()*, meaning a **minor version change** but the result format change seems to require a **major version update**  
+    - ~~likely additional parameter to *conjugate() / conjugateSync()*, meaning a **minor version change** but the result format change seems to require a **major version update**~~ - Bad Idea&trade; again
+    - add new optional parameter to **Conjugator::constructor (highlight: Highlight = false)**, add set &amp; get methods
 
 - 6/7/2020, version 1.2.0
   - new wishlist
