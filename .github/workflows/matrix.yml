@@ -5,9 +5,9 @@ name: Build Matrix
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
     - run: npm run cover
     
     - name: Coveralls
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@main
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
