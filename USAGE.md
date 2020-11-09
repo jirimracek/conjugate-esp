@@ -1,50 +1,57 @@
-# Basic usage details
+# Usage details
 
-- updated on Thu 05 Nov 2020 08:16:11 PM CET, version 2.1.2
-- Simple usage
+Mon 09 Nov 2020 09:58:41 PM CET, version 2.2.0
+____
 
-## Simple installation and use
-
-### Installation
+## Installation
 
 - clone / download gitHub repository
 - npm i @jirimracek/conjugate-esp
 
-### TypeScript use
+### TypeScript
 
 ```typescript
     // Uncomment one of the following 2 lines based on install type
-    // import { Conjugator } from  <path to install>                 // locally installed from repository
-    // import { Conjugator } from  '@jirimracek/conjugate-esp';      // npm installed
+    // import { Conjugator } from  <path to install>              // locally installed from repo
+    // import { Conjugator } from  '@jirimracek/conjugate-esp';   // npm installed
     //
     const cng = new Conjugator();
     cng.setOrthography('2010');                                   // defaults to '2010'
     // cng.setOrthography('1999');                                // use 1999 orthography rules
-    /*
-    * main entry points (see below for more details, parameters, return types)
-    * sync:  conjugateSync()
-    * async: conjugate()
-    */
-    const table = cng.conjugateSync('adscribir', 'formal');       // sync, formal, returns Result[] | ErrorType
+
+    // sync, formal, returns Result[] | ErrorType
+    const table = cng.conjugateSync('adscribir', 'formal');
     console.log(JSON.stringify(table, null, 1));
-    cng.conjugate('soler', 'voseo')                               // async, voseo, returns Promise<Result[] | ErrorType>
-      .then(table => console.log(JSON.stringify(table, null, 1))) // process correct result
-      .catch(error => console.error(error));                      // catch error
+
+    // async, voseo, returns Promise<Result[] | ErrorType>
+    cng.conjugate('soler', 'voseo')
+      .then(table => console.log(JSON.stringify(table, null, 1))) // process result
+      .catch(error => console.error(error));                      // catch errors
 ```
 
-### JavaScript use
+### JavaScript
 
 ```javascript
     // Uncomment one of the following 2 lines based on install type
-    // const CNG = require('<path to install>/dist');       // localy installed from repository
+    // const CNG = require('<path to install>/dist');       // localy installed from repo
     // const CNG = require("@jirimracek/conjugate-esp");    // npm installed
     const cng = new CNG.Conjugator();
-    // ... same code as TypeScript above
+    // cng.setOrthography('2010');                          // defaults to '2010'
+    cng.setOrthography('1999');                             // use 1999 orthography rules
+
+    // sync, formal, returns Result[] | ErrorType
+    const table = cng.conjugateSync('hablar', 'canarias');
+    console.log(JSON.stringify(table, null, 1));
+
+    // async, castellano, returns Promise<Result[] | ErrorType>
+    cng.conjugate('freír')
+      .then(table => console.log(JSON.stringify(table, null, 1))) // process result
+      .catch(error => console.error(error));                      // catch errors
 ```
 
 ____
 
-## Public interfaces
+### Public interfaces
 
 - **Conjugator**
   - *constructor(ortho: Orthography = '2010', highlight: Highlight = false)*
@@ -114,47 +121,141 @@ ____
 
 ____
 
-## Result values
+### Return values
 
-- conjugate() methods will return either a *Result[]* or *ErrorType*
+- conjugate() / conjugateSync() methods will return either a *Result[]* or *ErrorType*
   - ErrorType is defined as *type ErrorType = { ERROR: { message: string } }*
   - Result is defined as *type Result = { info: Info, conjugation: ResultTable }*
   - see conjugator.ts for error messages, definitions of *ErrorType* and *Result*
   - see basemodel.ts for definition of *Info* and *ResultTable*
-  - the structure of ResultTable is as follows
-  - Impersonal
-    - Infinitivo, Gerundio, Participio
-  - Indicativo
-    - Simple
-      - Presente
-      - Pretérito Imperfecto
-      - Pretérito Indefinido
-      - Futuro Imperfecto
-      - Condicional Simple
-    - Compuesto
-      - Pretérito Perfecto
-      - Pretérito Pluscuamperfecto
-      - Pretérito Anterior
-      - Futuro Perfecto
-      - Condicional Compuesto
-  - Subjuntivo
-    - Simple
-      - Presente
-      - Pretérito Imperfecto Ra
-      - Pretérito Imperfecto Se
-      - Futuro Imperfecto
-    - Compuesto
-      - Pretérito Perfecto
-      - Pretérito Pluscuamperfecto Ra
-      - Pretérito Pluscuamperfecto Se
-      - Futuro Perfecto
-  - Imperativo
-    - Afirmativo
-    - Negativo
+  - ResultTable properties
+
+  ```json
+   {
+  "info": {
+   "verb":       string,
+   "model":      string,
+   "region":     string,
+   "pronominal": boolean,
+   "defective":  boolean,
+   "ortho?":     string,
+   "highlight?": boolean
+  },
+  "conjugation": {
+   "Impersonal": {
+    "Infinitivo": string,
+    "Gerundio":   string,
+    "Participio": string,
+   },
+   "Indicativo": {
+    "Presente":                  [string, string, string, string, string, string],
+    "PreteritoImperfecto":       [string, string, string, string, string, string],
+    "PreteritoIndefinido":       [string, string, string, string, string, string],
+    "FuturoImperfecto":          [string, string, string, string, string, string],
+    "CondicionalSimple":         [string, string, string, string, string, string],
+    "PreteritoPerfecto":         [string, string, string, string, string, string],
+    "PreteritoPluscuamperfecto": [string, string, string, string, string, string],
+    "PreteritoAnterior":         [string, string, string, string, string, string],
+    "FuturoPerfecto":            [string, string, string, string, string, string],
+    "CondicionalCompuesto":      [string, string, string, string, string, string],
+   },
+   "Subjuntivo": {
+    "Presente":                    [string, string, string, string, string, string],
+    "PreteritoImperfectoRa":       [string, string, string, string, string, string],
+    "PreteritoImperfectoSe":       [string, string, string, string, string, string],
+    "FuturoImperfecto":            [string, string, string, string, string, string],
+    "PreteritoPerfecto":           [string, string, string, string, string, string],
+    "PreteritoPluscuamperfectoRa": [string, string, string, string, string, string],
+    "PreteritoPluscuamperfectoSe": [string, string, string, string, string, string],
+    "FuturoPerfecto":              [string, string, string, string, string, string],
+    ]
+   },
+   "Imperativo": {
+    "Afirmativo": [ "-", string, "-", string, string, "-" ],
+    "Negativo":   [ "-", string, "-", string, string, "-" ]
+   }
+  }
+
+  ```
+
+____
+
+### Example output.  NOTE that you'll get an array of these objects
+
+  ```json
+  [
+    {
+     "info": {
+      "verb": "hablar",
+      "model": "hablar",
+      "region": "canarias",
+      "pronominal": false,
+      "defective": false
+     },
+     "conjugation": {
+      "Impersonal": {
+       "Infinitivo": "hablar",
+       "Gerundio": "hablando",
+       "Participio": "hablado"
+      },
+      "Indicativo": {
+       "Presente": [
+        "yo hablo",
+        "tú hablas",
+        "él habla",
+        "nosotros hablamos",
+        "ustedes hablan",
+        "ellos hablan"
+       ],
+       "PreteritoImperfecto": [
+        "yo hablaba",
+        "tú hablabas",
+        "él hablaba",
+        "nosotros hablábamos",
+        .
+        .
+        .
+      },
+      "Imperativo": {
+       "Afirmativo": [
+        "-",
+        "tú habla",
+        "-",
+        "nosotros hablemos",
+        "ustedes hablen",
+        "-"
+       ],
+       "Negativo": [
+        "-",
+        "tú no hables",
+        "-",
+        "nosotros no hablemos",
+        "ustedes no hablen",
+        "-"
+       ]
+      }
+     }
+    },
+    {
+      "info": ...
+    },
+    {
+      "conjugation": ...
+    },
+    {
+    .
+    .
+    .
+   }
+  ]
+
+  ```
 
 - as noted above the conjugate method will return one object (Result[]), which will normally hold multiple ResultTable objects
 
-### Processing the resulting data
+____
+
+### Processing results
 
 - it may be useful to take a look at the info object which holds some interesting facts about the associated ResultTable, for example whether the verb is pronominal or not, the conjugation model used, whether it's defective or now, etc.
 - it is probably a good idea to iterate over the Result[]

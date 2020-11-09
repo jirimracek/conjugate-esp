@@ -1,14 +1,21 @@
 # Spanish verb conjugator
 
+Mon 09 Nov 2020 09:58:41 PM CET, version 2.2.0
+____
+
 [![Matrix Build](https://github.com/jirimracek/conjugate-esp/workflows/Matrix%20Build/badge.svg?branch=master)](https://github.com/jirimracek/conjugate-esp/actions?query=workflow%3A%22Matrix+Build%22)
 [![Coverage Status](https://coveralls.io/repos/github/jirimracek/conjugate-esp/badge.svg?branch=master)](https://coveralls.io/github/jirimracek/conjugate-esp?branch=master)
 ![GitHub](https://img.shields.io/github/license/jirimracek/conjugate-esp)
 
-This project uses templates, pattern matching & logic to conjugate Spanish verbs, there are no lookup tables, no databases, no dependencies.  While the development depends on few external packages, the deployed npm has no dependencies
+Uses templates, pattern matching & logic to conjugate Spanish verbs, there are no lookup tables, no databases, no dependencies.  While the development depends on few external packages, the deployed npm has no dependencies
+____
 
-- Project goals: correct, detailed, complete, independent, fast & small (yes, you can have it all)
+## Goals
+
+- correct, detailed, complete, independent, fast & small (yes, you can have it all)
 - 10567 tested verbs, uses 97 models
-- includes only current, RAE recognized as known &amp; used verbs
+- includes
+  - only current, RAE recognized as known &amp; used verbs
   - regional varieties of castellano, voseo, formal, canarias
   - defectives
   - multiple (dual & triple) conjugations
@@ -17,64 +24,48 @@ This project uses templates, pattern matching & logic to conjugate Spanish verbs
 
 ____
 
-- Version 2.1.2
-- Updated Thu 05 Nov 2020 08:16:11 PM CET
-  - TL;DR
-    - changes concerning pre and past 2010 orthography rules, added info header entry, added tests
-    - minor cleanup before npm publish
-  - see [CHANGELOG](CHANGELOG.md) for details
-  - see [ROADMAP](ROADMAP.md) for future changes and ideas
-  - see [USAGE](USAGE.md) for public interfaces and more info
+### TL;DR
+
+- reverted ts compilerOptions back to "target": "ES2020" and "module": "commonjs"
+- changes concerning pre and past 2010 orthography rules, added info header entry, added tests
+- minor cleanup before npm publish
+- published to npm under tag v2.2.0
 
 ____
 
-- Many thanks to [Estudio Sampere Salamanca, España](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html "Sampere Salamanca")
+### Want to read
+
+- see [CHANGELOG](CHANGELOG.md) for details
+- see [ROADMAP](ROADMAP.md) for future changes and ideas
+- see [USAGE](USAGE.md) for usage, interfaces, return values description, sample output and more
+
+____
+
+### Credits
+
+- Many thanks to [Estudio Sampere Salamanca, España](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html)
   - ***Esther González, Ester García, María Ballesteros*** you're my heroes
 
 ____
 
-## Basic usage, see the repository [USAGE.md file](USAGE.md) for details
+### Compatibility
+
+- browsers
+  - see [caniuse](https://caniuse.com/?search=fromEntries)
+- node.js >= 12.11
+  - uses ES2019 features, namely Object.fromEntries and Array.prototype.flat
+  - see [ECMAScript compatibility](https://kangax.github.io/compat-table/es2016plus/)
+
+____
 
 ### Installation
 
 - clone / download gitHub repository
 - npm i @jirimracek/conjugate-esp
 
-### TypeScript use
-
-```typescript
-    // Uncomment one of the following 2 lines based on install type
-    // import { Conjugator } from  <path to install>                 // locally installed from repository
-    // import { Conjugator } from  '@jirimracek/conjugate-esp';      // npm installed
-    //
-    const cng = new Conjugator();
-    cng.setOrthography('2010');                                   // defaults to '2010'
-    // cng.setOrthography('1999');                                // use 1999 orthography rules
-    /*
-    * main entry points (see below for more details, parameters, return types)
-    * sync:  conjugateSync()
-    * async: conjugate()
-    */
-    const table = cng.conjugateSync('adscribir', 'formal');       // sync, formal, returns Result[] | ErrorType
-    console.log(JSON.stringify(table, null, 1));
-    cng.conjugate('soler', 'voseo')                               // async, voseo, returns Promise<Result[] | ErrorType>
-      .then(table => console.log(JSON.stringify(table, null, 1))) // process correct result
-      .catch(error => console.error(error));                      // catch error
-```
-
-### JavaScript use
-
-```javascript
-    // Uncomment one of the following 2 lines based on install type
-    // const CNG = require('<path to install>/dist');       // localy installed from repository
-    // const CNG = require("@jirimracek/conjugate-esp");    // npm installed
-    const cng = new CNG.Conjugator();
-    // ... same code as TypeScript above
-```
-
 ____
 
-### Returns array of tables or error, see [USAGE](USAGE.md)
+### Modes / Times covered
 
 - Impersonal
   - Infinitivo, Gerundio, Participio
@@ -89,8 +80,7 @@ ____
   - Compuesto
     - Pretérito Perfecto, Pretérito Pluscuamperfecto Ra, Pretérito Pluscuamperfecto Se, Futuro Perfecto
 - Imperativo
-  - Afirmativo
-  - Negativo
+  - Afirmativo, Negativo
 
 ____
 
@@ -224,7 +214,7 @@ ____
 
 ____
 
-## Resources
+### Resources Used
 
 - [Estudio Sampere Salamanca](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html "Sampere Salamanca") - great place to study Spanish
 
