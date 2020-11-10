@@ -1,10 +1,10 @@
 # Spanish verb conjugator
 
-Mon 09 Nov 2020 09:58:41 PM CET, version 2.2.0
+Tue 10 Nov 2020 12:01:15 PM CET, version 2.2.1
 ____
 
-[![Matrix Build](https://github.com/jirimracek/conjugate-esp/workflows/Matrix%20Build/badge.svg?branch=master)](https://github.com/jirimracek/conjugate-esp/actions?query=workflow%3A%22Matrix+Build%22)
-[![Coverage Status](https://coveralls.io/repos/github/jirimracek/conjugate-esp/badge.svg?branch=master)](https://coveralls.io/github/jirimracek/conjugate-esp?branch=master)
+![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/jirimracek/conjugate-esp/badge.svg?branch=main)](https://coveralls.io/github/jirimracek/conjugate-esp?branch=main)
 ![GitHub](https://img.shields.io/github/license/jirimracek/conjugate-esp)
 
 Uses templates, pattern matching & logic to conjugate Spanish verbs, there are no lookup tables, no databases, no dependencies.  While the development depends on few external packages, the deployed npm has no dependencies
@@ -26,10 +26,10 @@ ____
 
 ### TL;DR
 
-- reverted ts compilerOptions back to "target": "ES2020" and "module": "commonjs"
-- changes concerning pre and past 2010 orthography rules, added info header entry, added tests
-- minor cleanup before npm publish
-- published to npm under tag v2.2.0
+- new in 2.2.x
+  - pre 1999, 1999-2010, post 2010 orthography rules
+  - new methods *setOrthography(), getOrthography()*
+  - new info header entry
 
 ____
 
@@ -65,7 +65,7 @@ ____
 
 ____
 
-### Modes / Times covered
+### Modes / Times include rarely employed *Indicativo Pretérito Anterior &amp; Subjuntivo Futuro Perfecto / Imperfecto*
 
 - Impersonal
   - Infinitivo, Gerundio, Participio
@@ -73,12 +73,12 @@ ____
   - Simple
     - Presente, Pretérito Imperfecto, Pretérito Indefinido, Futuro Imperfecto, Condicional Simple
   - Compuesto
-    - Pretérito Perfecto, Pretérito Pluscuamperfecto, Pretérito Anterior, Futuro Perfecto, Condicional Compuesto
+    - Pretérito Perfecto, Pretérito Pluscuamperfecto, *Pretérito Anterior*, Futuro Perfecto, Condicional Compuesto
 - Subjuntivo
   - Simple
-    - Presente, Pretérito Imperfecto Ra, Pretérito Imperfecto Se, Futuro Imperfecto
+    - Presente, Pretérito Imperfecto Ra, Pretérito Imperfecto Se, *Futuro Imperfecto*
   - Compuesto
-    - Pretérito Perfecto, Pretérito Pluscuamperfecto Ra, Pretérito Pluscuamperfecto Se, Futuro Perfecto
+    - Pretérito Perfecto, Pretérito Pluscuamperfecto Ra, Pretérito Pluscuamperfecto Se, *Futuro Perfecto*
 - Imperativo
   - Afirmativo, Negativo
 
