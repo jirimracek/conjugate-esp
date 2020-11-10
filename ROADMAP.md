@@ -1,20 +1,21 @@
 # Things to do, wishlists, plans, crimes committed, etc
 
-Mon 09 Nov 2020 09:58:41 PM CET, version 2.2.0
+Tue 10 Nov 2020 12:01:15 PM CET, version 2.2.1
 ____
 
-- Mon 09 Nov 2020 09:58:41 PM CET, 2.2.0
+- Tue 10 Nov 2020 12:01:15 PM CET, 2.2.1
   - I should probably obsolete / delete some old (and some broken) npm packages
   - We have
-    - 2.1.1  Thu 05 Nov 2020 07:38:28 PM CET, changes concerning pre and past 2010 orthography rules, it's **broken since 1.2.1**
-    - 1.2.1, Tue 27 Oct 2020 06:07:18 PM CET, dev packages upgrade, TypeScript 4.0 updates - Bad Idea&trade;, **broken**
-    - 1.2.0, Sun 07 Jun 2020 06:30:11 PM CEST, includes only RAE known/used verbs, this release removed 2248 unknown/unused verbs
-    - 1.1.2, Fri 05 Jun 2020 02:20:07 PM CEST, last version that includes verbs deemed unused or unknown by the RAE
-    - 1.1.1, Fri 29 May 2020 11:57:28 AM CEST
-    - 1.1.0, Tue 19 May 2020 10:36:45 AM CEST
-    - 1.0.2, Mon 04 May 2020 02:55:30 PM CEST
-    - 1.0.1, Fri 01 May 2020 09:55:42 PM CEST
-    - 1.0.0, Fri 01 May 2020 07:29:54 PM CEST
+    - 2.2.0  Mon 09 Nov 2020 09:58:41 PM CET,  tag v2.2.0, **keep**, stable, first stable that includes 1999 & 2010 ortho
+    - 2.1.1  Thu 05 Nov 2020 07:38:28 PM CET,  tag v2.1.1, **obsolete, broken**, changes concerning pre and past 2010 orthography rules
+    - 1.2.1, Tue 27 Oct 2020 06:07:18 PM CET,  tag v1.2.1, **obsolete, broken**, dev packages upgrade, TypeScript 4.0 updates - Bad Idea&trade;
+    - 1.2.0, Sun 07 Jun 2020 06:30:11 PM CEST, tag v1.2.0, **keep**, first &amp; last 1.2.x, includes only RAE known/used verbs
+    - 1.1.2, Fri 05 Jun 2020 02:20:07 PM CEST, tag v1.1.2, **keep**, stable, final 1.1.x, last version that includes verbs deemed unused or unknown by the RAE
+    - 1.1.1, Fri 29 May 2020 11:57:28 AM CEST, tag v1.1.1, **obsolete**, stable, not needed
+    - 1.1.0, Tue 19 May 2020 10:36:45 AM CEST, tag v1.1.0, **obsolete**, stable, not needed
+    - 1.0.2, Mon 04 May 2020 02:55:30 PM CEST, tag v1.0.2, **keep**, stable, final 1.0.x
+    - 1.0.1, Fri 01 May 2020 09:55:42 PM CEST, tag v1.0.1, **obsolete**, stable, initial version, not needed
+    - 1.0.0, Fri 01 May 2020 07:29:54 PM CEST   - initial version, **obsolete** not synched with repository
   - Should probably just leave 1.1.2, 1.2.0 and the upcoming 2.2.0 and nuke the rest
 
 - Tue 27 Oct 2020 07:56:09 PM CET, version 1.2.2
