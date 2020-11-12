@@ -19,25 +19,31 @@ export class ModelFactory {
         // empty
     }
 
-    public getModel(verb: string, modelName: string, type: PronominalKey, region: Regions, attributes: ModelAttributes): BaseModel | undefined {
-        if (ar[modelName as ArKey]) {
-            return new ar[modelName as ArKey](verb, type, region, attributes);
-        } else if (er[modelName as ErKey]) {
-            return new er[modelName as ErKey](verb, type, region, attributes);
-        } else if (ir[modelName as IrKey]) {
-            return new ir[modelName as IrKey](verb, type, region, attributes);
-        }
-        return undefined;
-    }
-
-    // Return base model stripped of attributes, used for doing a comparison to highlight
-    public getSimulatedModel(verb: string, modelName: string, type: PronominalKey, region: Regions): BaseModel | undefined {
-        if (ar[modelName as ArKey]) {
-            return this.getModel(verb, 'hablar', type, region, {});
-        } else if (er[modelName as ErKey]) {
-            return this.getModel(verb, 'temer', type, region, {});
-        } else if (ir[modelName as IrKey]) {
-            return new ir[modelName as IrKey](verb, type, region, {});
+    /**
+     * Get verb appropriate model unless the sim flag is true
+     * @param verb 
+     * @param model 
+     * @param type 
+     * @param region 
+     * @param attrs 
+     * @param sim - simulate basemodel (regular) conjugation, return regular model
+     */
+    public getModel(verb: string, model: string, type: PronominalKey, region: Regions, attrs: ModelAttributes, sim = false): BaseModel | undefined {
+        if (ar[model as ArKey]) {
+            if (sim) {
+                return new ar['hablar'](verb, type, region, {});
+            }
+            return new ar[model as ArKey](verb, type, region, attrs);
+        } else if (er[model as ErKey]) {
+            if (sim) {
+                return new er['temer'](verb, type, region, {});
+            }
+            return new er[model as ErKey](verb, type, region, attrs);
+        } else if (ir[model as IrKey]) {
+            if (sim) {
+                return new ir['partir'](verb, type, region, {});
+            }
+            return new ir[model as IrKey](verb, type, region, attrs);
         }
         return undefined;
     }

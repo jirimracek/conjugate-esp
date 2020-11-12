@@ -182,7 +182,7 @@ export class Conjugator {
 
                     info.highlight = this.tags;                // note it in info - de we really need to do this???
                     // get conjugation as if the verb was conjugated per regular model (hablar, temer, partir)
-                    const simulatedModel = this.factory.getSimulatedModel(verb, modelName, pronominalKey, region);
+                    const simulatedModel = this.factory.getModel(verb, modelName, pronominalKey, region, {}, true);
                     const simulated = simulatedModel?.getConjugation();
                     /* istanbul ignore else */
                     if (simulated && conjugated) {

@@ -227,8 +227,8 @@ describe('Model Test Sync', () => {
         expect(testFactory.getModel('hablar', 'temer', 'P', 'castellano', {})).toBeDefined();
 
         // simulated models
-        expect(testFactory.getSimulatedModel('serenar', 'serenar', 'N', 'castellano')).toBeUndefined();
-        expect(testFactory.getSimulatedModel('hablar', 'invalid', 'N', 'canarias')).toBeUndefined();
+        expect(testFactory.getModel('serenar', 'serenar', 'N', 'castellano',{}, true)).toBeUndefined();
+        expect(testFactory.getModel('hablar', 'invalid', 'N', 'canarias', {}, true)).toBeUndefined();
     });
 
     test('Sync verb and model count', async () => {
