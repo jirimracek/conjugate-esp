@@ -5,7 +5,7 @@ name: Build Matrix
 
 on:
   push:
-    branches: [ main ]
+    branches: [ highlight ]
   pull_request:
     branches: [ main ]
 
