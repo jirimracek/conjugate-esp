@@ -5,9 +5,9 @@ name: Build Matrix
 
 on:
   push:
-    branches: [ highlight ]
-  pull_request:
     branches: [ main ]
+  pull_request:
+    branches: [ highlight ]
 
 jobs:
   build:
