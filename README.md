@@ -1,6 +1,6 @@
 # Spanish verb conjugator
 
-Tue 10 Nov 2020 12:01:15 PM CET, version 2.2.1
+Thu 12 Nov 2020 07:09:14 PM CET, version 2.2.1-experimental
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
@@ -27,6 +27,7 @@ ____
 ### TL;DR
 
 - new in 2.2.x
+  - preliminary: highlighting
   - pre 1999, 1999-2010, post 2010 orthography rules
   - new methods *setOrthography(), getOrthography()*
   - new info header entry
@@ -65,7 +66,9 @@ ____
 
 ____
 
-### Modes / Times include rarely employed *Indicativo Pretérito Anterior &amp; Subjuntivo Futuro Perfecto / Imperfecto*
+### Modes / Times
+
+(include rarely employed *Indicativo Pretérito Anterior &amp; Subjuntivo Futuro Perfecto / Imperfecto*)
 
 - Impersonal
   - Infinitivo, Gerundio, Participio
@@ -91,34 +94,34 @@ ____
 
 | AR            | |
 |---------------|:-----------:|
-| **hablar** | &#x2714; |
-| ***acertar*** | &#x2714; |
-| ***actuar*** | &#x2714; |
-| ***aguar*** | &#x2714; |
-| ***ahincar*** | &#x2714; |
-| ***aislar*** | &#x2714; |
-| ***andar*** | &#x2714; |
-| ***aunar*** | &#x2714; |
-| ***avergonzar*** | &#x2714; |
-| ***cabrahigar*** | &#x2714; |
-| ***colgar*** | &#x2714; |
-| ***contar*** | &#x2714; |
-| ***dar*** | &#x2714; |
-| ***desdar*** | &#x2714; |
-| ***desosar*** | &#x2714; |
-| ***engorar*** | &#x2714; |
-| ***enraizar*** | &#x2714; |
-| ***errar*** | &#x2714; |
-| ***estar*** | &#x2714; |
-| ***forzar*** | &#x2714; |
-| ***jugar*** | &#x2714; |
-| ***pagar*** | &#x2714; |
-| ***regar*** | &#x2714; |
-| ***rozar*** | &#x2714; |
-| ***sacar*** | &#x2714; |
-| ***tropezar*** | &#x2714; |
-| ***vaciar*** | &#x2714; |
-| ***volcar*** | &#x2714; |
+| ***hablar*** | &#x2714; |
+| *acertar* | &#x2714; |
+| *actuar* | &#x2714; |
+| *aguar* | &#x2714; |
+| *ahincar* | &#x2714; |
+| *aislar* | &#x2714; |
+| *andar* | &#x2714; |
+| *aunar* | &#x2714; |
+| *avergonzar* | &#x2714; |
+| *cabrahigar* | &#x2714; |
+| *colgar* | &#x2714; |
+| *contar* | &#x2714; |
+| *dar* | &#x2714; |
+| *desdar* | &#x2714; |
+| *desosar* | &#x2714; |
+| *engorar* | &#x2714; |
+| *enraizar* | &#x2714; |
+| *errar* | &#x2714; |
+| *estar* | &#x2714; |
+| *forzar* | &#x2714; |
+| *jugar* | &#x2714; |
+| *pagar* | &#x2714; |
+| *regar* | &#x2714; |
+| *rozar* | &#x2714; |
+| *sacar* | &#x2714; |
+| *tropezar* | &#x2714; |
+| *vaciar* | &#x2714; |
+| *volcar* | &#x2714; |
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
@@ -132,38 +135,38 @@ ____
 
 | ER            | |
 |---------------|:-----------:|
-| **temer** | &#x2714; |
-| ***caber*** | &#x2714; |
-| ***caer*** | &#x2714; |
-| ***coger*** | &#x2714; |
-| ***corroer*** | &#x2714; |
-| ***creer*** | &#x2714; |
-| ***haber*** | &#x2714; |
-| ***hacer*** | &#x2714; |
-| ***mover*** | &#x2714; |
-| ***nacer*** | &#x2714; |
-| ***oler*** | &#x2714; |
-| ***placer*** | &#x2714; |
-| ***poder*** | &#x2714; |
-| ***poner*** | &#x2714; |
-| ***querer*** | &#x2714; |
-| ***raer*** | &#x2714; |
-| ***rehacer*** | &#x2714; |
-| ***responder*** | &#x2714; |
-| ***rever*** | &#x2714; |
-| ***romper*** | &#x2714; |
-| ***saber*** | &#x2714; |
-| ***ser*** | &#x2714; |
-| ***tañer*** | &#x2714; |
-| ***tender*** | &#x2714; |
-| ***tener*** | &#x2714; |
-| ***torcer*** | &#x2714; |
-| ***traer*** | &#x2714; |
-| ***valer*** | &#x2714; |
-| ***vencer*** | &#x2714; |
-| ***ver*** | &#x2714; |
-| ***volver*** | &#x2714; |
-| ***yacer*** | &#x2714; |
+| ***temer*** | &#x2714; |
+| *caber* | &#x2714; |
+| *caer* | &#x2714; |
+| *coger* | &#x2714; |
+| *corroer* | &#x2714; |
+| *creer* | &#x2714; |
+| *haber* | &#x2714; |
+| *hacer* | &#x2714; |
+| *mover* | &#x2714; |
+| *nacer* | &#x2714; |
+| *oler* | &#x2714; |
+| *placer* | &#x2714; |
+| *poder* | &#x2714; |
+| *poner* | &#x2714; |
+| *querer* | &#x2714; |
+| *raer* | &#x2714; |
+| *rehacer* | &#x2714; |
+| *responder* | &#x2714; |
+| *rever* | &#x2714; |
+| *romper* | &#x2714; |
+| *saber* | &#x2714; |
+| *ser* | &#x2714; |
+| *tañer* | &#x2714; |
+| *tender* | &#x2714; |
+| *tener* | &#x2714; |
+| *torcer* | &#x2714; |
+| *traer* | &#x2714; |
+| *valer* | &#x2714; |
+| *vencer* | &#x2714; |
+| *ver* | &#x2714; |
+| *volver* | &#x2714; |
+| *yacer* | &#x2714; |
 |&#x2796;||
 |&#x2796;||
 |&#x2796;||
@@ -173,43 +176,43 @@ ____
 
 | IR            | |
 |---------------|:-----------:|
-| **partir** | &#x2714; |
-| ***abrir*** | &#x2714; |
-| ***adquirir*** | &#x2714; |
-| ***argüir*** | &#x2714; |
-| ***asir*** | &#x2714; |
-| ***balbucir*** | &#x2714; |
-| ***bendecir*** | &#x2714; |
-| ***ceñir*** | &#x2714; |
-| ***cohibir*** | &#x2714; |
-| ***conducir*** | &#x2714; |
-| ***corregir*** | &#x2714; |
-| ***decir*** | &#x2714; |
-| ***delinquir*** | &#x2714; |
-| ***dirigir*** | &#x2714; |
-| ***discernir*** | &#x2714; |
-| ***distinguir*** | &#x2714; |
-| ***dormir*** | &#x2714; |
-| ***embaír*** | &#x2714; |
-| ***erguir*** | &#x2714; |
-| ***escribir*** | &#x2714; |
-| ***huir*** | &#x2714; |
-| ***ir*** | &#x2714; |
-| ***lucir*** | &#x2714; |
-| ***oír*** | &#x2714; |
-| ***plañir*** | &#x2714; |
-| ***podrir*** | &#x2714; |
-| ***pudrir*** | &#x2714; |
-| ***rehenchir*** | &#x2714; |
-| ***rehuir*** | &#x2714; |
-| ***reunir*** | &#x2714; |
-| ***reír*** | &#x2714; |
-| ***salir*** | &#x2714; |
-| ***seguir*** | &#x2714; |
-| ***sentir*** | &#x2714; |
-| ***servir*** | &#x2714; |
-| ***venir*** | &#x2714; |
-| ***zurcir*** | &#x2714; |
+| ***partir*** | &#x2714; |
+| *abrir* | &#x2714; |
+| *adquirir* | &#x2714; |
+| *argüir* | &#x2714; |
+| *asir* | &#x2714; |
+| *balbucir* | &#x2714; |
+| *bendecir* | &#x2714; |
+| *ceñir* | &#x2714; |
+| *cohibir* | &#x2714; |
+| *conducir* | &#x2714; |
+| *corregir* | &#x2714; |
+| *decir* | &#x2714; |
+| *delinquir* | &#x2714; |
+| *dirigir* | &#x2714; |
+| *discernir* | &#x2714; |
+| *distinguir* | &#x2714; |
+| *dormir* | &#x2714; |
+| *embaír* | &#x2714; |
+| *erguir* | &#x2714; |
+| *escribir* | &#x2714; |
+| *huir* | &#x2714; |
+| *ir* | &#x2714; |
+| *lucir* | &#x2714; |
+| *oír* | &#x2714; |
+| *plañir* | &#x2714; |
+| *podrir* | &#x2714; |
+| *pudrir* | &#x2714; |
+| *rehenchir* | &#x2714; |
+| *rehuir* | &#x2714; |
+| *reunir* | &#x2714; |
+| *reír* | &#x2714; |
+| *salir* | &#x2714; |
+| *seguir* | &#x2714; |
+| *sentir* | &#x2714; |
+| *servir* | &#x2714; |
+| *venir* | &#x2714; |
+| *zurcir* | &#x2714; |
 </td></tr> </table>
 
 ____

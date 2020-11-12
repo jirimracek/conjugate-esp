@@ -1,6 +1,6 @@
 # Usage details
 
-Tue 10 Nov 2020 12:01:15 PM CET, version 2.2.1
+Thu 12 Nov 2020 07:09:14 PM CET, version 2.2.1-experimental
 ____
 
 ## Installation
@@ -54,7 +54,7 @@ ____
 ### Public interfaces
 
 - **Conjugator**
-  - *constructor(ortho: Orthography = '2010', highlight: Highlight = false)*
+  - *constructor(ortho: Orthography = '2010', highlight: HighlightTags = { start: '', end: '', deleted: '' })*
     - parameter *ortho* - possible values '1999' | '2010', defaults to '2010'
       - purpose: determine the result based on different orthography rules
         - 2010 - use strict 2010 rules
@@ -78,15 +78,52 @@ ____
         - *Result::conjugation* object will contain
           - with *constructor(ortho: Orthography = '1999')* both pre 2010 and post 2010 conjugations (*rio* and *rió*) arrays are included
           - with *constructor(ortho: Orthography = '2010')* only post 2010 conjugation (*rio*)
-    - parameter *highlight* - possible values true | false, defaults to false
+    - parameter *highlight* - optional, properties default to empty strings
       - purpose: highlight the differences between irregular conjugation and (what would have been) a regular one
-        - ***NOTE*** not implemented yet, has no effect
+        - the resulting conjugations will be annotated by the *start*, *end* and *deleted* strings (tags)
+        - highlighting only applies to irregular verbs, it makes no sense to annotate regular conjugation with changes, there are none
+        - the properties are optional, if at least one of them is non-empty string, it will happen and it will be noted in the info
+        - Examples: *setHighlightTags({start:., end:-, deleted:\*})*, tener conjugation
+          - if tener was regular, conjugated as temer, it would conjugate like yo teno, tú tenes, el tene
+            - what you see below are the changes required to go from regular to irregular conjugation
+              - teno &#8594; tengo        // insert g
+              - tenes &#8594; tienes      // insert i
+              <pre>
+                "Indicativo": {
+                  "Presente": [
+                    "yo ten.g-o",      // the pair .- annotates the start and end of changes
+                    "tú t.i-enes",
+                    .
+                    .
+              </pre>
+            - the *deleted* string will be inserted to indicate deletion (if this is desired)
+              - again, if tener was regular , the conjugation below would be yo tení
+              - tení &#8594; tuve        // insert uv, delete ní
+              <pre>  
+                    "PreteritoIndefinido": [
+                      "yo t.uv-e.*-",   // note the indicated deletion .*- at the end
+                        .
+                        .
+              </pre>
+            - else if the *deleted* is not specified as in setHighlightTags (start: '.', end: '-')
+              <pre>
+                    "PreteritoIndefinido": [
+                      "yo t.uv-e",   // note the missing deletion ".*-" at the end
+              </pre>
+            - there will be multiple changes when required, verb colgar
+              <pre>
+                  "Subjuntivo": {
+                    "Presente": [
+                      "yo c.ue-lg.u-e",
+                      "tú c.ue-lg.u-es",
+                      "él c.ue-lg.u-e",
+              </pre>
 
   - *public setOrthography (ortho: Orthography): void* - possible values *'1999'|'2010'*
   - *public getOrthography (): Orthography*
 
-  - *public setHighlight (highlight: Highlight): void* - possible values *true | false*, ***NOTE*** not implemented yet, has no effect
-  - *public getHighlight(): Highlight*
+  - *public setHighlightTags (highlight: HighlightTags): void* - { start: string, end: string, deleted: string }
+  - *public getHighlightTags(): HighlightTags*
   
   - *public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | ErrorType*
     - sync method, returns a Result[] of conjugations or ErrorType object
@@ -148,27 +185,26 @@ ____
     "Participio": string,
    },
    "Indicativo": {
-    "Presente":                  [string, string, string, string, string, string],
-    "PreteritoImperfecto":       [string, string, string, string, string, string],
-    "PreteritoIndefinido":       [string, string, string, string, string, string],
-    "FuturoImperfecto":          [string, string, string, string, string, string],
-    "CondicionalSimple":         [string, string, string, string, string, string],
-    "PreteritoPerfecto":         [string, string, string, string, string, string],
-    "PreteritoPluscuamperfecto": [string, string, string, string, string, string],
-    "PreteritoAnterior":         [string, string, string, string, string, string],
-    "FuturoPerfecto":            [string, string, string, string, string, string],
-    "CondicionalCompuesto":      [string, string, string, string, string, string],
+    "Presente":                  string[6],
+    "PreteritoImperfecto":       string[6],
+    "PreteritoIndefinido":       string[6],
+    "FuturoImperfecto":          string[6],
+    "CondicionalSimple":         string[6],
+    "PreteritoPerfecto":         string[6],
+    "PreteritoPluscuamperfecto": string[6],
+    "PreteritoAnterior":         string[6],
+    "FuturoPerfecto":            string[6],
+    "CondicionalCompuesto":      string[6],
    },
    "Subjuntivo": {
-    "Presente":                    [string, string, string, string, string, string],
-    "PreteritoImperfectoRa":       [string, string, string, string, string, string],
-    "PreteritoImperfectoSe":       [string, string, string, string, string, string],
-    "FuturoImperfecto":            [string, string, string, string, string, string],
-    "PreteritoPerfecto":           [string, string, string, string, string, string],
-    "PreteritoPluscuamperfectoRa": [string, string, string, string, string, string],
-    "PreteritoPluscuamperfectoSe": [string, string, string, string, string, string],
-    "FuturoPerfecto":              [string, string, string, string, string, string],
-    ]
+    "Presente":                    string[6],
+    "PreteritoImperfectoRa":       string[6],
+    "PreteritoImperfectoSe":       string[6],
+    "FuturoImperfecto":            string[6],
+    "PreteritoPerfecto":           string[6],
+    "PreteritoPluscuamperfectoRa": string[6],
+    "PreteritoPluscuamperfectoSe": string[6],
+    "FuturoPerfecto":              string[6],
    },
    "Imperativo": {
     "Afirmativo": [ "-", string, "-", string, string, "-" ],

@@ -4,7 +4,7 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { PronominalKey, Regions, IndicativoSubSimpleKey, SubjuntivoSubSimpleKey, } from './types';
+import { PronominalKey, Regions, IndicativoSubSimpleKey, SubjuntivoSubSimpleKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubCompKey, IndicativoSubKey, SubjuntivoSubCompKey, SubjuntivoSubKey, } from './types';
 import { clearAccents, esdrujula, strongify } from './stringutils';
 
 // Attributes
@@ -33,18 +33,7 @@ type CompSubTable = { [modekey: string]: { [timekey: string]: string[] } };
 type PronounsTable = { [key in PronominalKey]: { [key in Regions]: string[] } };
 
 type IndicativoSubjuntivoModeKey = 'Indicativo' | 'Subjuntivo';
-type ImperativoSubKey = 'Afirmativo' | 'Negativo';
-type ImpersonalSubKey = 'Infinitivo' | 'Gerundio' | 'Participio';
 
-// Compuestos keys
-type IndicativoSubCompKey = 'PreteritoPerfecto' | 'PreteritoPluscuamperfecto'
-    | 'PreteritoAnterior' | 'FuturoPerfecto' | 'CondicionalCompuesto';
-type SubjuntivoSubCompKey = 'PreteritoPerfecto' | 'PreteritoPluscuamperfectoRa'
-    | 'PreteritoPluscuamperfectoSe' | 'FuturoPerfecto';
-
-// Combined simple and compuestos
-type IndicativoSubKey = IndicativoSubSimpleKey | IndicativoSubCompKey;
-type SubjuntivoSubKey = SubjuntivoSubSimpleKey | SubjuntivoSubCompKey;
 
 
 export type DesinenceTable = {

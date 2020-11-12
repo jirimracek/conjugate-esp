@@ -6,11 +6,14 @@
 */
 import definitions from '../data/definitions.json';
 import { ModelFactory } from './factory';
-import { Regions, PronominalKey, Orthography, Highlight } from './types';
+import { Regions, PronominalKey, Orthography, AnyModeKey, ImpersonalSubKey, ImperativoSubKey, IndicativoSubKey, SubjuntivoSubKey, HighlightTags } from './types';
 import { ModelAttributes, ResultTable, Model, ModelWithAttributes } from './basemodel';
+import { tagDiffs } from './stringutils';
 
 export { Regions, PronominalKey, ResultTable };
 export type VerbModelData = { [key in PronominalKey]?: Model[] | Model };
+export type VerbModelTemplates = { [verbname: string]: VerbModelData };
+
 export type Info = {
     verb: string,
     model: string,
@@ -18,7 +21,7 @@ export type Info = {
     pronominal: boolean,
     defective: boolean,
     ortho?: string,
-    highlight?: boolean
+    highlight?: HighlightTags
 };
 
 export type ErrorType = { ERROR: { message: string } };
@@ -26,7 +29,6 @@ export type Result = {
     info: Info,
     conjugation: ResultTable
 };
-export type VerbModelTemplates = { [verbname: string]: VerbModelData };
 
 export const errorMsg = {
     unknownVerb: 'Input error, unknown verb VERB',
@@ -52,33 +54,44 @@ export const errorMsg = {
 export class Conjugator {
     protected templates: VerbModelTemplates = definitions;
     protected factory: ModelFactory = new ModelFactory();
-    private orthography: Orthography;
-    private highlight: Highlight;
+    private orthography: Orthography = '2010';
+    private tags: HighlightTags = { start: '', end: '', deleted: '' };
 
     /**
      * 
      * @param ortho optional, 1999|2010, default 2010 - use 2010 orthography 
-     * @param highlight optional, true|false, insert highlight chars, default false
+     * @param highlight optional, defaults to nothing, use a single character or strings ({start: <startTag>, end: </startTag>, deleted: string})
      */
-    constructor(ortho: Orthography = '2010', highlight: Highlight = false) {
-        this.orthography = ortho;
-        this.highlight = highlight;
+    constructor(ortho: Orthography = '2010', highlight: HighlightTags = { start: '', end: '', deleted: '' }) {
+        this.setOrthography(ortho);
+        this.setHighlightTags(highlight);
     }
 
-    public setOrthography (ortho: Orthography): void {
-        this.orthography = ortho;
+    public setOrthography(ortho: Orthography): void {
+        if (ortho === '1999' || ortho === '2010') {
+            this.orthography = ortho;
+        } else {
+            console.warn(`Ignored: orthography parameter <${ortho}>, needs to be one of '1999' or '2010'`);
+        }
     }
 
-    public getOrthography (): Orthography {
+    public getOrthography(): Orthography {
         return this.orthography;
     }
 
-    public setHighlight (highlight: Highlight): void {
-        this.highlight = highlight;
+    public setHighlightTags(highlight: HighlightTags): void {
+        if (typeof highlight.start !== 'undefined' &&
+            typeof highlight.end !== 'undefined' &&
+            typeof highlight.deleted !== 'undefined') {
+            this.tags = highlight;
+        } else {
+            console.warn(`Ignored highlight parameter <${highlight}>, ` +
+                'needs to be of form { start: \'string\', end: \'string\', deleted: \'string\'}');
+        }
     }
 
-    public getHighlight(): Highlight {
-        return this.highlight;
+    public getHighlightTags(): HighlightTags {
+        return this.tags;
     }
 
     /**
@@ -90,6 +103,7 @@ export class Conjugator {
      */
     public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | ErrorType {
         const result: Result[] = [];
+
         try {
             if (!this.templates) {
                 throw new Error(errorMsg.noTemplates);
@@ -120,7 +134,7 @@ export class Conjugator {
                             (Object.entries(model as ModelWithAttributes)).flat() as [string, ModelAttributes];
                         // if ortho is not 2010 or M is undefined or M is defined and not false 
                         //   then use this model, otherwise skip it.  See types.ts for more info
-                        if (this.orthography !== '2010' || typeof attributes['M'] === 'undefined' || 
+                        if (this.orthography !== '2010' || typeof attributes['M'] === 'undefined' ||
                             attributes['M'] !== 'false') {
                             modelTemplates.push([name as string, pronominalKey, region, attributes]);
                             // } else {
@@ -150,19 +164,35 @@ export class Conjugator {
 
                 if (typeof attributes['M'] !== 'undefined') {
                     if (attributes.M === 'true') {
+                        // this indicates the ortho of the resulting column
+                        // if this.ortho === 1999, we get both columns, 2010 as well as 1999.
+                        // No, you can't just assign info.ortho = this.ortho
                         info.ortho = '2010';
                     } else {
                         info.ortho = '1999';
                     }
                 }
 
-                if (this.highlight) {
-                    info.highlight = this.highlight;
+                // highlight only if irregular verb and
+                // at least one of the tags is defined
+                // The idea: simulate conjugation based on a regular model, then resolve the differences
+                const conjugated = model.getConjugation();
+                if (!['hablar', 'temer', 'partir'].includes(modelName) && // Mental note - don't change models anymore
+                    ('' !== this.tags.start || '' !== this.tags.end || '' !== this.tags.deleted)) {
+
+                    info.highlight = this.tags;                // note it in info - de we really need to do this???
+                    // get conjugation as if the verb was conjugated per regular model (hablar, temer, partir)
+                    const simulatedModel = this.factory.getSimulatedModel(verb, modelName, pronominalKey, region);
+                    const simulated = simulatedModel?.getConjugation();
+                    /* istanbul ignore else */
+                    if (simulated && conjugated) {
+                        this.insertTags(simulated, conjugated);
+                    }
                 }
 
                 result.push({
                     info,
-                    conjugation: model.getConjugation()
+                    conjugation: conjugated
                 });
             });
             return result;
@@ -241,4 +271,49 @@ export class Conjugator {
             }
         });
     }
+
+    /**
+     * compare each line of simulated and real conjugation, markup differences in real conjugation with start/end tags
+     */
+    private insertTags(simulated: ResultTable, conjugated: ResultTable): void {
+        // Iterate over conjugations, send the simulated and real lines to be compared and highlighted
+        Object.keys(conjugated).forEach(key => {
+            const modeKey = key as AnyModeKey;
+            Object.keys(conjugated[modeKey]).forEach(subKey => {
+                switch (modeKey) {
+                    case 'Impersonal': {
+                        const modeSubKey = subKey as ImpersonalSubKey;
+                        conjugated[modeKey][modeSubKey] =
+                            tagDiffs(simulated[modeKey][modeSubKey], conjugated[modeKey][modeSubKey], this.tags);
+                    }
+                        break;
+                    case 'Indicativo': {
+                        const modeSubKey = subKey as IndicativoSubKey;
+                        conjugated[modeKey][modeSubKey] =
+                            conjugated[modeKey][modeSubKey].map((conjugatedLine, index) => {
+                                return tagDiffs(simulated[modeKey][modeSubKey][index], conjugatedLine, this.tags);
+                            });
+                    }
+                        break;
+                    case 'Subjuntivo': {
+                        const modeSubKey = subKey as SubjuntivoSubKey;
+                        conjugated[modeKey][modeSubKey] =
+                            conjugated[modeKey][modeSubKey].map((conjugatedLine, index) => {
+                                return tagDiffs(simulated[modeKey][modeSubKey][index], conjugatedLine, this.tags);
+                            });
+                    }
+                        break;
+                    case 'Imperativo': {
+                        const modeSubKey = subKey as ImperativoSubKey;
+                        conjugated[modeKey][modeSubKey] =
+                            conjugated[modeKey][modeSubKey].map((conjugatedLine, index) => {
+                                return tagDiffs(simulated[modeKey][modeSubKey][index], conjugatedLine, this.tags);
+                            });
+                    }
+                        break;
+                }
+            });
+        });
+    }
+
 }

@@ -4,13 +4,28 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
+export type ImpersonalKey = 'Impersonal';
 export type IndicativoSubSimpleKey = 'Presente' | 'PreteritoImperfecto' | 'PreteritoIndefinido' | 'FuturoImperfecto' | 'CondicionalSimple';
 export type SubjuntivoSubSimpleKey = 'Presente'| 'PreteritoImperfectoRa'| 'PreteritoImperfectoSe'| 'FuturoImperfecto';
 export type PronominalKey = 'N' | 'P';     
 export type Regions = 'castellano' | 'voseo' | 'canarias' | 'formal';
 export type Orthography = '1999' | '2010';
 export type Highlight = true | false;
+export type HighlightTags = { start: string, end: string, deleted: string };   // start, end tags, insert 'delete' to indicated deleted portion
 
+export type ImperativoSubKey = 'Afirmativo' | 'Negativo';
+export type ImpersonalSubKey = 'Infinitivo' | 'Gerundio' | 'Participio';
+// Compuestos keys
+export type IndicativoSubCompKey = 'PreteritoPerfecto' | 'PreteritoPluscuamperfecto'
+    | 'PreteritoAnterior' | 'FuturoPerfecto' | 'CondicionalCompuesto';
+export type SubjuntivoSubCompKey = 'PreteritoPerfecto' | 'PreteritoPluscuamperfectoRa'
+    | 'PreteritoPluscuamperfectoSe' | 'FuturoPerfecto';
+// Combined simple and compuestos
+export type IndicativoSubKey = IndicativoSubSimpleKey | IndicativoSubCompKey;
+export type SubjuntivoSubKey = SubjuntivoSubSimpleKey | SubjuntivoSubCompKey;
+
+export type AnyModeKey = 'Impersonal' | 'Indicativo' | 'Subjuntivo' | 'Imperativo';
+export type AnyModeSubKey = ImpersonalSubKey | IndicativoSubKey | SubjuntivoSubKey | ImperativoSubKey;
 /*  The M attribute ([M]onosyllable) and Orthography cooperation
     the M flag is defined in definitions.json and its meanings in the engine are:
       M=true means use the 2010 orthography (no accent)

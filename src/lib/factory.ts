@@ -30,6 +30,18 @@ export class ModelFactory {
         return undefined;
     }
 
+    // Return base model stripped of attributes, used for doing a comparison to highlight
+    public getSimulatedModel(verb: string, modelName: string, type: PronominalKey, region: Regions): BaseModel | undefined {
+        if (ar[modelName as ArKey]) {
+            return this.getModel(verb, 'hablar', type, region, {});
+        } else if (er[modelName as ErKey]) {
+            return this.getModel(verb, 'temer', type, region, {});
+        } else if (ir[modelName as IrKey]) {
+            return new ir[modelName as IrKey](verb, type, region, {});
+        }
+        return undefined;
+    }
+
     public getModels(): string[] {
         const models: Set<string> = new Set(Object.keys(ar));
         Object.keys(er).forEach(m => models.add(m));

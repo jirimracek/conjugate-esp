@@ -1,9 +1,16 @@
 # Things to do, wishlists, plans, crimes committed, etc
 
-Tue 10 Nov 2020 12:01:15 PM CET, version 2.2.1
+Thu 12 Nov 2020 07:09:14 PM CET, version 2.2.1-experimental
 ____
 
-- Tue 10 Nov 2020 12:01:15 PM CET, 2.2.1
+- Thu 12 Nov 2020 07:09:14 PM CET, version 2.2.1-experimental
+  - every array, every conjugation has the pronominals, which is totally unnecessary, we know what the pronominals should be
+    - drop the pronominals, put just one list in the info object insted of repeating it 20x for each array, I think it's a Good Idea&trade;
+  - internal
+    - reorganize tests
+    - reorganize types, exports, imports - they're kind of scattered all over the place
+
+- Tue 10 Nov 2020 01:33:36 PM CET, 2.2.1
   - I should probably obsolete / delete some old (and some broken) npm packages
   - We have
     - 2.2.0  Mon 09 Nov 2020 09:58:41 PM CET,  tag v2.2.0, **keep**, stable, first stable that includes 1999 & 2010 ortho
@@ -20,7 +27,7 @@ ____
 
 - Tue 27 Oct 2020 07:56:09 PM CET, version 1.2.2
   - (last updated on Thu 05 Nov 2020 08:16:11 PM CET, version 2.1.2)
-  - possible upcoming changes
+  - (done in 2.2.0) possible upcoming changes
     - 1999 &amp; 2010 orthography rules - this concerns monosyllable orthographical changes as per la RAE
       - pre 1999 ***rió*** is the accepted version
       - 1999 through 2010 both ***rió*** and ***rio*** are tolerated

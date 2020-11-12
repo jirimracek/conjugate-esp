@@ -8,16 +8,21 @@
 import { Conjugator } from '../index';
 import { Info, Result, ErrorType, VerbModelData, VerbModelTemplates } from '../lib/conjugator';
 import { ModelFactory } from '../lib/factory';
-import { Regions } from '../lib/types';
+import { AnyModeKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubKey, Regions, SubjuntivoSubKey } from '../lib/types';
 import { errorMsg } from '../lib/conjugator';
+import { Orthography } from '../../dist/lib/types';
+import { HighlightTags } from '../../dist/lib/types';
 
 const VERB_COUNT = 10567;
 const MODEL_COUNT = 97;
 // Disable thrown messages
 beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(() => { /* empty */ });
+    // jest.spyOn(console, 'warn').mockImplementation(jest.fn());
+
 });
 
+console.warn = jest.fn();
 // shuffle lists so we don't test in the same order every time
 function shuffle(array: string[]): string[] {
     let count = array.length, temp, index;
@@ -220,6 +225,10 @@ describe('Model Test Sync', () => {
         expect(testFactory.getModel('hablar', 'hablar', 'P', 'voseo', {})).toBeDefined();
         expect(testFactory.getModel('hablar', 'partir', 'P', 'formal', {})).toBeDefined();
         expect(testFactory.getModel('hablar', 'temer', 'P', 'castellano', {})).toBeDefined();
+
+        // simulated models
+        expect(testFactory.getSimulatedModel('serenar', 'serenar', 'N', 'castellano')).toBeUndefined();
+        expect(testFactory.getSimulatedModel('hablar', 'invalid', 'N', 'canarias')).toBeUndefined();
     });
 
     test('Sync verb and model count', async () => {
@@ -324,61 +333,135 @@ describe('Conjugation Test', () => {
     const conjugator = new Conjugator();
     verbsToTest = shuffle(conjugator.getVerbListSync().filter(verb => verbs.includes(verb)));
     verbsToTest.forEach(verb => {
-        describe(`${verb}`, () => {
-            regionsToTest.forEach(region => {
-                test(`${region} ortho 2010`, () => {
-                    conjugator.setOrthography('2010');
-                    const conjugations: Result[] | ErrorType = conjugator.conjugateSync(verb, region);   // ortho==='2010'
-                    if (!Array.isArray(conjugations)) {
-                        fail(conjugations);
-                    }
-                    expect((conjugations[0].info as Info)['verb']).
-                        toEqual((conjugations[0].info as Info)['pronominal'] === true ? `${verb}se` : verb);
-                    expect((conjugations[0].info as Info)['region']).toEqual(region);
-                    if (monos.includes(verb) || monos.includes(`${verb}se`)) {
-                        conjugations.forEach(c => expect(c.info.ortho).toEqual('2010'));
-                    } else {
-                        conjugations.forEach(c => expect(c.info.ortho).toBeUndefined());
-                    }
-                });
-                test(`${region} ortho 1999`, () => {
-                    conjugator.setOrthography('1999');
-                    const conjugations: Result[] | ErrorType = conjugator.conjugateSync(verb, region);
-                    if (!Array.isArray(conjugations)) {
-                        fail(conjugations);
-                    }
-                    expect((conjugations[0].info as Info)['verb']).
-                        toEqual((conjugations[0].info as Info)['pronominal'] === true ? `${verb}se` : verb);
-                    expect((conjugations[0].info as Info)['region']).toEqual(region);
-                    if (monos.includes(verb) || monos.includes(`${verb}se`)) {
-                        conjugations.forEach(c => expect(c.info.ortho).toEqual(expect.stringMatching(/2010|1999/)));
-                    } else {
-                        conjugations.forEach(c => expect(c.info.ortho).toBeUndefined());
-                    }
-                });
+        regionsToTest.forEach(region => {
+            test(`${region} ortho 2010`, () => {
+                conjugator.setOrthography('2010');
+                const conjugations: Result[] | ErrorType = conjugator.conjugateSync(verb, region);
+                if (!Array.isArray(conjugations)) {
+                    fail(conjugations);
+                }
+                expect((conjugations[0].info as Info)['verb']).
+                    toEqual((conjugations[0].info as Info)['pronominal'] === true ? `${verb}se` : verb);
+                expect((conjugations[0].info as Info)['region']).toEqual(region);
+                if (monos.includes(verb) || monos.includes(`${verb}se`)) {
+                    conjugations.forEach(c => expect(c.info.ortho).toEqual('2010'));
+                } else {
+                    conjugations.forEach(c => expect(c.info.ortho).toBeUndefined());
+                }
+            });
+            test(`${region} ortho 1999`, () => {
+                conjugator.setOrthography('1999');
+                const conjugations: Result[] | ErrorType = conjugator.conjugateSync(verb, region);
+                if (!Array.isArray(conjugations)) {
+                    fail(conjugations);
+                }
+                expect((conjugations[0].info as Info)['verb']).
+                    toEqual((conjugations[0].info as Info)['pronominal'] === true ? `${verb}se` : verb);
+                expect((conjugations[0].info as Info)['region']).toEqual(region);
+                if (monos.includes(verb) || monos.includes(`${verb}se`)) {
+                    conjugations.forEach(c => expect(c.info.ortho).toEqual(expect.stringMatching(/2010|1999/)));
+                } else {
+                    conjugations.forEach(c => expect(c.info.ortho).toBeUndefined());
+                }
             });
         });
     });
 });
 
+// This is really a verification test, no longer just functional.  But, it doesn't take too much to verify.
 describe('Info Header Ortho', () => {
     const conjugator = new Conjugator();
+    expect(conjugator.getOrthography()).toEqual('2010');
+
+    conjugator.setOrthography('2000' as Orthography);
+    expect(console.warn).toHaveBeenCalled();
+    expect(conjugator.getOrthography()).not.toEqual('2000');
+
+    conjugator.setOrthography('1999');
+    expect(conjugator.getOrthography()).toEqual('1999');
 
     // verbs with ortho M flags (monosyllables correction as per 2010)
     monos.forEach(verb => {
-        describe(`${verb}`, () => {
-            regionsToTest.forEach(region => {
-                // 2010 has only the short versions
-                test(`info header ${region} ortho 2010`, () => {
-                    conjugator.setOrthography('2010');
-                    const conjugations: Result[] | ErrorType = conjugator.conjugateSync(verb, region);
-                    if (!Array.isArray(conjugations)) {
-                        fail(conjugations);
+        regionsToTest.forEach(region => {
+            // 2010 has only the short versions
+            test(`info header ${region} ortho 2010`, () => {
+                conjugator.setOrthography('2010');
+                const conjugations: Result[] | ErrorType = conjugator.conjugateSync(verb, region);
+                if (!Array.isArray(conjugations)) {
+                    fail(conjugations);
+                }
+                conjugations.forEach(c => {
+                    expect(c.info.ortho).toEqual('2010');
+                    // reír, freír
+                    if (c.info.verb.match(/.*(reír|reírse)$/)) {
+                        expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*rio$/));
+                        if (c.info.region === 'castellano') {
+                            expect(c.conjugation.Subjuntivo.Presente[4]).toEqual(expect.stringMatching(/.*riais$/));
+                        }
                     }
-                    conjugations.forEach(c => {
-                        expect(c.info.ortho).toEqual('2010');
-                        // reír, freír
+                    // fluir, fruir, gruir, huir, luir, muir
+                    if (c.info.verb.match(/.*(uir|uirse)$/)) {
+                        expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ui$/));
+                        if (c.info.region === 'castellano') {
+                            expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*uis$/));
+                        }
+                        if (c.info.region === 'voseo') {
+                            expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*uis$/));
+                            if (c.info.pronominal) {
+                                expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*uite$/));
+                            } else {
+                                expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*ui$/));
+                            }
+                        }
+                    }
+                    // puar, ruar
+                    if (c.info.verb.match(/.*uar$/)) {
+                        expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ue$/));
+                        expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*uo$/));
+                        if (c.info.region === 'castellano') {
+                            expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*ais$/));
+                        }
+                        if (c.info.region === 'voseo') {
+                            expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*uas$/));
+                            expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*ua$/));
+                        }
+                        if (c.info.region === 'formal') {
+                            expect(c.conjugation.Indicativo.PreteritoIndefinido[1]).toEqual(expect.stringMatching(/.*uo$/));
+                        }
+                    }
+                    // chiar, ciar, criar, fiar, guiar, liar, miar, piar, triar, 
+                    if (c.info.verb.match(/.*(iar|iarse)$/)) {
+                        expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ie$/));
+                        expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*io$/));
+                        if (c.info.region === 'castellano') {
+                            expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*ais$/));
+                        }
+                        if (c.info.region === 'voseo') {
+                            expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*ias$/));
+                            if (c.info.pronominal) {
+                                expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*iate$/));
+                            } else {
+                                expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*ia$/));
+                            }
+                        }
+                        if (c.info.region === 'formal') {
+                            expect(c.conjugation.Indicativo.PreteritoIndefinido[1]).toEqual(expect.stringMatching(/.*io$/));
+                        }
+                    }
+                });
+            });
+            // 1999 ortho has both
+            test(`info header ${region} ortho 1999`, () => {
+                conjugator.setOrthography('1999');
+                const conjugations: Result[] | ErrorType = conjugator.conjugateSync(verb, region);
+                if (!Array.isArray(conjugations)) {
+                    fail(conjugations);
+                }
+                conjugations.forEach(c => {
+                    expect(c.info.ortho).toBeDefined();
+                    if (c.info.ortho === '2010') {
                         if (c.info.verb.match(/.*(reír|reírse)$/)) {
+                            // reír, freír
                             expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*rio$/));
                             if (c.info.region === 'castellano') {
                                 expect(c.conjugation.Subjuntivo.Presente[4]).toEqual(expect.stringMatching(/.*riais$/));
@@ -399,7 +482,6 @@ describe('Info Header Ortho', () => {
                                 }
                             }
                         }
-                        // puar, ruar
                         if (c.info.verb.match(/.*uar$/)) {
                             expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ue$/));
                             expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*uo$/));
@@ -414,7 +496,6 @@ describe('Info Header Ortho', () => {
                                 expect(c.conjugation.Indicativo.PreteritoIndefinido[1]).toEqual(expect.stringMatching(/.*uo$/));
                             }
                         }
-                        // chiar, ciar, criar, fiar, guiar, liar, miar, piar, triar, 
                         if (c.info.verb.match(/.*(iar|iarse)$/)) {
                             expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ie$/));
                             expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*io$/));
@@ -433,131 +514,142 @@ describe('Info Header Ortho', () => {
                                 expect(c.conjugation.Indicativo.PreteritoIndefinido[1]).toEqual(expect.stringMatching(/.*io$/));
                             }
                         }
-                    });
-                });
-                // 1999 ortho has both
-                test(`info header ${region} ortho 1999`, () => {
-                    conjugator.setOrthography('1999');
-                    const conjugations: Result[] | ErrorType = conjugator.conjugateSync(verb, region);
-                    if (!Array.isArray(conjugations)) {
-                        fail(conjugations);
-                    }
-                    conjugations.forEach(c => {
-                        expect(c.info.ortho).toBeDefined();
-                        if (c.info.ortho === '2010') {
-                            if (c.info.verb.match(/.*(reír|reírse)$/)) {
-                                // reír, freír
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*rio$/));
-                                if (c.info.region === 'castellano') {
-                                    expect(c.conjugation.Subjuntivo.Presente[4]).toEqual(expect.stringMatching(/.*riais$/));
-                                }
+                    } else if (c.info.ortho === '1999') {
+                        if (c.info.verb.match(/.*(reír|reírse)$/)) {
+                            expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*rió$/));
+                            if (c.info.region === 'castellano') {
+                                expect(c.conjugation.Subjuntivo.Presente[4]).toEqual(expect.stringMatching(/.*riáis$/));
                             }
-                            // fluir, fruir, gruir, huir, luir, muir
-                            if (c.info.verb.match(/.*(uir|uirse)$/)) {
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ui$/));
-                                if (c.info.region === 'castellano') {
-                                    expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*uis$/));
-                                }
-                                if (c.info.region === 'voseo') {
-                                    expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*uis$/));
-                                    if (c.info.pronominal) {
-                                        expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*uite$/));
-                                    } else {
-                                        expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*ui$/));
-                                    }
-                                }
+                        }
+                        // fluir, fruir, gruir, huir, luir, muir
+                        if (c.info.verb.match(/.*(uir|uirse)$/)) {
+                            expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*uí$/));
+                            if (c.info.region === 'castellano') {
+                                expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*uís$/));
                             }
-                            if (c.info.verb.match(/.*uar$/)) {
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ue$/));
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*uo$/));
-                                if (c.info.region === 'castellano') {
-                                    expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*ais$/));
-                                }
-                                if (c.info.region === 'voseo') {
-                                    expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*uas$/));
-                                    expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*ua$/));
-                                }
-                                if (c.info.region === 'formal') {
-                                    expect(c.conjugation.Indicativo.PreteritoIndefinido[1]).toEqual(expect.stringMatching(/.*uo$/));
-                                }
-                            }
-                            if (c.info.verb.match(/.*(iar|iarse)$/)) {
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ie$/));
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*io$/));
-                                if (c.info.region === 'castellano') {
-                                    expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*ais$/));
-                                }
-                                if (c.info.region === 'voseo') {
-                                    expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*ias$/));
-                                    if (c.info.pronominal) {
-                                        expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*iate$/));
-                                    } else {
-                                        expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*ia$/));
-                                    }
-                                }
-                                if (c.info.region === 'formal') {
-                                    expect(c.conjugation.Indicativo.PreteritoIndefinido[1]).toEqual(expect.stringMatching(/.*io$/));
-                                }
-                            }
-                        } else if (c.info.ortho === '1999') {
-                            if (c.info.verb.match(/.*(reír|reírse)$/)) {
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*rió$/));
-                                if (c.info.region === 'castellano') {
-                                    expect(c.conjugation.Subjuntivo.Presente[4]).toEqual(expect.stringMatching(/.*riáis$/));
-                                }
-                            }
-                            // fluir, fruir, gruir, huir, luir, muir
-                            if (c.info.verb.match(/.*(uir|uirse)$/)) {
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*uí$/));
-                                if (c.info.region === 'castellano') {
-                                    expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*uís$/));
-                                }
-                                if (c.info.region === 'voseo') {
-                                    expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*uís$/));
-                                    if (c.info.pronominal) {
-                                        expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*uite$/));
-                                    } else {
-                                        expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*uí$/));
-                                    }
-                                }
-                            }
-                            if (c.info.verb.match(/.*uar$/)) {
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ué$/));
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*uó$/));
-                                if (c.info.region === 'castellano') {
-                                    expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*áis$/));
-                                }
-                                if (c.info.region === 'voseo') {
-                                    expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*uás$/));
-                                    expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*uá$/));
-                                }
-                                if (c.info.region === 'formal') {
-                                    expect(c.conjugation.Indicativo.PreteritoIndefinido[1]).toEqual(expect.stringMatching(/.*uó$/));
-                                }
-                            }
-                            if (c.info.verb.match(/.*(iar|iarse)$/)) {
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ié$/));
-                                expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*ió$/));
-
-                                if (c.info.region === 'castellano') {
-                                    expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*áis$/));
-                                }
-                                if (c.info.region === 'voseo') {
-                                    expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*iás$/));
-                                    if (c.info.pronominal) {
-                                        expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*iate$/));
-                                    } else {
-                                        expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*iá$/));
-                                    }
-                                }
-                                if (c.info.region === 'formal') {
-                                    expect(c.conjugation.Indicativo.PreteritoIndefinido[1]).toEqual(expect.stringMatching(/.*ió$/));
+                            if (c.info.region === 'voseo') {
+                                expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*uís$/));
+                                if (c.info.pronominal) {
+                                    expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*uite$/));
+                                } else {
+                                    expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*uí$/));
                                 }
                             }
                         }
+                        if (c.info.verb.match(/.*uar$/)) {
+                            expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ué$/));
+                            expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*uó$/));
+                            if (c.info.region === 'castellano') {
+                                expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*áis$/));
+                            }
+                            if (c.info.region === 'voseo') {
+                                expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*uás$/));
+                                expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*uá$/));
+                            }
+                            if (c.info.region === 'formal') {
+                                expect(c.conjugation.Indicativo.PreteritoIndefinido[1]).toEqual(expect.stringMatching(/.*uó$/));
+                            }
+                        }
+                        if (c.info.verb.match(/.*(iar|iarse)$/)) {
+                            expect(c.conjugation.Indicativo.PreteritoIndefinido[0]).toEqual(expect.stringMatching(/.*ié$/));
+                            expect(c.conjugation.Indicativo.PreteritoIndefinido[2]).toEqual(expect.stringMatching(/.*ió$/));
+
+                            if (c.info.region === 'castellano') {
+                                expect(c.conjugation.Indicativo.Presente[4]).toEqual(expect.stringMatching(/.*áis$/));
+                            }
+                            if (c.info.region === 'voseo') {
+                                expect(c.conjugation.Indicativo.Presente[1]).toEqual(expect.stringMatching(/.*iás$/));
+                                if (c.info.pronominal) {
+                                    expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*iate$/));
+                                } else {
+                                    expect(c.conjugation.Imperativo.Afirmativo[1]).toEqual(expect.stringMatching(/.*iá$/));
+                                }
+                            }
+                            if (c.info.region === 'formal') {
+                                expect(c.conjugation.Indicativo.PreteritoIndefinido[1]).toEqual(expect.stringMatching(/.*ió$/));
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    });
+});
+
+// Verify that the start / end tags are consistent, i.e.: for each start tag there must be a closing end tag
+describe('Highlight Tag Consistency Test', () => {
+    const conjugator = new Conjugator();
+    conjugator.setOrthography('1999');
+    expect(conjugator.getOrthography()).toEqual('1999');
+
+    expect(conjugator.getHighlightTags()).toEqual({ start: '', end: '', deleted: '' });
+    conjugator.setHighlightTags('foo' as unknown as HighlightTags);
+    expect(console.warn).toHaveBeenCalled();
+    expect(conjugator.getHighlightTags()).toEqual({ start: '', end: '', deleted: '' });
+
+    const tags = { start: '.', end: '-', deleted: '*' };
+    conjugator.setHighlightTags(tags);
+    expect(conjugator.getHighlightTags()).toEqual({ start: '.', end: '-', deleted: '*' });
+
+    verbsToTest = shuffle(conjugator.getVerbListSync().filter(verb => verbs.includes(verb)));
+
+    const emptyTags = tags.start + tags.end;
+    // const redundantEnd = tags.start + tags.deleted + tags.end;
+    // TODO: check for combo of things that shouldn't happen, for ex.: .-.*-
+    //       need to reorganize tests
+
+    verbsToTest.forEach(verb => {
+        regionsToTest.forEach(region => {
+            test(`${region}, ortho 1999, highlight tags '-','.'`, () => {
+                const conjugations: Result[] | ErrorType = conjugator.conjugateSync(verb, region);
+                if (!Array.isArray(conjugations)) {
+                    fail(conjugations);
+                }
+                conjugations.forEach(result => {
+                    const table = (result as Result).conjugation;
+                    Object.keys(table).forEach(key => {
+                        const modeKey = key as AnyModeKey;
+                        Object.keys(table[modeKey]).forEach(subKey => {
+                            switch (modeKey) {
+                                case 'Impersonal':
+                                    matchTags(table[modeKey][subKey as ImpersonalSubKey]);
+                                    break;
+                                case 'Indicativo':
+                                    table[modeKey][subKey as IndicativoSubKey].forEach(t => matchTags(t));
+                                    break;
+                                case 'Subjuntivo':
+                                    table[modeKey][subKey as SubjuntivoSubKey].forEach(t => matchTags(t));
+                                    break;
+                                case 'Imperativo':
+                                    table[modeKey][subKey as ImperativoSubKey].forEach(t => matchTags(t));
+                                    break;
+                            }
+                        });
                     });
                 });
             });
         });
     });
+
+    function matchTags(text: string): void {
+        if (text === '-') {   // defective
+            return;
+        }
+        let starts = 0;
+        let ends = 0;
+        let lastTag = tags.end;
+        text.split('').forEach(character => {
+            if (character === tags.start) {
+                expect(lastTag).toEqual(tags.end);
+                lastTag = tags.start;
+                ++starts;
+            } else if (character === tags.end) {
+                expect(lastTag).toEqual(tags.start);
+                lastTag = tags.end;
+                ++ends;
+            }
+        });
+        expect (starts).toEqual(ends);
+        expect (text.includes(emptyTags)).toBe(false);
+    }
 });

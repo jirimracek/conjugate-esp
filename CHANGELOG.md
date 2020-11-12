@@ -1,14 +1,14 @@
 # Changelog
 
-Tue 10 Nov 2020 12:01:15 PM CET, version 2.2.1
+Thu 12 Nov 2020 07:09:14 PM CET, version 2.2.1-experimental
 ____
 
-- Tue 10 Nov 2020 12:01:15 PM CET, 2.2.1
+- Thu 12 Nov 2020 07:09:14 PM CET, 2.2.1-experimental
   - obsoleted packages in npm registry, documented changes in [ROADMAP](ROADMAP.md)
 
 - Mon 09 Nov 2020 09:58:41 PM CET, 2.2.0
   - reverted ts compiler options mainly back to module commonjs
-  - publishing to npm under tag v2.2.1, this time preferrably without errors
+  - publishing to npm under tag v2.2.1-experimental, this time preferrably without errors
 
 - Thu 05 Nov 2020 08:16:11 PM CET, 2.1.2
   - trimming for npm publish

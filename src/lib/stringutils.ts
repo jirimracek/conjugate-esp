@@ -4,6 +4,8 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
+import diff = require('fast-diff');
+import { HighlightTags } from './types';
 /* eslint-disable array-element-newline */
 /* eslint-disable max-len */
 const Plain: readonly string[] = [ 'a', 'e', 'i', 'o', 'u', 'ü'];
@@ -146,6 +148,53 @@ export function clearAccents(word: string): string {
     return word.replace(/([áéíóú])/g, (match, p1): string => {
         return Plain[Accented.indexOf(p1)];
     });
+}
+
+/**
+     * find diff between regular and irregular strings (what needs to happen to go from 'simulated' version to 'conjugated')
+     * insert highlight characters at diff points
+     * 
+     * @param simulated - verb conjugated as per a regular model
+     * @param conjugated - verb conjugated as per its proper model (correct conjugation)
+     * @returns highlighted string if differences found
+     */
+export function tagDiffs(simulated: string, conjugated: string, tags: HighlightTags): string {
+    if (conjugated === '-') {                 // ignore defectives
+        return conjugated;
+    }
+
+    const conjugatedBase = conjugated.split(' ');
+    const conjugatedWord = conjugatedBase.pop();
+    const simulatedWord = simulated.split(' ').pop();
+    /* istanbul ignore if */
+    if (! (simulatedWord && conjugatedWord)) {
+        console.error(`Internal, tagDiffs, simulated: "${simulatedWord}", conjugated: "${conjugatedWord}"`);
+        return conjugated;
+    }
+
+    const chunks = diff(simulatedWord, conjugatedWord); 
+    const result: string[] = [];
+    chunks.forEach((chunk, index) => {
+        switch (chunk[0]) {
+            case diff.EQUAL:
+                result.push(chunk[1]);
+                break;
+            case diff.INSERT:
+                result.push(`${tags.start}${chunk[1]}${tags.end}`);
+                break;
+            case diff.DELETE:
+                // Insert the delete sequence only if
+                //   tags.deleted exists &&
+                //   (this is the last op || next operation is EQUAL)
+                if (tags.deleted && 
+                    (index === chunks.length - 1 || chunks[index + 1][0] === diff.EQUAL) ) {
+                    result.push(`${tags.start}${tags.deleted}${tags.end}`);       
+                }
+                break;
+        }
+    });
+    conjugatedBase.push(result.join(''));
+    return conjugatedBase.join(' ');
 }
 
 /**
