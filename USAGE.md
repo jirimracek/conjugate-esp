@@ -1,6 +1,6 @@
 # Usage details
 
-Thu 12 Nov 2020 07:09:14 PM CET, version 2.2.1-experimental
+Thu 12 Nov 2020 09:40:42 PM CET, version 2.2.1-experimental
 ____
 
 ## Installation
