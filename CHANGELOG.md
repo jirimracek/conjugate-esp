@@ -1,9 +1,14 @@
 # Changelog
 
-Fri 13 Nov 2020 09:28:57 PM CET, version 2.2.1-experimental
+Sat 14 Nov 2020 12:15:35 AM CET, version 2.2.1-experimental
 ____
 
-- Fri 13 Nov 2020 09:28:57 PM CET, 2.2.1-experimental
+- Sat 14 Nov 2020 12:15:35 AM CET, version 2.2.1-experimental
+- removed pronouns from conjugations, there is a new property in info object, no need to have a pronoun on all 120 conjugated versions of each verb for each region, .....
+  - ran verification tests on all 10567 verbs, seem to be OK
+  - highlighting seems to be working
+
+- Thu 12 Nov 2020 07:09:14 PM CET, version 2.2.1-experimental
   - obsoleted packages in npm registry, documented changes in [ROADMAP](ROADMAP.md)
 
 - Mon 09 Nov 2020 09:58:41 PM CET, 2.2.0

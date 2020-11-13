@@ -1,6 +1,6 @@
 # Spanish verb conjugator
 
-Fri 13 Nov 2020 09:28:57 PM CET, version 2.2.1-experimental
+Sat 14 Nov 2020 12:15:35 AM CET, version 2.2.1-experimental
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)

@@ -961,7 +961,7 @@ export class ser extends temer {
         super.setImperativoAfirmativo();
         if (this.region !== 'formal') {
             this.table.Imperativo.Afirmativo[1] =
-                this.table.Imperativo.Afirmativo[1].replace(/(.*)\s+.*/, '$1 sé');
+                this.table.Imperativo.Afirmativo[1].replace(/.*/, 'sé');
         }
     }
 }

@@ -174,7 +174,7 @@ export abstract class BaseModel {
             'castellano' === region ? 'os' : 'se',
             'se'
         ];
-        
+
         this.personalPronouns = [
             'yo',
             ['castellano', 'canarias'].includes(region) ? 'tú' :
@@ -392,16 +392,16 @@ export abstract class BaseModel {
     private setCompuestos(): void {
         INDICATIVO_COMP_KEYS.forEach(time =>
             this.table.Indicativo[time] =
-                this.auxHaber.Indicativo[time].map((aux, index) =>
-                    `${this.type === 'P' ? 
-                        this.reflexPronouns[index] : 
-                        ''} ${aux} ${this.participioCompuesto}`.trim()));
+            this.auxHaber.Indicativo[time].map((aux, index) =>
+                `${this.type === 'P' ?
+                    this.reflexPronouns[index] :
+                    ''} ${aux} ${this.participioCompuesto}`.trim()));
 
-        SUBJUNTIVO_COMP_KEYS.forEach(time => 
+        SUBJUNTIVO_COMP_KEYS.forEach(time =>
             this.table.Subjuntivo[time] =
             this.auxHaber.Subjuntivo[time].map((aux, index) =>
-                `${this.type === 'P' ? 
-                    this.reflexPronouns[index] : 
+                `${this.type === 'P' ?
+                    this.reflexPronouns[index] :
                     ''} ${aux} ${this.participioCompuesto}`.trim()));
     }
 
@@ -492,11 +492,15 @@ export abstract class BaseModel {
             this.table.Imperativo.Afirmativo[1] =
                 this.table.Imperativo.Afirmativo[1].replace(regex, (match: string, p1: string): string => {
                     // if p1 ends with a space, it's the mono we're looking for
-                    if (/\s+$/.test(p1) || this.type === 'P') return `${p1}${subP}`;
-                    return `${p1}${subNP}`;   //  else p1 didn't end with a space (ex.: tú repon: p1 === 'tú re')
+                    // if (/\s+$/.test(p1) || this.type === 'P') return `${p1}${subP}`;
+                    // if p1 is empty (is 'pone', isn't 'repone'), it's the mono we're looking for
+                    if (/^$/.test(p1) || this.type === 'P') return `${p1}${subP}`;
+                    return `${p1}${subNP}`;   //  else p1 wasn't blank (ex.: 'repon': p1 === 're')
                 });
         }
     }
+    //         this.setImperativoAfirmativoMono(/(.*)p[oó]ne/, 'pon', 'pón');
+
 
     protected setImperativoNegativo(): void {
         if (NO_IMPERATIVO_NEGATIVO.includes(this.defectiveAttributes)) {
@@ -504,10 +508,10 @@ export abstract class BaseModel {
         }
         // All regions are formed the same, directly from corresponding subjuntives, 
         //    insert 'no' after the first pronominal
-        [1, 3, 4].forEach(index => this.table.Imperativo.Negativo[index] = `no ${this.table.Subjuntivo.Presente[index]}`);
+        [1, 3, 4].forEach(index => this.table.Imperativo.Negativo[index] =
+            `no ${this.table.Subjuntivo.Presente[index]}`);
         // this.table.Subjuntivo.Presente[index].replace(/^(.+?) (.*)$/, '$1 no $2'));
     }
-
     /**
      * When all is done, wead out the defectives.  Not pretty but works
      */
@@ -588,13 +592,23 @@ export abstract class BaseModel {
                 this.table.Indicativo.PreteritoPerfecto[0] = '-';
                 this.table.Subjuntivo.PreteritoPerfecto = Array.from(DASH6);
                 break;
-            case 'imper': // infinitivo, gerundio, participio y en las terceras personas del singular
-                Object.keys(this.table.Indicativo).forEach(time =>
-                    [0, 1, 3, 4, 5].forEach(index => this.table.Indicativo[time as IndicativoSubKey][index] = '-'));
+            // Normally we use the pronouns.  A few defective forms dictate that the pronouns
+            // are not to be used. imper, tercio and terciop
+            // only in infinitivo, gerundio, participio y en las terceras personas del singular
+            case 'imper':
+                Object.keys(this.table.Indicativo).forEach(time => {
+                    [0, 1, 3, 4, 5].forEach(index =>
+                        this.table.Indicativo[time as IndicativoSubKey][index] = '-');
+                    this.table.Indicativo[time as IndicativoSubKey][2] =
+                        this.table.Indicativo[time as IndicativoSubKey][2].replace(/^se /, '');
+                });
 
-                Object.keys(this.table.Subjuntivo).forEach(time =>
-                    [0, 1, 3, 4, 5].forEach(index => this.table.Subjuntivo[time as SubjuntivoSubKey][index] = '-'));
-
+                Object.keys(this.table.Subjuntivo).forEach(time => {
+                    [0, 1, 3, 4, 5].forEach(index =>
+                        this.table.Subjuntivo[time as SubjuntivoSubKey][index] = '-');
+                    this.table.Subjuntivo[time as SubjuntivoSubKey][2] =
+                        this.table.Subjuntivo[time as SubjuntivoSubKey][2].replace(/^se /, '');
+                });
                 break;
             case 'tercio':
                 // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos D= tercio
@@ -615,11 +629,21 @@ export abstract class BaseModel {
             case 'terciop':
                 // terciopersonal, v2 - infinitivo, gerundio, participio y en terceras personas
                 // Verbo: acaecer, acontecer
-                Object.keys(this.table.Indicativo).forEach(time =>
-                    [0, 1, 3, 4].forEach(index => this.table.Indicativo[time as IndicativoSubKey][index] = '-'));
+                Object.keys(this.table.Indicativo).forEach(time => {
+                    [0, 1, 3, 4].forEach(index =>
+                        this.table.Indicativo[time as IndicativoSubKey][index] = '-');
+                    [2, 5].forEach(index =>
+                        this.table.Indicativo[time as IndicativoSubKey][index] =
+                        this.table.Indicativo[time as IndicativoSubKey][index].replace(/^se /, ''));
+                });
 
-                Object.keys(this.table.Subjuntivo).forEach(time =>
-                    [0, 1, 3, 4].forEach(index => this.table.Subjuntivo[time as SubjuntivoSubKey][index] = '-'));
+                Object.keys(this.table.Subjuntivo).forEach(time => {
+                    [0, 1, 3, 4].forEach(index =>
+                        this.table.Subjuntivo[time as SubjuntivoSubKey][index] = '-');
+                    [2, 5].forEach(index =>
+                        this.table.Subjuntivo[time as SubjuntivoSubKey][index] =
+                        this.table.Subjuntivo[time as SubjuntivoSubKey][index].replace(/^se /, ''));
+                });
                 break;
 
                 // case 'mmorfo':

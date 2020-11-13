@@ -1,6 +1,6 @@
 # Usage details
 
-Fri 13 Nov 2020 09:28:57 PM CET, version 2.2.1-experimental
+Sat 14 Nov 2020 12:15:35 AM CET, version 2.2.1-experimental
 ____
 
 ## Installation
@@ -121,10 +121,10 @@ ____
             - useful highlight example
               - *In code: cng = new Conjugator('1999', { start: '<mark>', end: '</mark>', deleted: '\u2027' });*
               - *In your .css:  mark { background-color: inherit; color: red; }*
-              - Results in
-                - t<span style="color: red">uv</span>e‧  
+              - Results in (the **bold** would be rendered in red)
+                - t**uv**e **‧**  
                   - note the 'dot' at the end of tuve, it's the delete mark &#x2027;
-                - no te c<span style="color: red">ue</span>lg<span style="color: red">ue</span>s
+                - no te c**ue**lg**ue**s
 
   - *public setOrthography (ortho: Orthography): void* - possible values *'1999'|'2010'*
   - *public getOrthography (): Orthography*
