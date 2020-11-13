@@ -1,9 +1,9 @@
 # Changelog
 
-Thu 12 Nov 2020 09:40:42 PM CET, version 2.2.1-experimental
+Fri 13 Nov 2020 09:28:57 PM CET, version 2.2.1-experimental
 ____
 
-- Thu 12 Nov 2020 09:40:42 PM CET, 2.2.1-experimental
+- Fri 13 Nov 2020 09:28:57 PM CET, 2.2.1-experimental
   - obsoleted packages in npm registry, documented changes in [ROADMAP](ROADMAP.md)
 
 - Mon 09 Nov 2020 09:58:41 PM CET, 2.2.0

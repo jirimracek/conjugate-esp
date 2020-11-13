@@ -30,7 +30,6 @@ type AttributeValues = DefectiveType | boolean | string;
 type AttributeKeys = 'PR' | 'PS' | 'D' | 'M' | 'V';
 
 type CompSubTable = { [modekey: string]: { [timekey: string]: string[] } };
-type PronounsTable = { [key in PronominalKey]: { [key in Regions]: string[] } };
 
 type IndicativoSubjuntivoModeKey = 'Indicativo' | 'Subjuntivo';
 
@@ -66,21 +65,6 @@ export type ResultTable = {
 export type ModelAttributes = { [attributekey in AttributeKeys]?: AttributeValues };
 export type ModelWithAttributes = { [modelname: string]: ModelAttributes };
 export type Model = string | ModelWithAttributes;
-
-const PRONOUNS: Readonly<PronounsTable> = {
-    N: {
-        castellano: ['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos'],
-        voseo: ['yo', 'vos', 'él', 'nosotros', 'ustedes', 'ellos'],
-        formal: ['yo', 'usted', 'él', 'nosotros', 'ustedes', 'ellos'],
-        canarias: ['yo', 'tú', 'él', 'nosotros', 'ustedes', 'ellos']
-    },
-    P: {
-        castellano: ['yo me', 'tú te', 'él se', 'nosotros nos', 'vosotros os', 'ellos se'],
-        voseo: ['yo me', 'vos te', 'él se', 'nosotros nos', 'ustedes se', 'ellos se'],
-        formal: ['yo me', 'usted se', 'él se', 'nosotros nos', 'ustedes se', 'ellos se'],
-        canarias: ['yo me', 'tú te', 'él se', 'nosotros nos', 'ustedes se', 'ellos se']
-    }
-};
 
 // The composite verb auxiliar haber forms
 const AUX: Readonly<CompSubTable> = {
@@ -165,7 +149,8 @@ export abstract class BaseModel {
     protected version: string;
     protected attributes: ModelAttributes;
 
-    private pronouns: PronounsTable;
+    private reflexPronouns: Array<string>;
+    private personalPronouns: Array<string>;
     private auxHaber: CompSubTable;
     private defectiveAttributes: DefectiveType;
     // private monoSyllables: boolean;
@@ -178,19 +163,27 @@ export abstract class BaseModel {
         this.attributes = attributes;                                     //  exists but empty if there aren't any
         this.defectiveAttributes = attributes['D'] as DefectiveType;      //  undefined if there aren't any 
         // Dup objects so we don't disturb the constant
-        this.pronouns = JSON.parse(JSON.stringify(PRONOUNS));
         this.auxHaber = JSON.parse(JSON.stringify(AUX));
         this.version = (attributes.V ? attributes.V : '0') as string;
-        // this.monoSyllables = attributes['M'] as boolean;
 
-        // Modify this.pronouns tables as per selected defective attributes
-        // Normally we use the PRONOMBRES table.  A few defective forms dictate that the pronouns
-        // are not to be used. imper, tercio and terciop
-        if (['imper', 'tercio', 'terciop'].includes(this.defectiveAttributes)) {
-            // fill to-be-unused pronouns with (exactly) 6 blanks
-            this.pronouns.N[this.region] = Array.from('012345').map(() => ' ');   // count them. 6
-            this.pronouns.P[this.region] = Array.from('012345').map(() => ' ');   // count them. 6
-        }
+        this.reflexPronouns = [
+            'me',
+            'formal' === region ? 'se' : 'te',
+            'se',
+            'nos',
+            'castellano' === region ? 'os' : 'se',
+            'se'
+        ];
+        
+        this.personalPronouns = [
+            'yo',
+            ['castellano', 'canarias'].includes(region) ? 'tú' :
+                'voseo' === region ? 'vos' : 'usted',
+            'él',
+            'nosotros',
+            'castellano' === region ? 'vosotros' : 'ustedes',
+            'ellos'
+        ];
 
         // initialize empty result conjugation table
         this.table = {
@@ -215,6 +208,9 @@ export abstract class BaseModel {
                 ...SUBJUNTIVO_COMP_KEYS.map(key => [key, []])]),
 
         };
+    }
+    public getPronouns(): string[] {
+        return this.personalPronouns;
     }
 
     /**
@@ -332,21 +328,21 @@ export abstract class BaseModel {
      * from derived, which may change stems per each person.  
      * @param mode 
      * @param key 
-     * @param roots optional array of desired stems, override in derived classes
+     * @param roots optional array of desired stems, set it in derived class
      */
     // protected setTable(mode: ModeParam, key: ModeTimeParam , roots?: string[]): void {
     protected setTable(mode: IndicativoSubjuntivoModeKey, key: IndicativoSubSimpleKey | SubjuntivoSubSimpleKey, roots?: string[]): void {
         if (mode === 'Indicativo') {
             this.table[mode][key as IndicativoSubSimpleKey] = this.desinences[mode][key as IndicativoSubSimpleKey]
                 .map((desinence: string, index: number) =>
-                    `${this.pronouns[this.type][this.region][index]} ${roots ?
+                    `${this.type === 'P' ? this.reflexPronouns[index] : ''} ${roots ?
                         roots[index] :
                         this.stem}${desinence}`.trim());
         }
         if (mode === 'Subjuntivo') {
             this.table[mode][key as SubjuntivoSubSimpleKey] = this.desinences[mode][key as SubjuntivoSubSimpleKey]
                 .map((desinence: string, index: number) =>
-                    `${this.pronouns[this.type][this.region][index]} ${roots ?
+                    `${this.type === 'P' ? this.reflexPronouns[index] : ''} ${roots ?
                         roots[index] :
                         this.stem}${desinence}`.trim());
         }
@@ -394,16 +390,19 @@ export abstract class BaseModel {
     /////////////////////////////////////////////////////////////////
     // compuestos
     private setCompuestos(): void {
-        INDICATIVO_COMP_KEYS.forEach(time => {
+        INDICATIVO_COMP_KEYS.forEach(time =>
             this.table.Indicativo[time] =
                 this.auxHaber.Indicativo[time].map((aux, index) =>
-                    `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim());
-        });
+                    `${this.type === 'P' ? 
+                        this.reflexPronouns[index] : 
+                        ''} ${aux} ${this.participioCompuesto}`.trim()));
 
-        SUBJUNTIVO_COMP_KEYS.forEach(time => this.table.Subjuntivo[time] =
+        SUBJUNTIVO_COMP_KEYS.forEach(time => 
+            this.table.Subjuntivo[time] =
             this.auxHaber.Subjuntivo[time].map((aux, index) =>
-                `${this.pronouns[this.type][this.region][index]} ${aux} ${this.participioCompuesto}`.trim())
-        );
+                `${this.type === 'P' ? 
+                    this.reflexPronouns[index] : 
+                    ''} ${aux} ${this.participioCompuesto}`.trim()));
     }
 
     // Imperatives
@@ -422,16 +421,20 @@ export abstract class BaseModel {
             switch (this.region) {
                 case 'formal':
                     this.table.Imperativo.Afirmativo[1] =
-                        esdrujula(this.table.Subjuntivo.Presente[1].replace(/^(.+?) (.*) (.*)$/, '$1 $3$2'));
+                        // esdrujula(this.table.Subjuntivo.Presente[1].replace(/^(.+?) (.*) (.*)$/, '$1 $3$2'));
+                        esdrujula(this.table.Subjuntivo.Presente[1].replace(/^(.*) (.*)$/, '$2$1'));
                     break;
                 case 'voseo':
                     // https://enclave.rae.es/consultas-linguisticas/buscar?search=voseo
                     this.table.Imperativo.Afirmativo[1] =
-                        clearAccents(this.table.Indicativo.Presente[1].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
+                        // clearAccents(this.table.Indicativo.Presente[1].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
+                        clearAccents(this.table.Indicativo.Presente[1].replace(/^(.*) (.*)s$/, '$2$1'));
                     break;
                 default:         // castellano & canarias
                     this.table.Imperativo.Afirmativo[1] =
-                        esdrujula(this.table.Indicativo.Presente[1].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
+                        // esdrujula(this.table.Indicativo.Presente[1].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
+                        //                                                  te hablas -> háblate
+                        esdrujula(this.table.Indicativo.Presente[1].replace(/^(.*) (.*)s$/, '$2$1'));
                     break;
             }
         }
@@ -441,27 +444,32 @@ export abstract class BaseModel {
             this.table.Imperativo.Afirmativo[3] = this.table.Subjuntivo.Presente[3];
         } else {
             this.table.Imperativo.Afirmativo[3] =
-                esdrujula(this.table.Subjuntivo.Presente[3].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
+                // esdrujula(this.table.Subjuntivo.Presente[3].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
+                esdrujula(this.table.Subjuntivo.Presente[3].replace(/^(.*) (.*)s$/, '$2$1'));
         }
 
         // 2nd person plural
         if (this.region === 'castellano') {
             if (this.type === 'N') {
                 this.table.Imperativo.Afirmativo[4] =
-                    `${this.pronouns.N.castellano[4]} ${this.verb.replace(/r$/, 'd')}`;
+                    // `${this.pronouns.N.castellano[4]} ${this.verb.replace(/r$/, 'd')}`;
+                    `${this.verb.replace(/r$/, 'd')}`;
             } else {
                 // Tricky. Sounds simple, take infinitive, replace the 'r' with 'os'.  Accents matter
                 // Last syllable before 'os' needs to be strong.  Clear accents before strong-ifying 
                 // Do use pronouns.N (vosotros), it's not an error
                 this.table.Imperativo.Afirmativo[4] =
-                    `${this.pronouns.N.castellano[4]} ${strongify(clearAccents(this.verb.replace(/r$/, '')), 1)}os`;
+                    // `${this.pronouns.N.castellano[4]} ${strongify(clearAccents(this.verb.replace(/r$/, '')), 1)}os`;
+                    // `${this.pronouns.N.castellano[4]} ${strongify(clearAccents(this.verb.replace(/r$/, '')), 1)}os`;
+                    `${strongify(clearAccents(this.verb.replace(/r$/, '')), 1)}os`;
             }
         } else {
             if (this.type === 'N') {
                 this.table.Imperativo.Afirmativo[4] = this.table.Subjuntivo.Presente[4];
             } else {
                 this.table.Imperativo.Afirmativo[4] =
-                    esdrujula(this.table.Subjuntivo.Presente[4].replace(/^(.+?) (.*) (.*)$/, '$1 $3$2'));
+                    // esdrujula(this.table.Subjuntivo.Presente[4].replace(/^(.+?) (.*) (.*)$/, '$1 $3$2'));
+                    esdrujula(this.table.Subjuntivo.Presente[4].replace(/^(.*) (.*)$/, '$2$1'));
             }
         }
     }
@@ -496,8 +504,8 @@ export abstract class BaseModel {
         }
         // All regions are formed the same, directly from corresponding subjuntives, 
         //    insert 'no' after the first pronominal
-        [1, 3, 4].forEach(index => this.table.Imperativo.Negativo[index] =
-            this.table.Subjuntivo.Presente[index].replace(/^(.+?) (.*)$/, '$1 no $2'));
+        [1, 3, 4].forEach(index => this.table.Imperativo.Negativo[index] = `no ${this.table.Subjuntivo.Presente[index]}`);
+        // this.table.Subjuntivo.Presente[index].replace(/^(.+?) (.*)$/, '$1 no $2'));
     }
 
     /**

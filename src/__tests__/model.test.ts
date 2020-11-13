@@ -255,12 +255,12 @@ describe('Model Test Sync', () => {
         expect(result).toBeInstanceOf(Array);
         expect((result as Result[])[0]['info']).toBeDefined();
         expect((result as Result[])[0].info.model).toEqual('hablar');
-        expect((result as Result[])[0].conjugation.Indicativo.Presente[0]).toEqual('yo hablo');
+        expect((result as Result[])[0].conjugation.Indicativo.Presente[0]).toEqual('hablo');
 
         result = conjugator.conjugateSync('partir');
         expect(result).toBeInstanceOf(Array);
         expect((result as Result[])[0].info.pronominal).toBe(false);
-        expect((result as Result[])[0].conjugation.Subjuntivo.Presente[2]).toEqual('él parta');
+        expect((result as Result[])[0].conjugation.Subjuntivo.Presente[2]).toEqual('parta');
     });
 
     verbsToTest = shuffle(conjugator.getVerbListSync().filter(verb => verbs.includes(verb)));
@@ -321,7 +321,7 @@ describe('Model Test Async', () => {
     test('Async known verb', () => {
         const conjugator = new Conjugator();
         return conjugator.conjugate('haber').
-            then(result => expect((result as Result[])[0].conjugation.Subjuntivo.Presente[1]).toEqual('tú hayas'));
+            then(result => expect((result as Result[])[0].conjugation.Subjuntivo.Presente[1]).toEqual('hayas'));
     });
 });
 

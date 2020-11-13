@@ -1,6 +1,6 @@
 # Usage details
 
-Thu 12 Nov 2020 09:40:42 PM CET, version 2.2.1-experimental
+Fri 13 Nov 2020 09:28:57 PM CET, version 2.2.1-experimental
 ____
 
 ## Installation
@@ -91,8 +91,8 @@ ____
               <pre>
                 "Indicativo": {
                   "Presente": [
-                    "yo ten.g-o",      // the pair .- annotates the start and end of changes
-                    "tú t.i-enes",
+                    "ten.g-o",      // the pair .- annotates the start & end of changes
+                    "t.i-enes",
                     .
                     .
               </pre>
@@ -101,23 +101,30 @@ ____
               - tení &#8594; tuve        // insert uv, delete ní
               <pre>  
                     "PreteritoIndefinido": [
-                      "yo t.uv-e.*-",   // note the indicated deletion .*- at the end
+                      "t.uv-e.*-",   // note the indicated deletion .*- at the end
                         .
                         .
               </pre>
             - else if the *deleted* is not specified as in setHighlightTags (start: '.', end: '-')
               <pre>
                     "PreteritoIndefinido": [
-                      "yo t.uv-e",   // note the missing deletion ".*-" at the end
+                      "t.uv-e",   // note the missing deletion ".*-" at the end
               </pre>
             - there will be multiple changes when required, verb colgar
               <pre>
                   "Subjuntivo": {
                     "Presente": [
-                      "yo c.ue-lg.u-e",
-                      "tú c.ue-lg.u-es",
-                      "él c.ue-lg.u-e",
+                      "c.ue-lg.u-e",
+                      "c.ue-lg.u-es",
+                      "c.ue-lg.u-e",
               </pre>
+            - useful highlight example
+              - *In code: cng = new Conjugator('1999', { start: '<mark>', end: '</mark>', deleted: '\u2027' });*
+              - *In your .css:  mark { background-color: inherit; color: red; }*
+              - Results in
+                - t<span style="color: red">uv</span>e‧  
+                  - note the 'dot' at the end of tuve, it's the delete mark &#x2027;
+                - no te c<span style="color: red">ue</span>lg<span style="color: red">ue</span>s
 
   - *public setOrthography (ortho: Orthography): void* - possible values *'1999'|'2010'*
   - *public getOrthography (): Orthography*

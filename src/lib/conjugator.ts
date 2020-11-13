@@ -18,6 +18,7 @@ export type Info = {
     verb: string,
     model: string,
     region: string,
+    pronouns: string[],
     pronominal: boolean,
     defective: boolean,
     ortho?: string,
@@ -158,6 +159,7 @@ export class Conjugator {
                     verb: pronominalKey === 'P' ? `${verb}se` : verb,
                     model: modelName,
                     region: region,
+                    pronouns: model.getPronouns(),
                     pronominal: (pronominalKey === 'P'),
                     defective: !!(attributes['D'])
                 };
