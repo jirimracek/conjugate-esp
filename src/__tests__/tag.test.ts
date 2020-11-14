@@ -9,7 +9,7 @@ import { Conjugator } from '../index';
 import { Result, ErrorType } from '../lib/conjugator';
 import { AnyModeKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey } from '../lib/types';
 import { HighlightTags } from '../../dist/lib/types';
-import { getRegions, shuffle } from './include';
+import { getRegions, shuffle, verbsToTest } from './include';
 
 // Disable thrown messages
 beforeEach(() => {
@@ -35,8 +35,8 @@ describe('Highlight Tag Consistency Test', () => {
     conjugator.setHighlightTags(tags);
     expect(conjugator.getHighlightTags()).toEqual({ start: '.', end: '-', deleted: '*' });
 
-    // Test random 200 verbs
-    const toTest = shuffle(conjugator.getVerbListSync()).splice(0, 200);
+    // Our array of interesting verbs and throw in a few more
+    const toTest = shuffle(Array.from(new Set([...conjugator.getVerbListSync().splice(0, 200), ...verbsToTest()])));
 
     const emptyTags = tags.start + tags.end;
     // const redundantEnd = tags.start + tags.deleted + tags.end;
