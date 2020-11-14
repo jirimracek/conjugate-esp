@@ -1,6 +1,6 @@
 {
   "name": "@jirimracek/conjugate-esp",
-  "version": "2.2.1-experimental",
+  "version": "2.2.2-rc1",
   "description": "Spanish verb conjugator, castellano, voseo, canarias, formal",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

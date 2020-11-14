@@ -185,11 +185,9 @@ export class Conjugator {
                     info.highlight = this.tags;                // note it in info - de we really need to do this???
                     // get conjugation as if the verb was conjugated per regular model (hablar, temer, partir)
                     const simulatedModel = this.factory.getModel(verb, modelName, pronominalKey, region, {}, true);
-                    const simulated = simulatedModel?.getConjugation();
-                    /* istanbul ignore else */
-                    if (simulated && conjugated) {
-                        this.insertTags(simulated, conjugated);
-                    }
+                    // Already checked for the model above, assert it's correct
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    this.insertTags(simulatedModel!.getConjugation(), conjugated);
                 }
 
                 result.push({
@@ -245,7 +243,6 @@ export class Conjugator {
         });
     }
 
-
     /**
      * list of all models, sync version
      * 
@@ -283,39 +280,46 @@ export class Conjugator {
             const modeKey = key as AnyModeKey;
             Object.keys(conjugated[modeKey]).forEach(subKey => {
                 switch (modeKey) {
-                    case 'Impersonal': {
-                        const modeSubKey = subKey as ImpersonalSubKey;
-                        conjugated[modeKey][modeSubKey] =
-                            tagDiffs(simulated[modeKey][modeSubKey], conjugated[modeKey][modeSubKey], this.tags);
-                    }
+                    case 'Impersonal':                   // do not mark infinitive (reír, oír, ...)
+                        if (subKey === 'Gerundio') {
+                            conjugated[modeKey][subKey as ImpersonalSubKey] =
+                                tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
+                                    conjugated[modeKey][subKey as ImpersonalSubKey], this.tags);
+                        }
+                        else if (subKey === 'Participio') {            // we may have dual
+                            const parts = conjugated[modeKey][subKey as ImpersonalSubKey].split('/');
+                            if (parts.length > 1) {
+                                // mark each part individually and then join them again
+                                conjugated[modeKey][subKey as ImpersonalSubKey] =
+                                    [tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
+                                        parts[0], this.tags),
+                                    tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
+                                        parts[1], this.tags)
+                                    ].join('/');
+                            } else {
+                                conjugated[modeKey][subKey as ImpersonalSubKey] =
+                                    tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
+                                        conjugated[modeKey][subKey as ImpersonalSubKey], this.tags);
+                            }
+                        }
                         break;
-                    case 'Indicativo': {
-                        const modeSubKey = subKey as IndicativoSubKey;
-                        conjugated[modeKey][modeSubKey] =
-                            conjugated[modeKey][modeSubKey].map((conjugatedLine, index) => {
-                                return tagDiffs(simulated[modeKey][modeSubKey][index], conjugatedLine, this.tags);
-                            });
-                    }
+                    case 'Indicativo': conjugated[modeKey][subKey as IndicativoSubKey] =
+                        conjugated[modeKey][subKey as IndicativoSubKey].map((line, index) => {
+                            return tagDiffs(simulated[modeKey][subKey as IndicativoSubKey][index], line, this.tags);
+                        });
                         break;
-                    case 'Subjuntivo': {
-                        const modeSubKey = subKey as SubjuntivoSubKey;
-                        conjugated[modeKey][modeSubKey] =
-                            conjugated[modeKey][modeSubKey].map((conjugatedLine, index) => {
-                                return tagDiffs(simulated[modeKey][modeSubKey][index], conjugatedLine, this.tags);
-                            });
-                    }
+                    case 'Subjuntivo': conjugated[modeKey][subKey as SubjuntivoSubKey] =
+                        conjugated[modeKey][subKey as SubjuntivoSubKey].map((line, index) => {
+                            return tagDiffs(simulated[modeKey][subKey as SubjuntivoSubKey][index], line, this.tags);
+                        });
                         break;
-                    case 'Imperativo': {
-                        const modeSubKey = subKey as ImperativoSubKey;
-                        conjugated[modeKey][modeSubKey] =
-                            conjugated[modeKey][modeSubKey].map((conjugatedLine, index) => {
-                                return tagDiffs(simulated[modeKey][modeSubKey][index], conjugatedLine, this.tags);
-                            });
-                    }
+                    case 'Imperativo': conjugated[modeKey][subKey as ImperativoSubKey] =
+                        conjugated[modeKey][subKey as ImperativoSubKey].map((line, index) => {
+                            return tagDiffs(simulated[modeKey][subKey as ImperativoSubKey][index], line, this.tags);
+                        });
                         break;
                 }
             });
         });
     }
-
 }

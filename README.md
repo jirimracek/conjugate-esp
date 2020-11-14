@@ -1,6 +1,6 @@
 # Spanish verb conjugator
 
-Sat 14 Nov 2020 12:15:35 AM CET, version 2.2.1-experimental
+Sat 14 Nov 2020 12:33:02 PM CET, version 2.2.2-rc1
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
@@ -27,8 +27,9 @@ ____
 ### TL;DR
 
 - new in 2.2.x
-  - preliminary, experimental: highlighting
-  - preliminary, experimental: removed pronouns from conjugations, they now live in the info object only
+  - preliminary
+    - highlighting
+    - removed pronouns from conjugations, they now live in the info object only
   - pre 1999, 1999-2010, post 2010 orthography rules
   - new methods *setOrthography(), getOrthography()*
   - new info header entry

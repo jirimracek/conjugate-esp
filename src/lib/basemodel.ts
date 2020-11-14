@@ -153,7 +153,6 @@ export abstract class BaseModel {
     private personalPronouns: Array<string>;
     private auxHaber: CompSubTable;
     private defectiveAttributes: DefectiveType;
-    // private monoSyllables: boolean;
 
     protected constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         this.verb = verb;
@@ -421,18 +420,15 @@ export abstract class BaseModel {
             switch (this.region) {
                 case 'formal':
                     this.table.Imperativo.Afirmativo[1] =
-                        // esdrujula(this.table.Subjuntivo.Presente[1].replace(/^(.+?) (.*) (.*)$/, '$1 $3$2'));
                         esdrujula(this.table.Subjuntivo.Presente[1].replace(/^(.*) (.*)$/, '$2$1'));
                     break;
                 case 'voseo':
                     // https://enclave.rae.es/consultas-linguisticas/buscar?search=voseo
                     this.table.Imperativo.Afirmativo[1] =
-                        // clearAccents(this.table.Indicativo.Presente[1].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
                         clearAccents(this.table.Indicativo.Presente[1].replace(/^(.*) (.*)s$/, '$2$1'));
                     break;
                 default:         // castellano & canarias
                     this.table.Imperativo.Afirmativo[1] =
-                        // esdrujula(this.table.Indicativo.Presente[1].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
                         //                                                  te hablas -> háblate
                         esdrujula(this.table.Indicativo.Presente[1].replace(/^(.*) (.*)s$/, '$2$1'));
                     break;
@@ -444,7 +440,6 @@ export abstract class BaseModel {
             this.table.Imperativo.Afirmativo[3] = this.table.Subjuntivo.Presente[3];
         } else {
             this.table.Imperativo.Afirmativo[3] =
-                // esdrujula(this.table.Subjuntivo.Presente[3].replace(/^(.+?) (.*) (.*)s$/, '$1 $3$2'));
                 esdrujula(this.table.Subjuntivo.Presente[3].replace(/^(.*) (.*)s$/, '$2$1'));
         }
 
@@ -452,15 +447,11 @@ export abstract class BaseModel {
         if (this.region === 'castellano') {
             if (this.type === 'N') {
                 this.table.Imperativo.Afirmativo[4] =
-                    // `${this.pronouns.N.castellano[4]} ${this.verb.replace(/r$/, 'd')}`;
                     `${this.verb.replace(/r$/, 'd')}`;
             } else {
                 // Tricky. Sounds simple, take infinitive, replace the 'r' with 'os'.  Accents matter
                 // Last syllable before 'os' needs to be strong.  Clear accents before strong-ifying 
-                // Do use pronouns.N (vosotros), it's not an error
                 this.table.Imperativo.Afirmativo[4] =
-                    // `${this.pronouns.N.castellano[4]} ${strongify(clearAccents(this.verb.replace(/r$/, '')), 1)}os`;
-                    // `${this.pronouns.N.castellano[4]} ${strongify(clearAccents(this.verb.replace(/r$/, '')), 1)}os`;
                     `${strongify(clearAccents(this.verb.replace(/r$/, '')), 1)}os`;
             }
         } else {
@@ -468,7 +459,6 @@ export abstract class BaseModel {
                 this.table.Imperativo.Afirmativo[4] = this.table.Subjuntivo.Presente[4];
             } else {
                 this.table.Imperativo.Afirmativo[4] =
-                    // esdrujula(this.table.Subjuntivo.Presente[4].replace(/^(.+?) (.*) (.*)$/, '$1 $3$2'));
                     esdrujula(this.table.Subjuntivo.Presente[4].replace(/^(.*) (.*)$/, '$2$1'));
             }
         }
@@ -491,16 +481,12 @@ export abstract class BaseModel {
         if (this.region === 'castellano' || this.region === 'canarias') {
             this.table.Imperativo.Afirmativo[1] =
                 this.table.Imperativo.Afirmativo[1].replace(regex, (match: string, p1: string): string => {
-                    // if p1 ends with a space, it's the mono we're looking for
-                    // if (/\s+$/.test(p1) || this.type === 'P') return `${p1}${subP}`;
                     // if p1 is empty (is 'pone', isn't 'repone'), it's the mono we're looking for
                     if (/^$/.test(p1) || this.type === 'P') return `${p1}${subP}`;
                     return `${p1}${subNP}`;   //  else p1 wasn't blank (ex.: 'repon': p1 === 're')
                 });
         }
     }
-    //         this.setImperativoAfirmativoMono(/(.*)p[oó]ne/, 'pon', 'pón');
-
 
     protected setImperativoNegativo(): void {
         if (NO_IMPERATIVO_NEGATIVO.includes(this.defectiveAttributes)) {

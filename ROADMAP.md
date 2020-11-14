@@ -1,17 +1,17 @@
 # Things to do, wishlists, plans, crimes committed, etc
 
-Sat 14 Nov 2020 12:15:35 AM CET, version 2.2.1-experimental
+Sat 14 Nov 2020 12:33:02 PM CET, version 2.2.2-rc1
 ____
 
 - Thu 12 Nov 2020 07:09:14 PM CET, version 2.2.1-experimental
-  - every array, every conjugation has the pronominals, which is totally unnecessary, we know what the pronominals should be
+  - (done in 2.2.1-experimental) every array, every conjugation has the pronominals, which is totally unnecessary, we know what the pronominals should be
     - drop the pronominals, put just one list in the info object insted of repeating it 20x for each array, I think it's a Good Idea&trade;
   - internal
     - reorganize tests
     - reorganize types, exports, imports - they're kind of scattered all over the place
 
 - Tue 10 Nov 2020 01:33:36 PM CET, 2.2.1
-  - I should probably obsolete / delete some old (and some broken) npm packages
+  - (done) I should probably obsolete / delete some old (and some broken) npm packages
   - We have
     - 2.2.0  Mon 09 Nov 2020 09:58:41 PM CET,  tag v2.2.0, **keep**, stable, first stable that includes 1999 & 2010 ortho
     - 2.1.1  Thu 05 Nov 2020 07:38:28 PM CET,  tag v2.1.1, **obsolete, broken**, changes concerning pre and past 2010 orthography rules
@@ -110,7 +110,7 @@ ____
           - **surgir -> dirigir/se**
       - this should go into a **major version update**
 
-  - investigating what would it take to insert *highlight markers* - something that can be used to highlight the irregular changes from what the verb would have looked like if it was regular. For example
+  - (done in 2.2.1-experimental) investigating what would it take to insert *highlight markers* - something that can be used to highlight the irregular changes from what the verb would have looked like if it was regular. For example
     - if poner was a regular verb, the first person indicative presente would be '*pono*', which of course it is not, it is *pongo*.  If the conjugation is marked, let's say with a dot '.' character, we would get back 'po.n.go' - with a marker to indicate that the 'n' is the irregular deviation from regular conjugation that can be shown as "po**n**go" or whatever the consumer wants
     - colgar, subj. presente *cuelgue* would become 'c.ue.lg.u.e' (c**ue**lg**u**e) or should it be 'c.uelgu.e' (c**uelgu**e)?  Hmmmm
     - what to do with 'missing parts'?  Hacer, futuro isn't '*haceré*' but *haré*.  'h.ar.é' (h**ar**é) to mark the change so it can be visually noted?

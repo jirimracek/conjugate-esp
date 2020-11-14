@@ -1,6 +1,6 @@
 # Usage details
 
-Sat 14 Nov 2020 12:15:35 AM CET, version 2.2.1-experimental
+Sat 14 Nov 2020 12:33:02 PM CET, version 2.2.2-rc1
 ____
 
 ## Installation
@@ -170,6 +170,8 @@ ____
 - conjugate() / conjugateSync() methods will return either a *Result[]* or *ErrorType*
   - ErrorType is defined as *type ErrorType = { ERROR: { message: string } }*
   - Result is defined as *type Result = { info: Info, conjugation: ResultTable }*
+    - NOTE that each possible conjugation ResultTable has its own Info
+      - When info.defective === false, it means that **this particular table** contains defective conjugation, **it does NOT mean that the verb isn't defective**.  Ditto for pronominal
   - see conjugator.ts for error messages, definitions of *ErrorType* and *Result*
   - see basemodel.ts for definition of *Info* and *ResultTable*
   - ResultTable properties
@@ -183,7 +185,7 @@ ____
    "pronominal": boolean,
    "defective":  boolean,
    "ortho?":     string,
-   "highlight?": boolean
+   "highlight?": {start: string, end: string, deleted: string}
   },
   "conjugation": {
    "Impersonal": {
@@ -225,74 +227,159 @@ ____
 
 ### Example output.  NOTE that you'll get an array of these objects
 
-  ```json
-  [
-    {
-     "info": {
-      "verb": "hablar",
-      "model": "hablar",
-      "region": "canarias",
-      "pronominal": false,
-      "defective": false
-     },
-     "conjugation": {
-      "Impersonal": {
-       "Infinitivo": "hablar",
-       "Gerundio": "hablando",
-       "Participio": "hablado"
-      },
-      "Indicativo": {
-       "Presente": [
-        "yo hablo",
-        "tú hablas",
-        "él habla",
-        "nosotros hablamos",
-        "ustedes hablan",
-        "ellos hablan"
-       ],
-       "PreteritoImperfecto": [
-        "yo hablaba",
-        "tú hablabas",
-        "él hablaba",
-        "nosotros hablábamos",
-        .
-        .
-        .
-      },
-      "Imperativo": {
-       "Afirmativo": [
-        "-",
-        "tú habla",
-        "-",
-        "nosotros hablemos",
-        "ustedes hablen",
-        "-"
-       ],
-       "Negativo": [
-        "-",
-        "tú no hables",
-        "-",
-        "nosotros no hablemos",
-        "ustedes no hablen",
-        "-"
-       ]
-      }
-     }
-    },
-    {
-      "info": ...
-    },
-    {
-      "conjugation": ...
-    },
-    {
-    .
-    .
-    .
-   }
-  ]
+- ***hablar, castellano, 2010, start:<mark>, end:<\mark>, deleted:_***
+  - Note that the info has no ortho nor highlight properties - neither applies to hablar, there are no orthographical changes, there is nothing to highlight
+  - pronouns correspond to castellano
 
-  ```
+```json
+[
+ {
+  "info": {
+   "verb": "hablar",
+   "model": "hablar",
+   "region": "castellano",
+   "pronouns": [
+    "yo",
+    "tú",
+    "él",
+    "nosotros",
+    "vosotros",
+    "ellos"
+   ],
+   "pronominal": false,
+   "defective": false
+  },
+  "conjugation": {
+   "Impersonal": {
+    "Infinitivo": "hablar",
+    "Gerundio": "hablando",
+    "Participio": "hablado"
+   },
+   "Indicativo": {
+    "Presente": [
+     "hablo",
+     "hablas",
+     "habla",
+     "hablamos",
+     "habláis",
+     "hablan"
+    ],
+    "PreteritoImperfecto": [
+     "hablaba",
+     "hablabas",
+     .
+     .
+     .
+    ]
+   },
+   "Imperativo": {
+    "Afirmativo": [
+     "-",
+     "habla",
+     "-",
+     "hablemos",
+     "hablad",
+     "-"
+    ],
+    "Negativo": [
+     "-",
+     "no hables",
+     "-",
+     "no hablemos",
+     "no habléis",
+     "-"
+    ]
+   }
+  }
+ },
+  {
+    "info": ...
+  },
+  {
+    "conjugation": ...
+  },
+  {
+  .
+  .
+  .
+ }
+]
+
+```
+
+- ***freír, voseo, 2010, start:<mark>, end:</mark>, deleted:_***
+  - note the deletion in gerundio, has both info.ortho and info.highlight as they both apply to this verb
+  - pronouns correspond to voseo
+
+```json
+[
+ {
+  "info": {
+   "verb": "freír",
+   "model": "reír",
+   "region": "voseo",
+   "pronouns": [
+    "yo",
+    "vos",
+    "él",
+    "nosotros",
+    "ustedes",
+    "ellos"
+   ],
+   "pronominal": false,
+   "defective": false,
+   "ortho": "2010",
+   "highlight": {
+    "start": "<mark>",
+    "end": "</mark>",
+    "deleted": "_"
+   }
+  },
+  "conjugation": {
+   "Impersonal": {
+    "Infinitivo": "freír",
+    "Gerundio": "fr<mark>_</mark>iendo",
+    "Participio": "fre<mark>í</mark>do"
+   },
+   "Indicativo": {
+    "Presente": [
+     "fr<mark>í</mark>o",
+     "freís",
+     "fr<mark>í</mark>e",
+     "fre<mark>í</mark>mos",
+     "fr<mark>í</mark>en",
+     "fr<mark>í</mark>en"
+    ],
+    "PreteritoImperfecto": [
+     "freía",
+     .
+     .
+     .
+     "hubieren fre<mark>í</mark>do"
+    ]
+   },
+   "Imperativo": {
+    "Afirmativo": [
+     "-",
+     "freí",
+     "-",
+     "fr<mark>i</mark>amos",
+     "fr<mark>í</mark>an",
+     "-"
+    ],
+    "Negativo": [
+     "-",
+     "no fr<mark>í</mark>as",
+     "-",
+     "no fr<mark>i</mark>amos",
+     "no fr<mark>í</mark>an",
+     "-"
+    ]
+   }
+  }
+ },
+
+```
 
 - as noted above the conjugate method will return one object (Result[]), which will normally hold multiple ResultTable objects
 
