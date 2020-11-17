@@ -7,62 +7,138 @@
 
 /* Do not export anything but classes from these model files, model factory depends on these exports */
 
-import { BaseModel, ModelAttributes, DesinenceTable } from './basemodel';
-import { clearLastAccent } from './stringutils';
-import { PronominalKey, Regions } from './types';
+import {BaseModel, ModelAttributes, DesinenceTable} from './basemodel';
+import {clearLastAccent} from './stringutils';
+import {PronominalKey, Regions} from './types';
 
-const DIndicativoPreteritoIndefinido = ['uve', 'uviste', 'uvo', 'uvimos', 'uvisteis', 'uvieron'];
-const DSubjuntivoPresente = ['ue', 'ues', 'ue', 'uemos', 'uéis', 'uen'];
-const DSubjuntivoPreteritoImperfectoRa = ['uviera', 'uvieras', 'uviera', 'uviéramos', 'uvierais', 'uvieran'];
-const DSubjuntivoPreteritoImperfectoSe = ['uviese', 'uvieses', 'uviese', 'uviésemos', 'uvieseis', 'uviesen'];
-const DSubjuntivoFuturoImperfecto = ['uviere', 'uvieres', 'uviere', 'uviéremos', 'uviereis', 'uvieren'];
+// Temp arrays used to remap
+const Array_6 = Array(6).fill('');
 
-const AR: Readonly<DesinenceTable> = {
-    Impersonal: {
-        Infinitivo: ['ar', 'arse'],
-        Gerundio: ['ando', 'ándose'],
-        Participio: ['ado']
-    },
-    Indicativo: {
-        Presente: ['o', 'as', 'a', 'amos', 'áis', 'an'],
-        PreteritoImperfecto: ['aba', 'abas', 'aba', 'ábamos', 'abais', 'aban'],
-        PreteritoIndefinido: ['é', 'aste', 'ó', 'amos', 'asteis', 'aron'],
-        FuturoImperfecto: ['aré', 'arás', 'ará', 'aremos', 'aréis', 'arán'],
-        CondicionalSimple: ['aría', 'arías', 'aría', 'aríamos', 'aríais', 'arían']
-    },
-    Subjuntivo: {
-        Presente: ['e', 'es', 'e', 'emos', 'éis', 'en'],
-        PreteritoImperfectoRa: ['ara', 'aras', 'ara', 'áramos', 'arais', 'aran'],
-        PreteritoImperfectoSe: ['ase', 'ases', 'ase', 'ásemos', 'aseis', 'asen'],
-        FuturoImperfecto: ['are', 'ares', 'are', 'áremos', 'areis', 'aren']
-    }
+// Common to Andar and Estar
+const caeIndicativoPreteritoIndefinido = (region: Regions): Array<string> => {
+    return ['uve',
+        region !== 'formal' ? 'uviste' : 'uvo',
+        'uvo',
+        'uvimos',
+        region !== 'castellano' ? 'uvieron' : 'uvisteis',
+        'uvieron'];
 };
+
+const caeSubjuntivoPreteritoImperfectoRa = (region: Regions): Array<string> => {
+    return ['uviera',
+        region !== 'formal' ? 'uvieras' : 'uviera',
+        'uviera',
+        'uviéramos',
+        region !== 'castellano' ? 'uvieran' : 'uvierais',
+        'uvieran'];
+};
+
+const caeSubjuntivoPreteritoImperfectoSe = (region: Regions): Array<string> => {
+    return ['uviese',
+        region !== 'formal' ? 'uvieses' : 'uviese',
+        'uviese',
+        'uviésemos',
+        region !== 'castellano' ? 'uviesen' : 'uvieseis',
+        'uviesen'];
+};
+
+const caeSubjuntivoFuturoImperfecto = (region: Regions): Array<string> => {
+    return ['uviere',
+        region !== 'formal' ? 'uvieres' : 'uviere',
+        'uviere',
+        'uviéremos',
+        region !== 'castellano' ? 'uvieren' : 'uviereis',
+        'uvieren'];
+};
+
 /* eslint-disable @typescript-eslint/naming-convention */
 /**
- * @class base class for all -ar conjugations
- */
+     * @class base class for all -ar conjugations
+     */
 export class hablar extends BaseModel {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-
-        // Initialize termination table, map ar terminations to the base
-        // Clone so we don't overwrite the template
-        this.desinences = JSON.parse(JSON.stringify(AR));
-
-        // Voseo, 2nd singular -> accented version, which happens to be 2nd plural stripped of i
-        if (this.region === 'voseo') {
-            this.desinences.Indicativo.Presente[1] = 'ás';
-        }
-        // Give derived class a chance to modify the desinences as per model
-        this.configDesinences();
-
-        // Finish desinences configuration in base class
-        this.remapDesinencesByRegion();
+        this.desinences = this.initDesinences(region, type);
     }
 
-    // Give derived classes chance to modify terms arrays
-    protected configDesinences(): void { /* empty */ }
+    // Initialize termination table, map ar terminations to the base
+    private initDesinences(region: Regions, reflexive: PronominalKey): DesinenceTable {
+        return {
+            Impersonal: {
+                Infinitivo: reflexive !== 'P' ? 'ar' : 'arse',
+                Gerundio: reflexive !== 'P' ? 'ando' : 'ándose',
+                Participio: 'ado'
+            },
+            Indicativo: {
+                Presente: ['o',
+                    region !== 'voseo' ? (region !== 'formal' ? 'as' : 'a') : 'ás',
+                    'a',
+                    'amos',
+                    region !== 'castellano' ? 'an' : 'áis',
+                    'an'
+                ],
+                PreteritoImperfecto: ['aba',
+                    region !== 'formal' ? 'abas' : 'aba',
+                    'aba',
+                    'ábamos',
+                    region !== 'castellano' ? 'aban' : 'abais',
+                    'aban'
+                ],
+                PreteritoIndefinido: ['é',
+                    region !== 'formal' ? 'aste' : 'ó',
+                    'ó',
+                    'amos',
+                    region !== 'castellano' ? 'aron' : 'asteis',
+                    'aron'
+                ],
+                FuturoImperfecto: ['aré',
+                    region !== 'formal' ? 'arás' : 'ará',
+                    'ará',
+                    'aremos',
+                    region !== 'castellano' ? 'arán' : 'aréis',
+                    'arán'
+                ],
+                CondicionalSimple: ['aría',
+                    region !== 'formal' ? 'arías' : 'aría',
+                    'aría',
+                    'aríamos',
+                    region !== 'castellano' ? 'arían' : 'aríais',
+                    'arían']
+            },
+            Subjuntivo: {
+                Presente: ['e',
+                    region !== 'formal' ? 'es' : 'e',
+                    'e',
+                    'emos',
+                    region !== 'castellano' ? 'en' : 'éis',
+                    'en'
+                ],
+                PreteritoImperfectoRa: ['ara',
+                    region !== 'formal' ? 'aras' : 'ara',
+                    'ara',
+                    'áramos',
+                    region !== 'castellano' ? 'aran' : 'arais',
+                    'aran'
+                ],
+                PreteritoImperfectoSe: ['ase',
+                    region !== 'formal' ? 'ases' : 'ase',
+                    'ase',
+                    'ásemos',
+                    region !== 'castellano' ? 'asen' : 'aseis',
+                    'asen'
+                ],
+                FuturoImperfecto: ['are',
+                    region !== 'formal' ? 'ares' : 'are',
+                    'are',
+                    'áremos',
+                    region !== 'castellano' ? 'aren' : 'areis',
+                    'aren'
+                ]
+            }
+        };
+    }
 }
+
 
 export class acertar extends hablar {
     private alteredStem: string;
@@ -97,18 +173,20 @@ export class actuar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)u/, '$1ú');
-    }
-
-    protected configDesinences(): void {
         // 2010 orthography
-        if ( typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
+        if (typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
             if (this.region === 'voseo') {
                 this.desinences.Indicativo.Presente[1] = 'as';
             }
-            this.desinences.Indicativo.Presente[4] = 'ais';
+            if (this.region === 'castellano') {
+                this.desinences.Indicativo.Presente[4] = 'ais';
+                this.desinences.Subjuntivo.Presente[4] = 'eis';
+            }
+            if (this.region === 'formal') {
+                this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
+            }
             this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
             this.desinences.Indicativo.PreteritoIndefinido[2] = 'o';
-            this.desinences.Subjuntivo.Presente[4] = 'eis';
         }
     }
 
@@ -152,7 +230,7 @@ export class aguar extends hablar {
 
     protected setSubjuntivoPresente(): void {
         this.setTable('Subjuntivo', 'Presente',
-            Array.from('012345').map(() => this.alteredStem));
+            Array_6.map(() => this.alteredStem));
     }
 }
 
@@ -194,13 +272,10 @@ export class aislar extends hablar {
 export class andar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-    }
-
-    protected configDesinences(): void {
-        this.desinences.Indicativo.PreteritoIndefinido = Array.from(DIndicativoPreteritoIndefinido);
-        this.desinences.Subjuntivo.PreteritoImperfectoRa = Array.from(DSubjuntivoPreteritoImperfectoRa);
-        this.desinences.Subjuntivo.PreteritoImperfectoSe = Array.from(DSubjuntivoPreteritoImperfectoSe);
-        this.desinences.Subjuntivo.FuturoImperfecto = Array.from(DSubjuntivoFuturoImperfecto);
+        this.desinences.Indicativo.PreteritoIndefinido = caeIndicativoPreteritoIndefinido(region);
+        this.desinences.Subjuntivo.PreteritoImperfectoRa = caeSubjuntivoPreteritoImperfectoRa(region);
+        this.desinences.Subjuntivo.PreteritoImperfectoSe = caeSubjuntivoPreteritoImperfectoSe(region);
+        this.desinences.Subjuntivo.FuturoImperfecto = caeSubjuntivoFuturoImperfecto(region);
     }
 }
 
@@ -247,13 +322,10 @@ export class cabrahigar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/i/, 'í');
-    }
-
-    protected configDesinences(): void {
         this.desinences.Indicativo.PreteritoIndefinido[0] =
-            this.desinences.Indicativo.PreteritoIndefinido[0].replace(/^/, 'u');
+            `u${this.desinences.Indicativo.PreteritoIndefinido[0]}`;
         this.desinences.Subjuntivo.Presente =
-            this.desinences.Subjuntivo.Presente.map(d => d.replace(/^/, 'u'));
+            this.desinences.Subjuntivo.Presente.map(d => `u${d}`);
     }
 
     protected setIndicativoPresente(): void {
@@ -271,13 +343,10 @@ export class colgar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/o/, 'ue');
-    }
-
-    protected configDesinences(): void {
         this.desinences.Indicativo.PreteritoIndefinido[0] =
-            this.desinences.Indicativo.PreteritoIndefinido[0].replace(/^/, 'u');
+            `u${this.desinences.Indicativo.PreteritoIndefinido[0]}`;
         this.desinences.Subjuntivo.Presente =
-            this.desinences.Subjuntivo.Presente.map(d => d.replace(/^/, 'u'));
+            this.desinences.Subjuntivo.Presente.map(d => `u${d}`);
     }
 
     protected setIndicativoPresente(): void {
@@ -314,48 +383,42 @@ export class contar extends hablar {
 export class dar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-    }
 
-    protected configDesinences(): void {
-        this.desinences.Indicativo.Presente[0] =
-            this.desinences.Indicativo.Presente[0].replace(/$/, 'y');
+        this.desinences.Indicativo.Presente = ['oy',
+            region !== 'formal' ? 'as' : 'a',
+            'a',
+            'amos',
+            region !== 'castellano' ? 'an' : 'ais',
+            'an'
+        ];
 
-        [1, 4].forEach(i => this.desinences.Indicativo.Presente[i] =
-            this.desinences.Indicativo.Presente[i].replace(/á/, 'a'));
+        this.desinences.Indicativo.PreteritoIndefinido = ['i',
+            region !== 'formal' ? 'iste' : 'io',
+            'io',
+            'imos',
+            region !== 'castellano' ? 'ieron' : 'isteis',
+            'ieron'
+        ];
 
-        [0, 1, 3, 4].forEach(i =>
-            this.desinences.Indicativo.PreteritoIndefinido[i] =
-            this.desinences.Indicativo.PreteritoIndefinido[i].replace(/^./, 'i'));
+        this.desinences.Subjuntivo.Presente = ['é',
+            region !== 'formal' ? 'es' : 'é',
+            'é',
+            'emos',
+            region !== 'castellano' ? 'en' : 'eis',
+            'en'
+        ];
 
-        this.desinences.Indicativo.PreteritoIndefinido[2] =
-            this.desinences.Indicativo.PreteritoIndefinido[2].replace(/^./, 'io');
-        this.desinences.Indicativo.PreteritoIndefinido[5] =
-            this.desinences.Indicativo.PreteritoIndefinido[5].replace(/^./, 'ie');
-
-        [0, 2].forEach(i => this.desinences.Subjuntivo.Presente[i] =
-            this.desinences.Subjuntivo.Presente[i].replace(/./, 'é'));
-        this.desinences.Subjuntivo.Presente[4] =
-            this.desinences.Subjuntivo.Presente[4].replace(/./, 'e');
-
-        [0, 1, 2, 4, 5].forEach(i => {
-            this.desinences.Subjuntivo.PreteritoImperfectoRa[i] =
-                this.desinences.Subjuntivo.PreteritoImperfectoRa[i].replace(/./, 'ie');
-
-            this.desinences.Subjuntivo.PreteritoImperfectoSe[i] =
-                this.desinences.Subjuntivo.PreteritoImperfectoSe[i].replace(/./, 'ie');
-
-            this.desinences.Subjuntivo.FuturoImperfecto[i] =
-                this.desinences.Subjuntivo.FuturoImperfecto[i].replace(/./, 'ie');
-        });
-
-        this.desinences.Subjuntivo.PreteritoImperfectoRa[3] =
-            this.desinences.Subjuntivo.PreteritoImperfectoRa[3].replace(/./, 'ié');
-
-        this.desinences.Subjuntivo.PreteritoImperfectoSe[3] =
-            this.desinences.Subjuntivo.PreteritoImperfectoSe[3].replace(/./, 'ié');
-
-        this.desinences.Subjuntivo.FuturoImperfecto[3] =
-            this.desinences.Subjuntivo.FuturoImperfecto[3].replace(/./, 'ié');
+        this.desinences.Subjuntivo.PreteritoImperfectoRa = ['iera',
+            region !== 'formal' ? 'ieras' : 'iera',
+            'iera',
+            'iéramos',
+            region !== 'castellano' ? 'ieran' : 'ierais',
+            'ieran'
+        ];
+        this.desinences.Subjuntivo.PreteritoImperfectoSe =
+            this.desinences.Subjuntivo.PreteritoImperfectoRa.map(d => d.replace(/ra/, 'se'));
+        this.desinences.Subjuntivo.FuturoImperfecto =
+            this.desinences.Subjuntivo.PreteritoImperfectoRa.map(d => d.replace(/ra/, 're'));
     }
 
     protected setImperativoAfirmativo(): void {
@@ -369,20 +432,29 @@ export class dar extends hablar {
 export class desdar extends dar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-    }
+        this.desinences.Indicativo.Presente = ['oy',
+            region !== 'formal' ? 'ás' : 'á',
+            'á',
+            'amos',
+            region !== 'castellano' ? 'án' : 'áis',
+            'án'
+        ];
 
-    protected configDesinences(): void {
-        super.configDesinences();
-        [1, 2, 4, 5].forEach(i => this.desinences.Indicativo.Presente[i] =
-            this.desinences.Indicativo.Presente[i].replace(/a/, 'á'));
+        this.desinences.Indicativo.PreteritoIndefinido = ['í',
+            region !== 'formal' ? 'iste' : 'ió',
+            'ió',
+            'imos',
+            region !== 'castellano' ? 'ieron' : 'isteis',
+            'ieron'
+        ];
 
-        this.desinences.Indicativo.PreteritoIndefinido[0] =
-            this.desinences.Indicativo.PreteritoIndefinido[0].replace(/i/, 'í');
-        this.desinences.Indicativo.PreteritoIndefinido[2] =
-            this.desinences.Indicativo.PreteritoIndefinido[2].replace(/o/, 'ó');
-
-        [1, 4, 5].forEach(i => this.desinences.Subjuntivo.Presente[i] =
-            this.desinences.Subjuntivo.Presente[i].replace(/e/, 'é'));
+        this.desinences.Subjuntivo.Presente = ['é',
+            region !== 'formal' ? 'és' : 'é',
+            'é',
+            'emos',
+            region !== 'castellano' ? 'én' : 'éis',
+            'én'
+        ];
     }
 }
 
@@ -427,7 +499,7 @@ export class errar extends hablar {
 
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-        this.alteredStem = this.stem.replace(/^/, 'y');
+        this.alteredStem = `y${this.stem}`;
     }
 
     protected setIndicativoPresente(): void {
@@ -442,28 +514,26 @@ export class errar extends hablar {
 export class estar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-    }
-
-    protected configDesinences(): void {
         this.desinences.Indicativo.Presente = [
             'oy',
-            'ás',
+            this.region !== 'formal' ? 'ás' : 'á',
             'á',
             'amos',
-            'áis',
+            this.region !== 'castellano' ? 'án' : 'áis',
             'án'
         ];
-        this.desinences.Indicativo.PreteritoIndefinido = Array.from(DIndicativoPreteritoIndefinido);
         this.desinences.Subjuntivo.Presente = [
             'é',
-            'és',
+            this.region !== 'formal' ? 'és' : 'é',
             'é',
             'emos',
-            'éis',
+            this.region !== 'castellano' ? 'én' : 'éis',
             'én'];
-        this.desinences.Subjuntivo.PreteritoImperfectoRa = Array.from(DSubjuntivoPreteritoImperfectoRa);
-        this.desinences.Subjuntivo.PreteritoImperfectoSe = Array.from(DSubjuntivoPreteritoImperfectoSe);
-        this.desinences.Subjuntivo.FuturoImperfecto = Array.from(DSubjuntivoFuturoImperfecto);
+
+        this.desinences.Indicativo.PreteritoIndefinido = caeIndicativoPreteritoIndefinido(region);
+        this.desinences.Subjuntivo.PreteritoImperfectoRa = caeSubjuntivoPreteritoImperfectoRa(region);
+        this.desinences.Subjuntivo.PreteritoImperfectoSe = caeSubjuntivoPreteritoImperfectoSe(region);
+        this.desinences.Subjuntivo.FuturoImperfecto = caeSubjuntivoFuturoImperfecto(region);
     }
 
     protected setImperativoAfirmativo(): void {
@@ -521,11 +591,8 @@ export class jugar extends hablar {
 export class pagar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
-    }
-
-    protected configDesinences(): void {
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'ué';
-        this.desinences.Subjuntivo.Presente = Array.from(DSubjuntivoPresente);
+        this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(d => `u${d}`);
     }
 }
 
@@ -535,11 +602,8 @@ export class regar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
-    }
-
-    protected configDesinences(): void {
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'ué';
-        this.desinences.Subjuntivo.Presente = Array.from(DSubjuntivoPresente);
+        this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(d => `u${d}`);
     }
 
     protected setIndicativoPresente(): void {
@@ -565,7 +629,7 @@ export class rozar extends hablar {
 
     protected setSubjuntivoPresente(): void {
         this.setTable('Subjuntivo', 'Presente',
-            Array.from('012345').map(() => this.alteredStem));
+            Array_6.map(() => this.alteredStem));
     }
 }
 
@@ -581,7 +645,7 @@ export class sacar extends hablar {
     protected setSubjuntivoPresente(): void {
         const alteredStem = this.stem.replace(/(.*)c/, '$1qu');
         this.setTable('Subjuntivo', 'Presente',
-            Array.from('012345').map(() => alteredStem));
+            Array_6.map(() => alteredStem));
     }
 }
 
@@ -602,7 +666,8 @@ export class tropezar extends hablar {
     }
 
     protected setSubjuntivoPresente(): void {
-        this.setSubjuntivoPresentePattern0125(this.stem.replace(/e(.?)z$/, 'ie$1c'), this.stem.replace(/z$/, 'c'));
+        this.setSubjuntivoPresentePattern0125(this.stem.replace(/e(.?)z$/, 'ie$1c'),
+            this.stem.replace(/z$/, 'c'));
     }
 }
 
@@ -612,18 +677,20 @@ export class vaciar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)i/, '$1í');
-    }
-
-    protected configDesinences(): void {
         // 2010 orthography
-        if ( typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
+        if (typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
             if (this.region === 'voseo') {
                 this.desinences.Indicativo.Presente[1] = 'as';
             }
-            this.desinences.Indicativo.Presente[4] = 'ais';
+            if (this.region === 'castellano') {
+                this.desinences.Indicativo.Presente[4] = 'ais';
+                this.desinences.Subjuntivo.Presente[4] = 'eis';
+            }
+            if (this.region === 'formal') {
+                this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
+            }
             this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
             this.desinences.Indicativo.PreteritoIndefinido[2] = 'o';
-            this.desinences.Subjuntivo.Presente[4] = 'eis';
         }
     }
 
@@ -635,13 +702,15 @@ export class vaciar extends hablar {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
     }
 }
+
 export class volcar extends hablar {
     public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, type, region, attributes);
     }
 
     protected setIndicativoPresente(): void {
-        this.setIndicativoPresentePattern125(this.stem.replace(/(.*)o/, '$1ue'), this.stem.replace(/(.*)o/, '$1ue'));
+        this.setIndicativoPresentePattern125(this.stem.replace(/(.*)o/, '$1ue'),
+            this.stem.replace(/(.*)o/, '$1ue'));
     }
 
     protected setIndicativoPreteritoIndefinido(): void {

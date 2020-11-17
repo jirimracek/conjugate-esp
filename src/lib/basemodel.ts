@@ -4,8 +4,8 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { PronominalKey, Regions, IndicativoSubSimpleKey, SubjuntivoSubSimpleKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubCompKey, IndicativoSubKey, SubjuntivoSubCompKey, SubjuntivoSubKey, } from './types';
-import { clearAccents, esdrujula, strongify } from './stringutils';
+import {PronominalKey, Regions, IndicativoSubSimpleKey, SubjuntivoSubSimpleKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubCompKey, IndicativoSubKey, SubjuntivoSubCompKey, SubjuntivoSubKey, } from './types';
+import {clearAccents, esdrujula, strongify} from './stringutils';
 
 // Attributes
 // attribute has form of attrname : string | boolean
@@ -29,15 +29,13 @@ type AttributeValues = DefectiveType | boolean | string;
 
 type AttributeKeys = 'PR' | 'PS' | 'D' | 'M' | 'V';
 
-type CompSubTable = { [modekey: string]: { [timekey: string]: string[] } };
+type CompSubTable = {[modekey: string]: {[timekey: string]: string[]}};
 
 type IndicativoSubjuntivoModeKey = 'Indicativo' | 'Subjuntivo';
 
-
-
 export type DesinenceTable = {
     Impersonal: {
-        [subkey in ImpersonalSubKey]: string[]
+        [subkey in ImpersonalSubKey]: string
     },
     Indicativo: {
         [subkey in IndicativoSubSimpleKey]: string[]
@@ -45,7 +43,7 @@ export type DesinenceTable = {
     Subjuntivo: {
         [subkey in SubjuntivoSubSimpleKey]: string[]
     }
-}
+};
 
 export type ResultTable = {
     Impersonal: {
@@ -60,28 +58,12 @@ export type ResultTable = {
     Imperativo: {
         [subkey in ImperativoSubKey]: string[]
     }
-}
+};
 
-export type ModelAttributes = { [attributekey in AttributeKeys]?: AttributeValues };
-export type ModelWithAttributes = { [modelname: string]: ModelAttributes };
+export type ModelAttributes = {[attributekey in AttributeKeys]?: AttributeValues};
+export type ModelWithAttributes = {[modelname: string]: ModelAttributes};
 export type Model = string | ModelWithAttributes;
 
-// The composite verb auxiliar haber forms
-const AUX: Readonly<CompSubTable> = {
-    Indicativo: {
-        PreteritoPerfecto: ['he', 'has', 'ha', 'hemos', 'habéis', 'han'],
-        PreteritoPluscuamperfecto: ['había', 'habías', 'había', 'habíamos', 'habíais', 'habían'],
-        PreteritoAnterior: ['hube', 'hubiste', 'hubo', 'hubimos', 'hubisteis', 'hubieron'],
-        FuturoPerfecto: ['habré', 'habrás', 'habrá', 'habremos', 'habréis', 'habrán'],
-        CondicionalCompuesto: ['habría', 'habrías', 'habría', 'habríamos', 'habríais', 'habrían']
-    },
-    Subjuntivo: {
-        PreteritoPerfecto: ['haya', 'hayas', 'haya', 'hayamos', 'hayáis', 'hayan'],
-        PreteritoPluscuamperfectoRa: ['hubiera', 'hubieras', 'hubiera', 'hubiéramos', 'hubierais', 'hubieran'],
-        PreteritoPluscuamperfectoSe: ['hubiese', 'hubieses', 'hubiese', 'hubiésemos', 'hubieseis', 'hubiesen'],
-        FuturoPerfecto: ['hubiere', 'hubieres', 'hubiere', 'hubiéremos', 'hubiereis', 'hubieren']
-    }
-};
 
 const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
     'imper',
@@ -91,11 +73,6 @@ const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
     'omorfo',
     'osmorfo',
     'ogmorfo'
-];
-export const IMPERSONAL_KEYS: ImpersonalSubKey[] = [
-    'Infinitivo',
-    'Gerundio',
-    'Participio'
 ];
 
 export const INDICATIVO_SIMPLE_KEYS: IndicativoSubSimpleKey[] = [
@@ -128,10 +105,10 @@ export const SUBJUNTIVO_COMP_KEYS: SubjuntivoSubCompKey[] = [
     'FuturoPerfecto'
 ];
 
-export const IMPERATIVO_KEYS: ImperativoSubKey[] = [
-    'Afirmativo',
-    'Negativo'
-];
+// export const IMPERATIVO_VKEYS: ImperativoSubKey[] = [
+//     'Afirmativo',
+//     'Negativo'
+// ];
 
 const NO_IMPERATIVO_NEGATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'ogmorfo'];
 const DASH6 = '------';
@@ -161,114 +138,149 @@ export abstract class BaseModel {
         this.region = region;
         this.attributes = attributes;                                     //  exists but empty if there aren't any
         this.defectiveAttributes = attributes['D'] as DefectiveType;      //  undefined if there aren't any 
-        // Dup objects so we don't disturb the constant
-        this.auxHaber = JSON.parse(JSON.stringify(AUX));
         this.version = (attributes.V ? attributes.V : '0') as string;
 
-        this.reflexPronouns = [
+        // The composite verb auxiliar haber forms
+        // NOTE on plural voseo: https://www.crisoltranslations.com/our-blog/voseo-latin-american-spanish/
+        this.auxHaber = this.initAuxiliaryHaber(region);
+
+        this.reflexPronouns = ((): Array<string> => [
             'me',
-            'formal' === region ? 'se' : 'te',
+            region !== 'formal' ? 'te' : 'se',
             'se',
             'nos',
-            'castellano' === region ? 'os' : 'se',
+            region !== 'castellano' ? 'se' : 'os',
             'se'
-        ];
+        ])();
 
-        this.personalPronouns = [
+        this.personalPronouns = ((): Array<string> => [
             'yo',
-            ['castellano', 'canarias'].includes(region) ? 'tú' :
-                'voseo' === region ? 'vos' : 'usted',
+            region !== 'formal' ? (region !== 'voseo' ? 'tú' : 'vos') : 'usted',
             'él',
             'nosotros',
-            'castellano' === region ? 'vosotros' : 'ustedes',
+            region !== 'castellano' ? 'ustedes' : 'vosotros',
             'ellos'
-        ];
+        ])();
 
-        // initialize empty result conjugation table
+        // initialize empty result conjugation table, imperativo needs to be initialize to ------
         this.table = {
-            Impersonal: Object.fromEntries([...IMPERSONAL_KEYS.map(key => [key, ''])]),
-            Indicativo: Object.fromEntries([
-                ...INDICATIVO_SIMPLE_KEYS.map(key => [key, []]),
-                ...INDICATIVO_COMP_KEYS.map(key => [key, []])]),
-            Subjuntivo: Object.fromEntries([
-                ...SUBJUNTIVO_SIMPLE_KEYS.map(key => [key, []]),
-                ...SUBJUNTIVO_COMP_KEYS.map(key => [key, []])]),
-            Imperativo: Object.fromEntries([...IMPERATIVO_KEYS.map(key => [key, Array.from(DASH6)])])
+            Impersonal: {
+                Infinitivo: '', Gerundio: '', Participio: ''
+            },
+            Indicativo: {
+                Presente: [],
+                PreteritoImperfecto: [],
+                PreteritoIndefinido: [],
+                FuturoImperfecto: [],
+                CondicionalSimple: [],
+                PreteritoPerfecto: [],
+                PreteritoPluscuamperfecto: [],
+                PreteritoAnterior: [],
+                FuturoPerfecto: [],
+                CondicionalCompuesto: []
+            },
+            Subjuntivo: {
+                Presente: [],
+                PreteritoImperfectoRa: [],
+                PreteritoImperfectoSe: [],
+                FuturoImperfecto: [],
+                PreteritoPerfecto: [],
+                PreteritoPluscuamperfectoRa: [],
+                PreteritoPluscuamperfectoSe: [],
+                FuturoPerfecto: []
+            },
+            Imperativo: {
+                Afirmativo: Array.from(DASH6),
+                Negativo: Array.from(DASH6)
+            }
         };
 
-        // initialize empty desinences table
         this.desinences = {
-            Impersonal: Object.fromEntries([...IMPERSONAL_KEYS.map(key => [key, []])]),
-            Indicativo: Object.fromEntries([
-                ...INDICATIVO_SIMPLE_KEYS.map(key => [key, []]),
-                ...INDICATIVO_COMP_KEYS.map(key => [key, []])]),
-            Subjuntivo: Object.fromEntries([
-                ...SUBJUNTIVO_SIMPLE_KEYS.map(key => [key, []]),
-                ...SUBJUNTIVO_COMP_KEYS.map(key => [key, []])]),
-
+            Impersonal: {
+                Infinitivo: '', Gerundio: '', Participio: ''
+            },
+            Indicativo: {
+                Presente: [],
+                PreteritoImperfecto: [],
+                PreteritoIndefinido: [],
+                FuturoImperfecto: [],
+                CondicionalSimple: []
+            },
+            Subjuntivo: {
+                Presente: [],
+                PreteritoImperfectoRa: [],
+                PreteritoImperfectoSe: [],
+                FuturoImperfecto: []
+            }
         };
     }
+    // NOTE on plural voseo: https://www.crisoltranslations.com/our-blog/voseo-latin-american-spanish/
+    private initAuxiliaryHaber(region: Regions): CompSubTable {
+        return {
+            Indicativo: {
+                PreteritoPerfecto: ['he',
+                    region !== 'formal' ? 'has' : 'ha',
+                    'ha',
+                    'hemos',
+                    region !== 'castellano' ? 'han' : 'habéis',
+                    'han'],
+                PreteritoPluscuamperfecto: ['había',
+                    region !== 'formal' ? 'habías' : 'había',
+                    'había',
+                    'habíamos',
+                    region !== 'castellano' ? 'habían' : 'habíais',
+                    'habían'],
+                PreteritoAnterior: ['hube',
+                    region !== 'formal' ? 'hubiste' : 'hubo',
+                    'hubo',
+                    'hubimos',
+                    region !== 'castellano' ? 'hubieron' : 'hubisteis',
+                    'hubieron'],
+                FuturoPerfecto: ['habré',
+                    region !== 'formal' ? 'habrás' : 'habrá',
+                    'habrá',
+                    'habremos',
+                    region !== 'castellano' ? 'habrán' : 'habréis',
+                    'habrán'],
+                CondicionalCompuesto: ['habría',
+                    region !== 'formal' ? 'habrías' : 'habría',
+                    'habría',
+                    'habríamos',
+                    region !== 'castellano' ? 'habrían' : 'habríais',
+                    'habrían']
+            },
+            Subjuntivo: {
+                PreteritoPerfecto: ['haya',
+                    region !== 'formal' ? 'hayas' : 'haya',
+                    'haya',
+                    'hayamos',
+                    region !== 'castellano' ? 'hayan' : 'hayáis',
+                    'hayan'],
+                PreteritoPluscuamperfectoRa: ['hubiera',
+                    region !== 'formal' ? 'hubieras' : 'hubiera',
+                    'hubiera',
+                    'hubiéramos',
+                    region !== 'castellano' ? 'hubieran' : 'hubierais',
+                    'hubieran'],
+                PreteritoPluscuamperfectoSe: ['hubiese',
+                    region !== 'formal' ? 'hubieses' : 'hubiese',
+                    'hubiese',
+                    'hubiésemos',
+                    region !== 'castellano' ? 'hubiesen' : 'hubieseis',
+                    'hubiesen'],
+                FuturoPerfecto: ['hubiere',
+                    region !== 'formal' ? 'hubieres' : 'hubiere',
+                    'hubiere',
+                    'hubiéremos',
+                    region !== 'castellano' ? 'hubieren' : 'hubiereis',
+                    'hubieren']
+            }
+        };
+    }
+
+
     public getPronouns(): string[] {
         return this.personalPronouns;
-    }
-
-    /**
-     * Reorder terminations based on the region.  Call in derived class once we have the desinences configured
-     * based on verb type.  This is the last step, common to everyone.
-     */
-    protected remapDesinencesByRegion(): void {
-        // Remap terminations based on region
-        if (this.region === 'voseo') {
-            // Then, 2nd plural -> ustedes 
-            INDICATIVO_SIMPLE_KEYS.forEach(mode =>
-                this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]);
-
-            SUBJUNTIVO_SIMPLE_KEYS.forEach(mode =>
-                this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
-
-            // Remap auxiliary Haber
-            INDICATIVO_COMP_KEYS.forEach(mode =>
-                this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
-
-            SUBJUNTIVO_COMP_KEYS.forEach(mode =>
-                this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
-
-        } else if (this.region === 'formal') {
-            // Castellano formal, 2nd singular -> usted, 2nd plural -> ustedes
-            INDICATIVO_SIMPLE_KEYS.forEach(mode => {
-                this.desinences.Indicativo[mode][1] = this.desinences.Indicativo[mode][2];
-                this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5];
-            });
-
-            SUBJUNTIVO_SIMPLE_KEYS.forEach(mode => {
-                this.desinences.Subjuntivo[mode][1] = this.desinences.Subjuntivo[mode][2];
-                this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5];
-            });
-
-            INDICATIVO_COMP_KEYS.forEach(mode => {
-                this.auxHaber.Indicativo[mode][1] = this.auxHaber.Indicativo[mode][2];
-                this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5];
-            });
-
-            SUBJUNTIVO_COMP_KEYS.forEach(mode => {
-                this.auxHaber.Subjuntivo[mode][1] = this.auxHaber.Subjuntivo[mode][2];
-                this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5];
-            });
-
-        } else if (this.region === 'canarias') {
-            // Canarias, 2nd singular remains the same, 2nd plural -> ustedes
-            INDICATIVO_SIMPLE_KEYS.forEach(mode =>
-                this.desinences.Indicativo[mode][4] = this.desinences.Indicativo[mode][5]);
-
-            SUBJUNTIVO_SIMPLE_KEYS.forEach(mode =>
-                this.desinences.Subjuntivo[mode][4] = this.desinences.Subjuntivo[mode][5]);
-
-            INDICATIVO_COMP_KEYS.forEach(mode =>
-                this.auxHaber.Indicativo[mode][4] = this.auxHaber.Indicativo[mode][5]);
-
-            SUBJUNTIVO_COMP_KEYS.forEach(mode =>
-                this.auxHaber.Subjuntivo[mode][4] = this.auxHaber.Subjuntivo[mode][5]);
-        }
     }
 
     public getConjugation(): ResultTable {
@@ -302,16 +314,18 @@ export abstract class BaseModel {
 
     private setInfinitivo(): void {
         this.table.Impersonal.Infinitivo =
-            `${this.stem}${(this.type === 'N' ?
-                this.desinences.Impersonal.Infinitivo[0] :
-                this.desinences.Impersonal.Infinitivo[1])}`;
+            `${this.stem}${this.desinences.Impersonal.Infinitivo}`;
+        // `${this.stem}${(this.type === 'N' ?
+        //     this.desinences.Impersonal.Infinitivo[0] :
+        //     this.desinences.Impersonal.Infinitivo[1])}`;
     }
 
     protected setGerundio(root?: string): void {
         this.table.Impersonal.Gerundio =
-            `${root ? root : this.stem}${this.type === 'N' ?
-                this.desinences.Impersonal.Gerundio[0] :
-                this.desinences.Impersonal.Gerundio[1]}`;
+            `${root ? root : this.stem}${this.desinences.Impersonal.Gerundio}`;
+        // `${root ? root : this.stem}${this.type === 'N' ?
+        //     this.desinences.Impersonal.Gerundio[0] :
+        //     this.desinences.Impersonal.Gerundio[1]}`;
     }
 
     protected setParticipio(): void {
@@ -506,10 +520,7 @@ export abstract class BaseModel {
             case 'imorfo':
                 // use only forms whose desinence starts with i or í, zap the rest
                 // Tricky, need to look at the original desinence this was built with
-                // Nonpronominal and the desinence doesn't start with ií, nuke
-                if (this.type === 'N' && /^[^ií]/.test(this.desinences.Impersonal.Gerundio[0])) {
-                    this.table.Impersonal.Gerundio = '-';
-                } else if (this.type === 'P' && /^[^ií]/.test(this.desinences.Impersonal.Gerundio[1])) {
+                if (/^[^ií]/.test(this.desinences.Impersonal.Gerundio)) {
                     this.table.Impersonal.Gerundio = '-';
                 }
 

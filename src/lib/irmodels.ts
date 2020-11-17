@@ -4,48 +4,21 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { BaseModel, ModelAttributes, DesinenceTable } from './basemodel';
-import { PronominalKey, Regions, SubjuntivoSubSimpleKey, IndicativoSubSimpleKey } from './types';
+import {BaseModel, ModelAttributes, DesinenceTable} from './basemodel';
+import {PronominalKey, Regions} from './types';
 
 
 /* Do not export anything but classes from these model files, model factory depends on these exports */
 
 // Temp arrays used to remap
-const SIXARRAY = [0, 1, 2, 3, 4, 5];    // Use to remap all persons, etc
-const FIVEARRAY = [1, 2, 3, 4, 5];      // Use to remap 5 persons or when the index itself doesn't matter!!!
-
-const IR: Readonly<DesinenceTable> = {
-    Impersonal: {
-        Infinitivo: ['ir', 'irse'],
-        Gerundio: ['iendo', 'iéndose'],
-        Participio: ['ido']
-    },
-    Indicativo: {
-        Presente: ['o', 'es', 'e', 'imos', 'ís', 'en'],
-        PreteritoImperfecto: ['ía', 'ías', 'ía', 'íamos', 'íais', 'ían'],
-        PreteritoIndefinido: ['í', 'iste', 'ió', 'imos', 'isteis', 'ieron'],
-        FuturoImperfecto: ['iré', 'irás', 'irá', 'iremos', 'iréis', 'irán'],
-        CondicionalSimple: ['iría', 'irías', 'iría', 'iríamos', 'iríais', 'irían']
-    },
-    Subjuntivo: {
-        Presente: ['a', 'as', 'a', 'amos', 'áis', 'an'],
-        PreteritoImperfectoRa: ['iera', 'ieras', 'iera', 'iéramos', 'ierais', 'ieran'],
-        PreteritoImperfectoSe: ['iese', 'ieses', 'iese', 'iésemos', 'ieseis', 'iesen'],
-        FuturoImperfecto: ['iere', 'ieres', 'iere', 'iéremos', 'iereis', 'ieren']
-    }
-};
+const Array_6 = Array(6).fill('');
+const Array_5 = Array(5).fill('');
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export class partir extends BaseModel {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-        this.desinences = JSON.parse(JSON.stringify(IR));
-
-        if (this.region === 'voseo') {
-            this.desinences.Indicativo.Presente[1] = 'ís';
-        }
-        this.configDesinences();
-        this.remapDesinencesByRegion();
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
+        this.desinences = this.initDesinences(region, reflexive);
     }
 
     protected setParticipio(): void {
@@ -58,12 +31,78 @@ export class partir extends BaseModel {
         }
     }
 
-    protected configDesinences(): void { /* empty */ }
+    private initDesinences(region: Regions, reflexive: PronominalKey): DesinenceTable {
+        return {
+            Impersonal: {
+                Infinitivo: reflexive !== 'P' ? 'ir' : 'irse',
+                Gerundio: reflexive !== 'P' ? 'iendo' : 'iéndose',
+                Participio: 'ido'
+            },
+            Indicativo: {
+                Presente: ['o',
+                    region !== 'voseo' ? (region !== 'formal' ? 'es' : 'e') : 'ís',
+                    'e',
+                    'imos',
+                    region !== 'castellano' ? 'en' : 'ís',
+                    'en'],
+                PreteritoImperfecto: ['ía',
+                    region !== 'formal' ? 'ías' : 'ía',
+                    'ía',
+                    'íamos',
+                    region !== 'castellano' ? 'ían' : 'íais',
+                    'ían'],
+                PreteritoIndefinido: ['í',
+                    region !== 'formal' ? 'iste' : 'ió',
+                    'ió',
+                    'imos',
+                    region !== 'castellano' ? 'ieron' : 'isteis',
+                    'ieron'],
+                FuturoImperfecto: ['iré',
+                    region !== 'formal' ? 'irás' : 'irá',
+                    'irá',
+                    'iremos',
+                    region !== 'castellano' ? 'irán' : 'iréis',
+                    'irán'],
+                CondicionalSimple: ['iría',
+                    region !== 'formal' ? 'irías' : 'iría',
+                    'iría',
+                    'iríamos',
+                    region !== 'castellano' ? 'irían' : 'iríais',
+                    'irían']
+            },
+            Subjuntivo: {
+                Presente: ['a',
+                    region === 'formal' ? 'a' : 'as',
+                    'a',
+                    'amos',
+                    region === 'castellano' ? 'áis' : 'an',
+                    'an'],
+                PreteritoImperfectoRa: ['iera',
+                    region === 'formal' ? 'iera' : 'ieras',
+                    'iera',
+                    'iéramos',
+                    region === 'castellano' ? 'ierais' : 'ieran',
+                    'ieran'],
+                PreteritoImperfectoSe: ['iese',
+                    region === 'formal' ? 'iese' : 'ieses',
+                    'iese',
+                    'iésemos',
+                    region === 'castellano' ? 'ieseis' : 'iesen',
+                    'iesen'],
+                FuturoImperfecto: ['iere',
+                    region === 'formal' ? 'iere' : 'ieres',
+                    'iere',
+                    'iéremos',
+                    region === 'castellano' ? 'iereis' : 'ieren',
+                    'ieren']
+            }
+        };
+    }
 }
 
 export class abrir extends partir {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
     }
 
     protected setParticipio(): void {
@@ -72,25 +111,21 @@ export class abrir extends partir {
     }
 }
 
-
 export class asir extends partir {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-    }
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
+        this.desinences.Indicativo.Presente[0] = 'go';
 
-    protected configDesinences(): void {
-        this.desinences.Indicativo.Presente[0] = this.desinences.Indicativo.Presente[0].replace(/^/, 'g');
-
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.Presente[i] =
-            this.desinences.Subjuntivo.Presente[i].replace(/^/, 'g'));
+        this.desinences.Subjuntivo.Presente =
+            this.desinences.Subjuntivo.Presente.map(d => `g${d}`);
     }
 }
 
 export class adquirir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/ir/, 'ier');
     }
 
@@ -107,42 +142,48 @@ export class argüir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         //                                \u00fc ===  ü                      
         this.alteredStem = this.stem.replace(/\u00fc/, 'u');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
-    }
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
 
-    protected configDesinences(): void {
-        this.desinences.Impersonal.Gerundio = ['yendo', 'yéndose'];
+        this.desinences.Impersonal.Gerundio = reflexive !== 'P' ? 'yendo' : 'yéndose';
 
         [0, 2, 5].forEach(i => this.desinences.Indicativo.Presente[i] =
             `y${this.desinences.Indicativo.Presente[i]}`);
+
+        [2, 5].forEach(i => this.desinences.Indicativo.PreteritoIndefinido[i] =
+            this.desinences.Indicativo.PreteritoIndefinido[i].replace(/^i/, 'y'));
+
+        if (region !== 'castellano') {
+            this.desinences.Indicativo.Presente[4] =
+                `y${this.desinences.Indicativo.Presente[4]}`;
+            this.desinences.Indicativo.PreteritoIndefinido[4] =
+                this.desinences.Indicativo.PreteritoIndefinido[4].replace(/^i/, 'y');
+        }
+
+        if (region === 'formal') {
+            this.desinences.Indicativo.PreteritoIndefinido[1] =
+                this.desinences.Indicativo.PreteritoIndefinido[1].replace(/^i/, 'y');
+        }
 
         if (this.region !== 'voseo') {
             this.desinences.Indicativo.Presente[1] =
                 `y${this.desinences.Indicativo.Presente[1]}`;
         }
 
-        const pattern = /^i/;
-        const alteredStem = 'y';
-        [2, 5].forEach(i => this.desinences.Indicativo.PreteritoIndefinido[i] =
-            this.desinences.Indicativo.PreteritoIndefinido[i].replace(pattern, alteredStem));
+        this.desinences.Subjuntivo.Presente =
+            this.desinences.Subjuntivo.Presente.map(d => `y${d}`);
 
-        SIXARRAY.forEach(i => {
-            this.desinences.Subjuntivo.Presente[i] =
-                `y${this.desinences.Subjuntivo.Presente[i]}`;
+        this.desinences.Subjuntivo.PreteritoImperfectoRa =
+            this.desinences.Subjuntivo.PreteritoImperfectoRa.map(d => d.replace(/^i/, 'y'));
 
-            this.desinences.Subjuntivo.PreteritoImperfectoRa[i] =
-                this.desinences.Subjuntivo.PreteritoImperfectoRa[i].replace(pattern, alteredStem);
+        this.desinences.Subjuntivo.PreteritoImperfectoSe =
+            this.desinences.Subjuntivo.PreteritoImperfectoSe.map(d => d.replace(/^i/, 'y'));
 
-            this.desinences.Subjuntivo.PreteritoImperfectoSe[i] =
-                this.desinences.Subjuntivo.PreteritoImperfectoSe[i].replace(pattern, alteredStem);
-
-            this.desinences.Subjuntivo.FuturoImperfecto[i] =
-                this.desinences.Subjuntivo.FuturoImperfecto[i].replace(pattern, alteredStem);
-        });
+        this.desinences.Subjuntivo.FuturoImperfecto =
+            this.desinences.Subjuntivo.FuturoImperfecto.map(d => d.replace(/^i/, 'y'));
     }
 
     protected setGerundio(): void {
@@ -179,25 +220,29 @@ export class argüir extends partir {
 export class balbucir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/c$/, 'ce');
-    }
-    // balbucir takes some desinences from ir and others from ar
-    protected configDesinences(): void {
+
+        // balbucir takes some desinences from ir and others from ar
         // Adopt desinences from AR
-        this.desinences.Subjuntivo.Presente = ['e', 'es', 'e', 'emos', 'éis', 'en'];
+        this.desinences.Subjuntivo.Presente = ['e',
+            region !== 'formal' ? 'es' : 'e',
+            'e',
+            'emos',
+            region !== 'castellano' ? 'en' : 'éis',
+            'en'];
     }
 
     protected setIndicativoPresente(): void {
         this.setTable('Indicativo', 'Presente', [
             this.alteredStem,
-            ...FIVEARRAY.map(() => this.stem)]);
+            ...Array_5.map(() => this.stem)]);
     }
 
     protected setSubjuntivoPresente(): void {
         this.setTable('Subjuntivo', 'Presente',
-            SIXARRAY.map(() => this.alteredStem));
+            Array_6.map(() => this.alteredStem));
     }
 }
 
@@ -205,43 +250,41 @@ export class bendecir extends partir {
     protected alteredStem: string;
     protected alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/ec/, '');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
-    }
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
 
-    protected configDesinences(): void {
         this.desinences.Indicativo.PreteritoIndefinido = [
             'e',
-            'iste',
+            region !== 'formal' ? 'iste' : 'o',
             'o',
             'imos',
-            'isteis',
+            region !== 'castellano' ? 'eron' : 'isteis',
             'eron'
         ];
         this.desinences.Subjuntivo.PreteritoImperfectoRa = [
             'ijera',
-            'ijeras',
+            region !== 'formal' ? 'ijeras' : 'ijera',
             'ijera',
             'ijéramos',
-            'ijerais',
+            region !== 'castellano' ? 'ijeran' : 'ijerais',
             'ijeran',
         ];
         this.desinences.Subjuntivo.PreteritoImperfectoSe = [
             'ijese',
-            'ijeses',
+            region !== 'formal' ? 'ijeses' : 'ijese',
             'ijese',
             'ijésemos',
-            'ijeseis',
+            region !== 'castellano' ? 'ijesen' : 'ijeseis',
             'ijesen',
         ];
         this.desinences.Subjuntivo.FuturoImperfecto = [
             'ijere',
-            'ijeres',
+            region !== 'formal' ? 'ijeres' : 'ijere',
             'ijere',
             'ijéremos',
-            'ijereis',
+            region !== 'castellano' ? 'ijeren' : 'ijereis',
             'ijeren',
         ];
     }
@@ -256,12 +299,12 @@ export class bendecir extends partir {
 
     protected setIndicativoPreteritoIndefinido(): void {
         const alteredStem = this.stem.replace(/ec/, 'ij');
-        this.setTable('Indicativo', 'PreteritoIndefinido', SIXARRAY.map(() => alteredStem));
+        this.setTable('Indicativo', 'PreteritoIndefinido', Array_6.map(() => alteredStem));
     }
 
     protected setSubjuntivoPresente(): void {
         const alteredStem = this.stem.replace(/ec/, 'ig');
-        this.setTable('Subjuntivo', 'Presente', SIXARRAY.map(() => alteredStem));
+        this.setTable('Subjuntivo', 'Presente', Array_6.map(() => alteredStem));
     }
 
     protected setSubjuntivoPreteritoImperfectoRa(): void {
@@ -281,27 +324,33 @@ export class ceñir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
-    }
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
 
-    protected configDesinences(): void {
-        [0, 1].forEach(i => this.desinences.Impersonal.Gerundio[i] =
-            this.desinences.Impersonal.Gerundio[i].replace(/i/, ''));
+        this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.replace(/^i/, '');
 
         [2, 5].forEach(i => this.desinences.Indicativo.PreteritoIndefinido[i] =
-            this.desinences.Indicativo.PreteritoIndefinido[i].replace(/i/, ''));
+            this.desinences.Indicativo.PreteritoIndefinido[i].replace(/^i/, ''));
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.PreteritoImperfectoRa[i] =
-            this.desinences.Subjuntivo.PreteritoImperfectoRa[i].replace(/i/, ''));
+        if (region !== 'castellano') {
+            this.desinences.Indicativo.PreteritoIndefinido[4] =
+                this.desinences.Indicativo.PreteritoIndefinido[4].replace(/^i/, '');
+            if (region === 'formal') {
+                this.desinences.Indicativo.PreteritoIndefinido[1] =
+                    this.desinences.Indicativo.PreteritoIndefinido[1].replace(/^i/, '');
+            }
+        }
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.PreteritoImperfectoSe[i] =
-            this.desinences.Subjuntivo.PreteritoImperfectoSe[i].replace(/i/, ''));
+        this.desinences.Subjuntivo.PreteritoImperfectoRa =
+            this.desinences.Subjuntivo.PreteritoImperfectoRa.map(d => d.replace(/^i/, ''));
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.FuturoImperfecto[i] =
-            this.desinences.Subjuntivo.FuturoImperfecto[i].replace(/i/, ''));
+        this.desinences.Subjuntivo.PreteritoImperfectoSe =
+            this.desinences.Subjuntivo.PreteritoImperfectoSe.map(d => d.replace(/^i/, ''));
+
+        this.desinences.Subjuntivo.FuturoImperfecto =
+            this.desinences.Subjuntivo.FuturoImperfecto.map(d => d.replace(/^i/, ''));
     }
 
     protected setGerundio(): void {
@@ -336,8 +385,8 @@ export class ceñir extends partir {
 export class cohibir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)i/, '$1í');
     }
 
@@ -356,36 +405,38 @@ export class conducir extends partir {
     private alteredStemArray: string[];
     private secondAlteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)c/, '$1zc');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/(.*)c/, '$1j');
-        this.secondAlteredStemArray = SIXARRAY.map(() => this.secondAlteredStem);
-    }
+        this.secondAlteredStemArray = Array_6.map(() => this.secondAlteredStem);
 
-    protected configDesinences(): void {
-        this.desinences.Indicativo.PreteritoIndefinido[0] =
-            this.desinences.Indicativo.PreteritoIndefinido[0].replace(/í/, 'e');
-        this.desinences.Indicativo.PreteritoIndefinido[2] =
-            this.desinences.Indicativo.PreteritoIndefinido[2].replace(/ió/, 'o');
-        this.desinences.Indicativo.PreteritoIndefinido[5] =
-            this.desinences.Indicativo.PreteritoIndefinido[5].replace(/i/, '');
+        this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
+        this.desinences.Indicativo.PreteritoIndefinido[2] = 'o';
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.PreteritoImperfectoRa[i] =
-            this.desinences.Subjuntivo.PreteritoImperfectoRa[i].replace(/i/, ''));
+        if (region !== 'castellano') {
+            this.desinences.Indicativo.PreteritoIndefinido[4] = 'eron';
+            if (region === 'formal') {
+                this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
+            }
+        }
+        this.desinences.Indicativo.PreteritoIndefinido[5] = 'eron';
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.PreteritoImperfectoSe[i] =
-            this.desinences.Subjuntivo.PreteritoImperfectoSe[i].replace(/i/, ''));
+        this.desinences.Subjuntivo.PreteritoImperfectoRa =
+            this.desinences.Subjuntivo.PreteritoImperfectoRa.map(d => d.replace(/i/, ''));
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.FuturoImperfecto[i] =
-            this.desinences.Subjuntivo.FuturoImperfecto[i].replace(/i/, ''));
+        this.desinences.Subjuntivo.PreteritoImperfectoSe =
+            this.desinences.Subjuntivo.PreteritoImperfectoSe.map(d => d.replace(/i/, ''));
+
+        this.desinences.Subjuntivo.FuturoImperfecto =
+            this.desinences.Subjuntivo.FuturoImperfecto.map(d => d.replace(/i/, ''));
     }
 
     protected setIndicativoPresente(): void {
         this.setTable('Indicativo', 'Presente', [
             this.alteredStem,
-            ...FIVEARRAY.map(() => this.stem)]);
+            ...Array_5.map(() => this.stem)]);
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
@@ -415,12 +466,12 @@ export class corregir extends partir {
     private alteredStemArray: string[];
     private secondAlteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/eg/, 'ij');
-        this.secondAlteredStemArray = SIXARRAY.map(() => this.secondAlteredStem);
+        this.secondAlteredStemArray = Array_6.map(() => this.secondAlteredStem);
     }
 
     protected setGerundio(): void {
@@ -454,9 +505,8 @@ export class corregir extends partir {
 
 // Write according to docs/decir.ods, 3 versions
 export class decir extends bendecir {
-
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
     }
 
     protected setParticipio(): void {
@@ -494,47 +544,47 @@ export class decir extends bendecir {
 export class delinquir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/qu/, 'c');
     }
 
     protected setIndicativoPresente(): void {
         this.setTable('Indicativo', 'Presente', [
             this.alteredStem,
-            ...FIVEARRAY.map(() => this.stem)
+            ...Array_5.map(() => this.stem)
         ]);
     }
 
     protected setSubjuntivoPresente(): void {
-        this.setTable('Subjuntivo', 'Presente', SIXARRAY.map(() => this.alteredStem));
+        this.setTable('Subjuntivo', 'Presente', Array_6.map(() => this.alteredStem));
     }
 }
 
 export class dirigir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/g$/, 'j');
     }
 
     protected setIndicativoPresente(): void {
         this.setTable('Indicativo', 'Presente', [
             this.alteredStem,
-            ...FIVEARRAY.map(() => this.stem)]);
+            ...Array_5.map(() => this.stem)]);
     }
 
     protected setSubjuntivoPresente(): void {
-        this.setTable('Subjuntivo', 'Presente', SIXARRAY.map(() => this.alteredStem));
+        this.setTable('Subjuntivo', 'Presente', Array_6.map(() => this.alteredStem));
     }
 }
 
 export class discernir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
     }
 
@@ -549,20 +599,20 @@ export class discernir extends partir {
 export class distinguir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/u$/, '');
     }
 
     protected setIndicativoPresente(): void {
         this.setTable('Indicativo', 'Presente', [
             this.alteredStem,
-            ...FIVEARRAY.map(() => this.stem)
+            ...Array_5.map(() => this.stem)
         ]);
     }
 
     protected setSubjuntivoPresente(): void {
-        this.setTable('Subjuntivo', 'Presente', SIXARRAY.map(() => this.alteredStem));
+        this.setTable('Subjuntivo', 'Presente', Array_6.map(() => this.alteredStem));
     }
 }
 
@@ -571,10 +621,10 @@ export class dormir extends partir {
     private secondAlteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)o/, '$1u');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/(.*)o/, '$1ue');
     }
 
@@ -605,47 +655,42 @@ export class dormir extends partir {
     protected setSubjuntivoFuturoImperfecto(): void {
         this.setTable('Subjuntivo', 'FuturoImperfecto', this.alteredStemArray);
     }
-
 }
 
 export class embaír extends partir {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-    }
-
-    protected configDesinences(): void {
-        this.desinences.Impersonal.Infinitivo = ['ír', 'írse'];
-        this.desinences.Impersonal.Gerundio = ['yendo', 'yéndose'];
-        this.desinences.Impersonal.Participio = ['ído'];
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
+        this.desinences.Impersonal.Infinitivo = reflexive !== 'P' ? 'ír' : 'írse';
+        this.desinences.Impersonal.Gerundio = reflexive !== 'P' ? 'yendo' : 'yéndose';
+        this.desinences.Impersonal.Participio = 'ído';
         this.desinences.Indicativo.Presente[0] = 'yo';
         this.desinences.Indicativo.Presente[3] = 'ímos';
         this.desinences.Indicativo.PreteritoIndefinido = [
             'í',
-            'íste',
+            region !== 'formal' ? 'íste' : 'yó',
             'yó',
             'ímos',
-            'ísteis',
+            region !== 'castellano' ? 'yeron' : 'ísteis',
             'yeron'
         ];
-        this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(t => `y${t}`);
+        this.desinences.Subjuntivo.Presente =
+            this.desinences.Subjuntivo.Presente.map(d => `y${d}`);
 
-        let pattern = /i/;
-        let alteredStem = 'y';
-        [0, 1, 2, 3, 5].forEach(i =>
-            ['PreteritoImperfectoRa',
-                'PreteritoImperfectoSe',
-                'FuturoImperfecto'
-            ].forEach(modeTime => this.desinences.Subjuntivo[modeTime as SubjuntivoSubSimpleKey][i] =
-                this.desinences.Subjuntivo[modeTime as SubjuntivoSubSimpleKey][i].replace(pattern, alteredStem))
-        );
-
-        pattern = /ie/;
-        alteredStem = 'yé';
-        ['PreteritoImperfectoRa',
-            'PreteritoImperfectoSe',
-            'FuturoImperfecto'
-        ].forEach(modeTime => this.desinences.Subjuntivo[modeTime as SubjuntivoSubSimpleKey][4] =
-            this.desinences.Subjuntivo[modeTime as SubjuntivoSubSimpleKey][4].replace(pattern, alteredStem));
+        this.desinences.Subjuntivo.PreteritoImperfectoRa =
+            this.desinences.Subjuntivo.PreteritoImperfectoRa.map((d, i) =>
+                i === 4 && region === 'castellano' ?
+                    d.replace(/^ie/, 'yé') :
+                    d.replace(/^i/, 'y'));
+        this.desinences.Subjuntivo.PreteritoImperfectoSe =
+            this.desinences.Subjuntivo.PreteritoImperfectoSe.map((d, i) =>
+                i === 4 && region === 'castellano' ?
+                    d.replace(/^ie/, 'yé') :
+                    d.replace(/^i/, 'y'));
+        this.desinences.Subjuntivo.FuturoImperfecto =
+            this.desinences.Subjuntivo.FuturoImperfecto.map((d, i) =>
+                i === 4 && region === 'castellano' ?
+                    d.replace(/^ie/, 'yé') :
+                    d.replace(/^i/, 'y'));
     }
 }
 
@@ -655,13 +700,12 @@ export class erguir extends partir {
     private thirdAlteredStem: string;
     private thirdAlteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/^(.*)u/, 'y$1');
         this.secondAlteredStem = this.stem.replace(/^e(.*)u/, 'i$1');
         this.thirdAlteredStem = this.stem.replace(/^e/, 'i');
-        this.thirdAlteredStemArray = SIXARRAY.map(() => this.thirdAlteredStem);
-
+        this.thirdAlteredStemArray = Array_6.map(() => this.thirdAlteredStem);
     }
 
     protected setGerundio(): void {
@@ -695,7 +739,7 @@ export class erguir extends partir {
     protected setSubjuntivoPreteritoImperfectoSe(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoSe', this.thirdAlteredStemArray);
     }
-    
+
     protected setSubjuntivoFuturoImperfecto(): void {
         this.setTable('Subjuntivo', 'FuturoImperfecto', this.thirdAlteredStemArray);
     }
@@ -713,20 +757,17 @@ export class erguir extends partir {
 export class escribir extends partir {
     private participioSecundario: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.participioSecundario = this.attributes.PS as string;
-    }
-
-    protected configDesinences(): void {
-        this.desinences.Impersonal.Participio = [this.desinences.Impersonal.Participio[0].replace(/ido/, 'to')];
+        this.desinences.Impersonal.Participio = 'to';
     }
 
     protected setParticipio(): void {
         this.participioCompuesto = `${this.stem.replace(/b$/, '')}${this.desinences.Impersonal.Participio}`;
         if (this.participioSecundario) {
             const [searchValue, replaceValue] = this.participioSecundario.split('/');
-            this.table.Impersonal.Participio = 
+            this.table.Impersonal.Participio =
                 `${this.participioCompuesto}/${this.participioCompuesto.replace(searchValue, replaceValue)}`;
         } else {
             this.table.Impersonal.Participio = this.participioCompuesto;
@@ -735,34 +776,24 @@ export class escribir extends partir {
 }
 
 export class huir extends partir {
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-    }
-
-    protected configDesinences(): void {
-        this.desinences.Impersonal.Gerundio =
-            this.desinences.Impersonal.Gerundio.map(g => g.replace(/^i/, 'y'));
+        this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.replace(/^i/, 'y');
 
         [0, 2, 5].forEach(i => this.desinences.Indicativo.Presente[i] =
-            this.desinences.Indicativo.Presente[i].replace(/^/, 'y'));
+            `y${this.desinences.Indicativo.Presente[i]}`);
 
         [2, 5].forEach(i => this.desinences.Indicativo.PreteritoIndefinido[i] =
-            this.desinences.Indicativo.PreteritoIndefinido[i].replace(/i/, 'y'));
+            this.desinences.Indicativo.PreteritoIndefinido[i].replace(/^i/, 'y'));
 
         this.desinences.Subjuntivo.Presente =
-            this.desinences.Subjuntivo.Presente.map(d => d.replace(/^/, 'y'));
-
-        ['PreteritoImperfectoRa',
-            'PreteritoImperfectoSe',
-            'FuturoImperfecto'
-        ].map(time => this.desinences.Subjuntivo[time as SubjuntivoSubSimpleKey] =
-            this.desinences.Subjuntivo[time as SubjuntivoSubSimpleKey].map(d => d.replace(/^i/, 'y')));
+            this.desinences.Subjuntivo.Presente.map(d => `y${d}`);
 
         switch (this.region) {
             case 'castellano':
                 this.desinences.Indicativo.Presente[1] =
-                    this.desinences.Indicativo.Presente[1].replace(/^/, 'y');
+                    `y${this.desinences.Indicativo.Presente[1]}`;
                 break;
             case 'formal':
                 this.desinences.Indicativo.PreteritoIndefinido[1] =
@@ -770,85 +801,95 @@ export class huir extends partir {
             // Intentional fall through
             case 'canarias':
                 this.desinences.Indicativo.Presente[1] =
-                    this.desinences.Indicativo.Presente[1].replace(/^/, 'y');
+                    `y${this.desinences.Indicativo.Presente[1]}`;
             // Intentional fall through
             case 'voseo':
                 this.desinences.Indicativo.Presente[4] =
-                    this.desinences.Indicativo.Presente[4].replace(/^/, 'y');
+                    `y${this.desinences.Indicativo.Presente[4]}`;
                 this.desinences.Indicativo.PreteritoIndefinido[4] =
                     this.desinences.Indicativo.PreteritoIndefinido[4].replace(/i/, 'y');
         }
 
+        this.desinences.Subjuntivo.PreteritoImperfectoRa =
+            this.desinences.Subjuntivo.PreteritoImperfectoRa.map(d => d.replace(/^i/, 'y'));
+        this.desinences.Subjuntivo.PreteritoImperfectoSe =
+            this.desinences.Subjuntivo.PreteritoImperfectoSe.map(d => d.replace(/^i/, 'y'));
+        this.desinences.Subjuntivo.FuturoImperfecto =
+            this.desinences.Subjuntivo.FuturoImperfecto.map(d => d.replace(/^i/, 'y'));
+
         // 2010 orthography
-        if ( typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
+        if (typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
             if (this.region === 'voseo') {
                 this.desinences.Indicativo.Presente[1] = 'is';
             }
-            this.desinences.Indicativo.Presente[4] = 'is';
+            if (this.region === 'castellano') {
+                this.desinences.Indicativo.Presente[4] = 'is';
+            }
             this.desinences.Indicativo.PreteritoIndefinido[0] = 'i';
         }
     }
 }
 
 export class ir extends partir {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-    }
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
 
-    protected configDesinences(): void {
-        this.desinences.Impersonal.Gerundio = ['yendo', 'yéndose'];
-        this.desinences.Indicativo.Presente[0] = this.desinences.Indicativo.Presente[0].replace(/$/, 'y');
-        this.desinences.Indicativo.Presente[4] = this.desinences.Indicativo.Presente[4].replace(/./, 'ai');
-        [1, 2, 3, 5].forEach(i => this.desinences.Indicativo.Presente[i] =
-            this.desinences.Indicativo.Presente[i].replace(/./, 'a'));
+        this.desinences.Impersonal.Gerundio = reflexive !== 'P' ? 'yendo' : 'yéndose';
+        this.desinences.Indicativo.Presente = ['oy',
+            region !== 'formal' ? 'as' : 'a',
+            'a',
+            'amos',
+            region !== 'castellano' ? 'an' : 'ais',
+            'an'
+        ];
 
         this.desinences.Indicativo.PreteritoImperfecto[3] =
             this.desinences.Indicativo.PreteritoImperfecto[3].replace(/./, 'íb');
         [0, 1, 2, 4, 5].forEach(i => this.desinences.Indicativo.PreteritoImperfecto[i] =
             this.desinences.Indicativo.PreteritoImperfecto[i].replace(/./, 'ib'));
 
-        this.desinences.Indicativo.PreteritoIndefinido[0] =
-            this.desinences.Indicativo.PreteritoIndefinido[0].replace(/./, 'i');
-        this.desinences.Indicativo.PreteritoIndefinido[2] =
-            this.desinences.Indicativo.PreteritoIndefinido[2].replace(/.*/, 'e');
-        this.desinences.Indicativo.PreteritoIndefinido[5] =
-            this.desinences.Indicativo.PreteritoIndefinido[5].replace(/./, '');
+        this.desinences.Indicativo.PreteritoIndefinido = ['i',
+            region !== 'formal' ? 'iste' : 'e',
+            'e',
+            'imos',
+            region !== 'castellano' ? 'eron' : 'isteis',
+            'eron'
+        ];
 
+        this.desinences.Subjuntivo.PreteritoImperfectoRa =
+            this.desinences.Subjuntivo.PreteritoImperfectoRa.map(d => d.replace(/^./, ''));
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.PreteritoImperfectoRa[i] =
-            this.desinences.Subjuntivo.PreteritoImperfectoRa[i].replace(/./, ''));
+        this.desinences.Subjuntivo.PreteritoImperfectoSe =
+            this.desinences.Subjuntivo.PreteritoImperfectoSe.map(d => d.replace(/^./, ''));
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.PreteritoImperfectoSe[i] =
-            this.desinences.Subjuntivo.PreteritoImperfectoSe[i].replace(/./, ''));
-
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.FuturoImperfecto[i] =
-            this.desinences.Subjuntivo.FuturoImperfecto[i].replace(/./, ''));
+        this.desinences.Subjuntivo.FuturoImperfecto =
+            this.desinences.Subjuntivo.FuturoImperfecto.map(d => d.replace(/^./, ''));
     }
 
     protected setIndicativoPresente(): void {
-        this.setTable('Indicativo', 'Presente', SIXARRAY.map(() => 'v'));
+        this.setTable('Indicativo', 'Presente', Array_6.map(() => 'v'));
     }
-    
+
     protected setIndicativoPreteritoIndefinido(): void {
-        this.setTable('Indicativo', 'PreteritoIndefinido', SIXARRAY.map(() => 'fu'));
+        this.setTable('Indicativo', 'PreteritoIndefinido', Array_6.map(() => 'fu'));
     }
-    
+
     protected setSubjuntivoPresente(): void {
-        this.setTable('Subjuntivo', 'Presente', SIXARRAY.map(() => 'vay'));
+        this.setTable('Subjuntivo', 'Presente', Array_6.map(() => 'vay'));
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoRa(): void {
-        this.setTable('Subjuntivo', 'PreteritoImperfectoRa', SIXARRAY.map(() => 'fu'));
+        this.setTable('Subjuntivo', 'PreteritoImperfectoRa', Array_6.map(() => 'fu'));
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoSe(): void {
-        this.setTable('Subjuntivo', 'PreteritoImperfectoSe', SIXARRAY.map(() => 'fu'));
+        this.setTable('Subjuntivo', 'PreteritoImperfectoSe', Array_6.map(() => 'fu'));
     }
-    
+
     protected setSubjuntivoFuturoImperfecto(): void {
-        this.setTable('Subjuntivo', 'FuturoImperfecto', SIXARRAY.map(() => 'fu'));
+        this.setTable('Subjuntivo', 'FuturoImperfecto', Array_6.map(() => 'fu'));
     }
-    
+
     protected setImperativoAfirmativo(): void {
         super.setImperativoAfirmativo();
         switch (this.region) {
@@ -872,83 +913,93 @@ export class ir extends partir {
 export class lucir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)c/, '$1zc');
     }
 
     protected setIndicativoPresente(): void {
         this.setTable('Indicativo', 'Presente', [
             this.alteredStem,
-            ...FIVEARRAY.map(() => this.stem)
+            ...Array_5.map(() => this.stem)
         ]);
     }
 
     protected setSubjuntivoPresente(): void {
         this.setTable('Subjuntivo', 'Presente',
-            SIXARRAY.map(() => this.alteredStem));
+            Array_6.map(() => this.alteredStem));
     }
 }
 
 export class oír extends partir {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-    }
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
 
-    protected configDesinences(): void {
-        this.desinences.Impersonal.Infinitivo = ['ír', 'írse'];
-        this.desinences.Impersonal.Gerundio = ['yendo', 'yéndose'];
-        this.desinences.Impersonal.Participio = ['ído'];
+        this.desinences.Impersonal.Infinitivo = reflexive !== 'P' ? 'ír' : 'írse';
+        this.desinences.Impersonal.Gerundio = reflexive !== 'P' ? 'yendo' : 'yéndose';
+        this.desinences.Impersonal.Participio = 'ído';
+
         this.desinences.Indicativo.Presente[0] = 'igo';
         this.desinences.Indicativo.Presente[3] = 'ímos';
+
         [1, 2, 5].forEach(i => this.desinences.Indicativo.Presente[i] =
             this.desinences.Indicativo.Presente[i].replace(/^e/, 'ye'));
+        if (region !== 'castellano') {
+            this.desinences.Indicativo.Presente[4] =
+                this.desinences.Indicativo.Presente[4].replace(/^e/, 'ye');
+        }
 
         this.desinences.Indicativo.PreteritoIndefinido = [
             'í',
-            'íste',
+            region !== 'formal' ? 'íste' : 'yó',
             'yó',
             'ímos',
-            'ísteis',
+            region !== 'castellano' ? 'yeron' : 'ísteis',
             'yeron'
         ];
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.Presente[i] =
-            this.desinences.Subjuntivo.Presente[i].replace(/^/, 'ig'));
+        this.desinences.Subjuntivo.Presente =
+            this.desinences.Subjuntivo.Presente.map(d => `ig${d}`);
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.PreteritoImperfectoRa[i] =
-            this.desinences.Subjuntivo.PreteritoImperfectoRa[i].replace(/^i/, 'y'));
+        this.desinences.Subjuntivo.PreteritoImperfectoRa =
+            this.desinences.Subjuntivo.PreteritoImperfectoRa.map(d => d.replace(/^i/, 'y'));
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.PreteritoImperfectoSe[i] =
-            this.desinences.Subjuntivo.PreteritoImperfectoSe[i].replace(/^i/, 'y'));
+        this.desinences.Subjuntivo.PreteritoImperfectoSe =
+            this.desinences.Subjuntivo.PreteritoImperfectoSe.map(d => d.replace(/^i/, 'y'));
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.FuturoImperfecto[i] =
-            this.desinences.Subjuntivo.FuturoImperfecto[i].replace(/^i/, 'y'));
+        this.desinences.Subjuntivo.FuturoImperfecto =
+            this.desinences.Subjuntivo.FuturoImperfecto.map(d => d.replace(/^i/, 'y'));
     }
 }
 
 export class plañir extends partir {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-    }
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
 
-    protected configDesinences(): void {
-        [0, 1].forEach(i => this.desinences.Impersonal.Gerundio[i] =
-            this.desinences.Impersonal.Gerundio[i].replace(/^i/, ''));
+        this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.replace(/^i/, '');
 
         [2, 5].forEach(i => this.desinences.Indicativo.PreteritoIndefinido[i] =
             this.desinences.Indicativo.PreteritoIndefinido[i].replace(/^i/, ''));
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.Presente[i] =
-            this.desinences.Subjuntivo.Presente[i].replace(/^i/, ''));
+        if (region !== 'castellano') {
+            this.desinences.Indicativo.PreteritoIndefinido[4] =
+                this.desinences.Indicativo.PreteritoIndefinido[4].replace(/^i/, '');
+            if (region === 'formal') {
+                this.desinences.Indicativo.PreteritoIndefinido[1] =
+                    this.desinences.Indicativo.PreteritoIndefinido[1].replace(/^i/, '');
+            }
+        }
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.PreteritoImperfectoRa[i] =
-            this.desinences.Subjuntivo.PreteritoImperfectoRa[i].replace(/^i/, ''));
+        this.desinences.Subjuntivo.Presente =
+            this.desinences.Subjuntivo.Presente.map(d => d.replace(/^i/, ''));
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.PreteritoImperfectoSe[i] =
-            this.desinences.Subjuntivo.PreteritoImperfectoSe[i].replace(/^i/, ''));
+        this.desinences.Subjuntivo.PreteritoImperfectoRa =
+            this.desinences.Subjuntivo.PreteritoImperfectoRa.map(d => d.replace(/^i/, ''));
 
-        SIXARRAY.forEach(i => this.desinences.Subjuntivo.FuturoImperfecto[i] =
-            this.desinences.Subjuntivo.FuturoImperfecto[i].replace(/^i/, ''));
+        this.desinences.Subjuntivo.PreteritoImperfectoSe =
+            this.desinences.Subjuntivo.PreteritoImperfectoSe.map(d => d.replace(/^i/, ''));
+
+        this.desinences.Subjuntivo.FuturoImperfecto =
+            this.desinences.Subjuntivo.FuturoImperfecto.map(d => d.replace(/^i/, ''));
     }
 }
 
@@ -956,10 +1007,10 @@ export class podrir extends partir {
     private alteredStem: string;
     protected alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/o/, 'u');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
     }
 
     protected setGerundio(): void {
@@ -969,7 +1020,7 @@ export class podrir extends partir {
     protected setIndicativoPresente(): void {
         if (this.version === '0') {
             this.setTable('Indicativo', 'Presente',
-                SIXARRAY.map(() => this.alteredStem));
+                Array_6.map(() => this.alteredStem));
         } else {
             if (this.region === 'castellano') {
                 this.setTable('Indicativo', 'Presente', [
@@ -1063,10 +1114,10 @@ export class pudrir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/u/, 'o');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
     }
 
     protected setParticipio(): void {
@@ -1153,37 +1204,37 @@ export class rehenchir extends partir {
     protected alteredStemArray: string[];
     private secondAlteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/(.*)[ei]/, '$1í');
     }
 
     protected setGerundio(): void {
         super.setGerundio(this.alteredStem);
     }
-    
+
     protected setIndicativoPresente(): void {
         this.setIndicativoPresentePattern125(this.secondAlteredStem, this.secondAlteredStem);
     }
-    
+
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.secondAlteredStem, this.alteredStem);
     }
-    
+
     protected setIndicativoPreteritoIndefinido(): void {
         this.setIndicativoPreteritoIndefinidoPattern25(this.alteredStem);
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoRa(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoRa', this.alteredStemArray);
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoSe(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoSe', this.alteredStemArray);
     }
-    
+
     protected setSubjuntivoFuturoImperfecto(): void {
         this.setTable('Subjuntivo', 'FuturoImperfecto', this.alteredStemArray);
     }
@@ -1192,8 +1243,8 @@ export class rehenchir extends partir {
 export class rehuir extends huir {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/u/, 'ú');
     }
 
@@ -1211,28 +1262,29 @@ export class reír extends partir {
     private secondAlteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/e$/, '');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/e$/, 'í');
-    }
 
-    protected configDesinences(): void {
-        this.desinences.Impersonal.Infinitivo = ['ír', 'írse'];
-        this.desinences.Impersonal.Participio = ['ído'];
+        // 2010 orthography
+        const is2010 = typeof this.attributes['M'] !== 'undefined' &&
+            this.attributes['M'] === 'true';
+
+        this.desinences.Impersonal.Infinitivo = reflexive !== 'P' ? 'ír' : 'írse';
+        this.desinences.Impersonal.Participio = 'ído';
         this.desinences.Indicativo.Presente[3] = 'ímos';
         this.desinences.Indicativo.PreteritoIndefinido = [
             'í',
-            'íste',
-            'ió',
+            region !== 'formal' ? 'íste' : is2010 ? 'io' : 'ió',
+            is2010 ? 'io' : 'ió',
             'ímos',
-            'ísteis',
+            region !== 'castellano' ? 'ieron' : 'ísteis',
             'ieron'
         ];
-        // 2010 orthography
-        if ( typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
-            this.desinences.Indicativo.PreteritoIndefinido[2] = 'io';
+
+        if (is2010 && region === 'castellano') {
             this.desinences.Subjuntivo.Presente[4] = 'ais';
         }
     }
@@ -1253,15 +1305,15 @@ export class reír extends partir {
         const localAltered = this.stem.replace(/e$/, 'i');
         this.setSubjuntivoPresentePattern0125(this.secondAlteredStem, localAltered);
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoRa(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoRa', this.alteredStemArray);
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoSe(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoSe', this.alteredStemArray);
     }
-    
+
     protected setSubjuntivoFuturoImperfecto(): void {
         this.setTable('Subjuntivo', 'FuturoImperfecto', this.alteredStemArray);
     }
@@ -1270,15 +1322,15 @@ export class reír extends partir {
 export class reunir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/u/, 'ú');
     }
 
     protected setIndicativoPresente(): void {
         this.setIndicativoPresentePattern125(this.alteredStem, this.alteredStem);
     }
-    
+
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.alteredStem);
     }
@@ -1287,25 +1339,26 @@ export class reunir extends partir {
 export class salir extends partir {
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         const alteredStem = this.stem.replace(/$/, 'd');
-        this.alteredStemArray = SIXARRAY.map(() => alteredStem);
+        this.alteredStemArray = Array_6.map(() => alteredStem);
+
+        this.desinences.Indicativo.Presente[0] =
+            `g${this.desinences.Indicativo.Presente[0]}`;
+
+        this.desinences.Indicativo.FuturoImperfecto =
+            this.desinences.Indicativo.FuturoImperfecto.map(d => d.replace(/^i/, ''));
+        this.desinences.Indicativo.CondicionalSimple =
+            this.desinences.Indicativo.CondicionalSimple.map(d => d.replace(/^i/, ''));
+        this.desinences.Subjuntivo.Presente =
+            this.desinences.Subjuntivo.Presente.map(d => `g${d}`);
     }
 
-    protected configDesinences(): void {
-        this.desinences.Indicativo.Presente[0] = this.desinences.Indicativo.Presente[0].replace(/^/, 'g');
-        ['FuturoImperfecto', 'CondicionalSimple'].forEach(modeTime => {
-            this.desinences.Indicativo[modeTime as IndicativoSubSimpleKey] =
-                this.desinences.Indicativo[modeTime as IndicativoSubSimpleKey].map(d => d.replace(/^i/, ''));
-        });
-        this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(d => d.replace(/^/, 'g'));
-    }
-    
     protected setIndicativoFuturoImperfecto(): void {
         this.setTable('Indicativo', 'FuturoImperfecto', this.alteredStemArray);
     }
-    
+
     protected setIndicativoCondicionalSimple(): void {
         this.setTable('Indicativo', 'CondicionalSimple', this.alteredStemArray);
     }
@@ -1322,12 +1375,12 @@ export class seguir extends partir {
     private secondAlteredStem: string;
     private secondAlteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/(.*)egu/, '$1ig');
-        this.secondAlteredStemArray = SIXARRAY.map(() => this.secondAlteredStem);
+        this.secondAlteredStemArray = Array_6.map(() => this.secondAlteredStem);
     }
 
     protected setGerundio(): void {
@@ -1337,23 +1390,23 @@ export class seguir extends partir {
     protected setIndicativoPresente(): void {
         this.setIndicativoPresentePattern125(this.secondAlteredStem, this.alteredStem);
     }
-    
+
     protected setIndicativoPreteritoIndefinido(): void {
         this.setIndicativoPreteritoIndefinidoPattern25(this.alteredStem);
     }
-    
+
     protected setSubjuntivoPresente(): void {
         this.setTable('Subjuntivo', 'Presente', this.secondAlteredStemArray);
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoRa(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoRa', this.alteredStemArray);
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoSe(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoSe', this.alteredStemArray);
     }
-    
+
     protected setSubjuntivoFuturoImperfecto(): void {
         this.setTable('Subjuntivo', 'FuturoImperfecto', this.alteredStemArray);
     }
@@ -1365,10 +1418,10 @@ export class sentir extends partir {
     private secondAlteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/(.*)e/, '$1ie');
     }
 
@@ -1383,19 +1436,19 @@ export class sentir extends partir {
     protected setIndicativoPreteritoIndefinido(): void {
         this.setIndicativoPreteritoIndefinidoPattern25(this.alteredStem);
     }
-    
+
     protected setSubjuntivoPresente(): void {
         this.setSubjuntivoPresentePattern0125(this.secondAlteredStem, this.alteredStem);
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoRa(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoRa', this.alteredStemArray);
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoSe(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoSe', this.alteredStemArray);
     }
-    
+
     protected setSubjuntivoFuturoImperfecto(): void {
         this.setTable('Subjuntivo', 'FuturoImperfecto', this.alteredStemArray);
     }
@@ -1405,10 +1458,10 @@ export class servir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
     }
 
     protected setGerundio(): void {
@@ -1426,44 +1479,49 @@ export class servir extends partir {
     protected setSubjuntivoPresente(): void {
         this.setTable('Subjuntivo', 'Presente', this.alteredStemArray);
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoRa(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoRa',
             this.alteredStemArray);
     }
-    
+
     protected setSubjuntivoPreteritoImperfectoSe(): void {
         this.setTable('Subjuntivo', 'PreteritoImperfectoSe',
             this.alteredStemArray);
     }
-    
+
     protected setSubjuntivoFuturoImperfecto(): void {
         this.setTable('Subjuntivo', 'FuturoImperfecto', this.alteredStemArray);
     }
 }
-
 
 export class venir extends partir {
     private alteredStem: string;
     private secondAlteredStem: string;
     private secondAlteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/en$/, 'ien');
         this.secondAlteredStem = this.stem.replace(/en$/, 'in');
-        this.secondAlteredStemArray = SIXARRAY.map(() => this.secondAlteredStem);
-    }
+        this.secondAlteredStemArray = Array_6.map(() => this.secondAlteredStem);
 
-    protected configDesinences(): void {
-        this.desinences.Indicativo.Presente[0] = this.desinences.Indicativo.Presente[0].replace(/^/, 'g');
+        this.desinences.Indicativo.Presente[0] =
+            `g${this.desinences.Indicativo.Presente[0]}`;
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
+
+        if (region === 'formal') {
+            this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
+        }
         this.desinences.Indicativo.PreteritoIndefinido[2] = 'o';
-        ['FuturoImperfecto', 'CondicionalSimple'].forEach(modeTime => {
-            this.desinences.Indicativo[modeTime as IndicativoSubSimpleKey] =
-                this.desinences.Indicativo[modeTime as IndicativoSubSimpleKey].map(d => d.replace(/^i/, ''));
-        });
-        this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(d => d.replace(/^/, 'g'));
+
+        this.desinences.Indicativo.CondicionalSimple =
+            this.desinences.Indicativo.CondicionalSimple.map(d => d.replace(/^i/, ''));
+        this.desinences.Indicativo.FuturoImperfecto =
+            this.desinences.Indicativo.FuturoImperfecto.map(d => d.replace(/^i/, ''));
+
+        this.desinences.Subjuntivo.Presente =
+            this.desinences.Subjuntivo.Presente.map(d => `g${d}`);
     }
 
     protected setGerundio(): void {
@@ -1480,12 +1538,12 @@ export class venir extends partir {
 
     protected setIndicativoFuturoImperfecto(): void {
         this.setTable('Indicativo', 'FuturoImperfecto',
-            SIXARRAY.map(() => this.stem.replace(/$/, 'd')));
+            Array_6.map(() => `${this.stem}d`));
     }
-    
+
     protected setIndicativoCondicionalSimple(): void {
         this.setTable('Indicativo', 'CondicionalSimple',
-            SIXARRAY.map(() => this.stem.replace(/$/, 'd')));
+            Array_6.map(() => `${this.stem}d`));
     }
 
     protected setSubjuntivoPreteritoImperfectoRa(): void {
@@ -1511,16 +1569,16 @@ export class zurcir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
+        super(verb, reflexive, region, attributes);
         this.alteredStem = this.stem.replace(/c$/, 'z');
-        this.alteredStemArray = SIXARRAY.map(() => this.alteredStem);
+        this.alteredStemArray = Array_6.map(() => this.alteredStem);
     }
 
     protected setIndicativoPresente(): void {
         this.setTable('Indicativo', 'Presente', [
             this.alteredStem,
-            ...FIVEARRAY.map(() => this.stem)]);
+            ...Array_5.map(() => this.stem)]);
     }
 
     protected setSubjuntivoPresente(): void {
