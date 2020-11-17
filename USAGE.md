@@ -1,6 +1,6 @@
 # Usage details
 
-Sat 14 Nov 2020 12:33:02 PM CET, version 2.2.2-rc1
+Tue 17 Nov 2020 08:22:27 PM CET, version 2.2.2
 ____
 
 ## Installation
@@ -119,8 +119,8 @@ ____
                       "c.ue-lg.u-e",
               </pre>
             - useful highlight example
-              - *In code: cng = new Conjugator('1999', { start: '<mark>', end: '</mark>', deleted: '\u2027' });*
-              - *In your .css:  mark { background-color: inherit; color: red; }*
+              - *cng = new Conjugator('1999', { start: '\<mark>', end: '\</mark>', deleted: '\u2027' });*
+              - *.css:  mark { background-color: inherit; color: red; }*
               - Results in (the **bold** would be rendered in red)
                 - t**uv**e **‧**  
                   - note the 'dot' at the end of tuve, it's the delete mark &#x2027;
@@ -159,7 +159,7 @@ ____
 | Region | 2nd person singular | 2nd person plural|
 |-------|:---------------------:|:-:|
 | castellano | tú | vosotros |
-| voseo | vos | vosotros |
+| voseo | vos | ustedes |
 | canarias | tú | ustedes |
 | formal | usted | ustedes |
 
@@ -227,7 +227,7 @@ ____
 
 ### Example output.  NOTE that you'll get an array of these objects
 
-- ***hablar, castellano, 2010, start:<mark>, end:<\mark>, deleted:_***
+- ***hablar, castellano, 2010, start:\<mark>, end:\</mark>, deleted:_***
   - Note that the info has no ortho nor highlight properties - neither applies to hablar, there are no orthographical changes, there is nothing to highlight
   - pronouns correspond to castellano
 
@@ -307,7 +307,7 @@ ____
 
 ```
 
-- ***freír, voseo, 2010, start:<mark>, end:</mark>, deleted:_***
+- ***freír, voseo, 2010, start:\<mark>, end:\</mark>, deleted:_***
   - note the deletion in gerundio, has both info.ortho and info.highlight as they both apply to this verb
   - pronouns correspond to voseo
 

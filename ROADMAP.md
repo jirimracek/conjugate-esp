@@ -1,6 +1,6 @@
 # Things to do, wishlists, plans, crimes committed, etc
 
-Sat 14 Nov 2020 12:33:02 PM CET, version 2.2.2-rc1
+Tue 17 Nov 2020 08:22:27 PM CET, version 2.2.2
 ____
 
 - Thu 12 Nov 2020 07:09:14 PM CET, version 2.2.1-experimental

@@ -80,7 +80,7 @@ export class Conjugator {
         return this.orthography;
     }
 
-    public setHighlightTags(highlight: HighlightTags): void {
+    public setHighlightTags(highlight: {start: string, end: string, deleted: string}): void {
         if (typeof highlight.start !== 'undefined' &&
             typeof highlight.end !== 'undefined' &&
             typeof highlight.deleted !== 'undefined') {

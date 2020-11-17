@@ -1,11 +1,11 @@
 # Changelog
 
-Sat 14 Nov 2020 12:33:02 PM CET, version 2.2.2-rc1
+Tue 17 Nov 2020 08:22:27 PM CET, version 2.2.2
 ____
 
-- Sat 14 Nov 2020 12:33:02 PM CET, version 2.2.2-rc1
-  - divided tests into few more files
-  - few internal cleanup things
+- Tue 17 Nov 2020 08:22:27 PM CET, version 2.2.2
+  - divided tests into more files
+  - few internal cleanup things, cleaned up desinences a bit
   - release candidate, all verification tests are passing
 
 - Sat 14 Nov 2020 12:15:35 AM CET, version 2.2.1-experimental
@@ -20,7 +20,7 @@ ____
 
 - Mon 09 Nov 2020 09:58:41 PM CET, 2.2.0
   - reverted ts compiler options mainly back to module commonjs
-  - publishing to npm under tag v2.2.2-rc1, this time preferrably without errors
+  - publishing to npm under tag v2.2.2, this time preferrably without errors
 
 - Thu 05 Nov 2020 08:16:11 PM CET, 2.1.2
   - trimming for npm publish

@@ -1,6 +1,6 @@
 # Spanish verb conjugator
 
-Sat 14 Nov 2020 12:33:02 PM CET, version 2.2.2-rc1
+Tue 17 Nov 2020 08:22:27 PM CET, version 2.2.2
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
@@ -12,7 +12,7 @@ ____
 
 ## Goals
 
-- correct, detailed, complete, independent, fast & small (yes, you can have it all)
+- correct, detailed, complete, fast & small (yes, you can have it all)
 - 10567 tested verbs, uses 97 models
 - includes
   - only current, RAE recognized as known &amp; used verbs
@@ -30,9 +30,10 @@ ____
   - preliminary
     - highlighting
     - removed pronouns from conjugations, they now live in the info object only
+    - internal changes, code cleanup
   - pre 1999, 1999-2010, post 2010 orthography rules
-  - new methods *setOrthography(), getOrthography()*
-  - new info header entry
+  - new methods *setOrthography(), getOrthography(), setHighlight(), getHighlight*
+  - new info header entries *ortho, highlight*
 
 ____
 
