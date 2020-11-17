@@ -175,14 +175,14 @@ export class actuar extends hablar {
         this.alteredStem = this.stem.replace(/(.*)u/, '$1ú');
         // 2010 orthography
         if (typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
-            if (this.region === 'voseo') {
+            if (region === 'voseo') {
                 this.desinences.Indicativo.Presente[1] = 'as';
             }
-            if (this.region === 'castellano') {
+            if (region === 'castellano') {
                 this.desinences.Indicativo.Presente[4] = 'ais';
                 this.desinences.Subjuntivo.Presente[4] = 'eis';
             }
-            if (this.region === 'formal') {
+            if (region === 'formal') {
                 this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
             }
             this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
@@ -516,18 +516,18 @@ export class estar extends hablar {
         super(verb, type, region, attributes);
         this.desinences.Indicativo.Presente = [
             'oy',
-            this.region !== 'formal' ? 'ás' : 'á',
+            region !== 'formal' ? 'ás' : 'á',
             'á',
             'amos',
-            this.region !== 'castellano' ? 'án' : 'áis',
+            region !== 'castellano' ? 'án' : 'áis',
             'án'
         ];
         this.desinences.Subjuntivo.Presente = [
             'é',
-            this.region !== 'formal' ? 'és' : 'é',
+            region !== 'formal' ? 'és' : 'é',
             'é',
             'emos',
-            this.region !== 'castellano' ? 'én' : 'éis',
+            region !== 'castellano' ? 'én' : 'éis',
             'én'];
 
         this.desinences.Indicativo.PreteritoIndefinido = caeIndicativoPreteritoIndefinido(region);
@@ -679,14 +679,14 @@ export class vaciar extends hablar {
         this.alteredStem = this.stem.replace(/(.*)i/, '$1í');
         // 2010 orthography
         if (typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
-            if (this.region === 'voseo') {
+            if (region === 'voseo') {
                 this.desinences.Indicativo.Presente[1] = 'as';
             }
-            if (this.region === 'castellano') {
+            if (region === 'castellano') {
                 this.desinences.Indicativo.Presente[4] = 'ais';
                 this.desinences.Subjuntivo.Presente[4] = 'eis';
             }
-            if (this.region === 'formal') {
+            if (region === 'formal') {
                 this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
             }
             this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';

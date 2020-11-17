@@ -105,11 +105,6 @@ export const SUBJUNTIVO_COMP_KEYS: SubjuntivoSubCompKey[] = [
     'FuturoPerfecto'
 ];
 
-// export const IMPERATIVO_VKEYS: ImperativoSubKey[] = [
-//     'Afirmativo',
-//     'Negativo'
-// ];
-
 const NO_IMPERATIVO_NEGATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'ogmorfo'];
 const DASH6 = '------';
 
@@ -315,17 +310,11 @@ export abstract class BaseModel {
     private setInfinitivo(): void {
         this.table.Impersonal.Infinitivo =
             `${this.stem}${this.desinences.Impersonal.Infinitivo}`;
-        // `${this.stem}${(this.type === 'N' ?
-        //     this.desinences.Impersonal.Infinitivo[0] :
-        //     this.desinences.Impersonal.Infinitivo[1])}`;
     }
 
     protected setGerundio(root?: string): void {
         this.table.Impersonal.Gerundio =
             `${root ? root : this.stem}${this.desinences.Impersonal.Gerundio}`;
-        // `${root ? root : this.stem}${this.type === 'N' ?
-        //     this.desinences.Impersonal.Gerundio[0] :
-        //     this.desinences.Impersonal.Gerundio[1]}`;
     }
 
     protected setParticipio(): void {
@@ -736,7 +725,7 @@ export abstract class BaseModel {
         }
     }
 
-    // Patterns
+    // Patterns - named after the pertinent castellan person '125' (tú, él, ellos), etc.
     /**
      * Indicativo presente common pattern
      * 

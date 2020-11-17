@@ -290,7 +290,7 @@ export class hacer extends temer {
         super(verb, reflexive, region, attributes);
 
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
-        if (this.region === 'formal') {
+        if (region === 'formal') {
             this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
         }
         this.desinences.Indicativo.PreteritoIndefinido[2] = 'o';
@@ -694,7 +694,7 @@ export class poder extends temer {
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
 
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
-        if (this.region === 'formal') {
+        if (region === 'formal') {
             this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
         }
         this.desinences.Indicativo.PreteritoIndefinido[2] = 'o';
@@ -745,7 +745,7 @@ export class poner extends temer {
 
         this.desinences.Indicativo.Presente[0] = 'go';
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
-        if (this.region === 'formal') {
+        if (region === 'formal') {
             this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
         }
         this.desinences.Indicativo.PreteritoIndefinido[2] = 'o';
@@ -800,9 +800,9 @@ export class rever extends temer {
         this.desinences.Impersonal.Participio = 'isto';
 
         this.desinences.Indicativo.Presente[0] = 'eo';
-        this.desinences.Indicativo.Presente[1] = this.region === 'formal' ? 'é' : 'és';
+        this.desinences.Indicativo.Presente[1] = region === 'formal' ? 'é' : 'és';
         this.desinences.Indicativo.Presente[2] = 'é';
-        if (this.region !== 'castellano') {
+        if (region !== 'castellano') {
             this.desinences.Indicativo.Presente[4] = 'én';
         }
         this.desinences.Indicativo.Presente[5] = 'én';
@@ -833,10 +833,10 @@ export class querer extends temer {
         this.secondAlteredArray = Array_6.map(() => secondAltered);
 
         this.desinences.Indicativo.PreteritoIndefinido = ['ise',
-            this.region !== 'formal' ? 'isiste' : 'iso',
+            region !== 'formal' ? 'isiste' : 'iso',
             'iso',
             'isimos',
-            this.region !== 'castellano' ? 'isieron' : 'isisteis',
+            region !== 'castellano' ? 'isieron' : 'isisteis',
             'isieron'];
         this.desinences.Indicativo.FuturoImperfecto = commonHaberIndicativoFuturoImperfecto(region);
         this.desinences.Indicativo.CondicionalSimple = commonHaberIndicativoCondicionalSimple(region);
@@ -934,7 +934,7 @@ export class saber extends temer {
 
         this.desinences.Indicativo.Presente[0] = '';
 
-        if (this.region === 'formal') {
+        if (region === 'formal') {
             this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
         }
 
@@ -1058,11 +1058,11 @@ export class tañer extends temer {
         super(verb, reflexive, region, attributes);
         this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.replace(/^i/, '');
 
-        if (this.region === 'formal') {
+        if (region === 'formal') {
             this.desinences.Indicativo.PreteritoIndefinido[1] = 'ó';
         }
         this.desinences.Indicativo.PreteritoIndefinido[2] = 'ó';
-        if (this.region !== 'castellano') {
+        if (region !== 'castellano') {
             this.desinences.Indicativo.PreteritoIndefinido[4] = 'eron';
         }
         this.desinences.Indicativo.PreteritoIndefinido[5] = 'eron';
@@ -1106,7 +1106,7 @@ export class tener extends temer {
         this.desinences.Indicativo.Presente[0] = 'go';
 
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
-        if (this.region === 'formal') {
+        if (region === 'formal') {
             this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
         }
         this.desinences.Indicativo.PreteritoIndefinido[2] = 'o';
@@ -1170,9 +1170,9 @@ export class traer extends temer {
         this.desinences.Indicativo.Presente[0] = 'igo';
 
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'e';
-        if (this.region !== 'castellano') {
+        if (region !== 'castellano') {
             this.desinences.Indicativo.PreteritoIndefinido[4] = 'eron';
-            if (this.region === 'formal') {
+            if (region === 'formal') {
                 this.desinences.Indicativo.PreteritoIndefinido[1] = 'o';
             }
         }
@@ -1244,11 +1244,11 @@ export class ver extends temer {
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'i';
         this.desinences.Indicativo.PreteritoIndefinido[2] = 'io';
 
-        if (this.region === 'castellano') {
+        if (region === 'castellano') {
             this.desinences.Indicativo.Presente[4] = 'eis';
-        } else if (this.region === 'voseo') {
+        } else if (region === 'voseo') {
             this.desinences.Indicativo.Presente[1] = 'es';
-        } else if (this.region === 'formal') {
+        } else if (region === 'formal') {
             this.desinences.Indicativo.PreteritoIndefinido[1] = 'io';
         }
     }

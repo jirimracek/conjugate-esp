@@ -28,6 +28,7 @@ export function verbsToTest(): string[] {
         'acontecer',   // single defective                     
         'adecuar',     // dual, non defective                  
         'antojar',     // defective terciopersonal v2          
+        'argüir',
         'balbucir',    // combo of ir & ar verb, very unique
         'colorir',     // imorfo                               
         'condecir',    // the decir family of differences      

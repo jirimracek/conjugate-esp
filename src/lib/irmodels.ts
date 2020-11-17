@@ -148,7 +148,8 @@ export class argüir extends partir {
         this.alteredStem = this.stem.replace(/\u00fc/, 'u');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
 
-        this.desinences.Impersonal.Gerundio = reflexive !== 'P' ? 'yendo' : 'yéndose';
+        // nonreflexive only
+        this.desinences.Impersonal.Gerundio = 'yendo';
 
         [0, 2, 5].forEach(i => this.desinences.Indicativo.Presente[i] =
             `y${this.desinences.Indicativo.Presente[i]}`);
@@ -168,7 +169,7 @@ export class argüir extends partir {
                 this.desinences.Indicativo.PreteritoIndefinido[1].replace(/^i/, 'y');
         }
 
-        if (this.region !== 'voseo') {
+        if (region !== 'voseo') {
             this.desinences.Indicativo.Presente[1] =
                 `y${this.desinences.Indicativo.Presente[1]}`;
         }
@@ -790,7 +791,7 @@ export class huir extends partir {
         this.desinences.Subjuntivo.Presente =
             this.desinences.Subjuntivo.Presente.map(d => `y${d}`);
 
-        switch (this.region) {
+        switch (region) {
             case 'castellano':
                 this.desinences.Indicativo.Presente[1] =
                     `y${this.desinences.Indicativo.Presente[1]}`;
@@ -819,10 +820,10 @@ export class huir extends partir {
 
         // 2010 orthography
         if (typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
-            if (this.region === 'voseo') {
+            if (region === 'voseo') {
                 this.desinences.Indicativo.Presente[1] = 'is';
             }
-            if (this.region === 'castellano') {
+            if (region === 'castellano') {
                 this.desinences.Indicativo.Presente[4] = 'is';
             }
             this.desinences.Indicativo.PreteritoIndefinido[0] = 'i';
@@ -935,8 +936,9 @@ export class oír extends partir {
     public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
         super(verb, reflexive, region, attributes);
 
-        this.desinences.Impersonal.Infinitivo = reflexive !== 'P' ? 'ír' : 'írse';
-        this.desinences.Impersonal.Gerundio = reflexive !== 'P' ? 'yendo' : 'yéndose';
+        this.desinences.Impersonal.Infinitivo = 'ír';
+        // nonreflexive only
+        this.desinences.Impersonal.Gerundio = 'yendo';
         this.desinences.Impersonal.Participio = 'ído';
 
         this.desinences.Indicativo.Presente[0] = 'igo';
