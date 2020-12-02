@@ -4,7 +4,8 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-export { Conjugator, Info, ErrorType, Result, Regions } from './lib/conjugator';
+export { Conjugator, Result } from './lib/conjugator';
+export { Info, Regions } from './lib/types';
 export { ResultTable } from './lib/basemodel';
 /*
 * commented out the export on 10/29/2020 - not needed for the package functionality, however, you may 

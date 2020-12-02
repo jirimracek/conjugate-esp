@@ -11,5 +11,3 @@ src/
 .travis*
 *.map
 jest.config.json
-ROADMAP.*
-CHANGELOG.*

@@ -4,7 +4,7 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import {PronominalKey, Regions, IndicativoSubSimpleKey, SubjuntivoSubSimpleKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubCompKey, IndicativoSubKey, SubjuntivoSubCompKey, SubjuntivoSubKey, } from './types';
+import {Regions, IndicativoSubSimpleKey, SubjuntivoSubSimpleKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubCompKey, IndicativoSubKey, SubjuntivoSubCompKey, SubjuntivoSubKey, PronominalKey, } from './types';
 import {clearAccents, esdrujula, strongify} from './stringutils';
 
 // Attributes
@@ -63,6 +63,8 @@ export type ResultTable = {
 export type ModelAttributes = {[attributekey in AttributeKeys]?: AttributeValues};
 export type ModelWithAttributes = {[modelname: string]: ModelAttributes};
 export type Model = string | ModelWithAttributes;
+export type VerbModelData = { [key in PronominalKey]?: Model[] | Model };
+export type VerbModelTemplates = { [verbname: string]: VerbModelData };
 
 
 const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
@@ -111,7 +113,7 @@ const DASH6 = '------';
 export abstract class BaseModel {
     protected verb: string;
     protected stem = '';
-    protected type: PronominalKey;
+    protected reflexive: boolean;
     protected region: Regions;
 
     protected desinences: DesinenceTable;
@@ -126,10 +128,11 @@ export abstract class BaseModel {
     private auxHaber: CompSubTable;
     private defectiveAttributes: DefectiveType;
 
-    protected constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
+    protected constructor(verb: string, region: Regions, attributes: ModelAttributes) {
         this.verb = verb;
-        this.stem = verb.replace(/..$/, '');
-        this.type = type;
+        this.reflexive = verb.endsWith('se');
+        this.stem = verb.replace(this.reflexive ? /....$/ : /..$/, '');
+
         this.region = region;
         this.attributes = attributes;                                     //  exists but empty if there aren't any
         this.defectiveAttributes = attributes['D'] as DefectiveType;      //  undefined if there aren't any 
@@ -157,7 +160,7 @@ export abstract class BaseModel {
             'ellos'
         ])();
 
-        // initialize empty result conjugation table, imperativo needs to be initialize to ------
+        // initialize empty result conjugation table, imperativo needs to be initialized to ------
         this.table = {
             Impersonal: {
                 Infinitivo: '', Gerundio: '', Participio: ''
@@ -337,14 +340,14 @@ export abstract class BaseModel {
         if (mode === 'Indicativo') {
             this.table[mode][key as IndicativoSubSimpleKey] = this.desinences[mode][key as IndicativoSubSimpleKey]
                 .map((desinence: string, index: number) =>
-                    `${this.type === 'P' ? this.reflexPronouns[index] : ''} ${roots ?
+                    `${this.reflexive? this.reflexPronouns[index] : ''} ${roots ?
                         roots[index] :
                         this.stem}${desinence}`.trim());
         }
         if (mode === 'Subjuntivo') {
             this.table[mode][key as SubjuntivoSubSimpleKey] = this.desinences[mode][key as SubjuntivoSubSimpleKey]
                 .map((desinence: string, index: number) =>
-                    `${this.type === 'P' ? this.reflexPronouns[index] : ''} ${roots ?
+                    `${this.reflexive ? this.reflexPronouns[index] : ''} ${roots ?
                         roots[index] :
                         this.stem}${desinence}`.trim());
         }
@@ -395,14 +398,14 @@ export abstract class BaseModel {
         INDICATIVO_COMP_KEYS.forEach(time =>
             this.table.Indicativo[time] =
             this.auxHaber.Indicativo[time].map((aux, index) =>
-                `${this.type === 'P' ?
+                `${this.reflexive ?
                     this.reflexPronouns[index] :
                     ''} ${aux} ${this.participioCompuesto}`.trim()));
 
         SUBJUNTIVO_COMP_KEYS.forEach(time =>
             this.table.Subjuntivo[time] =
             this.auxHaber.Subjuntivo[time].map((aux, index) =>
-                `${this.type === 'P' ?
+                `${this.reflexive ?
                     this.reflexPronouns[index] :
                     ''} ${aux} ${this.participioCompuesto}`.trim()));
     }
@@ -413,7 +416,7 @@ export abstract class BaseModel {
             return;
         }
         // 2nd person singular
-        if (this.type === 'N') {
+        if (!this.reflexive) {
             if (this.region !== 'formal') {
                 this.table.Imperativo.Afirmativo[1] = this.table.Indicativo.Presente[1].replace(/s$/, '');
             } else {
@@ -439,7 +442,7 @@ export abstract class BaseModel {
         }
 
         // nosotros
-        if (this.type === 'N') {
+        if (!this.reflexive) {
             this.table.Imperativo.Afirmativo[3] = this.table.Subjuntivo.Presente[3];
         } else {
             this.table.Imperativo.Afirmativo[3] =
@@ -448,17 +451,17 @@ export abstract class BaseModel {
 
         // 2nd person plural
         if (this.region === 'castellano') {
-            if (this.type === 'N') {
+            if (!this.reflexive) {
                 this.table.Imperativo.Afirmativo[4] =
                     `${this.verb.replace(/r$/, 'd')}`;
             } else {
-                // Tricky. Sounds simple, take infinitive, replace the 'r' with 'os'.  Accents matter
+                // Tricky. Sounds simple, take infinitive, replace the 'rse' with 'os'.  Accents matter
                 // Last syllable before 'os' needs to be strong.  Clear accents before strong-ifying 
                 this.table.Imperativo.Afirmativo[4] =
-                    `${strongify(clearAccents(this.verb.replace(/r$/, '')), 1)}os`;
+                    `${strongify(clearAccents(this.verb.replace(/rse$/, '')), 1)}os`;
             }
         } else {
-            if (this.type === 'N') {
+            if (!this.reflexive) {
                 this.table.Imperativo.Afirmativo[4] = this.table.Subjuntivo.Presente[4];
             } else {
                 this.table.Imperativo.Afirmativo[4] =
@@ -485,7 +488,7 @@ export abstract class BaseModel {
             this.table.Imperativo.Afirmativo[1] =
                 this.table.Imperativo.Afirmativo[1].replace(regex, (match: string, p1: string): string => {
                     // if p1 is empty (is 'pone', isn't 'repone'), it's the mono we're looking for
-                    if (/^$/.test(p1) || this.type === 'P') return `${p1}${subP}`;
+                    if (/^$/.test(p1) || this.reflexive) return `${p1}${subP}`;
                     return `${p1}${subNP}`;   //  else p1 wasn't blank (ex.: 'repon': p1 === 're')
                 });
         }

@@ -5,14 +5,15 @@
  * @license * MIT License
 */
 import diff = require('fast-diff');
-import { HighlightTags } from './types';
+import {ResultTable} from '..';
+import {AnyModeKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey, Tags} from './types';
 /* eslint-disable array-element-newline */
 /* eslint-disable max-len */
-const Plain: readonly string[] = [ 'a', 'e', 'i', 'o', 'u', 'ü'];
+const Plain: readonly string[] = ['a', 'e', 'i', 'o', 'u', 'ü'];
 const Accented: readonly string[] = ['á', 'é', 'í', 'ó', 'ú'];
 const Vovels: readonly string[] = [...Plain, ...Accented];
 const Strong: readonly string[] = ['a', 'e', 'o', 'á', 'é', 'í', 'ó', 'ú'];
-const Unbreakable: readonly string[] = [ 'bl', 'cl', 'fl', 'gl', 'kl', 'll', 'pl', 'tl', 'br', 'cr', 'dr', 'fr', 'gr', 'kr', 'pr', 'rr', 'tr', 'ch' ];
+const Unbreakable: readonly string[] = ['bl', 'cl', 'fl', 'gl', 'kl', 'll', 'pl', 'tl', 'br', 'cr', 'dr', 'fr', 'gr', 'kr', 'pr', 'rr', 'tr', 'ch'];
 /* eslint-enable max-len */
 /* eslint-enable array-element-newline */
 
@@ -51,8 +52,8 @@ export function syllabify(phrase: string): string[] {
             if (!Vovels.includes(phrase[current + 1])) {
                 if ((current + 2) < phrase.length) {
                     // Case: vowel + consonant + consonant, nonbreakable group || vowel + consonant + vowel
-                    if (Unbreakable.includes(`${phrase[current + 1]}${phrase[current + 2]}`) || 
-                    Vovels.includes(phrase[current + 2])) {
+                    if (Unbreakable.includes(`${phrase[current + 1]}${phrase[current + 2]}`) ||
+                        Vovels.includes(phrase[current + 2])) {
                         result.push('-');
                     }
                     // Remaining Case: vowel + consonant + consonant, breakable group
@@ -61,7 +62,7 @@ export function syllabify(phrase: string): string[] {
             // Remaining Case: vowel + vowel (not two strongs)
         } else {   // Case: current is consonant
             if (!(Vovels.includes(phrase[current + 1]) ||
-             Unbreakable.includes(`${phrase[current]}${phrase[current + 1]}`))) {
+                Unbreakable.includes(`${phrase[current]}${phrase[current + 1]}`))) {
                 // Case: consonant + consonant, breakable group
                 result.push('-');
             }
@@ -158,21 +159,21 @@ export function clearAccents(word: string): string {
      * @param conjugated - verb conjugated as per its proper model (correct conjugation)
      * @returns highlighted string if differences found
      */
-export function tagDiffs(simulated: string, conjugated: string, tags: HighlightTags): string {
+export function tagDiffs(simulated: string, conjugated: string, tags: Tags): string {
     if (conjugated === '-') {                 // ignore defectives
         return conjugated;
     }
 
     const conjugatedBase = conjugated.split(' ');
-    const conjugatedWord = conjugatedBase.pop();
-    const simulatedWord = simulated.split(' ').pop();
+    const conjugatedWord = conjugatedBase.pop() as string;
+    const simulatedWord = simulated.split(' ').pop() as string;
     /* istanbul ignore if */
-    if (! (simulatedWord && conjugatedWord)) {
-        console.error(`Internal, tagDiffs, simulated: "${simulatedWord}", conjugated: "${conjugatedWord}"`);
-        return conjugated;
-    }
+    // if (! (simulatedWord && conjugatedWord)) {
+    //     console.error(`Internal, tagDiffs, simulated: "${simulatedWord}", conjugated: "${conjugatedWord}"`);
+    //     return conjugated;
+    // }
 
-    const chunks = diff(simulatedWord, conjugatedWord); 
+    const chunks = diff(simulatedWord, conjugatedWord);
     const result: string[] = [];
     chunks.forEach((chunk, index) => {
         switch (chunk[0]) {
@@ -186,9 +187,9 @@ export function tagDiffs(simulated: string, conjugated: string, tags: HighlightT
                 // Insert the delete sequence only if
                 //   tags.deleted exists &&
                 //   (this is the last op || next operation is EQUAL)
-                if (tags.deleted && 
-                    (index === chunks.length - 1 || chunks[index + 1][0] === diff.EQUAL) ) {
-                    result.push(`${tags.start}${tags.deleted}${tags.end}`);       
+                if (tags.del &&
+                    (index === chunks.length - 1 || chunks[index + 1][0] === diff.EQUAL)) {
+                    result.push(`${tags.start}${tags.del}${tags.end}`);
                 }
                 break;
         }
@@ -198,10 +199,61 @@ export function tagDiffs(simulated: string, conjugated: string, tags: HighlightT
 }
 
 /**
- * apply monosyllable accent rules to the last word of the phrase. If the word 
+ * compare each line of simulated and real conjugation, markup differences in real conjugation with start/end tags
+ */
+export function insertTags(simulated: ResultTable, conjugated: ResultTable, tags: Tags): void {
+    // Iterate over conjugations, send the simulated and real lines to be compared and highlighted
+    Object.keys(conjugated).forEach(key => {
+        const modeKey = key as AnyModeKey;
+        Object.keys(conjugated[modeKey]).forEach(subKey => {
+            switch (modeKey) {
+                case 'Impersonal':                   // do not mark infinitive (reír, oír, ...)
+                    if (subKey === 'Gerundio') {
+                        conjugated[modeKey][subKey as ImpersonalSubKey] =
+                            tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
+                                conjugated[modeKey][subKey as ImpersonalSubKey], tags);
+                    }
+                    else if (subKey === 'Participio') {            // we may have dual
+                        const parts = conjugated[modeKey][subKey as ImpersonalSubKey].split('/');
+                        if (parts.length > 1) {
+                            // mark each part individually and then join them again
+                            conjugated[modeKey][subKey as ImpersonalSubKey] =
+                                [tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
+                                    parts[0], tags),
+                                tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
+                                    parts[1], tags)
+                                ].join('/');
+                        } else {
+                            conjugated[modeKey][subKey as ImpersonalSubKey] =
+                                tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
+                                    conjugated[modeKey][subKey as ImpersonalSubKey], tags);
+                        }
+                    }
+                    break;
+                case 'Indicativo': conjugated[modeKey][subKey as IndicativoSubKey] =
+                    conjugated[modeKey][subKey as IndicativoSubKey].map((line, index) => {
+                        return tagDiffs(simulated[modeKey][subKey as IndicativoSubKey][index], line, tags);
+                    });
+                    break;
+                case 'Subjuntivo': conjugated[modeKey][subKey as SubjuntivoSubKey] =
+                    conjugated[modeKey][subKey as SubjuntivoSubKey].map((line, index) => {
+                        return tagDiffs(simulated[modeKey][subKey as SubjuntivoSubKey][index], line, tags);
+                    });
+                    break;
+                case 'Imperativo': conjugated[modeKey][subKey as ImperativoSubKey] =
+                    conjugated[modeKey][subKey as ImperativoSubKey].map((line, index) => {
+                        return tagDiffs(simulated[modeKey][subKey as ImperativoSubKey][index], line, tags);
+                    });
+                    break;
+            }
+        });
+    });
+}
+/**
+ * apply monosyllable accent rules to the last word of the phrase. If the word
  * has an accent on a strong vowel, remove it, otherwise leave it alone
- * 
- * @param phrase 
+ *
+ * @param phrase
  * no longer used as of 2.0.4
  */
 // export function applyMonoRules(phrase: string): string {
@@ -220,7 +272,7 @@ export function tagDiffs(simulated: string, conjugated: string, tags: HighlightT
 //         words.push(clearAccents(last));
 //         return words.join(' ');
 //     }
-    
+
 //     // If there is a strong and it is not accented, return, accent belongs to the weak
 //     if (/[aeo]/.test(last)) {
 //         return phrase;

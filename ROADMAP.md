@@ -1,7 +1,15 @@
 # Things to do, wishlists, plans, crimes committed, etc
 
-Tue 17 Nov 2020 08:22:27 PM CET, version 2.2.2
+Wed 02 Dec 2020 09:31:51 AM CET, version 2.2.2
 ____
+
+- Tue 01 Dec 2020 10:48:10 AM CET
+  - 2.4.x work?
+    - return a full list of verbs, include reflexives so getVerbList() returns both hablar and hablarse
+    - accept reflexives as a valid parameter to conjugate() - it gets rejected now
+      - internal: we don't need to propagate the pronominalKey from conjugate() to factory to models. Zap.
+      - prune the definitions file.  It's 396k now, more than half of the package, it can be taken down to about 200k
+      - reorganize testing
 
 - Thu 12 Nov 2020 07:09:14 PM CET, version 2.2.1-experimental
   - (done in 2.2.1-experimental) every array, every conjugation has the pronominals, which is totally unnecessary, we know what the pronominals should be

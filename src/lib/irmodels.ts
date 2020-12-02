@@ -5,7 +5,7 @@
  * @license * MIT License
 */
 import {BaseModel, ModelAttributes, DesinenceTable} from './basemodel';
-import {PronominalKey, Regions} from './types';
+import {Regions} from './types';
 
 
 /* Do not export anything but classes from these model files, model factory depends on these exports */
@@ -16,9 +16,9 @@ const Array_5 = Array(5).fill('');
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export class partir extends BaseModel {
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
-        this.desinences = this.initDesinences(region, reflexive);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
+        this.desinences = this.initDesinences(region);
     }
 
     protected setParticipio(): void {
@@ -31,11 +31,11 @@ export class partir extends BaseModel {
         }
     }
 
-    private initDesinences(region: Regions, reflexive: PronominalKey): DesinenceTable {
+    private initDesinences(region: Regions): DesinenceTable {
         return {
             Impersonal: {
-                Infinitivo: reflexive !== 'P' ? 'ir' : 'irse',
-                Gerundio: reflexive !== 'P' ? 'iendo' : 'iéndose',
+                Infinitivo: !this.reflexive ? 'ir' : 'irse',
+                Gerundio: !this.reflexive ? 'iendo' : 'iéndose',
                 Participio: 'ido'
             },
             Indicativo: {
@@ -101,8 +101,8 @@ export class partir extends BaseModel {
 }
 
 export class abrir extends partir {
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
     }
 
     protected setParticipio(): void {
@@ -112,8 +112,8 @@ export class abrir extends partir {
 }
 
 export class asir extends partir {
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.desinences.Indicativo.Presente[0] = 'go';
 
         this.desinences.Subjuntivo.Presente =
@@ -124,8 +124,8 @@ export class asir extends partir {
 export class adquirir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/ir/, 'ier');
     }
 
@@ -142,8 +142,8 @@ export class argüir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         //                                \u00fc ===  ü                      
         this.alteredStem = this.stem.replace(/\u00fc/, 'u');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
@@ -221,8 +221,8 @@ export class argüir extends partir {
 export class balbucir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/c$/, 'ce');
 
         // balbucir takes some desinences from ir and others from ar
@@ -251,8 +251,8 @@ export class bendecir extends partir {
     protected alteredStem: string;
     protected alteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/ec/, '');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
 
@@ -325,8 +325,8 @@ export class ceñir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
 
@@ -386,8 +386,8 @@ export class ceñir extends partir {
 export class cohibir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)i/, '$1í');
     }
 
@@ -406,8 +406,8 @@ export class conducir extends partir {
     private alteredStemArray: string[];
     private secondAlteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)c/, '$1zc');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/(.*)c/, '$1j');
@@ -467,8 +467,8 @@ export class corregir extends partir {
     private alteredStemArray: string[];
     private secondAlteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/eg/, 'ij');
@@ -506,8 +506,8 @@ export class corregir extends partir {
 
 // Write according to docs/decir.ods, 3 versions
 export class decir extends bendecir {
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
     }
 
     protected setParticipio(): void {
@@ -545,8 +545,8 @@ export class decir extends bendecir {
 export class delinquir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/qu/, 'c');
     }
 
@@ -565,8 +565,8 @@ export class delinquir extends partir {
 export class dirigir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/g$/, 'j');
     }
 
@@ -584,8 +584,8 @@ export class dirigir extends partir {
 export class discernir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
     }
 
@@ -600,8 +600,8 @@ export class discernir extends partir {
 export class distinguir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/u$/, '');
     }
 
@@ -622,8 +622,8 @@ export class dormir extends partir {
     private secondAlteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)o/, '$1u');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/(.*)o/, '$1ue');
@@ -659,10 +659,10 @@ export class dormir extends partir {
 }
 
 export class embaír extends partir {
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
-        this.desinences.Impersonal.Infinitivo = reflexive !== 'P' ? 'ír' : 'írse';
-        this.desinences.Impersonal.Gerundio = reflexive !== 'P' ? 'yendo' : 'yéndose';
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
+        this.desinences.Impersonal.Infinitivo = !this.reflexive ? 'ír' : 'írse';
+        this.desinences.Impersonal.Gerundio = !this.reflexive ? 'yendo' : 'yéndose';
         this.desinences.Impersonal.Participio = 'ído';
         this.desinences.Indicativo.Presente[0] = 'yo';
         this.desinences.Indicativo.Presente[3] = 'ímos';
@@ -701,8 +701,8 @@ export class erguir extends partir {
     private thirdAlteredStem: string;
     private thirdAlteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/^(.*)u/, 'y$1');
         this.secondAlteredStem = this.stem.replace(/^e(.*)u/, 'i$1');
         this.thirdAlteredStem = this.stem.replace(/^e/, 'i');
@@ -758,8 +758,8 @@ export class erguir extends partir {
 export class escribir extends partir {
     private participioSecundario: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.participioSecundario = this.attributes.PS as string;
         this.desinences.Impersonal.Participio = 'to';
     }
@@ -777,8 +777,8 @@ export class escribir extends partir {
 }
 
 export class huir extends partir {
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
 
         this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.replace(/^i/, 'y');
 
@@ -832,10 +832,10 @@ export class huir extends partir {
 }
 
 export class ir extends partir {
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
 
-        this.desinences.Impersonal.Gerundio = reflexive !== 'P' ? 'yendo' : 'yéndose';
+        this.desinences.Impersonal.Gerundio = !this.reflexive ? 'yendo' : 'yéndose';
         this.desinences.Indicativo.Presente = ['oy',
             region !== 'formal' ? 'as' : 'a',
             'a',
@@ -914,8 +914,8 @@ export class ir extends partir {
 export class lucir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)c/, '$1zc');
     }
 
@@ -933,8 +933,8 @@ export class lucir extends partir {
 }
 
 export class oír extends partir {
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
 
         this.desinences.Impersonal.Infinitivo = 'ír';
         // nonreflexive only
@@ -974,8 +974,8 @@ export class oír extends partir {
 }
 
 export class plañir extends partir {
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
 
         this.desinences.Impersonal.Gerundio = this.desinences.Impersonal.Gerundio.replace(/^i/, '');
 
@@ -1009,8 +1009,8 @@ export class podrir extends partir {
     private alteredStem: string;
     protected alteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/o/, 'u');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
     }
@@ -1116,8 +1116,8 @@ export class pudrir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/u/, 'o');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
     }
@@ -1206,8 +1206,8 @@ export class rehenchir extends partir {
     protected alteredStemArray: string[];
     private secondAlteredStem: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/(.*)[ei]/, '$1í');
@@ -1245,8 +1245,8 @@ export class rehenchir extends partir {
 export class rehuir extends huir {
     private alteredStem: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/u/, 'ú');
     }
 
@@ -1264,8 +1264,8 @@ export class reír extends partir {
     private secondAlteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/e$/, '');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/e$/, 'í');
@@ -1274,7 +1274,7 @@ export class reír extends partir {
         const is2010 = typeof this.attributes['M'] !== 'undefined' &&
             this.attributes['M'] === 'true';
 
-        this.desinences.Impersonal.Infinitivo = reflexive !== 'P' ? 'ír' : 'írse';
+        this.desinences.Impersonal.Infinitivo = !this.reflexive ? 'ír' : 'írse';
         this.desinences.Impersonal.Participio = 'ído';
         this.desinences.Indicativo.Presente[3] = 'ímos';
         this.desinences.Indicativo.PreteritoIndefinido = [
@@ -1324,8 +1324,8 @@ export class reír extends partir {
 export class reunir extends partir {
     private alteredStem: string;
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/u/, 'ú');
     }
 
@@ -1341,8 +1341,8 @@ export class reunir extends partir {
 export class salir extends partir {
     private alteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         const alteredStem = this.stem.replace(/$/, 'd');
         this.alteredStemArray = Array_6.map(() => alteredStem);
 
@@ -1377,8 +1377,8 @@ export class seguir extends partir {
     private secondAlteredStem: string;
     private secondAlteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/(.*)egu/, '$1ig');
@@ -1420,8 +1420,8 @@ export class sentir extends partir {
     private secondAlteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
         this.secondAlteredStem = this.stem.replace(/(.*)e/, '$1ie');
@@ -1460,8 +1460,8 @@ export class servir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1i');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
     }
@@ -1502,8 +1502,8 @@ export class venir extends partir {
     private secondAlteredStem: string;
     private secondAlteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/en$/, 'ien');
         this.secondAlteredStem = this.stem.replace(/en$/, 'in');
         this.secondAlteredStemArray = Array_6.map(() => this.secondAlteredStem);
@@ -1571,8 +1571,8 @@ export class zurcir extends partir {
     private alteredStem: string;
     private alteredStemArray: string[];
 
-    public constructor(verb: string, reflexive: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, reflexive, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/c$/, 'z');
         this.alteredStemArray = Array_6.map(() => this.alteredStem);
     }

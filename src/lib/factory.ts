@@ -4,7 +4,7 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import { PronominalKey, Regions } from './types';
+import { Regions } from './types';
 import { BaseModel, ModelAttributes } from './basemodel';
 import * as ar from './armodels';
 import * as er from './ermodels';
@@ -23,27 +23,28 @@ export class ModelFactory {
      * Get verb appropriate model unless the sim flag is true
      * @param verb 
      * @param model 
-     * @param type 
      * @param region 
      * @param attrs 
      * @param sim - simulate basemodel (regular) conjugation, return regular model
      */
-    public getModel(verb: string, model: string, type: PronominalKey, region: Regions, attrs: ModelAttributes, sim = false): BaseModel | undefined {
+    public getModel(verb: string, model: string, region: Regions, attrs: ModelAttributes, sim = false): BaseModel | undefined {
         if (ar[model as ArKey]) {
             if (sim) {
-                return new ar['hablar'](verb, type, region, {});
+                return new ar['hablar'](verb, region, {});
             }
-            return new ar[model as ArKey](verb, type, region, attrs);
-        } else if (er[model as ErKey]) {
+            return new ar[model as ArKey](verb, region, attrs);
+        } 
+        if (er[model as ErKey]) {
             if (sim) {
-                return new er['temer'](verb, type, region, {});
+                return new er['temer'](verb, region, {});
             }
-            return new er[model as ErKey](verb, type, region, attrs);
-        } else if (ir[model as IrKey]) {
+            return new er[model as ErKey](verb, region, attrs);
+        } 
+        if (ir[model as IrKey]) {
             if (sim) {
-                return new ir['partir'](verb, type, region, {});
+                return new ir['partir'](verb, region, {});
             }
-            return new ir[model as IrKey](verb, type, region, attrs);
+            return new ir[model as IrKey](verb, region, attrs);
         }
         return undefined;
     }

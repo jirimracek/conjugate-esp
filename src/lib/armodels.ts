@@ -9,7 +9,7 @@
 
 import {BaseModel, ModelAttributes, DesinenceTable} from './basemodel';
 import {clearLastAccent} from './stringutils';
-import {PronominalKey, Regions} from './types';
+import {Regions} from './types';
 
 // Temp arrays used to remap
 const Array_6 = Array(6).fill('');
@@ -56,17 +56,17 @@ const caeSubjuntivoFuturoImperfecto = (region: Regions): Array<string> => {
      * @class base class for all -ar conjugations
      */
 export class hablar extends BaseModel {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
-        this.desinences = this.initDesinences(region, type);
+    public constructor(verb: string, region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
+        this.desinences = this.initDesinences(region);
     }
 
     // Initialize termination table, map ar terminations to the base
-    private initDesinences(region: Regions, reflexive: PronominalKey): DesinenceTable {
+    private initDesinences(region: Regions): DesinenceTable {
         return {
             Impersonal: {
-                Infinitivo: reflexive !== 'P' ? 'ar' : 'arse',
-                Gerundio: reflexive !== 'P' ? 'ando' : 'ándose',
+                Infinitivo: !this.reflexive ? 'ar' : 'arse',
+                Gerundio: !this.reflexive ? 'ando' : 'ándose',
                 Participio: 'ado'
             },
             Indicativo: {
@@ -143,8 +143,8 @@ export class hablar extends BaseModel {
 export class acertar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
     }
 
@@ -170,8 +170,8 @@ export class acertar extends hablar {
 export class actuar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)u/, '$1ú');
         // 2010 orthography
         if (typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
@@ -202,8 +202,8 @@ export class actuar extends hablar {
 export class engorar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/or$/, 'üer');
     }
 
@@ -219,8 +219,8 @@ export class engorar extends hablar {
 export class aguar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/u$/, 'ü');
     }
 
@@ -235,8 +235,8 @@ export class aguar extends hablar {
 }
 
 export class ahincar extends hablar {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
     }
 
     protected setIndicativoPresente(): void {
@@ -255,8 +255,8 @@ export class ahincar extends hablar {
 export class aislar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/i/, 'í');
     }
 
@@ -270,8 +270,8 @@ export class aislar extends hablar {
 }
 
 export class andar extends hablar {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.desinences.Indicativo.PreteritoIndefinido = caeIndicativoPreteritoIndefinido(region);
         this.desinences.Subjuntivo.PreteritoImperfectoRa = caeSubjuntivoPreteritoImperfectoRa(region);
         this.desinences.Subjuntivo.PreteritoImperfectoSe = caeSubjuntivoPreteritoImperfectoSe(region);
@@ -282,8 +282,8 @@ export class andar extends hablar {
 export class aunar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/u/, 'ú');
     }
 
@@ -299,8 +299,8 @@ export class aunar extends hablar {
 export class avergonzar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/o/, 'üe');
     }
 
@@ -319,8 +319,8 @@ export class avergonzar extends hablar {
 export class cabrahigar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/i/, 'í');
         this.desinences.Indicativo.PreteritoIndefinido[0] =
             `u${this.desinences.Indicativo.PreteritoIndefinido[0]}`;
@@ -340,8 +340,8 @@ export class cabrahigar extends hablar {
 export class colgar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/o/, 'ue');
         this.desinences.Indicativo.PreteritoIndefinido[0] =
             `u${this.desinences.Indicativo.PreteritoIndefinido[0]}`;
@@ -361,8 +361,8 @@ export class colgar extends hablar {
 export class contar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)o/, (match: string, p1: string): string => {
             if (p1.endsWith('g')) {
                 return `${p1}üe`;
@@ -381,8 +381,8 @@ export class contar extends hablar {
 }
 
 export class dar extends hablar {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
 
         this.desinences.Indicativo.Presente = ['oy',
             region !== 'formal' ? 'as' : 'a',
@@ -423,15 +423,15 @@ export class dar extends hablar {
 
     protected setImperativoAfirmativo(): void {
         super.setImperativoAfirmativo();
-        if (this.type === 'P' && this.region === 'formal') {
+        if (this.reflexive && this.region === 'formal') {
             this.table.Imperativo.Afirmativo[1] = clearLastAccent(this.table.Imperativo.Afirmativo[1]);
         }
     }
 }
 
 export class desdar extends dar {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.desinences.Indicativo.Presente = ['oy',
             region !== 'formal' ? 'ás' : 'á',
             'á',
@@ -461,8 +461,8 @@ export class desdar extends dar {
 export class desosar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/o/, 'hue');
     }
 
@@ -476,8 +476,8 @@ export class desosar extends hablar {
 }
 
 export class enraizar extends hablar {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
     }
 
     protected setIndicativoPresente(): void {
@@ -497,8 +497,8 @@ export class enraizar extends hablar {
 export class errar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = `y${this.stem}`;
     }
 
@@ -512,8 +512,8 @@ export class errar extends hablar {
 }
 
 export class estar extends hablar {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.desinences.Indicativo.Presente = [
             'oy',
             region !== 'formal' ? 'ás' : 'á',
@@ -538,7 +538,7 @@ export class estar extends hablar {
 
     protected setImperativoAfirmativo(): void {
         super.setImperativoAfirmativo();
-        if (this.type === 'P') {
+        if (this.reflexive) {
             switch (this.region) {
                 default:
                     this.table.Imperativo.Afirmativo[4] = clearLastAccent(this.table.Imperativo.Afirmativo[4]);
@@ -551,8 +551,8 @@ export class estar extends hablar {
 }
 
 export class forzar extends hablar {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
     }
 
     protected setIndicativoPresente(): void {
@@ -570,8 +570,8 @@ export class forzar extends hablar {
 }
 
 export class jugar extends hablar {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
     }
 
     protected setIndicativoPresente(): void {
@@ -589,8 +589,8 @@ export class jugar extends hablar {
 }
 
 export class pagar extends hablar {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'ué';
         this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(d => `u${d}`);
     }
@@ -599,8 +599,8 @@ export class pagar extends hablar {
 export class regar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)e/, '$1ie');
         this.desinences.Indicativo.PreteritoIndefinido[0] = 'ué';
         this.desinences.Subjuntivo.Presente = this.desinences.Subjuntivo.Presente.map(d => `u${d}`);
@@ -618,8 +618,8 @@ export class regar extends hablar {
 export class rozar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/z$/, 'c');
     }
 
@@ -634,8 +634,8 @@ export class rozar extends hablar {
 }
 
 export class sacar extends hablar {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
     }
 
     protected setIndicativoPreteritoIndefinido(): void {
@@ -652,8 +652,8 @@ export class sacar extends hablar {
 export class tropezar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/e(.?)z$/, 'ie$1z');
     }
 
@@ -674,8 +674,8 @@ export class tropezar extends hablar {
 export class vaciar extends hablar {
     private alteredStem: string;
 
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
         this.alteredStem = this.stem.replace(/(.*)i/, '$1í');
         // 2010 orthography
         if (typeof this.attributes['M'] !== 'undefined' && this.attributes['M'] === 'true') {
@@ -704,8 +704,8 @@ export class vaciar extends hablar {
 }
 
 export class volcar extends hablar {
-    public constructor(verb: string, type: PronominalKey, region: Regions, attributes: ModelAttributes) {
-        super(verb, type, region, attributes);
+    public constructor(verb: string,  region: Regions, attributes: ModelAttributes) {
+        super(verb, region, attributes);
     }
 
     protected setIndicativoPresente(): void {

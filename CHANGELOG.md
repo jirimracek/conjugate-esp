@@ -1,9 +1,9 @@
 # Changelog
 
-Tue 17 Nov 2020 08:22:27 PM CET, version 2.2.2
+Wed 02 Dec 2020 09:31:51 AM CET, version 2.2.2
 ____
 
-- Tue 17 Nov 2020 08:22:27 PM CET, version 2.2.2
+- Wed 02 Dec 2020 09:31:51 AM CET, version 2.2.2
   - divided tests into more files
   - few internal cleanup things, cleaned up desinences a bit
   - release candidate, all verification tests are passing

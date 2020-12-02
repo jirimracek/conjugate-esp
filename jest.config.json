@@ -10,9 +10,9 @@
     "node"
   ],
   "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)$",
-  "testPathIgnorePatterns": ["/__tests__/include\\.*"],
+  "testPathIgnorePatterns": ["/__tests__/testdata\\.*"],
   "coverageDirectory": "coverage",
-  "coveragePathIgnorePatterns": ["/__tests__/include\\.*"],
+  "coveragePathIgnorePatterns": ["/__tests__/testdata\\.*"],
   "collectCoverageFrom": [
     "src/**/*.ts"
   ]

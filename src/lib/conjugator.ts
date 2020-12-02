@@ -5,162 +5,122 @@
  * @license * MIT License
 */
 import definitions from '../data/definitions.json';
-import { ModelFactory } from './factory';
-import { Regions, PronominalKey, Orthography, AnyModeKey, ImpersonalSubKey, ImperativoSubKey, IndicativoSubKey, SubjuntivoSubKey, HighlightTags } from './types';
-import { ModelAttributes, ResultTable, Model, ModelWithAttributes } from './basemodel';
-import { tagDiffs } from './stringutils';
+import {ModelFactory} from './factory';
+import {Regions, PronominalKey, Orthography, Tags, Info } from './types';
+import {ModelAttributes, ResultTable, ModelWithAttributes, VerbModelTemplates, VerbModelData, BaseModel} from './basemodel';
+import {insertTags} from './stringutils';
 
-export { Regions, PronominalKey, ResultTable };
-export type VerbModelData = { [key in PronominalKey]?: Model[] | Model };
-export type VerbModelTemplates = { [verbname: string]: VerbModelData };
 
-export type Info = {
-    verb: string,
-    model: string,
-    region: string,
-    pronouns: string[],
-    pronominal: boolean,
-    defective: boolean,
-    ortho?: string,
-    highlight?: HighlightTags
-};
-
-export type ErrorType = { ERROR: { message: string } };
 export type Result = {
     info: Info,
     conjugation: ResultTable
 };
 
-export const errorMsg = {
-    unknownVerb: 'Input error, unknown verb VERB',
-    unknownRegion: 'Input error, invalid region REGION',
-    unknownModel: 'Internal error, model MODEL not implemented, can\'t conjugate VERB, REGION, contact maintainer',
-    noTemplates: 'Internal error, undefined templates, check definitions.json file, contact maintainer',
-    noModelData: 'Internal error, missing verb VERB model data?, check definitions.json file, contact maintainer',
-    noVerbs: 'Internal error, no verbs, check definitions.json file, contact maintainer',
-    noModels: 'Internal error, no models, check definitions.json file, contact maintainer'
-};
-
 /**
- * Create instance of Conjugator, then
- * 
- * conjugator.conjugate(verb, region?)
- * 
- * verb: required
- * 
- * region: optional - 'castellano' | 'voseo' | 'formal' | 'canarias, defaults to 'castellano'
- * See types.ts for detailed documentation on orthography and attributes
+ * Ex.: const cng = new Conjugator(ortho?, tags?)
  * 
  */
 export class Conjugator {
     protected templates: VerbModelTemplates = definitions;
     protected factory: ModelFactory = new ModelFactory();
-    private orthography: Orthography = '2010';
-    private tags: HighlightTags = { start: '', end: '', deleted: '' };
+    private ortho: Orthography = '2010';
+    private tags: Tags = {start: '', end: '', del: ''};
+
 
     /**
-     * 
      * @param ortho optional, 1999|2010, default 2010 - use 2010 orthography 
-     * @param highlight optional, defaults to nothing, use a single character or strings ({start: <startTag>, end: </startTag>, deleted: string})
+     * @param highlight optional, defaults to empty strings, ({start: <startTag>, end: </startTag>, deleted: string})
+     * 
+     * See types.ts for detailed documentation on orthography and attributes
      */
-    constructor(ortho: Orthography = '2010', highlight: HighlightTags = { start: '', end: '', deleted: '' }) {
+    constructor(ortho: Orthography = '2010', highlight = {start: '', end: '', del: ''}) {
         this.setOrthography(ortho);
         this.setHighlightTags(highlight);
     }
 
     public setOrthography(ortho: Orthography): void {
         if (ortho === '1999' || ortho === '2010') {
-            this.orthography = ortho;
+            this.ortho = ortho;
         } else {
-            console.warn(`Ignored: orthography parameter <${ortho}>, needs to be one of '1999' or '2010'`);
+            console.warn(`Ignored parameter ortho: <${ortho}>, use '1999'|'2010'`);
         }
     }
 
     public getOrthography(): Orthography {
-        return this.orthography;
+        return this.ortho;
     }
 
-    public setHighlightTags(highlight: {start: string, end: string, deleted: string}): void {
-        if (typeof highlight.start !== 'undefined' &&
-            typeof highlight.end !== 'undefined' &&
-            typeof highlight.deleted !== 'undefined') {
-            this.tags = highlight;
+    public setHighlightTags(tags: {start: string, end: string, del: string}): void {
+        if (typeof tags.start !== 'undefined' &&
+            typeof tags.end !== 'undefined' &&
+            typeof tags.del !== 'undefined') {
+            this.tags = tags;
         } else {
-            console.warn(`Ignored highlight parameter <${highlight}>, ` +
-                'needs to be of form { start: \'string\', end: \'string\', deleted: \'string\'}');
+            console.warn(`Ignored parameter tags: <${tags}>, use { start: 'string', end: 'string', del: 'string'}`);
         }
     }
 
-    public getHighlightTags(): HighlightTags {
+    public getHighlightTags(): Tags {
         return this.tags;
     }
 
     /**
-     * Sync version, call conjugate() for async
-     * 
-     * @param verb required - base verb, no pronominal 'se', use 'hablar', not 'hablarse'  
-     * Returned Result[] includes pronominals and defectives if appropriate
-     * @param region optional, castellano|voseo|canarias|formal, default castellano
+     * @param verb required
+     * @param region castellano|voseo|canarias|formal 
      */
-    public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | ErrorType {
+    public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | string {
         const result: Result[] = [];
+        const reflexive = verb.endsWith('se') ? true : false;
+        const base = reflexive ? verb.replace(/..$/, '') : verb;
 
         try {
-            if (!this.templates) {
-                throw new Error(errorMsg.noTemplates);
-            }
             if (!this.getVerbListSync().includes(verb)) {
-                throw new Error(errorMsg.unknownVerb.replace('VERB', verb));
+                throw new Error(`Unknown verb ${verb}`);
             }
             if (!['castellano', 'voseo', 'canarias', 'formal'].includes(region)) {
-                throw new Error(errorMsg.unknownRegion.replace('REGION', region));
+                throw new Error(`Unknown region ${region}`);
             }
 
-            const verbModelData = this.templates[verb] as VerbModelData;
-            if (!verbModelData) {
-                throw new Error(errorMsg.noModelData.replace('VERB', verb));
-            }
+            const verbModelData = this.templates[base] as VerbModelData;
 
             // Things we need to know to construct the model 
-            const modelTemplates: [string, PronominalKey, Regions, ModelAttributes][] = [];
+            const modelTemplates: [string, Regions, ModelAttributes][] = [];
             (Object.keys(verbModelData) as PronominalKey[]).forEach(pronominalKey => {
                 // string | [string | ModelWithAttrs] | ModelWithAttrs
-                const models = [verbModelData[pronominalKey]].flat();
-                models.forEach(model => {
-                    if (typeof model === 'string') {
-                        modelTemplates.push([model, pronominalKey, region, {}]);
-                    } else {
-                        // it's a ModelWithAttrs
-                        const [name, attributes] =
-                            (Object.entries(model as ModelWithAttributes)).flat() as [string, ModelAttributes];
-                        // if ortho is not 2010 or M is undefined or M is defined and not false 
-                        //   then use this model, otherwise skip it.  See types.ts for more info
-                        if (this.orthography !== '2010' || typeof attributes['M'] === 'undefined' ||
-                            attributes['M'] !== 'false') {
-                            modelTemplates.push([name as string, pronominalKey, region, attributes]);
-                            // } else {
-                            //     console.log(`Skip ${verb}, ${name}, M=${attributes['M']}`);
+                // Match reflexive-ness with verb
+                if (reflexive && pronominalKey === 'P' || !reflexive && pronominalKey === 'N') {
+                    const models = [verbModelData[pronominalKey]].flat();
+                    models.forEach(model => {
+                        if (typeof model === 'string') {
+                            modelTemplates.push([model, region, {}]);
+                        } else {
+                            // it's a ModelWithAttrs
+                            const [name, attributes] =
+                                (Object.entries(model as ModelWithAttributes)).flat() as [string, ModelAttributes];
+                            // if ortho is not 2010 or M is undefined or M is defined and not false 
+                            //   then use this model, otherwise skip it.  See types.ts for more info
+                            if (this.ortho !== '2010' || typeof attributes['M'] === 'undefined' ||
+                                attributes['M'] !== 'false') {
+                                modelTemplates.push([name as string, region, attributes]);
+                                // } else {
+                                //     console.log(`Skip ${verb}, ${name}, M=${attributes['M']}`);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             });
 
             // Construct each model based on its recipe and get the verb conjugated based on given model
             modelTemplates.forEach(template => {
-                const [modelName, pronominalKey, region, attributes] = template;
-                const model = this.factory.getModel(verb, modelName, pronominalKey, region, attributes);
-                if (!model) {
-                    throw new Error(
-                        errorMsg.unknownModel.replace(/MODEL(.*)VERB(.*)REGION/,
-                            `${modelName}$1${verb}$2${region}`));
-                }
+                const [modelName, region, attributes] = template;
+                const model = this.factory.getModel(verb, modelName, region, attributes) as BaseModel;
 
                 const info: Info = {
-                    verb: pronominalKey === 'P' ? `${verb}se` : verb,
+                    verb: verb,
                     model: modelName,
                     region: region,
                     pronouns: model.getPronouns(),
-                    pronominal: (pronominalKey === 'P'),
+                    reflexive: reflexive,
                     defective: !!(attributes['D'])
                 };
 
@@ -180,14 +140,12 @@ export class Conjugator {
                 // The idea: simulate conjugation based on a regular model, then resolve the differences
                 const conjugated = model.getConjugation();
                 if (!['hablar', 'temer', 'partir'].includes(modelName) && // Mental note - don't change models anymore
-                    ('' !== this.tags.start || '' !== this.tags.end || '' !== this.tags.deleted)) {
+                    ('' !== this.tags.start || '' !== this.tags.end || '' !== this.tags.del)) {
 
                     info.highlight = this.tags;                // note it in info - de we really need to do this???
                     // get conjugation as if the verb was conjugated per regular model (hablar, temer, partir)
-                    const simulatedModel = this.factory.getModel(verb, modelName, pronominalKey, region, {}, true);
-                    // Already checked for the model above, assert it's correct
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    this.insertTags(simulatedModel!.getConjugation(), conjugated);
+                    const simulatedModel = this.factory.getModel(verb, modelName, region, {}, true) as BaseModel;
+                    insertTags(simulatedModel.getConjugation(), conjugated, this.tags);
                 }
 
                 result.push({
@@ -197,21 +155,18 @@ export class Conjugator {
             });
             return result;
         } catch (error) {
-            console.error(error);
-            return { ERROR: { message: error.message } };
+            // console.error(error);
+            return error.message;
         }
     }
 
     /**
-     * Async version, conjugateSync() for sync version
-     * 
-     * @param verb required - base verb, no pronominal 'se', use 'hablar', not 'hablarse'  
-     * Returned Result[] includes pronominals and defectives if appropriate
-     * @param region optional, castellano|voseo|canarias|formal, default castellano
+     * @param verb required
+     * @param region castellano|voseo|canarias|formal 
      */
-    public conjugate(verb: string, region: Regions = 'castellano'): Promise<Result[] | ErrorType> {
+    public conjugate(verb: string, region: Regions = 'castellano'): Promise<Result[] | string> {
         return new Promise((resolve, reject) => {
-            const result: Result[] | ErrorType = this.conjugateSync(verb, region);
+            const result = this.conjugateSync(verb, region);
             if (Array.isArray(result)) {
                 resolve(result);
             } else {
@@ -221,105 +176,42 @@ export class Conjugator {
     }
 
     /**
-     * get sorted list of known verbs,
+     * get sorted list of all verbs, sync
      */
     public getVerbListSync(): string[] {
-        try {
-            return Object.keys(this.templates).sort(function (a, b) { return a.localeCompare(b); });
-        } catch (error) {
-            console.error(errorMsg.noVerbs, error.message);
-            return [errorMsg.noVerbs];
-        }
-    }
-
-    public getVerbList(): Promise<string[]> {
-        return new Promise((resolve, reject) => {
-            const result = this.getVerbListSync();
-            if (result.length > 1) {
-                resolve(result);
-            } else {
-                reject(result);
+        const list: string[] = [];
+        Object.keys(this.templates).forEach(verb => {
+            if (this.templates[verb].P) {
+                list.push(`${verb}se`);
+            }
+            if (this.templates[verb].N) {
+                list.push(verb);
             }
         });
+        return list.sort(function (a, b) {return a.localeCompare(b);});
     }
 
     /**
-     * list of all models, sync version
+     * get sorted list of all verbs, async
+     * 
+     */
+    public getVerbList(): Promise<string[]> {
+        return new Promise(resolve => resolve(this.getVerbListSync()));
+    }
+
+    /**
+     * get list of all models, sync
      * 
      */
     public getModelsSync(): string[] {
-        try {
-            return this.factory.getModels();
-        } catch (error) {
-            console.error(errorMsg.noModels, error.message);
-            return [errorMsg.noModels];
-        }
+        return this.factory.getModels();
     }
 
     /**
-     * list of all models
+     * get list of all models, async
      * 
      */
     public getModels(): Promise<string[]> {
-        return new Promise((resolve, reject) => {
-            const result = this.getModelsSync();
-            if (result.length > 1) {
-                resolve(result);
-            } else {
-                reject(result);
-            }
-        });
-    }
-
-    /**
-     * compare each line of simulated and real conjugation, markup differences in real conjugation with start/end tags
-     */
-    private insertTags(simulated: ResultTable, conjugated: ResultTable): void {
-        // Iterate over conjugations, send the simulated and real lines to be compared and highlighted
-        Object.keys(conjugated).forEach(key => {
-            const modeKey = key as AnyModeKey;
-            Object.keys(conjugated[modeKey]).forEach(subKey => {
-                switch (modeKey) {
-                    case 'Impersonal':                   // do not mark infinitive (reír, oír, ...)
-                        if (subKey === 'Gerundio') {
-                            conjugated[modeKey][subKey as ImpersonalSubKey] =
-                                tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
-                                    conjugated[modeKey][subKey as ImpersonalSubKey], this.tags);
-                        }
-                        else if (subKey === 'Participio') {            // we may have dual
-                            const parts = conjugated[modeKey][subKey as ImpersonalSubKey].split('/');
-                            if (parts.length > 1) {
-                                // mark each part individually and then join them again
-                                conjugated[modeKey][subKey as ImpersonalSubKey] =
-                                    [tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
-                                        parts[0], this.tags),
-                                    tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
-                                        parts[1], this.tags)
-                                    ].join('/');
-                            } else {
-                                conjugated[modeKey][subKey as ImpersonalSubKey] =
-                                    tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
-                                        conjugated[modeKey][subKey as ImpersonalSubKey], this.tags);
-                            }
-                        }
-                        break;
-                    case 'Indicativo': conjugated[modeKey][subKey as IndicativoSubKey] =
-                        conjugated[modeKey][subKey as IndicativoSubKey].map((line, index) => {
-                            return tagDiffs(simulated[modeKey][subKey as IndicativoSubKey][index], line, this.tags);
-                        });
-                        break;
-                    case 'Subjuntivo': conjugated[modeKey][subKey as SubjuntivoSubKey] =
-                        conjugated[modeKey][subKey as SubjuntivoSubKey].map((line, index) => {
-                            return tagDiffs(simulated[modeKey][subKey as SubjuntivoSubKey][index], line, this.tags);
-                        });
-                        break;
-                    case 'Imperativo': conjugated[modeKey][subKey as ImperativoSubKey] =
-                        conjugated[modeKey][subKey as ImperativoSubKey].map((line, index) => {
-                            return tagDiffs(simulated[modeKey][subKey as ImperativoSubKey][index], line, this.tags);
-                        });
-                        break;
-                }
-            });
-        });
+        return new Promise(resolve => resolve(this.factory.getModels())); 
     }
 }

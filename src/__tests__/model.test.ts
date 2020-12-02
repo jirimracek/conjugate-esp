@@ -5,239 +5,176 @@
  * @license * MIT License
 */
 /* eslint-disable max-len */
-import { Conjugator } from '../index';
-import { Info, Result, ErrorType, VerbModelData, VerbModelTemplates, errorMsg } from '../lib/conjugator';
-import { ModelFactory } from '../lib/factory';
-import { Regions } from '../lib/types';
-import { shuffle, verbsToTest } from './include';
+import { Conjugator, Result, Regions} from '../index';
+import { ModelFactory} from '../lib/factory';
+import {Orthography} from '../lib/types';
 
-const VERB_COUNT = 10567;
+// const VERB_COUNT = 10567;        // without reflexives
+const VERB_COUNT = 14456;           // including reflexives
 const MODEL_COUNT = 97;
 // Disable thrown messages
 beforeEach(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => { /* empty */ });
+    jest.spyOn(console, 'error').mockImplementation(() => { /* empty */});
 });
+console.warn = jest.fn();
 
-const temp = new Conjugator();
-const models: string[] = temp.getModelsSync();
-const verbs = shuffle([...verbsToTest(), ...models]);
+const cng = new Conjugator();
+const verbList = cng.getVerbListSync();
+let result: Result[] | string;
 
-// Derive to get access to templates
-class MockJugator extends Conjugator {
-    private savedTemplates: VerbModelTemplates;
-    private savedFactory: ModelFactory;
-    constructor() {
-        super();
-        // Make duplicates
-        this.templates = JSON.parse(JSON.stringify(this.templates));
-        this.savedTemplates = JSON.parse(JSON.stringify(this.templates));
-        this.savedFactory = this.factory;
-    }
-    public deleteTemplates(): void {
-        this.templates = undefined as unknown as VerbModelTemplates;
-    }
-    public undefineModelData(verb: string): void {
-        this.templates[verb] = undefined as unknown as VerbModelData;
-    }
-    public restore(): void {
-        this.templates = JSON.parse(JSON.stringify(this.savedTemplates));
-        this.factory = this.savedFactory;
-    }
-    public fakeUnimplemented(verb: string, model: string): void {
-        this.templates[verb] = { 'N': model } as VerbModelData;
-    }
-    public deleteFactory(): void {
-        this.factory = undefined as unknown as ModelFactory;
-    }
-}
 
+// Async tests required reading: https://jestjs.io/docs/en/asynchronous
 // Test synchronous functions
-describe('Model Test Sync', () => {
-    test('Internals Sync', () => {
+describe('Model Test', () => {
+    test('Random verb sync', () => {
+        const index = Math.ceil(Math.random() * VERB_COUNT);
+        const verb = verbList[index];
         // expect correct data
-        let mockjugator = new MockJugator();
-        let result: Result[] | ErrorType = mockjugator.conjugateSync('partir', 'formal');
-        expect(result).toBeInstanceOf(Array);
-        expect(((result as Result[])[0].info as Info).model).toEqual('partir');
+        result = cng.conjugateSync(verb, 'formal') as Result[];
+        expect(result[0].info.verb).toEqual(verb);
+        expect(result[0].info.reflexive).toEqual(verb.endsWith('se') ? true : false);
 
-        // undefine verb model data in templates, expect error message
-        mockjugator.undefineModelData('partir');
-        result = mockjugator.conjugateSync('partir', 'formal');
-        expect(result).not.toBeInstanceOf(Array);
-        expect(result).toEqual({ ERROR: { message: errorMsg.noModelData.replace('VERB', 'partir') } });
-
-        // restore to valid state, verify it's good
-        mockjugator = new MockJugator();
-        result = mockjugator.conjugateSync('partir', 'formal');
-        expect(result).toBeInstanceOf(Array);
-        expect(((result as Result[])[0].info as Info).region).toEqual('formal');
-
-        // break it, expect error message
-        mockjugator.deleteTemplates();
-        result = mockjugator.conjugateSync('hablar', 'castellano');
-        expect(result).not.toBeInstanceOf(Array);
-        expect(result as ErrorType).toEqual({ ERROR: { message: errorMsg.noTemplates } });
-
-        // expect error message again, can't get verblist
-        expect(mockjugator.getVerbListSync()).toEqual([errorMsg.noVerbs]);
-
-        // really break it, no factory, expect error
-        mockjugator.deleteFactory();
-        expect(mockjugator.getModelsSync()).toEqual([errorMsg.noModels]);
-
-        // restore to valid state, verify it's good
-        mockjugator = new MockJugator();
-        result = mockjugator.conjugateSync('comer', 'voseo');
-        expect(result).toBeInstanceOf(Array);
-        expect(((result as Result[])[0].info as Info).verb).toEqual('comer');
-
-        // polute the db with verb:model that isn't implemented, expect error
-        mockjugator.fakeUnimplemented('foobar', 'bar');
-        result = mockjugator.conjugateSync('foobar');
-        expect(result).not.toBeInstanceOf(Array);
-        expect(result).
-            toEqual({
-                ERROR: {
-                    message: errorMsg.unknownModel.replace(/MODEL(.*)VERB(.*)REGION/,
-                        'bar$1foobar$2castellano')
-                }
-            });
-
-        // Force bad region, expect error
-        mockjugator.fakeUnimplemented('totally', 'bad');
-        result = mockjugator.conjugateSync('totally', 'bad' as Regions);
-        expect(result).not.toBeInstanceOf(Array);
-        expect((result as ErrorType)).toEqual({ ERROR: { message: errorMsg.unknownRegion.replace(/REGION/, 'bad') } });
-
-        // Couple of 'normal' tests
-        mockjugator = new MockJugator();
-        result = mockjugator.conjugateSync('partir');
-        expect((result as Result[])[0].info.defective).toEqual(false);
-        result = mockjugator.conjugateSync('hablar');
-        expect((result as Result[])[0].info.pronominal).toEqual(false);
-        result = mockjugator.conjugateSync('temer');
-        expect((result as Result[])[0].info.verb).toEqual('temer');
     });
-
-    const conjugator = new Conjugator();
-    test('Bad Input Sync', () => {
-        expect(conjugator.conjugateSync('hablarse', 'castellano')).
-            toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'hablarse') } });
-
-        // force bad region
-        expect(conjugator.conjugateSync('temer', 'castillano' as Regions)).
-            toEqual({ ERROR: { message: errorMsg.unknownRegion.replace('REGION', 'castillano') } });
-
-        expect(conjugator.conjugateSync('yo momma')).
-            toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'yo momma') } });
-    });
-
-    test('ModelFactory', () => {
-        const testFactory = new ModelFactory();
-        // serenar is not a model, getModel should return Empty
-        expect(testFactory.getModel('serenar', 'serenar', 'N', 'castellano', {})).toBeUndefined();
-        expect(testFactory.getModel('hablar', 'invalid', 'N', 'canarias', {})).toBeUndefined();
-
-        // legit existing models
-        expect(testFactory.getModel('hablar', 'hablar', 'P', 'voseo', {})).toBeDefined();
-        expect(testFactory.getModel('hablar', 'partir', 'P', 'formal', {})).toBeDefined();
-        expect(testFactory.getModel('hablar', 'temer', 'P', 'castellano', {})).toBeDefined();
-
-        // simulated models
-        expect(testFactory.getModel('serenar', 'serenar', 'N', 'castellano',{}, true)).toBeUndefined();
-        expect(testFactory.getModel('hablar', 'invalid', 'N', 'canarias', {}, true)).toBeUndefined();
-    });
-
-    test('Sync verb and model count', async () => {
-        expect(conjugator.getVerbListSync().length).toEqual(VERB_COUNT);
-        expect(conjugator.getModelsSync().length).toEqual(MODEL_COUNT);
-    });
-
-    test('Optional parameters', () => {
-        let result: Result[] | ErrorType = conjugator.conjugateSync('hablarse');           // hablarse can't be used, use 'hablar'
-        expect(result).not.toBeInstanceOf(Array);
-        expect(result).toEqual({ ERROR: { message: errorMsg.unknownVerb.replace('VERB', 'hablarse') } });
-
-        // force bad region
-        result = conjugator.conjugateSync('temer', 'castillano' as Regions);
-        expect(result).not.toBeInstanceOf(Array);
-        expect(result).toEqual({ ERROR: { message: errorMsg.unknownRegion.replace('REGION', 'castillano') } });
-
-        // good input, good answers
-        result = conjugator.conjugateSync('hablar');
-        expect(result).toBeInstanceOf(Array);
-        expect(result).not.toEqual([]);
-
-        result = conjugator.conjugateSync('hablar');
-        expect(result).toBeInstanceOf(Array);
-        expect((result as Result[])[0]['info']).toBeDefined();
-        expect((result as Result[])[0].info.model).toEqual('hablar');
-        expect((result as Result[])[0].conjugation.Indicativo.Presente[0]).toEqual('hablo');
-
-        result = conjugator.conjugateSync('partir');
-        expect(result).toBeInstanceOf(Array);
-        expect((result as Result[])[0].info.pronominal).toBe(false);
-        expect((result as Result[])[0].conjugation.Subjuntivo.Presente[2]).toEqual('parta');
-    });
-
-    const toTest = shuffle(conjugator.getVerbListSync().filter(verb => verbs.includes(verb)));
-    test('Availability', () => {
-        verbs.forEach(verb => {
-            // this can happen if something goes wrong with the db (partial db during development)
-            if (!toTest.includes(verb)) {
-                fail(`FIXME: '${verb}' not available for testing`);
-            }
+    test('Random verb async', () => {
+        const index = Math.ceil(Math.random() * VERB_COUNT);
+        const verb = verbList[index];
+        // expect correct data
+        return cng.conjugate(verb, 'formal').then((result) => {
+            expect((result as Result[])[0].info.verb).toEqual(verb);
+            expect((result as Result[])[0].info.reflexive).toEqual(verb.endsWith('se') ? true : false);
         });
     });
+
+    test('Unknown verb sync', () => {
+        result = cng.conjugateSync('comemer', 'formal');
+        expect(result).not.toBeInstanceOf(Array);
+        expect(result).toEqual('Unknown verb comemer');
+    });
+    test('Unknown verb async', () => {
+        return cng.conjugate('what ever', 'formal')
+            .then((result) => expect(result).not.toBeInstanceOf(Array))
+            .catch((error) =>
+                expect(error).toEqual('Unknown verb what ever'));
+    });
+
+    test('Known verb sync', () => {
+        // Couple of 'normal' tests
+        result = cng.conjugateSync('partir');
+        expect((result as Result[])[0].info.defective).toEqual(false);
+        expect((result as Result[])[0].info.reflexive).toBe(false);
+        expect((result as Result[])[0].conjugation.Subjuntivo.Presente[2]).toEqual('parta');
+
+        expect((cng.conjugateSync('hablar') as Result[])[0].info.reflexive).toEqual(false);
+        expect((cng.conjugateSync('hablarse') as Result[])[0].info.reflexive).toEqual(true);
+        expect((cng.conjugateSync('temer') as Result[])[0].info.verb).toEqual('temer');
+    });
+    test('ver async', () => {
+        return cng.conjugate('ver')
+            .then((result) => {
+                expect((result as Result[])[0].info.defective).toEqual(false);
+                expect((result as Result[])[0].info.reflexive).toBe(false);
+                expect((result as Result[])[0].conjugation.Subjuntivo.Presente[3]).toEqual('veamos');
+            });
+    });
+    test('ir async', () => {
+        return cng.conjugate('ir').then((result) =>
+            expect((result as Result[])[0].info.reflexive).toEqual(false));
+    });
+    test('ir async', () => {
+        return cng.conjugate('irse').then((result) =>
+            expect((result as Result[])[0].info.reflexive).toEqual(true));
+    });
+    test('escabullirse async', () => {
+        return cng.conjugate('escabullirse').then((result) =>
+            expect((result as Result[])[0].info.verb).toEqual('escabullirse'));
+    });
+
+    test('Unknow region sync', () => {
+        // force bad region
+        const index = Math.ceil(Math.random() * VERB_COUNT);
+        const verb = verbList[index];
+        expect(cng.conjugateSync(verb, 'former' as Regions)).
+            toEqual('Unknown region former');
+    });
+    test('Unknow region async', () => {
+        // force bad region
+        const index = Math.ceil(Math.random() * VERB_COUNT);
+        const verb = verbList[index];
+        return cng.conjugate(verb, 'castillano' as Regions).catch((error) =>
+            expect(error).toEqual('Unknown region castillano'));
+    });
+
+    test('Verb, model counts sync', () => {
+        expect(cng.getVerbListSync().length).toEqual(VERB_COUNT);
+        expect(cng.getModelsSync().length).toEqual(MODEL_COUNT);
+    });
+    test('Verb count async', () => {
+        return cng.getVerbList().then((result) => expect(result.length).toEqual(VERB_COUNT));
+    });
+    test('Model count async', () => {
+        return cng.getModels().then((result) => expect(result.length).toEqual(MODEL_COUNT));
+    });
+
+    test('Ortho no effect', () => {
+        // good input, good answers
+        cng.setOrthography('2010');
+        expect(cng.getOrthography()).toEqual('2010');
+        result = cng.conjugateSync('hablar', 'voseo') as Result[];
+        expect(result[0].info.ortho).toBeUndefined();          // ortho has no effect on hablar
+    });
+
+    test('Ortho 2010', () => {
+        cng.setOrthography('2010');
+        result = cng.conjugateSync('reírse') as Result[];
+        expect(result[0].info.ortho).toEqual('2010');
+    });
+
+    test('Ortho invalid', () => {
+        cng.setOrthography('2010');
+        cng.setOrthography('2000' as Orthography);
+        expect(cng.getOrthography()).toBe('2010');
+
+        cng.setOrthography('1999');
+        cng.setOrthography('2001' as Orthography);
+        expect(cng.getOrthography()).toBe('1999');
+    });
+
+    test('Highlight', () => {
+        const tags = {start: '*', end: '+', 'del': '-'};
+        cng.setHighlightTags(tags);
+        expect(cng.getHighlightTags()).toEqual(tags);
+    });
 });
 
-
-// Async tests
-// Required reading:
-// https://jestjs.io/docs/en/asynchronous
-describe('Model Test Async', () => {
-    test('Async verb and model count', async () => {
-        const mockjugator = new MockJugator();
-        await mockjugator.getVerbList().then(value => expect(value.length).toEqual(VERB_COUNT));
-        await mockjugator.getModels().then(value => expect(value.length).toEqual(MODEL_COUNT));
+describe('Model factory', () => {
+    const factory = new ModelFactory();
+    // serenar is not a model
+    test('Not a model', () => {
+        expect(factory.getModel('serenar', 'serenar', 'castellano', {})).toBeUndefined();
+        expect(factory.getModel('hablar', 'invalid', 'canarias', {})).toBeUndefined();
     });
 
-    test('Async broken templates', () => {
-        // make a broken mock
-        const broken = new MockJugator();
-        broken.deleteTemplates();
-        // return expect(broken.getVerbList()).resolves.toEqual([errorMsg.noVerbs]);
-        return expect(broken.getVerbList()).rejects.toEqual([errorMsg.noVerbs]);
+    // legit existing models
+    test('Valid models', () => {
+        expect(factory.getModel('hablar', 'hablar', 'voseo', {})).toBeDefined();
+        expect(factory.getModel('partir', 'partir', 'formal', {})).toBeDefined();
+        expect(factory.getModel('temer', 'temer', 'castellano', {})).toBeDefined();
+
+        expect(factory.getModel('bs', 'temer', 'castellano', {})).toBeDefined();
+        expect(factory.getModel('hablarse', 'hablar', 'voseo', {})).toBeDefined();
+        expect(factory.getModel('partirse', 'partir', 'formal', {})).toBeDefined();
+        expect(factory.getModel('temerse', 'temer', 'castellano', {})).toBeDefined();
     });
 
-    test('Async no factory', () => {
-        const broken = new MockJugator();
-        broken.deleteFactory();      // really break it
-        // return expect(broken.getModels()).resolves.toEqual([errorMsg.noModels]);
-        return expect(broken.getModels()).rejects.toEqual([errorMsg.noModels]);
+    test('Invalid models', () => {
+        expect(factory.getModel('serenar', 'serenar', 'castellano', {} )).toBeUndefined();
+        expect(factory.getModel('hablar', 'invalid', 'canarias', {})).toBeUndefined();
     });
 
-    test('Async badly formed verb (includes "se")', () => {
-        const conjugator = new Conjugator();
-        return conjugator.conjugate('partirse').
-            catch(e => expect(e).toEqual({ 'ERROR': { 'message': errorMsg.unknownVerb.replace('VERB', 'partirse') } }));
-    });
-
-    test('Async bad region', () => {
-        const conjugator = new Conjugator();
-        return conjugator.conjugate('partir', 'castilgano' as Regions).
-            catch(e => expect(e).toEqual({ 'ERROR': { 'message': errorMsg.unknownRegion.replace('REGION', 'castilgano') } }));
-    });
-
-    test('Async unknown verb', () => {
-        const conjugator = new Conjugator();
-        return conjugator.conjugate('yo').
-            catch(e => expect(e).toEqual({ 'ERROR': { 'message': errorMsg.unknownVerb.replace('VERB', 'yo') } }));
-    });
-
-    test('Async known verb', () => {
-        const conjugator = new Conjugator();
-        return conjugator.conjugate('haber').
-            then(result => expect((result as Result[])[0].conjugation.Subjuntivo.Presente[1]).toEqual('hayas'));
+    test('Simulated models', () => {
+        // Should return base model temer because caer is an er model
+        expect(factory.getModel('serenar', 'caer', 'castellano', {}, true)).toBeDefined();
+        // Returns hablar, dar is 'ar'
+        expect(factory.getModel('caer', 'dar', 'canarias', {}, true)).toBeDefined();
     });
 });

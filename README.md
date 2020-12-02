@@ -1,6 +1,6 @@
 # Spanish verb conjugator
 
-Tue 17 Nov 2020 08:22:27 PM CET, version 2.2.2
+Wed 02 Dec 2020 09:31:51 AM CET, version 2.2.2
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
@@ -13,10 +13,10 @@ ____
 ## Goals
 
 - correct, detailed, complete, fast & small (yes, you can have it all)
-- 10567 tested verbs, uses 97 models
+- 14456 tested verbs based on 97 models
 - includes
   - only current, RAE recognized as known &amp; used verbs
-  - regional varieties of castellano, voseo, formal, canarias
+  - castellano, voseo, formal, canarias
   - defectives
   - multiple (dual & triple) conjugations
   - dual participios

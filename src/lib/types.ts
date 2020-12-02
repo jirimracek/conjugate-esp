@@ -10,8 +10,7 @@ export type SubjuntivoSubSimpleKey = 'Presente'| 'PreteritoImperfectoRa'| 'Prete
 export type PronominalKey = 'N' | 'P';     
 export type Regions = 'castellano' | 'voseo' | 'canarias' | 'formal';
 export type Orthography = '1999' | '2010';
-export type Highlight = true | false;
-export type HighlightTags = { start: string, end: string, deleted: string };   // start, end tags, insert 'delete' to indicated deleted portion
+export type Tags = { start: string, end: string, del: string };   // start, end tags, insert 'delete' to indicated deleted portion
 
 export type ImperativoSubKey = 'Afirmativo' | 'Negativo';
 export type ImpersonalSubKey = 'Infinitivo' | 'Gerundio' | 'Participio';
@@ -26,6 +25,19 @@ export type SubjuntivoSubKey = SubjuntivoSubSimpleKey | SubjuntivoSubCompKey;
 
 export type AnyModeKey = 'Impersonal' | 'Indicativo' | 'Subjuntivo' | 'Imperativo';
 export type AnyModeSubKey = ImpersonalSubKey | IndicativoSubKey | SubjuntivoSubKey | ImperativoSubKey;
+
+
+export type Info = {
+    verb: string,
+    model: string,
+    region: string,
+    pronouns: string[],
+    reflexive: boolean,
+    defective: boolean,
+    ortho?: string,
+    highlight?: Tags
+};
+
 /*  The M attribute ([M]onosyllable) and Orthography cooperation
     the M flag is defined in definitions.json and its meanings in the engine are:
       M=true means use the 2010 orthography (no accent)

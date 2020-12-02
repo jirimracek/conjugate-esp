@@ -5,11 +5,9 @@
  * @license * MIT License
 */
 /* eslint-disable max-len */
-import { Conjugator } from '../index';
-import { Result, ErrorType } from '../lib/conjugator';
-import { AnyModeKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey } from '../lib/types';
-import { HighlightTags } from '../../dist/lib/types';
-import { getRegions, shuffle, verbsToTest } from './include';
+import { Conjugator, Result } from '../index';
+import { AnyModeKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey, Tags } from '../lib/types';
+import { getRegions, shuffle, verbsToTest, monos } from './testdata';
 
 // Disable thrown messages
 beforeEach(() => {
@@ -22,51 +20,45 @@ const regionsToTest = getRegions();
 
 // Verify that the start / end tags are consistent, i.e.: for each start tag there must be a closing end tag
 describe('Highlight Tag Consistency Test', () => {
-    const conjugator = new Conjugator();
-    conjugator.setOrthography('1999');
-    expect(conjugator.getOrthography()).toEqual('1999');
+    const cng = new Conjugator();
+    let tags = {start: '', end: '', del: ''};
+    cng.setOrthography('1999');
+    expect(cng.getOrthography()).toEqual('1999');
 
-    expect(conjugator.getHighlightTags()).toEqual({ start: '', end: '', deleted: '' });
-    conjugator.setHighlightTags('foo' as unknown as HighlightTags);
+    expect(cng.getHighlightTags()).toEqual(tags);
+    cng.setHighlightTags('foo' as unknown as Tags);
     expect(console.warn).toHaveBeenCalled();
-    expect(conjugator.getHighlightTags()).toEqual({ start: '', end: '', deleted: '' });
+    expect(cng.getHighlightTags()).toEqual(tags);
 
-    const tags = { start: '.', end: '-', deleted: '*' };
-    conjugator.setHighlightTags(tags);
-    expect(conjugator.getHighlightTags()).toEqual({ start: '.', end: '-', deleted: '*' });
+    tags = { start: '.', end: '-', del: '*' };
+    cng.setHighlightTags(tags);
+    expect(cng.getHighlightTags()).toEqual(tags);
 
     // Our array of interesting verbs and throw in a few more
-    const toTest = shuffle(Array.from(new Set([...conjugator.getVerbListSync().splice(0, 200), ...verbsToTest()])));
+    const toTest = shuffle(Array.from(new Set([...cng.getVerbListSync().splice(0, 200), ...verbsToTest, ... monos])));
 
     const emptyTags = tags.start + tags.end;
-    // const redundantEnd = tags.start + tags.deleted + tags.end;
-    // TODO: check for combo of things that shouldn't happen, for ex.: .-.*-
-    //       need to reorganize tests
 
     toTest.forEach(verb => {
         regionsToTest.forEach(region => {
-            test(`${region}, ortho 1999, highlight tags '-','.'`, () => {
-                const conjugations: Result[] | ErrorType = conjugator.conjugateSync(verb, region);
-                if (!Array.isArray(conjugations)) {
-                    fail(conjugations);
-                }
-                conjugations.forEach(result => {
+            test(`${region}, ortho 1999, tags:[${tags.start}, ${tags.end}, ${tags.del}]`, () => {
+                (cng.conjugateSync(verb, region) as Result[]).forEach(result => {
                     const table = (result as Result).conjugation;
-                    Object.keys(table).forEach(key => {
-                        const modeKey = key as AnyModeKey;
-                        Object.keys(table[modeKey]).forEach(subKey => {
-                            switch (modeKey) {
+                    Object.keys(table).forEach(k => {
+                        const key = k as AnyModeKey;
+                        Object.keys(table[key]).forEach(sub => {
+                            switch (key) {
                                 case 'Impersonal':
-                                    matchTags(table[modeKey][subKey as ImpersonalSubKey]);
+                                    matchTags(table[key][sub as ImpersonalSubKey], tags);
                                     break;
                                 case 'Indicativo':
-                                    table[modeKey][subKey as IndicativoSubKey].forEach(t => matchTags(t));
+                                    table[key][sub as IndicativoSubKey].forEach(t => matchTags(t, tags));
                                     break;
                                 case 'Subjuntivo':
-                                    table[modeKey][subKey as SubjuntivoSubKey].forEach(t => matchTags(t));
+                                    table[key][sub as SubjuntivoSubKey].forEach(t => matchTags(t, tags));
                                     break;
                                 case 'Imperativo':
-                                    table[modeKey][subKey as ImperativoSubKey].forEach(t => matchTags(t));
+                                    table[key][sub as ImperativoSubKey].forEach(t => matchTags(t, tags));
                                     break;
                             }
                         });
@@ -76,7 +68,7 @@ describe('Highlight Tag Consistency Test', () => {
         });
     });
 
-    function matchTags(text: string): void {
+    function matchTags(text: string, tags: {start: string, end: string, del: string}): void {
         if (text === '-') {   // defective
             return;
         }
