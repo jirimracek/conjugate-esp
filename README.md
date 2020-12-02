@@ -1,6 +1,6 @@
 # Spanish verb conjugator
 
-Wed 02 Dec 2020 09:31:51 AM CET, version 2.2.2
+Wed 02 Dec 2020 11:49:17 PM CET, version 2.3.0 experimental
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
@@ -17,6 +17,7 @@ ____
 - includes
   - only current, RAE recognized as known &amp; used verbs
   - castellano, voseo, formal, canarias
+  - reflexives
   - defectives
   - multiple (dual & triple) conjugations
   - dual participios
@@ -26,20 +27,17 @@ ____
 
 ### TL;DR
 
-- new in 2.2.x
-  - preliminary
-    - highlighting
-    - removed pronouns from conjugations, they now live in the info object only
-    - internal changes, code cleanup
-  - pre 1999, 1999-2010, post 2010 orthography rules
-  - new methods *setOrthography(), getOrthography(), setHighlight(), getHighlight*
-  - new info header entries *ortho, highlight*
+- new in 2.3.x
+  - public interface changes
+  - internal changes, code cleanup
+  - read [RELEASE](RELEASE.md) notes
 
 ____
 
 ### Want to read
 
-- see [CHANGELOG](CHANGELOG.md) for details
+- see [RELEASE](RELEASE.md) for major / minor version updates
+- see [CHANGELOG](CHANGELOG.md) for current details
 - see [ROADMAP](ROADMAP.md) for future changes and ideas
 - see [USAGE](USAGE.md) for usage, interfaces, return values description, sample output and more
 

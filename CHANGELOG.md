@@ -1,9 +1,19 @@
 # Changelog
 
-Wed 02 Dec 2020 09:31:51 AM CET, version 2.2.2
+Wed 02 Dec 2020 11:49:17 PM CET, version 2.3.0 experimental
 ____
 
-- Wed 02 Dec 2020 09:31:51 AM CET, version 2.2.2
+- Wed 02 Dec 2020 11:49:17 PM CET, version 2.3.0 experimental
+  - Info.pronominal renamed to reflexive
+  - conjugate() now returns string on error (eliminated ErrorType)
+  - conjugate() now requires an exact verb (either reflexive or normal - hablar / hablarse) and will return only that particular conjugation (previously only nonpronominal verb infinitive was accepted and the method returned both pronominal and nonpronominal versions when appropriate)
+  - getVerbList() now returns a complete list of all known verbs (14456) in their true forms.  Meaning that both hablar and hablarse are on the list as hablar can be used as reflexive as well.  On the other hand, abarse is reflexive only - abar doesn't exist, hence only abarse is on the list.  Attempt to conjugate('abar') will result in error
+  - highlight tags changed from
+    - {start: string, end: string, deleted: string} to
+    - {start: string, end: string, del: string
+  - all verification tests passing
+
+- Tue 17 Nov 2020 08:22:27 PM CET, version 2.2.2
   - divided tests into more files
   - few internal cleanup things, cleaned up desinences a bit
   - release candidate, all verification tests are passing
@@ -20,7 +30,7 @@ ____
 
 - Mon 09 Nov 2020 09:58:41 PM CET, 2.2.0
   - reverted ts compiler options mainly back to module commonjs
-  - publishing to npm under tag v2.2.2, this time preferrably without errors
+  - publishing to npm under tag v2.3.0 experimental, this time preferrably without errors
 
 - Thu 05 Nov 2020 08:16:11 PM CET, 2.1.2
   - trimming for npm publish

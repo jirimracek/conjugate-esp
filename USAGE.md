@@ -1,6 +1,6 @@
 # Usage details
 
-Wed 02 Dec 2020 09:31:51 AM CET, version 2.2.2
+Wed 02 Dec 2020 11:49:17 PM CET, version 2.3.0 experimental
 ____
 
 ## Installation
@@ -19,14 +19,14 @@ ____
     cng.setOrthography('2010');                                   // defaults to '2010'
     // cng.setOrthography('1999');                                // use 1999 orthography rules
 
-    // sync, formal, returns Result[] | ErrorType
+    // sync, formal, returns Result[] | string
     const table = cng.conjugateSync('adscribir', 'formal');
     console.log(JSON.stringify(table, null, 1));
 
-    // async, voseo, returns Promise<Result[] | ErrorType>
+    // async, voseo, returns Promise<Result[] | string>
     cng.conjugate('soler', 'voseo')
       .then(table => console.log(JSON.stringify(table, null, 1))) // process result
-      .catch(error => console.error(error));                      // catch errors
+      .catch(error => console.error(error));                      // process errors
 ```
 
 ### JavaScript
@@ -39,14 +39,14 @@ ____
     // cng.setOrthography('2010');                          // defaults to '2010'
     cng.setOrthography('1999');                             // use 1999 orthography rules
 
-    // sync, formal, returns Result[] | ErrorType
+    // sync, formal, returns Result[] | string
     const table = cng.conjugateSync('hablar', 'canarias');
     console.log(JSON.stringify(table, null, 1));
 
-    // async, castellano, returns Promise<Result[] | ErrorType>
+    // async, castellano, returns Promise<Result[] | string>
     cng.conjugate('freír')
       .then(table => console.log(JSON.stringify(table, null, 1))) // process result
-      .catch(error => console.error(error));                      // catch errors
+      .catch(error => console.error(error));                      // process failure
 ```
 
 ____
@@ -54,7 +54,7 @@ ____
 ### Public interfaces
 
 - **Conjugator**
-  - *constructor(ortho: Orthography = '2010', highlight: HighlightTags = { start: '', end: '', deleted: '' })*
+  - *constructor(ortho: Orthography = '2010', highlight: HighlightTags = { start: '', end: '', del: '' })*
     - parameter *ortho* - possible values '1999' | '2010', defaults to '2010'
       - purpose: determine the result based on different orthography rules
         - 2010 - use strict 2010 rules
@@ -80,10 +80,10 @@ ____
           - with *constructor(ortho: Orthography = '2010')* only post 2010 conjugation (*rio*)
     - parameter *highlight* - optional, properties default to empty strings
       - purpose: highlight the differences between irregular conjugation and (what would have been) a regular one
-        - the resulting conjugations will be annotated by the *start*, *end* and *deleted* strings (tags)
+        - the resulting conjugations will be annotated by the *start*, *end* and *del* strings (tags)
         - highlighting only applies to irregular verbs, it makes no sense to annotate regular conjugation with changes, there are none
         - the properties are optional, if at least one of them is non-empty string, it will happen and it will be noted in the info
-        - Examples: *setHighlightTags({start:., end:-, deleted:\*})*, tener conjugation
+        - Examples: *setHighlightTags({start:., end:-, del:\*})*, tener conjugation
           - if tener was regular, conjugated as temer, it would conjugate like yo teno, tú tenes, el tene
             - what you see below are the changes required to go from regular to irregular conjugation
               - teno &#8594; tengo        // insert g
@@ -91,12 +91,12 @@ ____
               <pre>
                 "Indicativo": {
                   "Presente": [
-                    "ten.g-o",      // the pair .- annotates the start & end of changes
+                    "ten.g-o",      // the pair .- is the start & end of changes
                     "t.i-enes",
                     .
                     .
               </pre>
-            - the *deleted* string will be inserted to indicate deletion (if this is desired)
+            - the *del* string will be inserted to indicate deletion (if this is desired)
               - again, if tener was regular , the conjugation below would be yo tení
               - tení &#8594; tuve        // insert uv, delete ní
               <pre>  
@@ -105,7 +105,7 @@ ____
                         .
                         .
               </pre>
-            - else if the *deleted* is not specified as in setHighlightTags (start: '.', end: '-')
+            - else if the *del* is not specified as in setHighlightTags (start: '.', end: '-')
               <pre>
                     "PreteritoIndefinido": [
                       "t.uv-e",   // note the missing deletion ".*-" at the end
@@ -119,7 +119,7 @@ ____
                       "c.ue-lg.u-e",
               </pre>
             - useful highlight example
-              - *cng = new Conjugator('1999', { start: '\<mark>', end: '\</mark>', deleted: '\u2027' });*
+              - *cng = new Conjugator('1999', { start: '\<mark>', end: '\</mark>', del: '\u2027' });*
               - *.css:  mark { background-color: inherit; color: red; }*
               - Results in (the **bold** would be rendered in red)
                 - t**uv**e **‧**  
@@ -129,28 +129,27 @@ ____
   - *public setOrthography (ortho: Orthography): void* - possible values *'1999'|'2010'*
   - *public getOrthography (): Orthography*
 
-  - *public setHighlightTags (highlight: HighlightTags): void* - { start: string, end: string, deleted: string }
-  - *public getHighlightTags(): HighlightTags*
+  - *public setHighlightTags (tags: {start: string, end: string, del: string})): void*
+  - *public getHighlightTags(): {start: string, end: string, del: string})*
   
-  - *public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | ErrorType*
+  - *public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | string*
     - sync method, returns a Result[] of conjugations or ErrorType object
 
-  - *public conjugate(verb: string, region: Regions = 'castellano'): Promise<Result[] | ErrorType>*
-    - async method, returns a Promise<Result[] of conjugations or ErrorType>
+  - *public conjugate(verb: string, region: Regions = 'castellano'): Promise<Result[] | string>*
+    - async method, returns a Promise<Result[] of conjugations or error string>
       - parameter *verb* - required
         - purpose: the verb to conjugate
-        - ***NOTE*** only the non-pronominal verb form is accepted
-          - Example:
-            - *conjugate('tomar')* returns conjugations for both *tomar* and *tomarse*
-            - _conjugate('tomar***se***')_ returns ***error*** (unknown verb)
-          - Admittedly this may have been an unfortunate design decision and it may change in the future
+        - ***new in 2.3.x*** exact verb form is required, either pronominal (reflexive) or nonpronominal (hablar or hablarse, ir or irse)
+        - Example (***new in 2.3.x***):
+          - *conjugate('tomar')* returns conjugation of *tomar*
+          - *conjugate('tomarse')* returns conjugation of *tomarse*
       - parameter *region* - optional, one of 'castellano' | 'voseo' | 'canarias' | 'formal'
         - see below for more on regional varieties
 
-  - *public getVerbListSync(): string[]* sync method, returns string [] of all known verbs, empty on error
-  - *public getVerbList(): Promise<string[]>* async version, string [] on fulfilled, empty on rejected
-  - *public getModelsSync(): string[]*  sync method, returns string [] of known models, empty on error
-  - *public getModels(): Promise<string[]>* async version, string [] on fullfilled, will be empty on rejected
+  - *public getVerbListSync(): string[]* sync method, returns string []
+  - *public getVerbList(): Promise<string[]>* async version, returns string []
+  - *public getModelsSync(): string[]*  sync method, returns string []
+  - *public getModels(): Promise<string[]>* async version, string []
 
 ____
 
@@ -167,14 +166,14 @@ ____
 
 ### Return values
 
-- conjugate() / conjugateSync() methods will return either a *Result[]* or *ErrorType*
-  - ErrorType is defined as *type ErrorType = { ERROR: { message: string } }*
+- conjugate() / conjugateSync() methods will return *Result[] | string*
+  - if string is returned, it's an error message
   - Result is defined as *type Result = { info: Info, conjugation: ResultTable }*
-    - NOTE that each possible conjugation ResultTable has its own Info
-      - When info.defective === false, it means that **this particular table** contains defective conjugation, **it does NOT mean that the verb isn't defective**.  Ditto for pronominal
-  - see conjugator.ts for error messages, definitions of *ErrorType* and *Result*
-  - see basemodel.ts for definition of *Info* and *ResultTable*
-  - ResultTable properties
+    - NOTE that each ResultTable has corresponding Info table
+      - When ***info.defective === false***, it means that **this particular ResultTable** does not contain defective conjugation, **it does NOT mean that the verb isn't defective**
+      - Ditto for reflexives
+
+- ResultTable properties
 
   ```json
    {
@@ -182,10 +181,10 @@ ____
    "verb":       string,
    "model":      string,
    "region":     string,
-   "pronominal": boolean,
+   "reflexive":  boolean,
    "defective":  boolean,
    "ortho?":     string,
-   "highlight?": {start: string, end: string, deleted: string}
+   "highlight?": {start: string, end: string, del: string}
   },
   "conjugation": {
    "Impersonal": {
@@ -227,8 +226,8 @@ ____
 
 ### Example output.  NOTE that you'll get an array of these objects
 
-- ***hablar, castellano, 2010, start:\<mark>, end:\</mark>, deleted:_***
-  - Note that the info has no ortho nor highlight properties - neither applies to hablar, there are no orthographical changes, there is nothing to highlight
+- ***hablar, castellano, 2010, start:\<mark>, end:\</mark>, del:_***
+  - Note that the info (below, the example) has no ortho nor highlight properties - neither applies to hablar, there are no orthographical changes, there is nothing to highlight
   - pronouns correspond to castellano
 
 ```json
@@ -246,7 +245,7 @@ ____
     "vosotros",
     "ellos"
    ],
-   "pronominal": false,
+   "reflexive": false,
    "defective": false
   },
   "conjugation": {
@@ -307,7 +306,7 @@ ____
 
 ```
 
-- ***freír, voseo, 2010, start:\<mark>, end:\</mark>, deleted:_***
+- ***freír, voseo, 2010, start:\<mark>, end:\</mark>, del:_***
   - note the deletion in gerundio, has both info.ortho and info.highlight as they both apply to this verb
   - pronouns correspond to voseo
 
@@ -326,13 +325,13 @@ ____
     "ustedes",
     "ellos"
    ],
-   "pronominal": false,
+   "reflexive": false,
    "defective": false,
    "ortho": "2010",
    "highlight": {
     "start": "<mark>",
     "end": "</mark>",
-    "deleted": "_"
+    "del": "_"
    }
   },
   "conjugation": {
@@ -381,12 +380,12 @@ ____
 
 ```
 
-- as noted above the conjugate method will return one object (Result[]), which will normally hold multiple ResultTable objects
+- as noted above the conjugate method will return one object (Result[]), which may hold multiple ResultTable objects
 
 ____
 
 ### Processing results
 
-- it may be useful to take a look at the info object which holds some interesting facts about the associated ResultTable, for example whether the verb is pronominal or not, the conjugation model used, whether it's defective or now, etc.
+- it may be useful to take a look at the info object which holds some interesting facts about the associated ResultTable, for example whether the verb is reflexive or not, the conjugation model used, whether it's defective or now, etc.
 - it is probably a good idea to iterate over the Result[]
 - the ResultTable is not an array, it is a json formatted object, use it as such

@@ -1,10 +1,10 @@
 # Things to do, wishlists, plans, crimes committed, etc
 
-Wed 02 Dec 2020 09:31:51 AM CET, version 2.2.2
+Wed 02 Dec 2020 11:49:17 PM CET, version 2.3.0 experimental
 ____
 
 - Tue 01 Dec 2020 10:48:10 AM CET
-  - 2.4.x work?
+  - 2.3.x work
     - return a full list of verbs, include reflexives so getVerbList() returns both hablar and hablarse
     - accept reflexives as a valid parameter to conjugate() - it gets rejected now
       - internal: we don't need to propagate the pronominalKey from conjugate() to factory to models. Zap.
