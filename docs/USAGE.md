@@ -1,6 +1,6 @@
 # Usage details
 
-Wed 02 Dec 2020 11:49:17 PM CET, version 2.3.0 experimental
+Fri 04 Dec 2020 01:06:29 AM CET, version 2.3.0
 ____
 
 ## Installation
@@ -82,7 +82,7 @@ ____
       - purpose: highlight the differences between irregular conjugation and (what would have been) a regular one
         - the resulting conjugations will be annotated by the *start*, *end* and *del* strings (tags)
         - highlighting only applies to irregular verbs, it makes no sense to annotate regular conjugation with changes, there are none
-        - the properties are optional, if at least one of them is non-empty string, it will happen and it will be noted in the info
+        - the tags are optional, set one of them or all three, if at least one of them is non-empty string, it will happen and it will be noted in the info
         - Examples: *setHighlightTags({start:., end:-, del:\*})*, tener conjugation
           - if tener was regular, conjugated as temer, it would conjugate like yo teno, tú tenes, el tene
             - what you see below are the changes required to go from regular to irregular conjugation

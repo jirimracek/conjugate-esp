@@ -1,6 +1,6 @@
 # Spanish verb conjugator
 
-Wed 02 Dec 2020 11:49:17 PM CET, version 2.3.0 experimental
+Fri 04 Dec 2020 01:06:29 AM CET, version 2.3.0
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
@@ -30,16 +30,16 @@ ____
 - new in 2.3.x
   - public interface changes
   - internal changes, code cleanup
-  - read [RELEASE](RELEASE.md) notes
+  - read [Release notes](docs/RELEASE.md) notes
 
 ____
 
 ### Want to read
 
-- see [RELEASE](RELEASE.md) for major / minor version updates
-- see [CHANGELOG](CHANGELOG.md) for current details
-- see [ROADMAP](ROADMAP.md) for future changes and ideas
-- see [USAGE](USAGE.md) for usage, interfaces, return values description, sample output and more
+- see [Release notes](docs/RELEASE.md) for major / minor version updates
+- see [Changelog](docs/CHANGELOG.md) for current details
+- see [Roadmap](docs/ROADMAP.md) for future changes and ideas
+- see [Usage](docs/USAGE.md) for usage, interfaces, return values description, sample output and more
 
 ____
 

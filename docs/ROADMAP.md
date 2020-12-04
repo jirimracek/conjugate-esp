@@ -1,19 +1,19 @@
 # Things to do, wishlists, plans, crimes committed, etc
 
-Wed 02 Dec 2020 11:49:17 PM CET, version 2.3.0 experimental
+Fri 04 Dec 2020 01:06:29 AM CET, version 2.3.0
 ____
 
 - Tue 01 Dec 2020 10:48:10 AM CET
   - 2.3.x work
-    - return a full list of verbs, include reflexives so getVerbList() returns both hablar and hablarse
-    - accept reflexives as a valid parameter to conjugate() - it gets rejected now
+    - (done) return a full list of verbs, include reflexives so getVerbList() returns both hablar and hablarse
+    - (done) accept reflexives as a valid parameter to conjugate() - it gets rejected now
       - internal: we don't need to propagate the pronominalKey from conjugate() to factory to models. Zap.
-      - prune the definitions file.  It's 396k now, more than half of the package, it can be taken down to about 200k
+      - ~~prune the definitions file.  It's 396k now, more than half of the package, it can be taken down to about 200k~~ (12/4/2020 - nope not working, tried.  It's doable but the runtime goes up 25%. Bad Idea&trade;)
       - reorganize testing
 
 - Thu 12 Nov 2020 07:09:14 PM CET, version 2.2.1-experimental
   - (done in 2.2.1-experimental) every array, every conjugation has the pronominals, which is totally unnecessary, we know what the pronominals should be
-    - drop the pronominals, put just one list in the info object insted of repeating it 20x for each array, I think it's a Good Idea&trade;
+    - (done) drop the pronominals, put just one list in the info object insted of repeating it 20x for each array, I think it's a Good Idea&trade;
   - internal
     - reorganize tests
     - reorganize types, exports, imports - they're kind of scattered all over the place

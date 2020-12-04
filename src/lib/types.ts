@@ -24,8 +24,6 @@ export type IndicativoSubKey = IndicativoSubSimpleKey | IndicativoSubCompKey;
 export type SubjuntivoSubKey = SubjuntivoSubSimpleKey | SubjuntivoSubCompKey;
 
 export type AnyModeKey = 'Impersonal' | 'Indicativo' | 'Subjuntivo' | 'Imperativo';
-export type AnyModeSubKey = ImpersonalSubKey | IndicativoSubKey | SubjuntivoSubKey | ImperativoSubKey;
-
 
 export type Info = {
     verb: string,

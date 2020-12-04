@@ -1,5 +1,4 @@
 # My ignores
-docs
 *.map
 .vscode
 *.code-workspace

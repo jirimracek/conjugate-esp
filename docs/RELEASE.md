@@ -1,6 +1,6 @@
 # Release notes
 
-Wed 02 Dec 2020 11:49:17 PM CET, version 2.3.0 experimental
+Fri 04 Dec 2020 01:06:29 AM CET, version 2.3.0
 ____
 
 ## 2.3.x changes vs 2.2.x

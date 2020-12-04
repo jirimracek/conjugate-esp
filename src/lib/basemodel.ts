@@ -4,7 +4,11 @@
  * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
-import {Regions, IndicativoSubSimpleKey, SubjuntivoSubSimpleKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubCompKey, IndicativoSubKey, SubjuntivoSubCompKey, SubjuntivoSubKey, PronominalKey, } from './types';
+import {
+    Regions, IndicativoSubSimpleKey, SubjuntivoSubSimpleKey,
+    ImperativoSubKey, ImpersonalSubKey, IndicativoSubCompKey, IndicativoSubKey,
+    SubjuntivoSubCompKey, SubjuntivoSubKey, PronominalKey,
+} from './types';
 import {clearAccents, esdrujula, strongify} from './stringutils';
 
 // Attributes
@@ -26,11 +30,8 @@ import {clearAccents, esdrujula, strongify} from './stringutils';
 type DefectiveType = 'imorfo' | 'eimorfo' | 'imper' | 'tercio' | 'terciop'
     | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'ogmorfo' | 'osmorfo';
 type AttributeValues = DefectiveType | boolean | string;
-
 type AttributeKeys = 'PR' | 'PS' | 'D' | 'M' | 'V';
-
 type CompSubTable = {[modekey: string]: {[timekey: string]: string[]}};
-
 type IndicativoSubjuntivoModeKey = 'Indicativo' | 'Subjuntivo';
 
 export type DesinenceTable = {
@@ -63,9 +64,8 @@ export type ResultTable = {
 export type ModelAttributes = {[attributekey in AttributeKeys]?: AttributeValues};
 export type ModelWithAttributes = {[modelname: string]: ModelAttributes};
 export type Model = string | ModelWithAttributes;
-export type VerbModelData = { [key in PronominalKey]?: Model[] | Model };
-export type VerbModelTemplates = { [verbname: string]: VerbModelData };
-
+export type VerbModelData = {[key in PronominalKey]?: Model[] | Model};
+export type VerbModelTemplates = {[verbname: string]: VerbModelData};
 
 const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
     'imper',
@@ -340,16 +340,14 @@ export abstract class BaseModel {
         if (mode === 'Indicativo') {
             this.table[mode][key as IndicativoSubSimpleKey] = this.desinences[mode][key as IndicativoSubSimpleKey]
                 .map((desinence: string, index: number) =>
-                    `${this.reflexive? this.reflexPronouns[index] : ''} ${roots ?
-                        roots[index] :
-                        this.stem}${desinence}`.trim());
+                    `${this.reflexive ? this.reflexPronouns[index] : ''} ${roots ?
+                        roots[index] : this.stem}${desinence}`.trim());
         }
         if (mode === 'Subjuntivo') {
             this.table[mode][key as SubjuntivoSubSimpleKey] = this.desinences[mode][key as SubjuntivoSubSimpleKey]
                 .map((desinence: string, index: number) =>
                     `${this.reflexive ? this.reflexPronouns[index] : ''} ${roots ?
-                        roots[index] :
-                        this.stem}${desinence}`.trim());
+                        roots[index] : this.stem}${desinence}`.trim());
         }
     }
 
@@ -398,16 +396,12 @@ export abstract class BaseModel {
         INDICATIVO_COMP_KEYS.forEach(time =>
             this.table.Indicativo[time] =
             this.auxHaber.Indicativo[time].map((aux, index) =>
-                `${this.reflexive ?
-                    this.reflexPronouns[index] :
-                    ''} ${aux} ${this.participioCompuesto}`.trim()));
+                `${this.reflexive ? this.reflexPronouns[index] : ''} ${aux} ${this.participioCompuesto}`.trim()));
 
         SUBJUNTIVO_COMP_KEYS.forEach(time =>
             this.table.Subjuntivo[time] =
             this.auxHaber.Subjuntivo[time].map((aux, index) =>
-                `${this.reflexive ?
-                    this.reflexPronouns[index] :
-                    ''} ${aux} ${this.participioCompuesto}`.trim()));
+                `${this.reflexive ? this.reflexPronouns[index] : ''} ${aux} ${this.participioCompuesto}`.trim()));
     }
 
     // Imperatives

@@ -1,9 +1,9 @@
 # Changelog
 
-Wed 02 Dec 2020 11:49:17 PM CET, version 2.3.0 experimental
+Fri 04 Dec 2020 01:06:29 AM CET, version 2.3.0
 ____
 
-- Wed 02 Dec 2020 11:49:17 PM CET, version 2.3.0 experimental
+- Fri 04 Dec 2020 01:06:29 AM CET, version 2.3.0
   - Info.pronominal renamed to reflexive
   - conjugate() now returns string on error (eliminated ErrorType)
   - conjugate() now requires an exact verb (either reflexive or normal - hablar / hablarse) and will return only that particular conjugation (previously only nonpronominal verb infinitive was accepted and the method returned both pronominal and nonpronominal versions when appropriate)
@@ -30,7 +30,7 @@ ____
 
 - Mon 09 Nov 2020 09:58:41 PM CET, 2.2.0
   - reverted ts compiler options mainly back to module commonjs
-  - publishing to npm under tag v2.3.0 experimental, this time preferrably without errors
+  - publishing to npm under tag v2.3.0, this time preferrably without errors
 
 - Thu 05 Nov 2020 08:16:11 PM CET, 2.1.2
   - trimming for npm publish

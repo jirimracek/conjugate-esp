@@ -41,8 +41,6 @@ export class Conjugator {
     public setOrthography(ortho: Orthography): void {
         if (ortho === '1999' || ortho === '2010') {
             this.ortho = ortho;
-        } else {
-            console.warn(`Ignored parameter ortho: <${ortho}>, use '1999'|'2010'`);
         }
     }
 
@@ -51,13 +49,9 @@ export class Conjugator {
     }
 
     public setHighlightTags(tags: {start: string, end: string, del: string}): void {
-        if (typeof tags.start !== 'undefined' &&
-            typeof tags.end !== 'undefined' &&
-            typeof tags.del !== 'undefined') {
-            this.tags = tags;
-        } else {
-            console.warn(`Ignored parameter tags: <${tags}>, use { start: 'string', end: 'string', del: 'string'}`);
-        }
+        if (tags.start !== undefined)  this.tags.start = tags.start;
+        if (tags.end !== undefined)  this.tags.end = tags.end;
+        if (tags.del !== undefined)  this.tags.del = tags.del;
     }
 
     public getHighlightTags(): Tags {
@@ -102,8 +96,6 @@ export class Conjugator {
                             if (this.ortho !== '2010' || typeof attributes['M'] === 'undefined' ||
                                 attributes['M'] !== 'false') {
                                 modelTemplates.push([name as string, region, attributes]);
-                                // } else {
-                                //     console.log(`Skip ${verb}, ${name}, M=${attributes['M']}`);
                             }
                         }
                     });
@@ -139,7 +131,9 @@ export class Conjugator {
                 // at least one of the tags is defined
                 // The idea: simulate conjugation based on a regular model, then resolve the differences
                 const conjugated = model.getConjugation();
-                if (!['hablar', 'temer', 'partir'].includes(modelName) && // Mental note - don't change models anymore
+
+                // Mental note - don't change models anymore
+                if (!['hablar', 'temer', 'partir'].includes(modelName) && 
                     ('' !== this.tags.start || '' !== this.tags.end || '' !== this.tags.del)) {
 
                     info.highlight = this.tags;                // note it in info - de we really need to do this???

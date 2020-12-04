@@ -2,6 +2,7 @@ docs/
 */__tests__/*
 coverage/
 src/
+bin/
 .vscode/
 .github/
 *.code-workspace
