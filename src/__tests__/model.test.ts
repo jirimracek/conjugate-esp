@@ -10,7 +10,7 @@ import { ModelFactory} from '../lib/factory';
 import {Orthography} from '../lib/types';
 
 // const VERB_COUNT = 10567;        // without reflexives
-const DEF_COUNT = 112;
+const DEF_COUNT = 121;
 const VERB_COUNT = 14456;           // including reflexives
 const MODEL_COUNT = 97;
 // Disable thrown messages

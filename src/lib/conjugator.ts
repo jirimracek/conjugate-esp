@@ -214,13 +214,17 @@ export class Conjugator {
      */
     public getDefectiveVerbListSync(): string[] {
         const list: string [] = [];
-        Object.entries(this.templates).forEach(entry => {
-            const text = JSON.stringify(entry[1]);
-            if (text.indexOf('D') !== -1) {
-                list.push(entry[0]);
+        Object.keys(this.templates).forEach(verb => {
+            if (this.templates[verb].P && 
+                JSON.stringify(this.templates[verb].P).indexOf('D') !== -1) {
+                list.push(`${verb}se`);
+            }
+            if (this.templates[verb].N && 
+                JSON.stringify(this.templates[verb].N).indexOf('D') !== -1) {
+                list.push(verb);
             }
         });
-        return list;
+        return list.sort(function (a, b) {return a.localeCompare(b);});
     }
 
     public getDefectiveVerbList(): Promise<string[]> {
