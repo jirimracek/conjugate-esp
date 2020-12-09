@@ -1,6 +1,6 @@
 # Release notes
 
-Fri 04 Dec 2020 01:06:29 AM CET, version 2.3.0
+Wed 09 Dec 2020 10:16:47 PM CET, version 2.3.1
 ____
 
 ## 2.3.x changes vs 2.2.x
@@ -40,3 +40,7 @@ ____
     - the tags parameter changed slightly from
       - {start: string, end: string, deleted: string} to
       - {start: string, end: string, del: string}
+  - **new methods**
+    - *getDefectiveVerbList()*
+    - *getDefectiveVerbListSync()*
+    - *getVersion()*

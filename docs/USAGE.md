@@ -1,6 +1,6 @@
 # Usage details
 
-Fri 04 Dec 2020 01:06:29 AM CET, version 2.3.0
+Wed 09 Dec 2020 10:16:47 PM CET, version 2.3.1
 ____
 
 ## Installation
@@ -148,8 +148,11 @@ ____
 
   - *public getVerbListSync(): string[]* sync method, returns string []
   - *public getVerbList(): Promise<string[]>* async version, returns string []
+  - *public getDefectiveVerbListSync(): string[]* sync method, returns string []
+  - *public getDefectiveVerbList(): Promise<string[]>* async version, returns string []
   - *public getModelsSync(): string[]*  sync method, returns string []
   - *public getModels(): Promise<string[]>* async version, string []
+  - *public getVersion(): string*
 
 ____
 

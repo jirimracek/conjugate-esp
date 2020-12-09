@@ -1,18 +1,18 @@
 # Spanish verb conjugator
 
-Fri 04 Dec 2020 01:06:29 AM CET, version 2.3.0
+Wed 09 Dec 2020 10:16:47 PM CET, version 2.3.1
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/jirimracek/conjugate-esp/badge.svg?branch=main)](https://coveralls.io/github/jirimracek/conjugate-esp?branch=main)
 ![GitHub](https://img.shields.io/github/license/jirimracek/conjugate-esp)
 
-Uses templates, pattern matching & logic to conjugate Spanish verbs, there are no lookup tables, no databases, no dependencies.  While the development depends on few external packages, the deployed npm has no dependencies
+Uses templates, pattern matching & logic to conjugate Spanish verbs
 ____
 
 ## Goals
 
-- correct, detailed, complete, fast & small (yes, you can have it all)
+- correct, detailed, complete, fast & small
 - 14456 tested verbs based on 97 models
 - includes
   - only current, RAE recognized as known &amp; used verbs
@@ -29,8 +29,8 @@ ____
 
 - new in 2.3.x
   - public interface changes
+  - new public methods
   - internal changes, code cleanup
-  - read [Release notes](docs/RELEASE.md) notes
 
 ____
 
@@ -47,15 +47,16 @@ ____
 
 - Many thanks to [Estudio Sampere Salamanca, España](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html)
   - ***Esther González, Ester García, María Ballesteros*** you're my heroes
+- many thanks to contributors to [fast-diff](https://github.com/jhchen/fast-diff) - I really didn't feel like writing yet another text comparison, you saved me a lot of time
 
 ____
 
 ### Compatibility
 
 - browsers
-  - see [caniuse](https://caniuse.com/?search=fromEntries)
+  - see [caniuse](https://caniuse.com/?search=array.flat)
 - node.js >= 12.11
-  - uses ES2019 features, namely Object.fromEntries and Array.prototype.flat
+  - uses ES2019 features, namely Array.flat
   - see [ECMAScript compatibility](https://kangax.github.io/compat-table/es2016plus/)
 
 ____
@@ -68,8 +69,6 @@ ____
 ____
 
 ### Modes / Times
-
-(include rarely employed *Indicativo Pretérito Anterior &amp; Subjuntivo Futuro Perfecto / Imperfecto*)
 
 - Impersonal
   - Infinitivo, Gerundio, Participio
@@ -86,6 +85,7 @@ ____
 - Imperativo
   - Afirmativo, Negativo
 
+(rarely employed *Indicativo Pretérito Anterior &amp; Subjuntivo Futuro Perfecto / Imperfecto*)
 ____
 
 ### Implemented and tested conjugation models

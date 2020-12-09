@@ -208,4 +208,26 @@ export class Conjugator {
     public getModels(): Promise<string[]> {
         return new Promise(resolve => resolve(this.factory.getModels())); 
     }
+
+    /**
+     * get list of all defective verbs
+     */
+    public getDefectiveVerbListSync(): string[] {
+        const list: string [] = [];
+        Object.entries(this.templates).forEach(entry => {
+            const text = JSON.stringify(entry[1]);
+            if (text.indexOf('D') !== -1) {
+                list.push(entry[0]);
+            }
+        });
+        return list;
+    }
+
+    public getDefectiveVerbList(): Promise<string[]> {
+        return new Promise(resolve => resolve(this.getDefectiveVerbListSync()));
+    }
+
+    public getVersion(): string {
+        return 'version: 2.3.1, Wed 09 Dec 2020 09:54:45 PM CET';
+    }
 }

@@ -1,7 +1,13 @@
 # Changelog
 
-Fri 04 Dec 2020 01:06:29 AM CET, version 2.3.0
+Wed 09 Dec 2020 10:16:47 PM CET, version 2.3.1
 ____
+
+- Wed 09 Dec 2020 10:16:47 PM CET, version 2.3.1
+  - added methods
+    - *getDefectiveVerbList()*
+    - *getDefectiveVerbListSync()*
+    - *getVersion()*
 
 - Fri 04 Dec 2020 01:06:29 AM CET, version 2.3.0
   - Info.pronominal renamed to reflexive
@@ -30,7 +36,7 @@ ____
 
 - Mon 09 Nov 2020 09:58:41 PM CET, 2.2.0
   - reverted ts compiler options mainly back to module commonjs
-  - publishing to npm under tag v2.3.0, this time preferrably without errors
+  - publishing to npm under tag v2.3.1, this time preferrably without errors
 
 - Thu 05 Nov 2020 08:16:11 PM CET, 2.1.2
   - trimming for npm publish

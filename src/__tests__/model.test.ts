@@ -10,6 +10,7 @@ import { ModelFactory} from '../lib/factory';
 import {Orthography} from '../lib/types';
 
 // const VERB_COUNT = 10567;        // without reflexives
+const DEF_COUNT = 112;
 const VERB_COUNT = 14456;           // including reflexives
 const MODEL_COUNT = 97;
 // Disable thrown messages
@@ -113,6 +114,15 @@ describe('Model Test', () => {
     });
     test('Model count async', () => {
         return cng.getModels().then((result) => expect(result.length).toEqual(MODEL_COUNT));
+    });
+    test('Defective verb count sync', () => {
+        expect(cng.getDefectiveVerbListSync().length).toEqual(DEF_COUNT);
+    });
+    test('Defective verb count async', () => {
+        return cng.getDefectiveVerbList().then((result) => expect(result.length).toEqual(DEF_COUNT));
+    });
+    test('Version', () => {
+        expect(cng.getVersion().length).not.toBe(0);
     });
 
     test('Ortho no effect', () => {
