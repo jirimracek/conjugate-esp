@@ -35,7 +35,6 @@ describe('Model Test', () => {
         // expect correct data
         result = cng.conjugateSync(verb, 'formal') as Result[];
         expect(result[0].info.verb).toEqual(verb);
-        expect(result[0].info.reflexive).toEqual(verb.endsWith('se') ? true : false);
 
     });
     test('Random verb async', () => {
@@ -44,7 +43,6 @@ describe('Model Test', () => {
         // expect correct data
         return cng.conjugate(verb, 'formal').then((result) => {
             expect((result as Result[])[0].info.verb).toEqual(verb);
-            expect((result as Result[])[0].info.reflexive).toEqual(verb.endsWith('se') ? true : false);
         });
     });
 
@@ -64,28 +62,16 @@ describe('Model Test', () => {
         // Couple of 'normal' tests
         result = cng.conjugateSync('partir');
         expect((result as Result[])[0].info.defective).toEqual(false);
-        expect((result as Result[])[0].info.reflexive).toBe(false);
         expect((result as Result[])[0].conjugation.Subjuntivo.Presente[2]).toEqual('parta');
 
-        expect((cng.conjugateSync('hablar') as Result[])[0].info.reflexive).toEqual(false);
-        expect((cng.conjugateSync('hablarse') as Result[])[0].info.reflexive).toEqual(true);
         expect((cng.conjugateSync('temer') as Result[])[0].info.verb).toEqual('temer');
     });
     test('ver async', () => {
         return cng.conjugate('ver')
             .then((result) => {
                 expect((result as Result[])[0].info.defective).toEqual(false);
-                expect((result as Result[])[0].info.reflexive).toBe(false);
                 expect((result as Result[])[0].conjugation.Subjuntivo.Presente[3]).toEqual('veamos');
             });
-    });
-    test('ir async', () => {
-        return cng.conjugate('ir').then((result) =>
-            expect((result as Result[])[0].info.reflexive).toEqual(false));
-    });
-    test('ir async', () => {
-        return cng.conjugate('irse').then((result) =>
-            expect((result as Result[])[0].info.reflexive).toEqual(true));
     });
     test('escabullirse async', () => {
         return cng.conjugate('escabullirse').then((result) =>

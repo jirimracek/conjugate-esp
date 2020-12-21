@@ -1,6 +1,6 @@
 # Spanish verb conjugator
 
-Mon 21 Dec 2020 08:05:48 PM CET, version 2.3.3
+Mon 21 Dec 2020 10:32:32 PM CET, version 2.3.4
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
@@ -23,7 +23,7 @@ ____
   - dual participios
   - orthographical changes (1999 and 2010)
 
-- If you find this useful -- drop me a note, it would be good to know that others use this and possibly how it's used
+- If you find this useful -- drop me a note, I'd like to know
 
 ____
 
@@ -32,10 +32,13 @@ ____
 - new in 2.3.x
   - public interface changes
   - new public methods
-    - getOrthoVerbListSync() and getOrthoVerbList() - get verbs affected by 1999/2010 orthography
+    - getOrthoVerbListSync()
+    - getOrthoVerbList() - get verbs affected by 1999/2010 orthography
   - getDefectiveVerbList(exact = false) now has an optional argument - see Usage for info
   - internal changes, dropped one lever of db nesting, simplifications
   - removed Array.flat(), can be used with more browsers, ts compiler option target moved back to ES2016
+  - dropped reflexive from the Info array - it ought to be somewhat obvious that a verb is reflexive
+  - rearranged the order or the Result[] - non-defective conjugations are always listed before defective ones
 
 ____
 

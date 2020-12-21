@@ -30,7 +30,6 @@ export type Info = {
     model: string,
     region: string,
     pronouns: string[],
-    reflexive: boolean,
     defective: boolean,
     ortho?: string,
     highlight?: Tags

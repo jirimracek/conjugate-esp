@@ -1,12 +1,12 @@
 # Release notes
 
-Mon 21 Dec 2020 08:05:48 PM CET, version 2.3.3
+Mon 21 Dec 2020 10:32:32 PM CET, version 2.3.4
 ____
 
 ## 2.3.x changes vs 2.2.x
 
 - **Info**
-  - pronominal renamed to reflexive
+  - dropped pronominal (reflexive) - it should be plenty obvious from the verb name
 
 - **conjugate()** changes (2)
   - 2.2.2x, old behaviour:
@@ -50,6 +50,8 @@ ____
     - *getOrthoVerbListSync(): string[]*
       - get a list of verbs that have been affected by 1999/2010 orthographical changes
     - *getVersion(): string*
+  - **conjugation array (results) order**
+    - non-defective conjugations are always listed before defective ones (this affects the order or Result[])
 
 - Internal
   - db changes, dropped one level of nesting, simplified access, has no effect on public interfaces

@@ -64,8 +64,6 @@ export class Conjugator {
      */
     public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | string {
         const result: Result[] = [];
-        const reflexive = verb.endsWith('se') ? true : false;
-        // const base = reflexive ? verb.replace(/..$/, '') : verb;
 
         try {
             if (!this.getVerbListSync().includes(verb)) {
@@ -112,7 +110,6 @@ export class Conjugator {
                     model: modelName,
                     region: region,
                     pronouns: model.getPronouns(),
-                    reflexive: reflexive,
                     defective: !!(attributes['D'])
                 };
 
@@ -280,6 +277,7 @@ export class Conjugator {
     }
 
     public getVersion(): string {
-        return 'version: 2.3.3, Mon 21 Dec 2020 07:19:31 PM CET';
+        return 'version: 2.3.4, Mon 21 Dec 2020 10:26:27 PM CET';
+
     }
 }

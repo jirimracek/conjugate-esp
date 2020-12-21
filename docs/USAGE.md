@@ -1,6 +1,6 @@
 # Usage details
 
-Mon 21 Dec 2020 08:05:48 PM CET, version 2.3.3
+Mon 21 Dec 2020 10:32:32 PM CET, version 2.3.4
 ____
 
 ## Installation
@@ -398,3 +398,4 @@ ____
 - it may be useful to take a look at the info object which holds some interesting facts about the associated ResultTable, for example whether the verb is reflexive or not, the conjugation model used, whether it's defective or now, etc.
 - it is probably a good idea to iterate over the Result[]
 - the ResultTable is not an array, it is a json formatted object, use it as such
+- non-defective conjugations are always listed before defective ones (in the Result[])
