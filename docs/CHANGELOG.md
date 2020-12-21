@@ -1,9 +1,9 @@
 # Changelog
 
-Wed 09 Dec 2020 11:30:56 PM CET, version 2.3.2
+Mon 21 Dec 2020 08:05:48 PM CET, version 2.3.3
 ____
 
-- Wed 09 Dec 2020 11:30:56 PM CET, version 2.3.2
+- Mon 21 Dec 2020 08:05:48 PM CET, version 2.3.3
   - added methods
     - *getDefectiveVerbList()*
     - *getDefectiveVerbListSync()*
@@ -36,7 +36,7 @@ ____
 
 - Mon 09 Nov 2020 09:58:41 PM CET, 2.2.0
   - reverted ts compiler options mainly back to module commonjs
-  - publishing to npm under tag v2.3.2, this time preferrably without errors
+  - publishing to npm under tag v2.3.3, this time preferrably without errors
 
 - Thu 05 Nov 2020 08:16:11 PM CET, 2.1.2
   - trimming for npm publish

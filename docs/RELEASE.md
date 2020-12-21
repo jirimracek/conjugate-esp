@@ -1,6 +1,6 @@
 # Release notes
 
-Wed 09 Dec 2020 11:30:56 PM CET, version 2.3.2
+Mon 21 Dec 2020 08:05:48 PM CET, version 2.3.3
 ____
 
 ## 2.3.x changes vs 2.2.x
@@ -41,6 +41,15 @@ ____
       - {start: string, end: string, deleted: string} to
       - {start: string, end: string, del: string}
   - **new methods**
-    - *getDefectiveVerbList()*
-    - *getDefectiveVerbListSync()*
-    - *getVersion()*
+    - *getDefectiveVerbList(pure = false): string [] | string [][]*
+    - *getDefectiveVerbListSync(pure = false)*
+      - get a list of defective verbs
+        - if pure === false, return string[] of all verbs which exist in defective variety (haber, estar, ...)
+        - if pure === true, in addition return list of verbes that only exist as defectives (abarse)
+    - *getOrthoVerbList(): string[]*
+    - *getOrthoVerbListSync(): string[]*
+      - get a list of verbs that have been affected by 1999/2010 orthographical changes
+    - *getVersion(): string*
+
+- Internal
+  - db changes, dropped one level of nesting, simplified access, has no effect on public interfaces

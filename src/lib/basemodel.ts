@@ -7,7 +7,7 @@
 import {
     Regions, IndicativoSubSimpleKey, SubjuntivoSubSimpleKey,
     ImperativoSubKey, ImpersonalSubKey, IndicativoSubCompKey, IndicativoSubKey,
-    SubjuntivoSubCompKey, SubjuntivoSubKey, PronominalKey,
+    SubjuntivoSubCompKey, SubjuntivoSubKey
 } from './types';
 import {clearAccents, esdrujula, strongify} from './stringutils';
 
@@ -64,7 +64,7 @@ export type ResultTable = {
 export type ModelAttributes = {[attributekey in AttributeKeys]?: AttributeValues};
 export type ModelWithAttributes = {[modelname: string]: ModelAttributes};
 export type Model = string | ModelWithAttributes;
-export type VerbModelData = {[key in PronominalKey]?: Model[] | Model};
+export type VerbModelData = Model[] | Model;
 export type VerbModelTemplates = {[verbname: string]: VerbModelData};
 
 const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [

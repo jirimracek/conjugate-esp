@@ -37,3 +37,6 @@ cng.setHighlightTags(tags);
 console.log(`${verb}, ${region}, ${ortho}, start:${tags.start}, end:${tags.end}, deleted:${tags.deleted}`);
 const table = cng.conjugateSync(verb, region);
 console.log(JSON.stringify(table, null, 1));
+// console.log(JSON.stringify(cng.getDefectiveVerbListSync(), null, 1));
+// console.log(JSON.stringify(cng.getDefectiveVerbListSync(true), null, 1));
+// console.log(cng.getOrthoVerbListSync());

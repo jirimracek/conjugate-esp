@@ -11,6 +11,8 @@ import {Orthography} from '../lib/types';
 
 // const VERB_COUNT = 10567;        // without reflexives
 const DEF_COUNT = 121;
+const PURE_DEF_COUNT = 51;
+const ORTHO_COUNT = 28;
 const VERB_COUNT = 14456;           // including reflexives
 const MODEL_COUNT = 97;
 // Disable thrown messages
@@ -117,9 +119,14 @@ describe('Model Test', () => {
     });
     test('Defective verb count sync', () => {
         expect(cng.getDefectiveVerbListSync().length).toEqual(DEF_COUNT);
+        expect(cng.getDefectiveVerbListSync(true)[0].length).toEqual(DEF_COUNT);
+        expect(cng.getDefectiveVerbListSync(true)[1].length).toEqual(PURE_DEF_COUNT);
     });
     test('Defective verb count async', () => {
         return cng.getDefectiveVerbList().then((result) => expect(result.length).toEqual(DEF_COUNT));
+    });
+    test('Model ortho count async', () => {
+        return cng.getOrthoVerbList().then((result) => expect(result.length).toEqual(ORTHO_COUNT));
     });
     test('Version', () => {
         expect(cng.getVersion().length).not.toBe(0);

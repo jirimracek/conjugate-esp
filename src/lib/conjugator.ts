@@ -6,7 +6,7 @@
 */
 import definitions from '../data/definitions.json';
 import {ModelFactory} from './factory';
-import {Regions, PronominalKey, Orthography, Tags, Info } from './types';
+import {Regions, Orthography, Tags, Info } from './types';
 import {ModelAttributes, ResultTable, ModelWithAttributes, VerbModelTemplates, VerbModelData, BaseModel} from './basemodel';
 import {insertTags} from './stringutils';
 
@@ -65,7 +65,7 @@ export class Conjugator {
     public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | string {
         const result: Result[] = [];
         const reflexive = verb.endsWith('se') ? true : false;
-        const base = reflexive ? verb.replace(/..$/, '') : verb;
+        // const base = reflexive ? verb.replace(/..$/, '') : verb;
 
         try {
             if (!this.getVerbListSync().includes(verb)) {
@@ -75,33 +75,33 @@ export class Conjugator {
                 throw new Error(`Unknown region ${region}`);
             }
 
-            const verbModelData = this.templates[base] as VerbModelData;
-
             // Things we need to know to construct the model 
             const modelTemplates: [string, Regions, ModelAttributes][] = [];
-            (Object.keys(verbModelData) as PronominalKey[]).forEach(pronominalKey => {
-                // string | [string | ModelWithAttrs] | ModelWithAttrs
-                // Match reflexive-ness with verb
-                if (reflexive && pronominalKey === 'P' || !reflexive && pronominalKey === 'N') {
-                    const models = [verbModelData[pronominalKey]].flat();
-                    models.forEach(model => {
-                        if (typeof model === 'string') {
-                            modelTemplates.push([model, region, {}]);
-                        } else {
-                            // it's a ModelWithAttrs
-                            const [name, attributes] =
-                                (Object.entries(model as ModelWithAttributes)).flat() as [string, ModelAttributes];
-                            // if ortho is not 2010 or M is undefined or M is defined and not false 
-                            //   then use this model, otherwise skip it.  See types.ts for more info
-                            if (this.ortho !== '2010' || typeof attributes['M'] === 'undefined' ||
-                                attributes['M'] !== 'false') {
-                                modelTemplates.push([name as string, region, attributes]);
-                            }
+            // string | [string | ModelWithAttrs] | ModelWithAttrs
+            // Match reflexive-ness with verb
+            const modelData = this.templates[verb] as VerbModelData;
+            // Convert to an array of model data so we can iterate over it
+            const models: VerbModelData = [];
+            if (typeof modelData === 'string' || !Array.isArray(modelData)) {
+                models.push(modelData);
+            } else {
+                models.push(...modelData);
+            } 
+            models.forEach(model => {
+                if (typeof model === 'string') {
+                    modelTemplates.push([model, region, {}]);
+                } else {   // it's a ModelWithAttrs
+                    Object.entries(model).forEach (([name, attributes]) => {
+                        const attrs = attributes as unknown as ModelWithAttributes; 
+                        // if ortho is not 2010 or M is undefined or M is defined and not false 
+                        //   then use this model, otherwise skip it.  See types.ts for more info
+                        if (this.ortho !== '2010' || typeof attrs['M'] === 'undefined' ||
+                                    attrs['M'] !== 'false') {
+                            modelTemplates.push([name, region, attrs]);
                         }
                     });
                 }
             });
-
             // Construct each model based on its recipe and get the verb conjugated based on given model
             modelTemplates.forEach(template => {
                 const [modelName, region, attributes] = template;
@@ -173,16 +173,7 @@ export class Conjugator {
      * get sorted list of all verbs, sync
      */
     public getVerbListSync(): string[] {
-        const list: string[] = [];
-        Object.keys(this.templates).forEach(verb => {
-            if (this.templates[verb].P) {
-                list.push(`${verb}se`);
-            }
-            if (this.templates[verb].N) {
-                list.push(verb);
-            }
-        });
-        return list.sort(function (a, b) {return a.localeCompare(b);});
+        return Object.keys(this.templates).sort(function(a,b) {return a.localeCompare(b);});
     }
 
     /**
@@ -210,28 +201,85 @@ export class Conjugator {
     }
 
     /**
-     * get list of all defective verbs
+     * get list of any verb that has a defective version
+     * @param pure - if true, return 2 lists, list[0] has any verb that has a defective version, 
+     * list[1] has verbs that only exist as defectives 
      */
-    public getDefectiveVerbListSync(): string[] {
-        const list: string [] = [];
-        Object.keys(this.templates).forEach(verb => {
-            if (this.templates[verb].P && 
-                JSON.stringify(this.templates[verb].P).indexOf('D') !== -1) {
-                list.push(`${verb}se`);
+    public getDefectiveVerbListSync(pure = false): string[]| string [][] {
+        const listAll: string [] = [];
+        const listPure: string[] = [];
+        Object.entries(this.templates).forEach(([verb, modelsData]) => {
+            let count = 0;
+            const models: VerbModelData = [];
+            // Make an array to iterate over
+            if (typeof modelsData === 'string' || !Array.isArray(modelsData)) {
+                models.push(modelsData);
+            } else {
+                models.push(...modelsData);
+            } 
+            // [string, {}]
+            models.forEach(model => {
+                if (typeof model !== 'string' ) {
+                    Object.values(model).forEach(value => {
+                        Object.keys(value).forEach (attrKey => {
+                            if (attrKey === 'D') ++count;
+                        });
+                    });
+                }
+            });
+            if (count === models.length) { 
+                listPure.push(verb);
             }
-            if (this.templates[verb].N && 
-                JSON.stringify(this.templates[verb].N).indexOf('D') !== -1) {
-                list.push(verb);
+            if (count > 0) {
+                listAll.push(verb);
             }
         });
-        return list.sort(function (a, b) {return a.localeCompare(b);});
+        if (pure) {
+            return [listAll.sort((a, b) => a.localeCompare(b)),
+                listPure.sort((a,b) => a.localeCompare(b))];
+        } else {
+            return listAll.sort((a, b) => a.localeCompare(b));
+        }
     }
 
-    public getDefectiveVerbList(): Promise<string[]> {
-        return new Promise(resolve => resolve(this.getDefectiveVerbListSync()));
+    public getDefectiveVerbList(exact = false): Promise<string[]|string[][]> {
+        return new Promise(resolve => resolve(this.getDefectiveVerbListSync(exact)));
+    }
+
+    /**
+     * return list of verbs affected by 1999/2010 orthography
+     */
+    public getOrthoVerbListSync(): string[] {
+        const set: Set<string> = new Set<string>();
+        Object.entries(this.templates).forEach(([verb, modelsData]) => {
+            const models: VerbModelData = [];
+            // Make an array to iterate over
+            if (typeof modelsData === 'string' || !Array.isArray(modelsData)) {
+                models.push(modelsData);
+            } else {
+                models.push(...modelsData);
+            } 
+            // [string, {}]
+            models.forEach(model => {
+                if (typeof model !== 'string' ) {
+                    Object.values(model).forEach(value => {
+                        Object.keys(value).forEach (attrKey => {
+                            if (attrKey === 'M') {
+                                set.add(verb); 
+                            }
+                        });
+                    });
+                }
+            });
+        });
+        return Array.from(set).sort((a, b) => a.localeCompare(b));
+    }
+
+    public getOrthoVerbList(): Promise<string[]> {
+        return new Promise(resolve => resolve(this.getOrthoVerbListSync()));
     }
 
     public getVersion(): string {
-        return 'version: 2.3.1, Wed 09 Dec 2020 09:54:45 PM CET';
+        return 'version: 2.3.3, Mon 21 Dec 2020 07:19:31 PM CET';
     }
 }

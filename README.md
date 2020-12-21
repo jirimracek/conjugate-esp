@@ -1,6 +1,6 @@
 # Spanish verb conjugator
 
-Wed 09 Dec 2020 11:30:56 PM CET, version 2.3.2
+Mon 21 Dec 2020 08:05:48 PM CET, version 2.3.3
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
@@ -23,6 +23,8 @@ ____
   - dual participios
   - orthographical changes (1999 and 2010)
 
+- If you find this useful -- drop me a note, it would be good to know that others use this and possibly how it's used
+
 ____
 
 ### TL;DR
@@ -30,7 +32,10 @@ ____
 - new in 2.3.x
   - public interface changes
   - new public methods
-  - internal changes, code cleanup
+    - getOrthoVerbListSync() and getOrthoVerbList() - get verbs affected by 1999/2010 orthography
+  - getDefectiveVerbList(exact = false) now has an optional argument - see Usage for info
+  - internal changes, dropped one lever of db nesting, simplifications
+  - removed Array.flat(), can be used with more browsers, ts compiler option target moved back to ES2016
 
 ____
 
@@ -47,16 +52,17 @@ ____
 
 - Many thanks to [Estudio Sampere Salamanca, España](http://www.sampere.com/learn-spanish/spanish-courses-salamanca.html)
   - ***Esther González, Ester García, María Ballesteros*** you're my heroes
-- many thanks to contributors to [fast-diff](https://github.com/jhchen/fast-diff) - I really didn't feel like writing yet another text comparison, you saved me a lot of time
+- Contributors to [fast-diff](https://github.com/jhchen/fast-diff) - I really didn't feel like writing yet another text comparison, you saved me a lot of time
 
 ____
 
 ### Compatibility
 
 - browsers
-  - see [caniuse](https://caniuse.com/?search=array.flat)
+  - see [caniuse](https://caniuse.com/)
 - node.js >= 12.11
-  - uses ES2019 features, namely Array.flat
+  - ~~uses ES2019 features, namely Array.flat~~ (12/21/2020 - not anymore)
+  - uses ES2016
   - see [ECMAScript compatibility](https://kangax.github.io/compat-table/es2016plus/)
 
 ____

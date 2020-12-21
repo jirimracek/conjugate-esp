@@ -1,6 +1,6 @@
 # Usage details
 
-Wed 09 Dec 2020 11:30:56 PM CET, version 2.3.2
+Mon 21 Dec 2020 08:05:48 PM CET, version 2.3.3
 ____
 
 ## Installation
@@ -146,12 +146,18 @@ ____
       - parameter *region* - optional, one of 'castellano' | 'voseo' | 'canarias' | 'formal'
         - see below for more on regional varieties
 
-  - *public getVerbListSync(): string[]* sync method, returns string []
-  - *public getVerbList(): Promise<string[]>* async version, returns string []
-  - *public getDefectiveVerbListSync(): string[]* sync method, returns string []
-  - *public getDefectiveVerbList(): Promise<string[]>* async version, returns string []
-  - *public getModelsSync(): string[]*  sync method, returns string []
-  - *public getModels(): Promise<string[]>* async version, string []
+  - *public getVerbListSync(): string[]*
+  - *public getVerbList(): Promise<string[]>* async version
+  - *public getDefectiveVerbListSync(pure = false): string[]*
+  - *public getDefectiveVerbList(pure = false): Promise<string[]>* async version
+    - get a list of defective verbs
+      - if pure === false, return string[] of all verbs which exist in defective variety (haber, estar, ...)
+      - if pure === true, in addition return list of verbes that only exist as defectives (abarse)
+  - *getOrthoVerbList(): string[]*
+  - *getOrthoVerbListSync(): string[]*
+    - get list of verbs that have been affected by 1999/2010 orthographical changes
+  - *public getModelsSync(): string[]*
+  - *public getModels(): Promise<string[]>* async version
   - *public getVersion(): string*
 
 ____
