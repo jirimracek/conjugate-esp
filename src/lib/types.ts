@@ -10,7 +10,7 @@ export type SubjuntivoSubSimpleKey = 'Presente'| 'PreteritoImperfectoRa'| 'Prete
 export type PronominalKey = 'N' | 'P';     
 export type Regions = 'castellano' | 'voseo' | 'canarias' | 'formal';
 export type Orthography = '1999' | '2010';
-export type Tags = { start: string, end: string, del: string };   // start, end tags, insert 'delete' to indicated deleted portion
+export type HighlightMarks = { start: string, end: string, del: string };   // start, end tags, insert 'delete' to indicated deleted portion
 
 export type ImperativoSubKey = 'Afirmativo' | 'Negativo';
 export type ImpersonalSubKey = 'Infinitivo' | 'Gerundio' | 'Participio';
@@ -31,8 +31,7 @@ export type Info = {
     region: string,
     pronouns: string[],
     defective: boolean,
-    ortho?: string,
-    highlight?: Tags
+    ortho?: string
 };
 
 /*  The M attribute ([M]onosyllable) and Orthography cooperation

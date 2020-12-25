@@ -6,7 +6,7 @@
 */
 import diff = require('fast-diff');
 import {ResultTable} from '..';
-import {AnyModeKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey, Tags} from './types';
+import {AnyModeKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey, HighlightMarks} from './types';
 /* eslint-disable array-element-newline */
 /* eslint-disable max-len */
 const Plain: readonly string[] = ['a', 'e', 'i', 'o', 'u', 'ü'];
@@ -159,7 +159,7 @@ export function clearAccents(word: string): string {
      * @param conjugated - verb conjugated as per its proper model (correct conjugation)
      * @returns highlighted string if differences found
      */
-export function tagDiffs(simulated: string, conjugated: string, tags: Tags): string {
+export function tagDiffs(simulated: string, conjugated: string, tags: HighlightMarks): string {
     if (conjugated === '-') {                 // ignore defectives
         return conjugated;
     }
@@ -201,7 +201,7 @@ export function tagDiffs(simulated: string, conjugated: string, tags: Tags): str
 /**
  * compare each line of simulated and real conjugation, markup differences in real conjugation with start/end tags
  */
-export function insertTags(simulated: ResultTable, conjugated: ResultTable, tags: Tags): void {
+export function insertTags(simulated: ResultTable, conjugated: ResultTable, tags: HighlightMarks): void {
     // Iterate over conjugations, send the simulated and real lines to be compared and highlighted
     Object.keys(conjugated).forEach(key => {
         const modeKey = key as AnyModeKey;

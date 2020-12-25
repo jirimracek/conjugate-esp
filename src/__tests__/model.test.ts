@@ -22,6 +22,7 @@ beforeEach(() => {
 console.warn = jest.fn();
 
 const cng = new Conjugator();
+cng.useHighlight(false);
 const verbList = cng.getVerbListSync();
 let result: Result[] | string;
 
@@ -143,9 +144,12 @@ describe('Model Test', () => {
     });
 
     test('Highlight', () => {
-        const tags = {start: '*', end: '+', 'del': '-'};
-        cng.setHighlightTags(tags);
-        expect(cng.getHighlightTags()).toEqual(tags);
+        cng.useHighlight();
+        result = cng.conjugateSync('freír', 'voseo') as Result[];
+        expect(result[0].conjugation.Indicativo.Presente[0]).toEqual('fr<mark>í</mark>o');
+        cng.useHighlight(false);
+        result = cng.conjugateSync('freír', 'voseo') as Result[];
+        expect(result[0].conjugation.Indicativo.Presente[0]).toEqual('frío');
     });
 });
 

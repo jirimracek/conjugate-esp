@@ -6,7 +6,7 @@
 */
 import definitions from '../data/definitions.json';
 import {ModelFactory} from './factory';
-import {Regions, Orthography, Tags, Info } from './types';
+import {Regions, Orthography, HighlightMarks, Info } from './types';
 import {ModelAttributes, ResultTable, ModelWithAttributes, VerbModelTemplates, VerbModelData, BaseModel} from './basemodel';
 import {insertTags} from './stringutils';
 
@@ -17,25 +17,29 @@ export type Result = {
 };
 
 /**
- * Ex.: const cng = new Conjugator(ortho?, tags?)
+ * Ex.: const cng = new Conjugator(ortho?, highlightMarks?)
  * 
  */
 export class Conjugator {
     protected templates: VerbModelTemplates = definitions;
     protected factory: ModelFactory = new ModelFactory();
     private ortho: Orthography = '2010';
-    private tags: Tags = {start: '', end: '', del: ''};
+    private highlightMarks: HighlightMarks = { start: '<mark>', end: '</mark>', del: '\u2027' };
+    private highlight = false;
 
 
     /**
      * @param ortho optional, 1999|2010, default 2010 - use 2010 orthography 
-     * @param highlight optional, defaults to empty strings, ({start: <startTag>, end: </startTag>, deleted: string})
+     * @param highlight optional, defaults to { start: '<mark>', end: '</mark>', del: '\u2027' }
      * 
      * See types.ts for detailed documentation on orthography and attributes
      */
-    constructor(ortho: Orthography = '2010', highlight = {start: '', end: '', del: ''}) {
+    constructor(ortho: Orthography = '2010', highlightMarks = { start: '<mark>', end: '</mark>', del: '\u2027' }) {
         this.setOrthography(ortho);
-        this.setHighlightTags(highlight);
+        /* istanbul ignore else */
+        if (highlightMarks.start && highlightMarks.end && highlightMarks.del) {
+            this.highlightMarks = highlightMarks;
+        }
     }
 
     public setOrthography(ortho: Orthography): void {
@@ -48,14 +52,8 @@ export class Conjugator {
         return this.ortho;
     }
 
-    public setHighlightTags(tags: {start: string, end: string, del: string}): void {
-        if (tags.start !== undefined)  this.tags.start = tags.start;
-        if (tags.end !== undefined)  this.tags.end = tags.end;
-        if (tags.del !== undefined)  this.tags.del = tags.del;
-    }
-
-    public getHighlightTags(): Tags {
-        return this.tags;
+    public useHighlight(use = true): void {
+        this.highlight = use;
     }
 
     /**
@@ -125,18 +123,15 @@ export class Conjugator {
                 }
 
                 // highlight only if irregular verb and
-                // at least one of the tags is defined
+                // at least one of the highlightMarks is defined
                 // The idea: simulate conjugation based on a regular model, then resolve the differences
                 const conjugated = model.getConjugation();
 
                 // Mental note - don't change models anymore
-                if (!['hablar', 'temer', 'partir'].includes(modelName) && 
-                    ('' !== this.tags.start || '' !== this.tags.end || '' !== this.tags.del)) {
-
-                    info.highlight = this.tags;                // note it in info - de we really need to do this???
+                if (!['hablar', 'temer', 'partir'].includes(modelName) && this.highlight) {
                     // get conjugation as if the verb was conjugated per regular model (hablar, temer, partir)
                     const simulatedModel = this.factory.getModel(verb, modelName, region, {}, true) as BaseModel;
-                    insertTags(simulatedModel.getConjugation(), conjugated, this.tags);
+                    insertTags(simulatedModel.getConjugation(), conjugated, this.highlightMarks);
                 }
 
                 result.push({

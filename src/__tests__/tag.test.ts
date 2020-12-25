@@ -6,7 +6,7 @@
 */
 /* eslint-disable max-len */
 import { Conjugator, Result } from '../index';
-import { AnyModeKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey, Tags } from '../lib/types';
+import { AnyModeKey, ImperativoSubKey, ImpersonalSubKey, IndicativoSubKey, SubjuntivoSubKey } from '../lib/types';
 import { getRegions, shuffle, verbsToTest, monos } from './testdata';
 
 // Disable thrown messages
@@ -20,19 +20,19 @@ const regionsToTest = getRegions();
 
 // Verify that the start / end tags are consistent, i.e.: for each start tag there must be a closing end tag
 describe('Highlight Tag Consistency Test', () => {
-    const cng = new Conjugator();
-    let tags = {start: '', end: '', del: ''};
+    const tags = { start: '<mark>', end: '</mark>', del: '\u2027' };
+    const cng = new Conjugator('2010', tags);
     cng.setOrthography('1999');
+    cng.useHighlight();
     expect(cng.getOrthography()).toEqual('1999');
 
-    expect(cng.getHighlightTags()).toEqual(tags);
-    cng.setHighlightTags('foo' as unknown as Tags);
-    // expect(console.warn).toHaveBeenCalled();
-    expect(cng.getHighlightTags()).toEqual(tags);
+    // expect(cng.getHighlightMarks()).toEqual(tags);
+    // cng.setHighlightMarks('foo' as unknown as HighlightMarks);
+    // // expect(console.warn).toHaveBeenCalled();
+    // expect(cng.getHighlightMarks()).toEqual(tags);
 
-    tags = { start: '.', end: '-', del: '*' };
-    cng.setHighlightTags(tags);
-    expect(cng.getHighlightTags()).toEqual(tags);
+    // cng.setHighlightMarks(tags);
+    // expect(cng.getHighlightMarks()).toEqual(tags);
 
     // Our array of interesting verbs and throw in a few more
     const toTest = shuffle(Array.from(new Set([...cng.getVerbListSync().splice(0, 200), ...verbsToTest, ... monos])));
