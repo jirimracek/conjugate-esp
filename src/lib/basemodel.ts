@@ -124,7 +124,6 @@ export abstract class BaseModel {
     protected attributes: ModelAttributes;
 
     private reflexPronouns: Array<string>;
-    private personalPronouns: Array<string>;
     private auxHaber: CompSubTable;
     private defectiveAttributes: DefectiveType;
 
@@ -149,15 +148,6 @@ export abstract class BaseModel {
             'nos',
             region !== 'castellano' ? 'se' : 'os',
             'se'
-        ])();
-
-        this.personalPronouns = ((): Array<string> => [
-            'yo',
-            region !== 'formal' ? (region !== 'voseo' ? 'tú' : 'vos') : 'usted',
-            'él',
-            'nosotros',
-            region !== 'castellano' ? 'ustedes' : 'vosotros',
-            'ellos'
         ])();
 
         // initialize empty result conjugation table, imperativo needs to be initialized to ------
@@ -276,10 +266,6 @@ export abstract class BaseModel {
         };
     }
 
-
-    public getPronouns(): string[] {
-        return this.personalPronouns;
-    }
 
     public getConjugation(): ResultTable {
 

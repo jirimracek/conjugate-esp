@@ -64,7 +64,6 @@ describe('Conjugate async', () => {
         return regionsToTest.forEach((region) => verbs.forEach((verb) => {
             cng.conjugate(verb, region).then((r) => {
                 const result = r as Result[];
-                expect(result[0].info.verb).toBe(verb);
                 expect(result[0].info.region).toBe(region);
                 expect(result[0].conjugation.Impersonal.Infinitivo).toBe(verb);
             });

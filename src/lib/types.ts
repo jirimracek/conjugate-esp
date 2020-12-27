@@ -26,11 +26,9 @@ export type SubjuntivoSubKey = SubjuntivoSubSimpleKey | SubjuntivoSubCompKey;
 export type AnyModeKey = 'Impersonal' | 'Indicativo' | 'Subjuntivo' | 'Imperativo';
 
 export type Info = {
-    verb: string,
     model: string,
     region: string,
-    pronouns: string[],
-    defective: boolean,
+    defective?: boolean,
     ortho?: string
 };
 

@@ -7,7 +7,6 @@
 /* eslint-disable max-len */
 import { Conjugator, Result, Regions} from '../index';
 import { ModelFactory} from '../lib/factory';
-import {Orthography} from '../lib/types';
 
 // const VERB_COUNT = 10567;        // without reflexives
 const DEF_COUNT = 121;
@@ -35,7 +34,7 @@ describe('Model Test', () => {
         const verb = verbList[index];
         // expect correct data
         result = cng.conjugateSync(verb, 'formal') as Result[];
-        expect(result[0].info.verb).toEqual(verb);
+        expect(result[0].info.region).toEqual('formal');
 
     });
     test('Random verb async', () => {
@@ -43,7 +42,7 @@ describe('Model Test', () => {
         const verb = verbList[index];
         // expect correct data
         return cng.conjugate(verb, 'formal').then((result) => {
-            expect((result as Result[])[0].info.verb).toEqual(verb);
+            expect((result as Result[])[0].info.region).toEqual('formal');
         });
     });
 
@@ -62,21 +61,28 @@ describe('Model Test', () => {
     test('Known verb sync', () => {
         // Couple of 'normal' tests
         result = cng.conjugateSync('partir');
-        expect((result as Result[])[0].info.defective).toEqual(false);
+        expect((result as Result[])[0].info.defective).toBeUndefined();
         expect((result as Result[])[0].conjugation.Subjuntivo.Presente[2]).toEqual('parta');
 
-        expect((cng.conjugateSync('temer') as Result[])[0].info.verb).toEqual('temer');
+        expect((cng.conjugateSync('temer') as Result[])[0].conjugation.Impersonal.Infinitivo).toEqual('temer');
     });
     test('ver async', () => {
         return cng.conjugate('ver')
             .then((result) => {
-                expect((result as Result[])[0].info.defective).toEqual(false);
+                expect((result as Result[])[0].info.defective).toBeUndefined();
                 expect((result as Result[])[0].conjugation.Subjuntivo.Presente[3]).toEqual('veamos');
+            });
+    });
+    test('haber async', () => {
+        return cng.conjugate('haber')
+            .then((result) => {
+                expect((result as Result[])[0].info.defective).toBeUndefined();
+                expect((result as Result[])[1].info.defective).toBe(true);
             });
     });
     test('escabullirse async', () => {
         return cng.conjugate('escabullirse').then((result) =>
-            expect((result as Result[])[0].info.verb).toEqual('escabullirse'));
+            expect((result as Result[])[0].conjugation.Impersonal.Infinitivo).toEqual('escabullirse'));
     });
 
     test('Unknow region sync', () => {
@@ -122,7 +128,6 @@ describe('Model Test', () => {
     test('Ortho no effect', () => {
         // good input, good answers
         cng.setOrthography('2010');
-        expect(cng.getOrthography()).toEqual('2010');
         result = cng.conjugateSync('hablar', 'voseo') as Result[];
         expect(result[0].info.ortho).toBeUndefined();          // ortho has no effect on hablar
     });
@@ -131,16 +136,6 @@ describe('Model Test', () => {
         cng.setOrthography('2010');
         result = cng.conjugateSync('reírse') as Result[];
         expect(result[0].info.ortho).toEqual('2010');
-    });
-
-    test('Ortho invalid', () => {
-        cng.setOrthography('2010');
-        cng.setOrthography('2000' as Orthography);
-        expect(cng.getOrthography()).toBe('2010');
-
-        cng.setOrthography('1999');
-        cng.setOrthography('2001' as Orthography);
-        expect(cng.getOrthography()).toBe('1999');
     });
 
     test('Highlight', () => {

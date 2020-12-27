@@ -1,12 +1,22 @@
 # Release notes
 
-Mon 21 Dec 2020 10:32:32 PM CET, version 2.3.4
+Sun 27 Dec 2020 06:24:33 PM CET, version 2.3.5
 ____
 
 ## 2.3.x changes vs 2.2.x
 
-- **Info**
-  - dropped pronominal (reflexive) - it should be plenty obvious from the verb name
+- **Info array trimmed down**
+  - dropped the verb name (it's what you asked for, isn't it?).  And it's the infinitive
+  - dropped pronominal (reflexive) from the Info array - it should be plenty obvious from the verb name
+  - dropped the list of pronouns.  They are region dependent, look them up in [USAGE](USAGE.md)
+  - defective is optional now
+  - the info array has this left in it now
+    - *model*
+    - *region*
+    - *defective?*
+    - *ortho?*
+- **conjugation array (results) order**
+  - non-defective conjugations are always listed before defective ones (this affects the order or Result[])
 
 - **conjugate()** changes (2)
   - 2.2.2x, old behaviour:
@@ -15,7 +25,7 @@ ____
       - the result of conjugation had a mix of reflexive / nonreflexive conjugations
       - Examples
         - conjugate('hablar') would return conjugations for both hablar and hablarse
-        - conjugate('abar') would return conjugations for abarse (abar doesn't exist)
+        - conjugate('abar') would return conjugation for abarse (abar doesn't exist)
       - Inconsistency
         - user asks for 'abar' and gets 'abarse', asks for 'hablar' and gets both 'hablar' and 'hablarse'
   - 2.3.x, new behaviour:
@@ -26,7 +36,7 @@ ____
         - conjugate ('hablarse') will result in hablarse conjugation only
         - conjugate ('abar') will result in unknown verb error
         - conjugate ('abarse') will return 'abarse' conjugation
-      - Hint:: getVerbList() returns a complete list of known verbs (with respect to the above, it will contain 'abarse' but not 'abar').  Use to verify your verb before you conjugate.
+      - Hint: Call *getVerbList()* to get a complete list of known verbs (with respect to the above, it will contain 'abarse' but not 'abar').  Use to verify your verb before you conjugate.
 
 - Other public interfaces:
   - **getVerbList()**
@@ -37,21 +47,25 @@ ____
   - **exports**
     - all necessary exports are now in the index file, nothing prevents you from importing from elsewhere but it should be unnecessary
   - **highlight tags**
-    - the tags parameter changed slightly from
+    - the tags constructor parameter changed slightly from
       - {start: string, end: string, deleted: string} to
       - {start: string, end: string, del: string}
+  - **obsoleted (removed) methods**
+    - *setHighlightTags()*
+    - *getHighlightTags()*
   - **new methods**
-    - *getDefectiveVerbList(pure = false): string [] | string [][]*
-    - *getDefectiveVerbListSync(pure = false)*
-      - get a list of defective verbs
-        - if pure === false, return string[] of all verbs which exist in defective variety (haber, estar, ...)
-        - if pure === true, in addition return list of verbes that only exist as defectives (abarse)
-    - *getOrthoVerbList(): string[]*
-    - *getOrthoVerbListSync(): string[]*
-      - get a list of verbs that have been affected by 1999/2010 orthographical changes
-    - *getVersion(): string*
-  - **conjugation array (results) order**
-    - non-defective conjugations are always listed before defective ones (this affects the order or Result[])
+    - get list of defective verbs
+      - if pure === false, return string[] of all verbs which exist in defective variety (haber, estar, ...)
+      - if pure === true, in addition return list of verbs that only exist as defectives (abarse)
+      - *getDefectiveVerbList(pure = false): string [] | string [][]*
+      - *getDefectiveVerbListSync(pure = false)*
+    - get list of verbs that have been affected by 1999/2010 orthographical changes
+      - *getOrthoVerbList(): string[]*
+      - *getOrthoVerbListSync(): string[]*
+    - turn on/off highlighting (default is off)
+      - *useHighlight(use = true)*
+    - get current version
+      - *getVersion(): string*
 
 - Internal
   - db changes, dropped one level of nesting, simplified access, has no effect on public interfaces

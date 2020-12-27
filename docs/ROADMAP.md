@@ -1,7 +1,38 @@
 # Things to do, wishlists, plans, crimes committed, etc
 
-Mon 21 Dec 2020 10:32:32 PM CET, version 2.3.4
+Sun 27 Dec 2020 06:24:33 PM CET, version 2.3.5
 ____
+
+- Sun 27 Dec 2020 12:29:40 PM CET
+  - 2.3.x
+    - further Info array trimming
+      - no reason to have
+        - verb name - should be obvious from what you asked for and from the infinitive
+        - pronouns
+          - if you're using this software, you should be aware of the region dependent pronouns  
+          - if you're not, they're listed in the [USAGE](usage.md)) document, take a look
+          - use them or not in your own app, no reason to force them on everyone
+      - so this is what we have left in the Info array
+        - *model*
+        - *region*
+        - *ortho?* - only present if a verb is 1999/2010 orthography sensitive
+        - *defective?* - only present if this particular conjugation is defective (doesn't mean that every conjugation of the verb is defective, only applies to the associated conjugation array)
+
+- Fri 25 Dec 2020 10:43:54 AM CET
+  - 2.3.x
+    - redo highlight
+      - problem: ran into a problem with Vue and vuex
+        - vue turned the tags inside of the conjugator into an Observer and later complained that I shouldn't be setting them outside of mutation.  It does have a bit of a logic behind it since I store the result in vuex store, hence vue is determined to observe everything that goes in an out.  Although I think that Vue has no business modifying my objects inside of my module.
+      - solution: practicality vs flexibility, the question is why do I even have a get and set highlight tags functions?  Who in their right mind will change them once set?
+      - practicality:
+        - the highlight tags are set to *{ start: '\<mark>', end: '\</mark>', del: '\u2027' }*
+        - they can still be set *once*, in the constructor call - the object must be complete now, no partials, all 3 of start, end and del tags must be defined in order to reset the default above
+        - **removing methods**
+          - *setHighlightTags()*
+          - *getHighlightTags()*
+          - *getOrthography()* - no need  
+        - highlighting is turned off by default
+        - **new method** *public useHighlight(use = true):void* turns it on/off
 
 - Tue 01 Dec 2020 10:48:10 AM CET
   - 2.3.x work

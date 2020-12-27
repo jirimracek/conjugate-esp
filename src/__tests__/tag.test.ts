@@ -24,7 +24,6 @@ describe('Highlight Tag Consistency Test', () => {
     const cng = new Conjugator('2010', tags);
     cng.setOrthography('1999');
     cng.useHighlight();
-    expect(cng.getOrthography()).toEqual('1999');
 
     // expect(cng.getHighlightMarks()).toEqual(tags);
     // cng.setHighlightMarks('foo' as unknown as HighlightMarks);

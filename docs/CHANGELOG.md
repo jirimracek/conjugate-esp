@@ -1,5 +1,21 @@
 # Changelog
 
+- Sun 27 Dec 2020 06:24:33 PM CET, version 2.3.5
+
+  - removed
+    - *setHighlightTags()*
+    - *getHighlightTags()*
+    - *getOrthography()* - no need - you should be aware of what you passed in
+  - info array
+    - removed *verb*
+    - *defective* is optional now
+    - removed *pronouns* - see usage to figure out pronouns dependency on region
+  - added
+    - *useHighlight()* - turn highlighting on/off
+  - highlight tags can now be set in constructor call only
+  - highlighting is off by default
+  - updated usage doc
+
 - Mon 21 Dec 2020 10:32:32 PM CET, version 2.3.4
   - added methods
     - *getOrthoVerbList()*
@@ -40,7 +56,7 @@
 
 - Mon 09 Nov 2020 09:58:41 PM CET, 2.2.0
   - reverted ts compiler options mainly back to module commonjs
-  - publishing to npm under tag v2.3.4, this time preferrably without errors
+  - publishing to npm under tag v2.3.5, this time preferrably without errors
 
 - Thu 05 Nov 2020 08:16:11 PM CET, 2.1.2
   - trimming for npm publish

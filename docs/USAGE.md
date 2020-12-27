@@ -1,6 +1,6 @@
 # Usage details
 
-Mon 21 Dec 2020 10:32:32 PM CET, version 2.3.4
+Sun 27 Dec 2020 06:24:33 PM CET, version 2.3.5
 ____
 
 ## Installation
@@ -54,7 +54,7 @@ ____
 ### Public interfaces
 
 - **Conjugator**
-  - *constructor(ortho: Orthography = '2010', highlight: HighlightTags = { start: '', end: '', del: '' })*
+  - *constructor(ortho: Orthography = '2010', highlightMarks: HighlightMarks = { start: '\<mark>', end: '\</mark>', del: '\u2027' })*
     - parameter *ortho* - possible values '1999' | '2010', defaults to '2010'
       - purpose: determine the result based on different orthography rules
         - 2010 - use strict 2010 rules
@@ -78,60 +78,53 @@ ____
         - *Result::conjugation* object will contain
           - with *constructor(ortho: Orthography = '1999')* both pre 2010 and post 2010 conjugations (*rio* and *rió*) arrays are included
           - with *constructor(ortho: Orthography = '2010')* only post 2010 conjugation (*rio*)
-    - parameter *highlight* - optional, properties default to empty strings
+    - parameter *highlightMarks* - optional, defaults to  *{ start: '\<mark>', end: '\</mark>', del: '\u2027' }*
       - purpose: highlight the differences between irregular conjugation and (what would have been) a regular one
-        - the resulting conjugations will be annotated by the *start*, *end* and *del* strings (tags)
+        - the resulting conjugations will be annotated by the *start*, *end* and *del* strings (marks)
         - highlighting only applies to irregular verbs, it makes no sense to annotate regular conjugation with changes, there are none
-        - the tags are optional, set one of them or all three, if at least one of them is non-empty string, it will happen and it will be noted in the info
-        - Examples: *setHighlightTags({start:., end:-, del:\*})*, tener conjugation
-          - if tener was regular, conjugated as temer, it would conjugate like yo teno, tú tenes, el tene
-            - what you see below are the changes required to go from regular to irregular conjugation
-              - teno &#8594; tengo        // insert g
-              - tenes &#8594; tienes      // insert i
-              <pre>
-                "Indicativo": {
-                  "Presente": [
-                    "ten.g-o",      // the pair .- is the start & end of changes
-                    "t.i-enes",
-                    .
-                    .
-              </pre>
-            - the *del* string will be inserted to indicate deletion (if this is desired)
-              - again, if tener was regular , the conjugation below would be yo tení
-              - tení &#8594; tuve        // insert uv, delete ní
-              <pre>  
-                    "PreteritoIndefinido": [
-                      "t.uv-e.*-",   // note the indicated deletion .*- at the end
-                        .
-                        .
-              </pre>
-            - else if the *del* is not specified as in setHighlightTags (start: '.', end: '-')
-              <pre>
-                    "PreteritoIndefinido": [
-                      "t.uv-e",   // note the missing deletion ".*-" at the end
-              </pre>
-            - there will be multiple changes when required, verb colgar
-              <pre>
-                  "Subjuntivo": {
-                    "Presente": [
-                      "c.ue-lg.u-e",
-                      "c.ue-lg.u-es",
-                      "c.ue-lg.u-e",
-              </pre>
-            - useful highlight example
-              - *cng = new Conjugator('1999', { start: '\<mark>', end: '\</mark>', del: '\u2027' });*
-              - *.css:  mark { background-color: inherit; color: red; }*
-              - Results in (the **bold** would be rendered in red)
-                - t**uv**e **‧**  
-                  - note the 'dot' at the end of tuve, it's the delete mark &#x2027;
-                - no te c**ue**lg**ue**s
+        - all marks must be defined (all 3 of start, end and del)
+        - highlighting is **off** by default, turn it on/off by
+          - *useHighlight(use = true)*
+        - Examples:
+          - constructor with no parameters (*default marks { start: '\<mark>', end: '\</mark>', del: '\u2027' }*)
+          - if tener was regular, ***conjugated as temer***, it would conjugate as ***yo teno, tú tenes, él tene**
+          - changes required to go from regular to irregular conjugation
+            <pre>
+            "Indicativo": {
+              "Presente": [
+                "ten<mark>g</mark>o",       // insert g
+                "t<mark>i</mark>enes",      // insert i
+                "t<mark>i</mark>ene",       // insert i
+            </pre>
+          - the *del* string will be inserted to indicate deletion (if this is desired)
+            - again, ***if tener was regular***, the conjugation (1st person pretérito indefinido) would be ***yo tení***
+            - tení &#8594; tuve        // insert uv, delete ní
+            <pre>
+              "PreteritoIndefinido": [
+                "t<mark>uv</mark>e<mark>‧</mark>",   // deletion character '\u2027' (<mark>‧</mark>) at the end
+            </pre>
+          - you'll see multiple marks inserted when required, for example verb *colgar*
+            <pre>
+            "Subjuntivo": {
+              "Presente": [
+                "c<mark>ue</mark>lg<mark>u</mark>e",
+                "c<mark>ue</mark>lg<mark>u</mark>es",
+                "c<mark>ue</mark>lg<mark>u</mark>e",
+            </pre>
+          - use blank for *del* in the constructor call to ignore deleted string portions
+            - *{start:'\<mark>', end: '\</mark>', del: ''}*
+            - tener
+            <pre>
+            "Indicativo": {
+              "Presente": [
+              "PreteritoIndefinido": [
+                "t<mark>uv</mark>e",                // no deletion character at the end
+            </pre>
+          - use *.css:  mark { background-color: inherit; color: red; }* to do your html highlighting
+
+  - *public useHighlight(use = true): void* - turn on/off highlighting
 
   - *public setOrthography (ortho: Orthography): void* - possible values *'1999'|'2010'*
-  - *public getOrthography (): Orthography*
-
-  - *public setHighlightTags (tags: {start: string, end: string, del: string})): void*
-  - *public getHighlightTags(): {start: string, end: string, del: string})*
-  
   - *public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | string*
     - sync method, returns a Result[] of conjugations or ErrorType object
 
@@ -179,21 +172,16 @@ ____
   - if string is returned, it's an error message
   - Result is defined as *type Result = { info: Info, conjugation: ResultTable }*
     - NOTE that each ResultTable has corresponding Info table
-      - When ***info.defective === false***, it means that **this particular ResultTable** does not contain defective conjugation, **it does NOT mean that the verb isn't defective**
-      - Ditto for reflexives
 
 - ResultTable properties
 
   ```json
    {
   "info": {
-   "verb":       string,
    "model":      string,
    "region":     string,
-   "reflexive":  boolean,
-   "defective":  boolean,
+   "defective?":  boolean,
    "ortho?":     string,
-   "highlight?": {start: string, end: string, del: string}
   },
   "conjugation": {
    "Impersonal": {
@@ -243,19 +231,8 @@ ____
 [
  {
   "info": {
-   "verb": "hablar",
    "model": "hablar",
-   "region": "castellano",
-   "pronouns": [
-    "yo",
-    "tú",
-    "él",
-    "nosotros",
-    "vosotros",
-    "ellos"
-   ],
-   "reflexive": false,
-   "defective": false
+   "region": "castellano"
   },
   "conjugation": {
    "Impersonal": {
@@ -316,32 +293,16 @@ ____
 ```
 
 - ***freír, voseo, 2010, start:\<mark>, end:\</mark>, del:_***
-  - note the deletion in gerundio, has both info.ortho and info.highlight as they both apply to this verb
-  - pronouns correspond to voseo
+  - note the deletion in gerundio, has info.ortho as it applies to this verb
+  - pronouns that you'll need to use (should you desire to do so) correspond to voseo
 
 ```json
 [
  {
   "info": {
-   "verb": "freír",
    "model": "reír",
    "region": "voseo",
-   "pronouns": [
-    "yo",
-    "vos",
-    "él",
-    "nosotros",
-    "ustedes",
-    "ellos"
-   ],
-   "reflexive": false,
-   "defective": false,
-   "ortho": "2010",
-   "highlight": {
-    "start": "<mark>",
-    "end": "</mark>",
-    "del": "_"
-   }
+   "ortho": "2010"
   },
   "conjugation": {
    "Impersonal": {
@@ -395,7 +356,7 @@ ____
 
 ### Processing results
 
-- it may be useful to take a look at the info object which holds some interesting facts about the associated ResultTable, for example whether the verb is reflexive or not, the conjugation model used, whether it's defective or now, etc.
+- it may be useful to take a look at the info object which holds some interesting facts about the associated ResultTable, for example the conjugation model used, whether it's defective or not, etc.
 - it is probably a good idea to iterate over the Result[]
 - the ResultTable is not an array, it is a json formatted object, use it as such
 - non-defective conjugations are always listed before defective ones (in the Result[])

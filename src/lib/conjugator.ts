@@ -36,20 +36,16 @@ export class Conjugator {
      */
     constructor(ortho: Orthography = '2010', highlightMarks = { start: '<mark>', end: '</mark>', del: '\u2027' }) {
         this.setOrthography(ortho);
-        /* istanbul ignore else */
-        if (highlightMarks.start && highlightMarks.end && highlightMarks.del) {
-            this.highlightMarks = highlightMarks;
-        }
+        this.highlightMarks = highlightMarks;
     }
 
-    public setOrthography(ortho: Orthography): void {
+    public setOrthography(ortho: Orthography): void {       
+        /* istanbul ignore else */
         if (ortho === '1999' || ortho === '2010') {
             this.ortho = ortho;
+        } else {
+            console.error(`Ignoring invalid orthography (${ortho}) `);
         }
-    }
-
-    public getOrthography(): Orthography {
-        return this.ortho;
     }
 
     public useHighlight(use = true): void {
@@ -104,12 +100,12 @@ export class Conjugator {
                 const model = this.factory.getModel(verb, modelName, region, attributes) as BaseModel;
 
                 const info: Info = {
-                    verb: verb,
                     model: modelName,
                     region: region,
-                    pronouns: model.getPronouns(),
-                    defective: !!(attributes['D'])
                 };
+                if (attributes['D']) {
+                    info.defective = true;
+                }
 
                 if (typeof attributes['M'] !== 'undefined') {
                     if (attributes.M === 'true') {
@@ -272,7 +268,7 @@ export class Conjugator {
     }
 
     public getVersion(): string {
-        return 'version: 2.3.4, Mon 21 Dec 2020 10:26:27 PM CET';
-
+        // return 'version: V.ERSION, D.ATE';
+        return 'version: 2.3.5, Sun 27 Dec 2020 06:24:33 PM CET';
     }
 }
