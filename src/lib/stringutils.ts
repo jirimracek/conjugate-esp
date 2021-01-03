@@ -157,24 +157,33 @@ export function clearAccents(word: string): string {
      * 
      * @param simulated - verb conjugated as per a regular model
      * @param conjugated - verb conjugated as per its proper model (correct conjugation)
+     * @param mode - true | null, true: highlight whole word, null: highlight partial differences
      * @returns highlighted string if differences found
      */
-export function tagDiffs(simulated: string, conjugated: string, tags: HighlightMarks): string {
-    if (conjugated === '-') {                 // ignore defectives
+export function tagDiffs(simulated: string, conjugated: string, tags: HighlightMarks, mode: boolean | null): string {
+    if (conjugated === '-' || mode === false) {                 // ignore defectives
         return conjugated;
     }
 
     const conjugatedBase = conjugated.split(' ');
     const conjugatedWord = conjugatedBase.pop() as string;
     const simulatedWord = simulated.split(' ').pop() as string;
-    /* istanbul ignore if */
     // if (! (simulatedWord && conjugatedWord)) {
     //     console.error(`Internal, tagDiffs, simulated: "${simulatedWord}", conjugated: "${conjugatedWord}"`);
     //     return conjugated;
     // }
+    if (mode === true) {
+        if (simulatedWord !== conjugatedWord) {
+            conjugatedBase.push(`${tags.start}${conjugatedWord}${tags.end}`);
+        } else {
+            conjugatedBase.push(conjugatedWord);
+        }
+        return conjugatedBase.join(' ');
+    }
 
-    const chunks = diff(simulatedWord, conjugatedWord);
+    // else mode === null, do the diff
     const result: string[] = [];
+    const chunks = diff(simulatedWord, conjugatedWord);
     chunks.forEach((chunk, index) => {
         switch (chunk[0]) {
             case diff.EQUAL:
@@ -199,9 +208,16 @@ export function tagDiffs(simulated: string, conjugated: string, tags: HighlightM
 }
 
 /**
- * compare each line of simulated and real conjugation, markup differences in real conjugation with start/end tags
  */
-export function insertTags(simulated: ResultTable, conjugated: ResultTable, tags: HighlightMarks): void {
+/**
+ * compare each line of simulated and real conjugation, markup differences in real conjugation with start/end tags
+ * 
+ * @param simulated - verb conjugated as a regular
+ * @param conjugated - real verb conjugation
+ * @param tags - highlight tags to insert
+ * @param mode - true | null - if true, highlight whole words, if null, highlight differences only
+ */
+export function insertTags(simulated: ResultTable, conjugated: ResultTable, tags: HighlightMarks, mode: boolean | null): void {
     // Iterate over conjugations, send the simulated and real lines to be compared and highlighted
     Object.keys(conjugated).forEach(key => {
         const modeKey = key as AnyModeKey;
@@ -211,7 +227,7 @@ export function insertTags(simulated: ResultTable, conjugated: ResultTable, tags
                     if (subKey === 'Gerundio') {
                         conjugated[modeKey][subKey as ImpersonalSubKey] =
                             tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
-                                conjugated[modeKey][subKey as ImpersonalSubKey], tags);
+                                conjugated[modeKey][subKey as ImpersonalSubKey], tags, mode);
                     }
                     else if (subKey === 'Participio') {            // we may have dual
                         const parts = conjugated[modeKey][subKey as ImpersonalSubKey].split('/');
@@ -219,30 +235,30 @@ export function insertTags(simulated: ResultTable, conjugated: ResultTable, tags
                             // mark each part individually and then join them again
                             conjugated[modeKey][subKey as ImpersonalSubKey] =
                                 [tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
-                                    parts[0], tags),
+                                    parts[0], tags, mode),
                                 tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
-                                    parts[1], tags)
+                                    parts[1], tags, mode)
                                 ].join('/');
                         } else {
                             conjugated[modeKey][subKey as ImpersonalSubKey] =
                                 tagDiffs(simulated[modeKey][subKey as ImpersonalSubKey],
-                                    conjugated[modeKey][subKey as ImpersonalSubKey], tags);
+                                    conjugated[modeKey][subKey as ImpersonalSubKey], tags, mode);
                         }
                     }
                     break;
                 case 'Indicativo': conjugated[modeKey][subKey as IndicativoSubKey] =
                     conjugated[modeKey][subKey as IndicativoSubKey].map((line, index) => {
-                        return tagDiffs(simulated[modeKey][subKey as IndicativoSubKey][index], line, tags);
+                        return tagDiffs(simulated[modeKey][subKey as IndicativoSubKey][index], line, tags, mode);
                     });
                     break;
                 case 'Subjuntivo': conjugated[modeKey][subKey as SubjuntivoSubKey] =
                     conjugated[modeKey][subKey as SubjuntivoSubKey].map((line, index) => {
-                        return tagDiffs(simulated[modeKey][subKey as SubjuntivoSubKey][index], line, tags);
+                        return tagDiffs(simulated[modeKey][subKey as SubjuntivoSubKey][index], line, tags, mode);
                     });
                     break;
                 case 'Imperativo': conjugated[modeKey][subKey as ImperativoSubKey] =
                     conjugated[modeKey][subKey as ImperativoSubKey].map((line, index) => {
-                        return tagDiffs(simulated[modeKey][subKey as ImperativoSubKey][index], line, tags);
+                        return tagDiffs(simulated[modeKey][subKey as ImperativoSubKey][index], line, tags, mode);
                     });
                     break;
             }

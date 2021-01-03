@@ -142,9 +142,27 @@ describe('Model Test', () => {
         cng.useHighlight();
         result = cng.conjugateSync('freír', 'voseo') as Result[];
         expect(result[0].conjugation.Indicativo.Presente[0]).toEqual('fr<mark>í</mark>o');
+        cng.useHighlight(true);
+        result = cng.conjugateSync('freír', 'voseo') as Result[];
+        expect(result[0].conjugation.Indicativo.Presente[0]).toEqual('<mark>frío</mark>');
         cng.useHighlight(false);
         result = cng.conjugateSync('freír', 'voseo') as Result[];
         expect(result[0].conjugation.Indicativo.Presente[0]).toEqual('frío');
+        // Test all blank marks
+        const testcng = new Conjugator('1999', {start: '', end: '', del: ''});
+        testcng.useHighlight();
+        result = testcng.conjugateSync('freír', 'voseo') as Result[];
+        expect(result[0].conjugation.Indicativo.Presente[0]).toEqual('frío');
+        testcng.useHighlight(true);
+        result = testcng.conjugateSync('freír', 'voseo') as Result[];
+        expect(result[0].conjugation.Indicativo.Presente[0]).toEqual('frío');
+        testcng.useHighlight(false);
+        result = testcng.conjugateSync('freír', 'voseo') as Result[];
+        expect(result[0].conjugation.Indicativo.Presente[0]).toEqual('frío');
+        const dotcng = new Conjugator('1999', {start: '', end: '', del: '\u2027'});
+        dotcng.useHighlight();
+        result = dotcng.conjugateSync('freír', 'voseo') as Result[];
+        expect(result[0].conjugation.Impersonal.Gerundio).toEqual('fr‧iendo');
     });
 });
 

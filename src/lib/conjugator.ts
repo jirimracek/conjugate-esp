@@ -25,7 +25,7 @@ export class Conjugator {
     protected factory: ModelFactory = new ModelFactory();
     private ortho: Orthography = '2010';
     private highlightMarks: HighlightMarks = { start: '<mark>', end: '</mark>', del: '\u2027' };
-    private highlight = false;
+    private highlight: boolean | null = false;
 
 
     /**
@@ -34,9 +34,11 @@ export class Conjugator {
      * 
      * See types.ts for detailed documentation on orthography and attributes
      */
-    constructor(ortho: Orthography = '2010', highlightMarks = { start: '<mark>', end: '</mark>', del: '\u2027' }) {
+    constructor(ortho: Orthography = '2010', highlightMarks?: HighlightMarks) {
         this.setOrthography(ortho);
-        this.highlightMarks = highlightMarks;
+        if (highlightMarks) {
+            this.highlightMarks = highlightMarks;
+        }
     }
 
     public setOrthography(ortho: Orthography): void {       
@@ -48,7 +50,19 @@ export class Conjugator {
         }
     }
 
-    public useHighlight(use = true): void {
+    /**
+     * 
+     * @param use - values true | false | null 
+     * - *true* highlight whole word with *start* / *end* marks, ignore *del* 
+     * - *false* no highlight 
+     * - *null* highlight difference details
+     */
+    public useHighlight(use: boolean | null = null): void {
+        // Don't be a bonehead
+        if (this.highlightMarks.start + this.highlightMarks.end + this.highlightMarks.del === '') {
+            this.highlight = false;
+            return;
+        }
         this.highlight = use;
     }
 
@@ -119,15 +133,19 @@ export class Conjugator {
                 }
 
                 // highlight only if irregular verb and
-                // at least one of the highlightMarks is defined
+                // highlight is on
+                // Note: this.highlight values:
+                //   true - highlight whole words
+                //   false - do not highlight
+                //   null - highlight differences
                 // The idea: simulate conjugation based on a regular model, then resolve the differences
                 const conjugated = model.getConjugation();
 
                 // Mental note - don't change models anymore
-                if (!['hablar', 'temer', 'partir'].includes(modelName) && this.highlight) {
+                if (!['hablar', 'temer', 'partir'].includes(modelName) && this.highlight !== false) {
                     // get conjugation as if the verb was conjugated per regular model (hablar, temer, partir)
                     const simulatedModel = this.factory.getModel(verb, modelName, region, {}, true) as BaseModel;
-                    insertTags(simulatedModel.getConjugation(), conjugated, this.highlightMarks);
+                    insertTags(simulatedModel.getConjugation(), conjugated, this.highlightMarks, this.highlight);
                 }
 
                 result.push({

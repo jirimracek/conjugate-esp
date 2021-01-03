@@ -1,7 +1,15 @@
 # Changelog
 
-- Sun 27 Dec 2020 06:24:33 PM CET, version 2.3.5
+- Sun 03 Jan 2021 03:27:48 PM CET, version 2.3.5
+  - modified highlighting
+    - it is still **off** by default - **no behaviour change here**
+    - *useHighlight(use: boolean | null = null)*   - default parameter change to null, when called with no parameter it behaves the same as before - **no behaviour change here**
+    - parameters change: *true|false|null* - new parameter value *null*
+      - *true* - highlight whole word, **change in behaviour**, ex.: <mark>tuve</mark>
+      - *false* - no highlight, **no change**, ex: tuve
+      - *null* - highlight differences only, **previous behaviour of _true_**, ex.: t<mark>uv</mark>e
 
+- Sun 27 Dec 2020 06:24:33 PM CET, version 2.3.5
   - removed
     - *setHighlightTags()*
     - *getHighlightTags()*

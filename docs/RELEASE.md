@@ -1,6 +1,6 @@
 # Release notes
 
-Sun 27 Dec 2020 06:24:33 PM CET, version 2.3.5
+Sun 03 Jan 2021 03:27:48 PM CET, version 2.3.5
 ____
 
 ## 2.3.x changes vs 2.2.x
@@ -55,15 +55,19 @@ ____
     - *getHighlightTags()*
   - **new methods**
     - get list of defective verbs
-      - if pure === false, return string[] of all verbs which exist in defective variety (haber, estar, ...)
-      - if pure === true, in addition return list of verbs that only exist as defectives (abarse)
+      - if pure === false, return string[] of all verbs which exist in **any defective variety** (haber, estar, ...)
+      - if pure === true, in addition return list of verbs that **only exist as defectives** (abarse)
       - *getDefectiveVerbList(pure = false): string [] | string [][]*
       - *getDefectiveVerbListSync(pure = false)*
     - get list of verbs that have been affected by 1999/2010 orthographical changes
       - *getOrthoVerbList(): string[]*
       - *getOrthoVerbListSync(): string[]*
-    - turn on/off highlighting (default is off)
-      - *useHighlight(use = true)*
+    - turn highlighting on / off / partial (default setting is *off* at startup)
+      - *useHighlight(use: boolean | null = null): void*
+        - use = true|false|null
+          - *true* - full highlightint
+          - *false* - highlight off (startup default)
+          - *null* - partial highlight (character changes only)
     - get current version
       - *getVersion(): string*
 

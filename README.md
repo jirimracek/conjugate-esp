@@ -1,6 +1,6 @@
 # Spanish verb conjugator
 
-Sun 27 Dec 2020 06:24:33 PM CET, version 2.3.5
+Sun 03 Jan 2021 03:27:48 PM CET, version 2.3.5
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
@@ -34,7 +34,7 @@ ____
   - new public methods
     - getOrthoVerbListSync()
     - getOrthoVerbList() - get verbs affected by 1999/2010 orthography
-    - useHighlight() - turn on/off highlighting
+    - useHighlight() - turn on / off / partial highlighting
   - getDefectiveVerbList(exact = false) now has an optional argument - see Usage for info
   - internal changes, dropped one lever of db nesting, simplifications
   - removed use of

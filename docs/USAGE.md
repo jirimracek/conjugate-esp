@@ -1,6 +1,6 @@
 # Usage details
 
-Sun 27 Dec 2020 06:24:33 PM CET, version 2.3.5
+Sun 03 Jan 2021 03:27:48 PM CET, version 2.3.5
 ____
 
 ## Installation
@@ -79,12 +79,13 @@ ____
           - with *constructor(ortho: Orthography = '1999')* both pre 2010 and post 2010 conjugations (*rio* and *rió*) arrays are included
           - with *constructor(ortho: Orthography = '2010')* only post 2010 conjugation (*rio*)
     - parameter *highlightMarks* - optional, defaults to  *{ start: '\<mark>', end: '\</mark>', del: '\u2027' }*
-      - purpose: highlight the differences between irregular conjugation and (what would have been) a regular one
+      - purpose: highlight differences between irregular conjugation and (what would have been) a regular one
         - the resulting conjugations will be annotated by the *start*, *end* and *del* strings (marks)
         - highlighting only applies to irregular verbs, it makes no sense to annotate regular conjugation with changes, there are none
         - all marks must be defined (all 3 of start, end and del)
-        - highlighting is **off** by default, turn it on/off by
-          - *useHighlight(use = true)*
+        - highlighting can be on (full words), off, or partial (only the differences)
+        - highlighting is **off** by default, turn it on / off / partial by
+          - *useHighlight(use = null)*  // true | false | null
         - Examples:
           - constructor with no parameters (*default marks { start: '\<mark>', end: '\</mark>', del: '\u2027' }*)
           - if tener was regular, ***conjugated as temer***, it would conjugate as ***yo teno, tú tenes, él tene**
@@ -122,7 +123,11 @@ ____
             </pre>
           - use *.css:  mark { background-color: inherit; color: red; }* to do your html highlighting
 
-  - *public useHighlight(use = true): void* - turn on/off highlighting
+  - *public useHighlight(use = null): void* - turn on/off highlighting
+    - parameter *use* can be *true|false|null* (note that highlighting is **off** by default at startup)
+      - *true* - highlight whole word, ex.: <mark>tuve</mark>
+      - *false* - no highlight, ex: tuve
+      - *null* - highlight differences only, ex.: t<mark>uv</mark>e
 
   - *public setOrthography (ortho: Orthography): void* - possible values *'1999'|'2010'*
   - *public conjugateSync(verb: string, region: Regions = 'castellano'): Result[] | string*
