@@ -1,7 +1,7 @@
 /**
  * @copyright 
- * Copyright (c) 2020 Jiri Mracek, jiri@automationce.com 
- * Copyright (c) 2020 Automation Controls & Engineering, Colorado LLC
+ * Copyright (c) 2020-2021 Jiri Mracek, jiri@automationce.com 
+ * Copyright (c) 2020-2021 Automation Controls & Engineering, Colorado LLC
  * @license * MIT License
 */
 // npm t -- --watch
