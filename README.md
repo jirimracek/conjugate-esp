@@ -1,6 +1,6 @@
 # Spanish verb conjugator
 
-Sun 03 Jan 2021 03:27:48 PM CET, version 2.3.5
+Sun 03 Jan 2021 07:14:54 PM CET, version 2.3.6
 ____
 
 ![Build Matrix](https://github.com/jirimracek/conjugate-esp/workflows/Build%20Matrix/badge.svg)
@@ -41,6 +41,7 @@ ____
     - *Array.flat()* , can be used with more browsers
     - ts compiler option target moved back to ES2016
   - rearranged the order or the Result[] - non-defective conjugations are always listed before defective ones
+- play with *node bin/runme.js*
 
 ____
 

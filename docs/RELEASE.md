@@ -1,6 +1,6 @@
 # Release notes
 
-Sun 03 Jan 2021 03:27:48 PM CET, version 2.3.5
+Sun 03 Jan 2021 07:14:54 PM CET, version 2.3.6
 ____
 
 ## 2.3.x changes vs 2.2.x

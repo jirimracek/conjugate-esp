@@ -1,6 +1,6 @@
 # Changelog
 
-- Sun 03 Jan 2021 03:27:48 PM CET, version 2.3.5
+- Sun 03 Jan 2021 07:14:54 PM CET, version 2.3.6
   - modified highlighting
     - it is still **off** by default - **no behaviour change here**
     - *useHighlight(use: boolean | null = null)*   - default parameter change to null, when called with no parameter it behaves the same as before - **no behaviour change here**
@@ -64,7 +64,7 @@
 
 - Mon 09 Nov 2020 09:58:41 PM CET, 2.2.0
   - reverted ts compiler options mainly back to module commonjs
-  - publishing to npm under tag v2.3.5, this time preferrably without errors
+  - publishing to npm under tag v2.3.6, this time preferrably without errors
 
 - Thu 05 Nov 2020 08:16:11 PM CET, 2.1.2
   - trimming for npm publish

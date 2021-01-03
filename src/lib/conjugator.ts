@@ -208,7 +208,7 @@ export class Conjugator {
 
     /**
      * get list of any verb that has a defective version
-     * @param pure - if true, return 2 lists, list[0] has any verb that has a defective version, 
+     * @param pure - if true, return 'version: 2.3.6, Sun 03 Jan 2021 06:52:48 PM CET';
      * list[1] has verbs that only exist as defectives 
      */
     public getDefectiveVerbListSync(pure = false): string[]| string [][] {
@@ -286,7 +286,6 @@ export class Conjugator {
     }
 
     public getVersion(): string {
-        // return 'version: V.ERSION, D.ATE';
-        return 'version: 2.3.5, Sun 27 Dec 2020 06:24:33 PM CET';
+        return 'v2.3.6, Sun 03 Jan 2021 07:14:54 PM CET';
     }
 }
