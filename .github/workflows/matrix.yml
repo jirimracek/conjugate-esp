@@ -27,8 +27,13 @@ jobs:
     - run: npm run build --if-present
     - run: npm run cover
     
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
+#    - name: Coveralls
+#      uses: coverallsapp/github-action@master
+#      with:
+#        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Cover        
+      uses: romeovs/lcov-reporter-action@v0.2.16
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        lcov-file: ./coverage/lcov.info
 
