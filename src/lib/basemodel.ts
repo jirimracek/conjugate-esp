@@ -17,19 +17,15 @@ import {clearAccents, esdrujula, strongify} from './stringutils';
 // known attributes:
 //    defective types: { D:imorfo | eimorfo | imper | tercio | terciop | mmorfo | bimorfop | bimorfog | trimorfo | omorfo | ogmorfo }
 //    PR:RegExp/replacement - Participio Replace                - RegExp is the regular expression that Replaces the regular form (inhestar, pensar:PR=estad/iest - from inhestado to inhiesto)
-//    // Obsoleted in 2.0.1
-//    PD:RegExp/replacement - Participio Dual                   - RegExp is the regular expression that creates the irregular participio form from the regular one
-//                                                                       AND it gets added as a second participio. The first, REGULAR PARTICIPIO gets used for COMPUESTOS
-//    //
 //    PC:RegExp/replacement - Participio Compuesto (irregular)  - same as PD, EXCEPT the second, IRREGULAR PARTICIPIO gets used for COMPUESTOS
 //    D:DefectiveType       - one of the Defective Types
-//    M:boolean             - Monosyllable ortho adjustment, drop accent
+//    M:string              - Monosyllable ortho adjustment, drop accent ("true"/"false")
 //    V:string              - use for other model changes, duals, triples, ex.: predecir, predeciré & prediré
 
 // Types used to represent data in the verb definitions json file
 type DefectiveType = 'imorfo' | 'eimorfo' | 'imper' | 'tercio' | 'terciop'
     | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'ogmorfo' | 'osmorfo';
-type AttributeValues = DefectiveType | boolean | string;
+type AttributeValues = DefectiveType | string;
 type AttributeKeys = 'PR' | 'PS' | 'D' | 'M' | 'V';
 type CompSubTable = {[modekey: string]: {[timekey: string]: string[]}};
 type IndicativoSubjuntivoModeKey = 'Indicativo' | 'Subjuntivo';

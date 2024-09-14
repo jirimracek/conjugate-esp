@@ -102,7 +102,7 @@ export class Conjugator {
                         // if ortho is not 2010 or M is undefined or M is defined and not false 
                         //   then use this model, otherwise skip it.  See types.ts for more info
                         if (this.ortho !== '2010' || typeof attrs['M'] === 'undefined' ||
-                                    attrs['M'] !== 'false') {
+                                    attrs['M'] as string !== 'false') {
                             modelTemplates.push([name, region, attrs]);
                         }
                     });
@@ -154,7 +154,7 @@ export class Conjugator {
                 });
             });
             return result;
-        } catch (error) {
+        } catch (error: any) {
             // console.error(error);
             return error.message;
         }
