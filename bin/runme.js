@@ -45,7 +45,7 @@ process.argv.slice(3).forEach(arg => {
 // const cng = new CNG.Conjugator(ortho, {start:'*', end: '*', del: '-'});
 const cng = new CNG.Conjugator();
 cng.setOrthography(ortho);  
-cng.useHighlight();
+cng.useHighlight(hl);
 console.log(`${verb}, ${region}, ${ortho}, highlight: ${hl === true ? 'full' : hl === null ? 'partial' : 'off'}`);
 const table = cng.conjugateSync(verb, region);
 console.log(JSON.stringify(table, null, 1));

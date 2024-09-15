@@ -17,19 +17,15 @@ import {clearAccents, esdrujula, strongify} from './stringutils';
 // known attributes:
 //    defective types: { D:imorfo | eimorfo | imper | tercio | terciop | mmorfo | bimorfop | bimorfog | trimorfo | omorfo | ogmorfo }
 //    PR:RegExp/replacement - Participio Replace                - RegExp is the regular expression that Replaces the regular form (inhestar, pensar:PR=estad/iest - from inhestado to inhiesto)
-//    // Obsoleted in 2.0.1
-//    PD:RegExp/replacement - Participio Dual                   - RegExp is the regular expression that creates the irregular participio form from the regular one
-//                                                                       AND it gets added as a second participio. The first, REGULAR PARTICIPIO gets used for COMPUESTOS
-//    //
 //    PC:RegExp/replacement - Participio Compuesto (irregular)  - same as PD, EXCEPT the second, IRREGULAR PARTICIPIO gets used for COMPUESTOS
 //    D:DefectiveType       - one of the Defective Types
-//    M:boolean             - Monosyllable ortho adjustment, drop accent
+//    M:string              - Monosyllable ortho adjustment, drop accent ("true"/"false")
 //    V:string              - use for other model changes, duals, triples, ex.: predecir, predeciré & prediré
 
-// Types used to represent data in the verb definitions json file
+// Types used to represent data in the verb definitions json file.  Cheat here, use 'hay' as a special haber imperfect version
 type DefectiveType = 'imorfo' | 'eimorfo' | 'imper' | 'tercio' | 'terciop'
-    | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'ogmorfo' | 'osmorfo';
-type AttributeValues = DefectiveType | boolean | string;
+    | 'mmorfo' | 'bimorfop' | 'bimorfog' | 'trimorfo' | 'omorfo' | 'ogmorfo' | 'osmorfo' | 'hay';
+type AttributeValues = DefectiveType | string;
 type AttributeKeys = 'PR' | 'PS' | 'D' | 'M' | 'V';
 type CompSubTable = {[modekey: string]: {[timekey: string]: string[]}};
 type IndicativoSubjuntivoModeKey = 'Indicativo' | 'Subjuntivo';
@@ -74,7 +70,8 @@ const NO_IMPERATIVO_AFIRMATIVO: DefectiveType[] = [
     'bimorfop',
     'omorfo',
     'osmorfo',
-    'ogmorfo'
+    'ogmorfo',
+    'hay'
 ];
 
 export const INDICATIVO_SIMPLE_KEYS: IndicativoSubSimpleKey[] = [
@@ -107,7 +104,7 @@ export const SUBJUNTIVO_COMP_KEYS: SubjuntivoSubCompKey[] = [
     'FuturoPerfecto'
 ];
 
-const NO_IMPERATIVO_NEGATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'ogmorfo'];
+const NO_IMPERATIVO_NEGATIVO: DefectiveType[] = ['imper', 'tercio', 'terciop', 'bimorfop', 'ogmorfo', 'hay'];
 const DASH6 = '------';
 
 export abstract class BaseModel {
@@ -568,7 +565,7 @@ export abstract class BaseModel {
                 Object.keys(this.table.Indicativo).forEach(time => {
                     [0, 1, 3, 4, 5].forEach(index =>
                         this.table.Indicativo[time as IndicativoSubKey][index] = '-');
-                    this.table.Indicativo[time as IndicativoSubKey][2] =
+                        this.table.Indicativo[time as IndicativoSubKey][2] =
                         this.table.Indicativo[time as IndicativoSubKey][2].replace(/^se /, '');
                 });
 
@@ -580,7 +577,7 @@ export abstract class BaseModel {
                 });
                 break;
             case 'tercio':
-                // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos D= tercio
+                // terciopersonal - infinitivo y en terceras personas, simple only??? no compuestos D=tercio
                 // Verbo empecer
                 (['Gerundio', 'Participio'] as ImpersonalSubKey[]).forEach(v => this.table.Impersonal[v] = '-');
                 // Simple indicative
@@ -704,6 +701,22 @@ export abstract class BaseModel {
                     this.table.Subjuntivo[mode as SubjuntivoSubKey] = Array.from(DASH6));
 
                 this.table.Imperativo.Negativo[3] = '-';
+                break;
+            case 'hay':
+                //  sólo en infinitivo y tercera persona, indicativo simple - zap everything else
+                this.table.Impersonal.Participio = '-';
+                this.table.Impersonal.Gerundio = '-';
+
+                Object.keys(this.table.Indicativo).forEach(time =>
+                    this.table.Indicativo[time as IndicativoSubKey] = Array.from(DASH6));
+                this.table.Indicativo.Presente[2] = 'hay';
+
+                Object.keys(this.table.Subjuntivo).forEach(time =>
+                    this.table.Subjuntivo[time as SubjuntivoSubKey] = Array.from(DASH6));
+
+                Object.keys(this.table.Imperativo).forEach(time =>
+                    this.table.Imperativo[time as ImperativoSubKey] = Array.from(DASH6));
+
                 break;
         }
     }
