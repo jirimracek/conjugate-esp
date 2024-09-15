@@ -286,6 +286,6 @@ export class Conjugator {
     }
 
     public getVersion(): string {
-        return 'v2.3.6, Sun 03 Jan 2021 07:14:54 PM CET';
+        return 'v2.4.0, Sat Sep 14 08:33:16 PM MDT 2024';
     }
 }
